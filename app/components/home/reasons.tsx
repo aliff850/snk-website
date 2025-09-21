@@ -66,11 +66,11 @@ export function ReasonSection() {
                                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     />
                                     {/* Overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-brand/30 to-transparent"></div>
                                     
                                     {/* Stat Badge */}
                                     {achievement.stat && (
-                                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-3xl px-4 py-2 border border-brand/20">
+                                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-3xl px-4 py-2">
                                             <div className="text-brand text-2xl font-bold">{achievement.stat}</div>
                                             <div className="text-brand text-xs font-medium">{achievement.statLabel}</div>
                                         </div>

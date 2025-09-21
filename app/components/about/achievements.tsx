@@ -41,20 +41,61 @@ export function Achievements() {
             <AnimateOnLoad animation="fade-in-up">
                 <div className="flex flex-col text-center gap-4 max-w-4xl mx-auto">
                     <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Our Achievements</h1>
-                    <p className="text-brand text-lg md:text-xl px-4">
+                    {/* <p className="text-brand text-lg md:text-xl px-4">
                         Milestones that define our journey as a leading insurtech innovator
-                    </p>
+                    </p> */}
                 </div>
             </AnimateOnLoad>
 
             <AnimateOnLoad animation="fade-in-up">
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-8">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+
+                        <AnimateOnLoad animation="fade-in-left" delay={100}>
+                            <div className="bg-white rounded-2xl p-8 border border-brand/20 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                                <div className="flex flex-col items-center text-center space-y-6">
+                                    <div className="relative w-48 h-48 group-hover:scale-105 transition-transform duration-300">
+                                        <Image
+                                            src="/images/bnm.png"
+                                            alt="Bank Negara Malaysia"
+                                            fill
+                                            className="object-contain"
+                                        />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-brand text-xl font-bold">Bank Negara Malaysia</h3>
+                                        <p className="text-brand">Regulatory Approval</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </AnimateOnLoad>
+
+
+                        <AnimateOnLoad animation="fade-in-right" delay={200}>
+                            <div className="bg-white rounded-2xl p-8 border border-brand/20 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                                <div className="flex flex-col items-center text-center space-y-6">
+                                    <div className="relative w-48 h-48 group-hover:scale-105 transition-transform duration-300">
+                                        <Image
+                                            src="/images/piam.png"
+                                            alt="Persatuan Insurans Am Malaysia"
+                                            fill
+                                            className="object-contain"
+                                        />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-brand text-xl font-bold">PIAM</h3>
+                                        <p className="text-brand">Insurance Association</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </AnimateOnLoad>
+                    </div>
+
                     <p className="text-brand text-lg md:text-xl px-4 font-bold">
                         Approved by BNM and PIAM as an insurtech service provider.
                     </p>
-                    <div className="flex grid sm:grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* BNM and PIAM logo */}
-                    </div>
+                    
                     
                 </div>
             </AnimateOnLoad>
@@ -80,12 +121,12 @@ export function Achievements() {
                                         className="object-cover"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     />
-                                    {/* Overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent"></div>
+
+                                    <div className="absolute inset-0 bg-gradient-to-t from-brand/30 to-transparent"></div>
                                     
                                     {/* Stat Badge */}
                                     {achievement.stat && (
-                                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-brand/20">
+                                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-3xl px-4 py-2">
                                             <div className="text-brand text-2xl font-bold">{achievement.stat}</div>
                                             <div className="text-brand text-xs font-medium">{achievement.statLabel}</div>
                                         </div>
