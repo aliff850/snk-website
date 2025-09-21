@@ -18,7 +18,7 @@ export function ContactHero() {
                     
                     <AnimateOnLoad animation="fade-in-up" delay={200}>
                         <p className="text-white text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto leading-relaxed opacity-90">
-                            Ready to transform your insurance operations? Contact our team to learn how SNK's innovative solutions can streamline your processes and enhance customer experiences.
+                            Ready to transform your insurance operations? Contact our team to learn how SNK&apos;s innovative solutions can streamline your processes and enhance customer experiences.
                         </p>
                     </AnimateOnLoad>
 

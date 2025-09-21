@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 export function Footer() {
 
@@ -11,7 +11,7 @@ export function Footer() {
                 <div className="lg:col-span-2">
                     <h3 className="text-2xl font-bold mb-6 text-white">About SNK</h3>
                     <p className="text-brand-foreground leading-relaxed mb-6 max-w-lg">
-                        We are Malaysia's leading Insurtech provider with over 20 years of experience in motor vehicle valuation and insurance claims solutions. Trusted by top insurers, we deliver innovative digital platforms that make insurance simple, fast, and accessible for everyone.
+                        We are Malaysia&apos;s leading Insurtech provider with over 20 years of experience in motor vehicle valuation and insurance claims solutions. Trusted by top insurers, we deliver innovative digital platforms that make insurance simple, fast, and accessible for everyone.
                     </p>
                     <div className="flex space-x-4">
                         <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors duration-200">

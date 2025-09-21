@@ -9,7 +9,7 @@ export function ContactMap() {
                     <div className="text-center mb-12">
                         <h2 className="text-white text-4xl md:text-5xl font-bold mb-6">Visit Our Office</h2>
                         <p className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
-                            Located in the heart of Subang Jaya's business district, our office is easily accessible by public transport and car
+                            Located in the heart of Subang Jaya&apos;s business district, our office is easily accessible by public transport and car
                         </p>
                     </div>
                 </AnimateOnLoad>

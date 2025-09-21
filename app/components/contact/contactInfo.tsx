@@ -75,7 +75,7 @@ export function ContactInfo() {
                     <div className="text-center mb-16">
                         <h2 className="text-white text-4xl md:text-5xl font-bold mb-6">Contact Information</h2>
                         <p className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
-                            Get in touch with our team through any of the channels below. We're here to help you succeed.
+                            Get in touch with our team through any of the channels below. We&apos;re here to help you succeed.
                         </p>
                     </div>
                 </AnimateOnLoad>
@@ -116,7 +116,7 @@ export function ContactInfo() {
                 </div>
 
                 {/* Quick Contact Actions */}
-                <AnimateOnLoad animation="fade-in-up" delay={600}>
+                <AnimateOnLoad animation="fade-in-up" delay={400}>
                     <div className="mt-16 bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg">
                         <div className="text-center mb-8">
                             <h3 className="text-brand text-2xl md:text-3xl font-bold mb-4">Quick Actions</h3>
