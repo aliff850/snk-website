@@ -119,7 +119,7 @@ export function ContactForm() {
                                     ))}
                                 </div>
 
-                                <AnimateOnLoad animation="fade-in-up" delay={700}>
+                                <AnimateOnLoad animation="fade-in-up" delay={200}>
                                     <div className="space-y-2">
                                         <label htmlFor="inquiry" className="block text-brand text-sm font-semibold">
                                             Type of Inquiry <span className="text-brand-element">*</span>
@@ -140,7 +140,7 @@ export function ContactForm() {
                                     </div>
                                 </AnimateOnLoad>
 
-                                <AnimateOnLoad animation="fade-in-up" delay={800}>
+                                <AnimateOnLoad animation="fade-in-up" delay={300}>
                                     <div className="space-y-2">
                                         <label htmlFor="message" className="block text-brand text-sm font-semibold">
                                             Message <span className="text-brand-element">*</span>
@@ -156,7 +156,7 @@ export function ContactForm() {
                                     </div>
                                 </AnimateOnLoad>
 
-                                <AnimateOnLoad animation="fade-in-up" delay={900}>
+                                <AnimateOnLoad animation="fade-in-up" delay={400}>
                                     <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                         <button 
                                             type="submit"
