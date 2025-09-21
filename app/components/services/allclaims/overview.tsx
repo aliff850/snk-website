@@ -3,9 +3,9 @@ import Image from 'next/image';
 
 export function AllClaimsOverview() {
     return(
-        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 py-16 px-4 md:px-12 lg:px-24 font-onest">
-            <div className="w-full max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 py-16 px-4 md:px-12 lg:px-24 font-onest min-h-screen">
+            <div className="w-full h-full max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 justify-center items-stretch h-full">
                     
                     {/* Content */}
                     <AnimateOnLoad animation="fade-in-left">
@@ -34,16 +34,21 @@ export function AllClaimsOverview() {
 
                     {/* Visual */}
                     <AnimateOnLoad animation="fade-in-right">
-                        <div className="relative">
-                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-brand/20 shadow-lg">
-                                <div className="text-center mb-6">
-                                    <h3 className="text-brand text-2xl font-bold mb-4">Valuation Tool Interface</h3>
-                                    <div className="relative h-80 bg-gradient-to-br from-brand-element/10 to-brand/10 rounded-2xl overflow-hidden">
-                                        
-                                    </div>
-                                </div>
+                        <div className="h-full flex">
+                            <div className="h-full w-full rounded-4xl overflow-hidden group">
+                                <Image src="/services/estimation.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width={1200} height={1200} alt="AllClaims Damage Assessment Interface"/>
                             </div>
                         </div>
+                        {/* <div className="relative h-96 bg-gradient-to-br from-brand-element/10 to-brand/10 rounded-3xl overflow-hidden border border-brand/20 shadow-lg">
+                            <Image
+                                src="/services/estimation.png"
+                                alt="AllClaims Damage Assessment Interface"
+                                fill
+                                className="object-cover rounded-3xl"
+                                priority
+                            />
+                        </div> */}
+
                     </AnimateOnLoad>
 
                 </div>

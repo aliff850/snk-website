@@ -116,7 +116,7 @@ export function ContactInfo() {
                 </div>
 
                 {/* Quick Contact Actions */}
-                <AnimateOnLoad animation="fade-in-up" delay={400}>
+                {/* <AnimateOnLoad animation="fade-in-up" delay={400}>
                     <div className="mt-16 bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg">
                         <div className="text-center mb-8">
                             <h3 className="text-brand text-2xl md:text-3xl font-bold mb-4">Quick Actions</h3>
@@ -155,7 +155,7 @@ export function ContactInfo() {
                             </button>
                         </div>
                     </div>
-                </AnimateOnLoad>
+                </AnimateOnLoad> */}
 
             </div>
         </section>

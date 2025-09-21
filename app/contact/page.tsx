@@ -8,7 +8,7 @@ export default function Contact() {
         <div className="min-h-screen">
             <ContactHero />
             <ContactForm />
-            <ContactInfo />
+            {/* <ContactInfo /> */}
             <ContactMap />
         </div>
     )

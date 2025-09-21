@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
+// import AnimateOnLoad from "./ui/AnimateOnLoad"
 // import { Button } from "@/components/ui/button"
 // import { Car } from "lucide-react"
 
@@ -42,28 +43,29 @@ export function Navigation() {
           <div className="hidden md:flex items-center space-x-8 text-foreground">
             <Link
               href="/about"
-              className="hover:text-brand hover:underline decoration-brand transition-colors">
+              className="hover:text-brand transition-colors overflow-hidden group relative">
                 About Us
+                <hr className="absolute w-full rounded-full border border-brand/80 right-20 top-5 group-hover:right-0 transition-all duration-150 ease-in-out"/>
             </Link>
-
             <Link
               href="/services"
-              className="hover:text-brand underline-brand transition-colors"
-            >
-              Our Services
+              className="hover:text-brand transition-colors overflow-hidden group relative">
+                Our Services
+                <hr className="absolute w-full rounded-full border border-brand/80 right-24 top-5 group-hover:right-0 transition-all duration-150 ease-in-out"/>
             </Link>
             <Link
               href="/news"
-              className="hover:text-brand underline-brand transition-colors"
-            >
-              Latest News
+              className="hover:text-brand transition-colors overflow-hidden group relative">
+                Latest News
+                <hr className="absolute w-full rounded-full border border-brand/80 right-24 top-5 group-hover:right-0 transition-all duration-150 ease-in-out"/>
             </Link>
             <Link
               href="/contact"
-              className="hover:text-brand underline-brand transition-colors"
-            >
-              Contact
+              className="hover:text-brand transition-colors overflow-hidden group relative">
+                Contact
+                <hr className="absolute w-full rounded-full border border-brand/80 right-20 top-5 group-hover:right-0 transition-all duration-150 ease-in-out"/>
             </Link>
+
           </div>
 
         </div>

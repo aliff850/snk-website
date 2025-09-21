@@ -6,7 +6,7 @@ export function HeroSection() {
     return (
 
         <section className="w-full bg-brand min-h-screen bg-[url('/images/g70.jpg')] bg-cover bg-center bg-fixed flex flex-col justify-center items-center">
-            <div className="min-h-screen bg-black/20 backdrop-blur-sm flex flex-col justify-center items-center px-24 py-16">
+            <div className="min-h-screen w-full bg-black/20 backdrop-blur-sm flex flex-col justify-center items-center px-24 py-16">
 
             <div className="mx-auto font-onest">
                 <AnimateOnLoad animation="fade-in-up">
@@ -17,7 +17,6 @@ export function HeroSection() {
                         <span className="block text-6xl text-brand-foreground mt-2">Through Technology and Experience</span>
                     </h1>
 
-                
                     <p className="text-xl text-brand-foreground mb-8 max-w-4xl mx-auto drop-shadow-sm">
                         Helping insurers and the public with claims, valuations, and roadside assistance.
                         <span className="block">With over 20 years of expertise.</span>

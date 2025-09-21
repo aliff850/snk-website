@@ -47,8 +47,8 @@ const solutions: Solution[] = [
         learnMoreUrl: "/solutions/valuation"
     },
     {
-        title: "Claims Automation",
-        description: "Automated claims processing system reducing manual work and improving accuracy through intelligent workflow management.",
+        title: "Claims Online Estimation",
+        description: "Online claims estimation system reducing manual work and improving accuracy through intelligent workflow management.",
         image: "/services/estimation.png",
         features: ["Automated workflows", "Fraud detection", "Document processing", "Analytics dashboard"],
         learnMoreUrl: "/solutions/automation"

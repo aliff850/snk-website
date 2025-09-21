@@ -68,7 +68,7 @@ export function AllClaimsCTA() {
                 </AnimateOnLoad>
 
                 {/* Additional Benefits */}
-                <AnimateOnLoad animation="fade-in-up" delay={200}>
+                {/* <AnimateOnLoad animation="fade-in-up" delay={200}>
                     <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="text-center">
                             <div className="bg-brand-element/10 rounded-2xl p-6 border border-brand-element/20">
@@ -98,7 +98,7 @@ export function AllClaimsCTA() {
                             </div>
                         </div>
                     </div>
-                </AnimateOnLoad>
+                </AnimateOnLoad> */}
 
             </div>
         </section>
