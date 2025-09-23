@@ -1,4 +1,5 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
+import { Crosshair } from 'lucide-react';
 
 interface Objective {
     title: string;
@@ -11,36 +12,28 @@ const objectives: Objective[] = [
         title: "End-to-End Digital Claims",
         description: "Deliver end-to-end digital claims processing in line with BNM’s vision of full automation.",
         icon: (
-            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L13.09 8.26L19 7L14.74 12L19 17L13.09 15.74L12 22L10.91 15.74L5 17L9.26 12L5 7L10.91 8.26L12 2Z"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-binary-icon lucide-binary"><rect x="14" y="14" width="4" height="6" rx="2"/><rect x="6" y="4" width="4" height="6" rx="2"/><path d="M6 20h4"/><path d="M14 10h4"/><path d="M6 14h2v6"/><path d="M14 4h2v6"/></svg>
         )
     },
     {
         title: "Data-Driven Decisions",
         description: "Empower insurers and customers with real-time data, valuations, and tools for better decision-making.",
         icon: (
-            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-circle-check-big-icon lucide-circle-check-big"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
         )
     },
     {
         title: "Seamless Customer Experience",
         description: "Enhance customer experience through roadside assistance, claims support, and easy-to-use digital platforms.",
         icon: (
-            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M21 9V7L15 1H5C3.89 1 3 1.89 3 3V7H1V9H3V15H1V17H3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V17H23V15H21V9H23M19 21H5V3H13V9H19V21Z"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-user-round-check-icon lucide-user-round-check"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="m16 19 2 2 4-4"/></svg>
         )
     },
     {
         title: "Regional Growth with Integrity",
         description: "Expand regionally while maintaining credibility, innovation, and customer-first values.",
         icon: (
-            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M16 4C18.2 4 20 5.8 20 8S18.2 12 16 12 12 10.2 12 8 13.8 4 16 4M16 14C20.4 14 24 15.8 24 18V20H8V18C8 15.8 11.6 14 16 14M8 12C10.2 12 12 10.2 12 8S10.2 4 8 4 4 5.8 4 8 5.8 12 8 12M8 14C3.6 14 0 15.8 0 18V20H6V18C6 16.9 6.9 16 8 16C9.1 16 10 16.9 10 18V20H16V18C16 15.8 12.4 14 8 14Z"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-chart-no-axes-combined-icon lucide-chart-no-axes-combined"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg>
         )
     }
 ];
@@ -68,9 +61,7 @@ export function Values() {
                         <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-12 border border-brand/20 hover:bg-white transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
                             <div className="text-center mb-6">
                                 <div className="inline-flex items-center justify-center w-16 h-16 bg-brand rounded-full mb-4">
-                                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M21 9V7L15 1H5C3.89 1 3 1.89 3 3V7H1V9H3V15H1V17H3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V17H23V15H21V9H23M19 21H5V3H13V9H19V21Z"/>
-                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-eye-icon lucide-eye text-brand-white"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
                                 </div>
                                 <h2 className="text-brand text-3xl md:text-4xl font-bold mb-4">Vision</h2>
                             </div>
@@ -87,9 +78,7 @@ export function Values() {
                         <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-12 border border-brand/20 hover:bg-white transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
                             <div className="text-center mb-6">
                                 <div className="inline-flex items-center justify-center w-16 h-16 bg-brand rounded-full mb-4">
-                                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2M12 4.5L19.5 8.5V10C19.5 14.5 17.5 17.5 12 19.5C6.5 17.5 4.5 14.5 4.5 10V8.5L12 4.5Z"/>
-                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-crosshair-icon lucide-crosshair text-brand-white"><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></svg>
                                 </div>
                                 <h2 className="text-brand text-3xl md:text-4xl font-bold mb-4">Mission</h2>
                             </div>

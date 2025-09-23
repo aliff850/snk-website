@@ -3,6 +3,7 @@ import { AllClaimsOverview } from '@/components/services/allclaims/overview';
 import { AllClaimsFeatures } from '@/components/services/allclaims/features';
 import { AllClaimsHowItWorks } from '@/components/services/allclaims/howItWorks';
 import { AllClaimsCTA } from '@/components/services/allclaims/cta';
+import { PreviewVideo } from '@/app/components/services/allclaims/video';
 
 export default function AllClaimsPage() {
     return(
@@ -10,7 +11,9 @@ export default function AllClaimsPage() {
             <AllClaimsHero />
             <AllClaimsOverview />
             <AllClaimsFeatures />
-            <AllClaimsHowItWorks />
+            <PreviewVideo />
+            
+            {/* <AllClaimsHowItWorks /> */}
             <AllClaimsCTA />
         </div>
     )

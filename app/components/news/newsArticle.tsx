@@ -22,7 +22,7 @@ export function NewsArticle({ article, index }: NewsArticleProps) {
     
     return (
         <AnimateOnLoad animation="fade-in-up" delay={animationDelay}>
-            <article className={`bg-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col ${
+            <article className={`bg-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col group ${
                 article.featured ? 'md:col-span-2' : ''
             }`}>
                 
@@ -36,7 +36,7 @@ export function NewsArticle({ article, index }: NewsArticleProps) {
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t group-hover:from-brand/30 to-transparent transition-all duration-300"></div>
                     
                     {/* Category Badge */}
                     <div className="absolute top-4 left-4">

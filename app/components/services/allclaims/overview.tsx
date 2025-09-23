@@ -3,14 +3,14 @@ import Image from 'next/image';
 
 export function AllClaimsOverview() {
     return(
-        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 py-16 px-4 md:px-12 lg:px-24 font-onest min-h-screen">
+        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full h-full max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 justify-center items-stretch h-full">
                     
                     {/* Content */}
                     <AnimateOnLoad animation="fade-in-left">
                         <div className="space-y-6">
-                            <h2 className="text-brand text-4xl md:text-5xl font-bold">Revolutionary Damage Assessment</h2>
+                            {/* <h2 className="text-brand text-4xl md:text-5xl font-bold">Revolutionary Damage Assessment</h2> */}
                             <p className="text-brand text-lg md:text-xl leading-relaxed">
                                 AllClaims leverages cutting-edge artificial intelligence and computer vision technology to analyze vehicle damage from photos, providing instant, accurate repair estimates that streamline the claims process.
                             </p>

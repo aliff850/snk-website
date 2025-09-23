@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Onest, Poppins } from "next/font/google";
 import { Navigation } from "./components/navigation";
 import { Footer } from "./components/footer";
+import ScrollToTop from "./components/ui/ScrollToTop";
 import "./globals.css";
 
 const onest = Onest({
@@ -27,6 +28,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  <ScrollToTop/>
+
   return (
     <html lang="en" className="scroll-smooth">
       <body

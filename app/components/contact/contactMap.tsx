@@ -40,7 +40,7 @@ export function ContactMap() {
                         <div className="space-y-8">
                             
                             {/* Address Card */}
-                            <ContactCard 
+                            {/* <ContactCard 
                                 title="Office Address"
                                 line1="SNK Market Data Research Sdn Bhd"
                                 line2="SNK Market Data Research SB, 11A-2, Jalan USJ1/1A, Regalia Business Center"
@@ -50,9 +50,9 @@ export function ContactMap() {
                                         <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22S19 14.25 19 9C19 5.13 15.87 2 12 2M12 11.5C10.62 11.5 9.5 10.38 9.5 9S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5Z"/>
                                     </svg>
                                 }
-                            />
+                            /> */}
 
-                            {/* <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg">
+                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg">
                                 <div className="flex items-start gap-4">
                                     <div className="bg-brand-element rounded-2xl p-3 flex-shrink-0">
                                         <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -68,10 +68,10 @@ export function ContactMap() {
                                         </div>
                                     </div>
                                 </div>
-                            </div> */}
+                            </div>
 
                             {/* Transportation */}
-                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg">
+                            {/* <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg">
                                 <h3 className="text-brand text-xl font-bold mb-6">How to Get Here</h3>
                                 
                                 <div className="space-y-4">
@@ -112,7 +112,7 @@ export function ContactMap() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Nearby Landmarks */}
                             {/* <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg">
