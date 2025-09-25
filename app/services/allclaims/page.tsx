@@ -11,7 +11,9 @@ export default function AllClaimsPage() {
             <AllClaimsHero />
             <AllClaimsOverview />
             <AllClaimsFeatures />
-            <PreviewVideo />
+            <PreviewVideo 
+                filename='Auto estimation.mp4'
+            />
             
             {/* <AllClaimsHowItWorks /> */}
             <AllClaimsCTA />
