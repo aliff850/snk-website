@@ -34,8 +34,8 @@ export function FAQSection() {
     ]
   
     return (
-      <section className="w-full bg-brand min-h-screen justify-center items-center px-24 py-16 font-onest">
-        <div className="max-w-6xl mx-auto flex flex-col gap-8">
+      <section className="bg-brand justify-center items-center px-4 md:px-12 lg:px-24 py-16 font-onest">
+        <div className="w-full max-w-7xl mx-auto flex flex-col gap-8">
             <AnimateOnLoad animation="fade-in-up">
                 <div className="text-center text-brand-foreground flex flex-col">
                     <h2 className="text-4xl md:text-6xl font-bold mb-6">
@@ -47,7 +47,7 @@ export function FAQSection() {
                 </div>
             </AnimateOnLoad>
   
-            <div className="max-w-4xl mx-auto">
+            <div className="w-full">
             <Accordion type="single" collapsible className="flex flex-col gap-4">
                 {faqs.map((faq, index) => (
                 <AnimateOnLoad animation="fade-in-up">
@@ -79,6 +79,7 @@ export function FAQSection() {
                     </Link>  */}
                 </p>
                 <Button href="/contact" size="sm" className="text-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-phone-icon lucide-phone mr-2"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg>
                     Contact Us Directly!
                 </Button>
             </div>

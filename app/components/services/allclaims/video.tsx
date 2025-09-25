@@ -1,4 +1,6 @@
 import AnimateOnLoad from "../../ui/AnimateOnLoad"
+import { Suspense } from "react"
+import { list } from "@vercel/blob"
 
 export function PreviewVideo() {
 
@@ -12,19 +14,18 @@ export function PreviewVideo() {
                 </div>
             </AnimateOnLoad>
 
-            <div className="w-full h-[560px]">
-
+            {/* <div className="w-full h-fit">
                 <iframe
-                width="560"
-                height="315"
+                width="1920"
+                height="1080"
                 src="https://www.youtube.com/embed/5kQHA6uM5yk?si=Z8f4Yt4bPEWnRMlA"
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                className="rounded-2xl w-full h-full"
+                className="rounded-2xl"
                 ></iframe>
-            </div>
+            </div> */}
 
         </section>
     )

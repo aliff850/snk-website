@@ -68,7 +68,9 @@ export function History() {
                 <AnimateOnLoad animation="fade-in-up" delay={200}>
                     <div className="relative">
                         {/* Timeline Line */}
-                        <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-brand rounded-full"></div>
+                        <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-brand rounded-full">
+                                                    
+                        </div>
                         
                         {/* Timeline Events */}
                         <div className="space-y-8 md:space-y-12">
@@ -102,25 +104,26 @@ function TimelineEventComponent({ event, index }: TimelineEventProps) {
             animation={isLeft ? "fade-in-left" : "fade-in-right"} 
             delay={animationDelay}
         >
-            <div className={`flex items-center ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
+            <div className={`w-full flex justify-center items-center ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
 
                 {/* Content Card */}
                 <div className={`w-5/12 ${isLeft ? 'text-right pr-4' : 'text-left pl-4'}`}>
                     <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
-                        <div className="text-brand text-2xl font-bold mb-2">{event.year}</div>
+                        <div className="text-brand text-4xl font-bold mb-2">{event.year}</div>
                         <h3 className="text-brand text-xl md:text-2xl font-semibold mb-3">{event.title}</h3>
                         <p className="text-brand/80 text-sm md:text-base leading-relaxed">{event.description}</p>
                     </div>
                 </div>
-                
-                {/* Timeline Node */}
-                <div className="w-2/12 flex justify-center">
+
+                {/* Node */}
+                <div className="mx-8 flex justify-center">
                     <div className="relative">
                         <div className="w-6 h-6 bg-brand rounded-full border-4 border-white shadow-lg z-10 relative"></div>
                         {/* Node Glow Effect */}
                         <div className="absolute inset-0 w-6 h-6 bg-brand-element rounded-full animate-pulse opacity-50"></div>
                     </div>
                 </div>
+                
                 
                 {/* Image */}
                 <div className={`w-5/12 ${isLeft ? 'pl-4' : 'pr-4'}`}>
