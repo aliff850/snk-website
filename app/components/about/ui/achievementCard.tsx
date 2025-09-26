@@ -30,7 +30,7 @@ export function AchievementCard() {
             </div>
             
             {/* BNM and PIAM approval */}
-            <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
 
                 <AnimateOnLoad animation="fade-in-left" delay={100}>
                     <div className="bg-brand-white rounded-3xl w-fit p-4 px-8 border border-brand/20 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group">
