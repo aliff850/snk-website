@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export function AllClaimsOverview() {
     return(
-        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 py-16 px-4 md:px-12 lg:px-24 font-onest">
+        <section className="w-full py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full h-full max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 justify-center items-stretch h-full">
                     
@@ -35,8 +35,8 @@ export function AllClaimsOverview() {
                     {/* Visual */}
                     <AnimateOnLoad animation="fade-in-right">
                         <div className="h-full flex">
-                            <div className="h-full w-full rounded-4xl overflow-hidden group">
-                                <Image src="/services/estimation.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width={1200} height={1200} alt="AllClaims Damage Assessment Interface"/>
+                            <div className="relative h-full w-full rounded-4xl overflow-hidden group">
+                                <Image src="/services/estimation.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" fill alt="AllClaims Damage Assessment Interface"/>
                             </div>
                         </div>
                         {/* <div className="relative h-96 bg-gradient-to-br from-brand-element/10 to-brand/10 rounded-3xl overflow-hidden border border-brand/20 shadow-lg">

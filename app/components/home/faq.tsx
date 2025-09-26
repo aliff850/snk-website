@@ -73,7 +73,7 @@ export function FAQSection() {
 
             <div className="text-center text-brand-foreground flex flex-col justify-center gap-4 items-center">
                 <p className="text-xl mx-auto">
-                    Cannot find the answer for your question?
+                    Unable find the answer for your question?
                     {/* <Link href="/contact" className="hover:text-brand-element transition-colors duration-200">
                         Contact us directly.
                     </Link>  */}

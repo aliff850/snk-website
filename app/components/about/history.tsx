@@ -73,7 +73,7 @@ export function History() {
                         </div>
                         
                         {/* Timeline Events */}
-                        <div className="space-y-8 md:space-y-12">
+                        <div className="flex flex-col gap-8 md:gap-12">
                             {timelineEvents.map((event, index) => (
                                 <TimelineEventComponent 
                                     key={index} 
@@ -100,46 +100,53 @@ function TimelineEventComponent({ event, index }: TimelineEventProps) {
     const animationDelay = (index * 100) as 0 | 100 | 200 | 300 | 400;
     
     return (
-        <AnimateOnLoad 
-            animation={isLeft ? "fade-in-left" : "fade-in-right"} 
-            delay={animationDelay}
-        >
-            <div className={`w-full flex justify-center items-center ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
+        
+            <div className={`w-full grid items-center gap-4 sm:grid-cols-1 md:grid-cols-[5fr_1fr_5fr]`}>
 
                 {/* Content Card */}
-                <div className={`w-5/12 ${isLeft ? 'text-right pr-4' : 'text-left pl-4'}`}>
-                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
-                        <div className="text-brand text-4xl font-bold mb-2">{event.year}</div>
-                        <h3 className="text-brand text-xl md:text-2xl font-semibold mb-3">{event.title}</h3>
-                        <p className="text-brand/80 text-sm md:text-base leading-relaxed">{event.description}</p>
-                    </div>
+                <div className={`${isLeft ? 'md:text-right md:pr-4' : 'md:text-left md:pl-4'} order-1 ${isLeft ? 'md:order-1' : 'md:order-3'}`}>
+                    <AnimateOnLoad 
+                        animation={isLeft ? "fade-in-left" : "fade-in-right"} 
+                        delay={animationDelay}
+                    >
+                        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
+                            <div className="text-brand text-4xl font-bold mb-2">{event.year}</div>
+                            <h3 className="text-brand text-xl md:text-2xl font-semibold mb-3">{event.title}</h3>
+                            <p className="text-brand/80 text-sm md:text-base leading-relaxed">{event.description}</p>
+                        </div>
+                    </AnimateOnLoad>
                 </div>
 
                 {/* Node */}
-                <div className="mx-8 flex justify-center">
+                <div className="hidden md:flex mx-8 justify-center md:order-2">
                     <div className="relative">
                         <div className="w-6 h-6 bg-brand rounded-full border-4 border-white shadow-lg z-10 relative"></div>
                         {/* Node Glow Effect */}
-                        <div className="absolute inset-0 w-6 h-6 bg-brand-element rounded-full animate-pulse opacity-50"></div>
+                        <div className="absolute inset-0 w-6 h-6 bg-brand-element rounded-full opacity-50"></div>
                     </div>
                 </div>
                 
                 
                 {/* Image */}
-                <div className={`w-5/12 ${isLeft ? 'pl-4' : 'pr-4'}`}>
-                    <div className="relative h-64 rounded-2xl overflow-hidden shadow-lg">
-                        <Image
-                            src={event.image}
-                            alt={event.title}
-                            fill
-                            className="object-cover hover:scale-105 transition-transform duration-300 ease-in-out"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
-                        />
-                        {/* Overlay for better visual appeal */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-brand/20 to-transparent"></div>
-                    </div>
+                <div className={`${isLeft ? 'md:pl-4' : 'md:pr-4'} order-2 ${isLeft ? 'md:order-3' : 'md:order-1'}`}>
+                    <AnimateOnLoad 
+                        animation={isLeft ? "fade-in-left" : "fade-in-right"} 
+                        delay={animationDelay}
+                    >
+                        <div className="relative h-64 rounded-2xl overflow-hidden shadow-lg">
+                            <Image
+                                src={event.image}
+                                alt={event.title}
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-300 ease-in-out"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                            />
+                            {/* Overlay for better visual appeal */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-brand/20 to-transparent"></div>
+                        </div>
+                    </AnimateOnLoad>
                 </div>
             </div>
-        </AnimateOnLoad>
+        
     );
 }

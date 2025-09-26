@@ -7,8 +7,11 @@ import { PreviewVideo } from '@/app/components/services/allclaims/video';
 
 export default function AllClaimsPage() {
     return(
-        <div className="min-h-screen">
-            <AllClaimsHero />
+        <div className="min-h-screen bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+            <AllClaimsHero
+                title="AllClaims"
+                caption="EPIC ESTIMATION SYSTEM"
+            />
             <AllClaimsOverview />
             <AllClaimsFeatures />
             <PreviewVideo 

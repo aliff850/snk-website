@@ -11,7 +11,7 @@ export function PreviewVideo(
     {filename}:VideoDisplayComponents) {
     return(
 
-        <section className="w-full flex flex-col justify-center items-center bg-white py-16 px-4 md:px-12 lg:px-24 font-onest">
+        <section className="w-full flex flex-col justify-center items-center py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl flex flex-col gap-8">
 
                 <AnimateOnLoad animation="fade-in-up">

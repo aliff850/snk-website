@@ -29,8 +29,8 @@ export function Navigation() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-col justify-center items-center p-4 font-onest">
-      <div className={`container md:py-3 md:px-8 transition-all duration-300 md:backdrop-blur-sm md:border md:border-brand-white/20 w-full max-w-7xl rounded-3xl ${
-        isScrolled ? "md:bg-brand-white md:backdrop-blur-md md:shadow-lg" : "md:bg-brand-white/30"
+      <div className={`container md:py-3 md:px-8 transition-all duration-300 md:backdrop-blur-sm md:border md:border-brand-white/20 w-full max-w-7xl rounded-full ${
+        isScrolled ? "md:bg-brand-white md:backdrop-blur-md md:shadow-lg text-foreground" : "md:bg-brand-white/30 text-brand-white"
       }`}
       >
       <div className="flex md:grid md:grid-cols-3 items-center">
@@ -40,7 +40,7 @@ export function Navigation() {
             <Image src="/placeholder.svg" alt="Site logo" className="group-hover:scale-105 transition-all duration-300" width={90} height={0} />
           </Link>
 
-          <div id="navigations" className="hidden md:flex justify-center justify-self-center items-center gap-8 text-foreground">
+          <div id="navigations" className="hidden md:flex justify-center justify-self-center items-center gap-8">
             <Link
               href="/about"
               className="hover:text-brand transition-colors overflow-hidden group relative whitespace-nowrap">
@@ -87,8 +87,11 @@ export function Navigation() {
               </span>
             </button>
 
-            <div className="hidden md:block">
-              {/* Login button goes here */}
+            <div className="md:block hidden">
+              <Link href="/login" className="flex items-center text-brand-white hover:bg-brand hover:scale-105 transition-all px-4 py-2 rounded-xl bg-brand/80">
+                Log In
+                {/* <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-log-in-icon lucide-log-in ml-2"><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/></svg> */}
+              </Link>
             </div>
           </div>
 
@@ -125,7 +128,7 @@ export function Navigation() {
 
             <Link href="/login" className="flex items-center text-foreground hover:bg-brand-white/60 transition-colors" onClick={() => setIsMenuOpen(false)}>
               Log In
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-log-in-icon lucide-log-in ml-2"><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/></svg>
+              {/* <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-log-in-icon lucide-log-in ml-2"><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/></svg> */}
             </Link>
 
           </div>

@@ -2,8 +2,8 @@ import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 
 export function ServicesHero() {
     return(
-        <section className="w-full bg-[url('/images/g70.jpg')] bg-cover bg-center font-onest text-white">
-            <div className="w-full h-full backdrop-blur-sm bg-black/20 px-4 md:px-12 lg:px-24 pt-30 pb-24 justify-center items-center">
+        <section className="w-full bg-[url('/images/w214.jpg')] bg-cover bg-center font-onest text-white">
+            <div className="w-full h-full bg-black/40 px-4 md:px-12 lg:px-24 pt-32 py-16 justify-center items-center">
                 <div className="text-center flex flex-col gap-4">
                     <AnimateOnLoad animation="fade-in-up">
                         <h1 className="text-background text-4xl md:text-6xl lg:text-7xl font-bold drop-shadow-sm">

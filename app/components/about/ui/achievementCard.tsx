@@ -30,10 +30,10 @@ export function AchievementCard() {
             </div>
             
             {/* BNM and PIAM approval */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center">
 
                 <AnimateOnLoad animation="fade-in-left" delay={100}>
-                    <div className="bg-brand-white rounded-3xl p-4 border border-brand/20 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group">
+                    <div className="bg-brand-white rounded-3xl w-fit p-4 px-8 border border-brand/20 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group">
                         <div className="flex flex-col items-center text-center">
                             <div className="relative w-72 h-48 transition-transform duration-300">
                                 <Image
@@ -53,7 +53,7 @@ export function AchievementCard() {
 
 
                 <AnimateOnLoad animation="fade-in-right" delay={200}>
-                    <div className="bg-brand-white rounded-3xl p-4 border border-brand/20 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group">
+                    <div className="bg-brand-white rounded-3xl w-fit p-4 px-8 border border-brand/20 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group">
                         <div className="flex flex-col items-center text-center">
                             <div className="relative w-72 h-48 transition-transform duration-300">
                                 <Image

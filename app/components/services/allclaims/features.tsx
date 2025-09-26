@@ -65,7 +65,7 @@ const features: Feature[] = [
 
 export function AllClaimsFeatures() {
     return(
-        <section className="w-full bg-white py-16 px-4 md:px-12 lg:px-24 font-onest">
+        <section className="w-full py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl mx-auto">
                 
                 {/* Section Header */}

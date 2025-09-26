@@ -1,7 +1,7 @@
 export function Interface() {
 
     return(
-        <div className="absolute inset-4 bg-white rounded-xl shadow-inner">
+        <div className="absolute inset-4 rounded-xl shadow-inner">
             <div className="p-4 h-full flex flex-col">
                 {/* Header */}
                 <div className="flex items-center gap-3 mb-4">
