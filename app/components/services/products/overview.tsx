@@ -39,8 +39,8 @@ export function ProductOverview({ overview, image }:ProductOverviewProps) {
                     {/* Visual */}
                     <AnimateOnLoad animation="fade-in-right">
                         <div className="h-full flex">
-                            <div className="relative h-full w-full rounded-4xl overflow-hidden group border border-brand/50">
-                                <Image src={image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" fill alt="AllClaims Damage Assessment Interface"/>
+                            <div className="flex flex-col items-center justify-center h-full rounded-3xl overflow-hidden group border border-brand/50">
+                                <Image src={image} className="object-cover group-hover:scale-105 transition-transform duration-300" height={900} width={500} alt="AllClaims Damage Assessment Interface"/>
                             </div>
                         </div>
                         {/* <div className="relative h-96 bg-gradient-to-br from-brand-element/10 to-brand/10 rounded-3xl overflow-hidden border border-brand/20 shadow-lg">

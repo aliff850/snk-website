@@ -61,7 +61,7 @@ def build_url(query_model: dict) -> str:
     url = 'https://search.mudah.my/v1/search?category=1020&'
     for parameter, value in query_model:
         if not value: continue
-        url += f'{parameter}={str(value).split(',')[0]}&'
+        url += f'{parameter}={str(value).split(",")[0]}&'
 
     return url.strip('&')
 
