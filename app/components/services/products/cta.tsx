@@ -1,7 +1,15 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 import { Button } from '../../ui/button';
 
-export function AllClaimsCTA() {
+interface ProductCTAProps {
+    title:string,
+    caption:string,
+    button:string,
+    link:string,
+    target:string,
+}
+
+export function ProductCTA({title,caption,button,link,target}:ProductCTAProps) {
     return(
         <section className="w-full py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl mx-auto">
@@ -18,25 +26,24 @@ export function AllClaimsCTA() {
                         
                         <div className="relative z-10 flex flex-col gap-8 justify-center items-center">
                             {/* Icon */}
-                            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full">
+                            {/* <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full">
                                 <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2M12 4.5L19.5 8.5V10C19.5 14.5 17.5 17.5 12 19.5C6.5 17.5 4.5 14.5 4.5 10V8.5L12 4.5Z"/>
                                 </svg>
-                            </div>
+                            </div> */}
                             
                             {/* Main Content */}
                             <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold">
-                                Ready to Transform Your Claims Process?
+                                {title}
                             </h2>
                             
                             <p className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
-                                Join leading insurance companies who have already revolutionized their damage assessment process with AllClaims. 
-                                Experience the power of AI-driven accuracy and speed.
+                                {caption}
                             </p>
 
 
-                            <Button variant="primary" className="text-2xl">
-                                Try AllClaims Today
+                            <Button href={link} target={target} variant="primary" className="text-2xl">
+                                {button}
                             </Button>
                             
                             {/* CTA Buttons */}

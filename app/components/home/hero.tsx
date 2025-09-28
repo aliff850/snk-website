@@ -6,7 +6,7 @@ export function HeroSection() {
     return (
 
         <section className="bg-brand min-h-screen bg-[url('/images/w214.jpg')] bg-cover bg-center bg-fixed flex flex-col justify-center items-center">
-            <div className="min-h-screen w-full bg-black/40 flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 py-16">
+            <div className="min-h-screen w-full bg-black/50 flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 py-16">
 
                 <div className="mx-auto max-w-7xl font-onest">
                     <AnimateOnLoad animation="fade-in-up">

@@ -22,7 +22,7 @@ export function ContactHero() {
                         </p>
                     </AnimateOnLoad>
 
-                    <AnimateOnLoad animation="fade-in-up" delay={300}>
+                    {/* <AnimateOnLoad animation="fade-in-up" delay={300}>
                         <div className="flex flex-wrap gap-4 justify-center mt-4">
                             <div className="bg-white/20 backdrop-blur-sm rounded-full px-6 py-2 border border-white/30">
                                 <span className="text-white font-medium">Expert Consultation</span>
@@ -34,7 +34,7 @@ export function ContactHero() {
                                 <span className="text-white font-medium">Quick Response</span>
                             </div>
                         </div>
-                    </AnimateOnLoad>
+                    </AnimateOnLoad> */}
                 </div>
             </div>
         </section>

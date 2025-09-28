@@ -1,14 +1,14 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 
-interface AllClaimsHeroProps {
+interface ProductHeroProps {
     title: string;
     caption: string;
 }
 
-export function AllClaimsHero({ title, caption }: AllClaimsHeroProps) {
+export function ProductHero({ title, caption }: ProductHeroProps) {
     return(
         <section className="w-full bg-[url('/services/estimation.png')] bg-cover bg-center font-onest text-white">
-            <div className="w-full h-full bg-black/70 px-4 md:px-12 lg:px-24 pt-32 pb-24 flex flex-col gap-8 justify-center items-center">
+            <div className="w-full h-full bg-black/50 px-4 md:px-12 lg:px-24 pt-32 pb-24 flex flex-col gap-8 justify-center items-center">
                 <div className="text-center flex flex-col gap-6">
                     <AnimateOnLoad animation="fade-in-up">
                         {/* <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-4">
@@ -27,7 +27,7 @@ export function AllClaimsHero({ title, caption }: AllClaimsHeroProps) {
                         </p>
                     </AnimateOnLoad>
 
-                    <AnimateOnLoad animation="fade-in-up" delay={300}>
+                    {/* <AnimateOnLoad animation="fade-in-up" delay={300}>
                         <div className="flex flex-wrap gap-4 justify-center mt-4">
                             <div className="bg-white/20 backdrop-blur-sm rounded-full px-6 py-2 border border-white/30">
                                 <span className="text-white font-medium">AI-Powered</span>
@@ -39,7 +39,7 @@ export function AllClaimsHero({ title, caption }: AllClaimsHeroProps) {
                                 <span className="text-white font-medium">Accurate</span>
                             </div>
                         </div>
-                    </AnimateOnLoad>
+                    </AnimateOnLoad> */}
                 </div>
             </div>
         </section>
