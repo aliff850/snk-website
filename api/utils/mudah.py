@@ -91,9 +91,12 @@ def search(searchQuery: CarSearchQuery,
     return response
 
 
-@mudahRouter.get('/all_vehicles', summary="Returns a map of every make and model available with their corresponding IDs. Or return a list of models from a specified make with their corresponding IDs")
+@mudahRouter.get('/all_vehicles',
+                 summary="Returns a map of every make and model available with their corresponding IDs. Or return a list of models from a specified make with their corresponding IDs",
+                 response_model=dict[str, str] | dict[str, dict[str, str]])
 def vehicle_map(make: str = None):
     if not make: return MAKE_MODEL_MAP
+    make = make.replace(' ', '-')
 
     if make not in MAKE_MODEL_MAP:
         return HTTPException(400, f'Unknown make provided: {make}')
