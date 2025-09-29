@@ -10,6 +10,6 @@
       "destination": "/$1"
     }
   ],
-  "installCommand": "pip install -r ./backend/requirements.txt && npm install",
+  "installCommand": "python -m pip install -r backend/requirements.txt",
   "buildCommand": "npm run build"
 }
