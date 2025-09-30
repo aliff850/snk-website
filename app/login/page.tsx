@@ -1,8 +1,24 @@
+"use client"
+
 import { Button } from "../components/ui/button"
 import AnimateOnLoad from "../components/ui/AnimateOnLoad"
 import Link from "next/link"
+import { login } from "@/utils/authentication"
+import { useActionState, useEffect } from "react"
+import { toast } from "react-toastify"
 
 export default function Login() {
+    const [state, formAction] = useActionState(
+        async (prevState: { success: boolean, error: string }, formData: FormData) => {
+            return await login(formData);
+        },
+        { success: false, error: "" }
+    );
+
+    useEffect(() => {
+        if (state.success) toast.success(`Successfully logged in`);
+        else toast.error("Login attempt failed");
+    }, [state])
     return(
         
         <section className="w-full min-h-screen bg-[url('/images/w214.jpg')] bg-cover bg-center font-onest">
@@ -19,9 +35,10 @@ export default function Login() {
                                 <p>Log into your SNK account</p>
                             </div>
 
-                            <form className="w-full flex flex-col gap-4">
+                            <form className="w-full flex flex-col gap-4" action={formAction}>
                                 <input
                                     id="email"
+                                    name="email"
                                     type="email"
                                     placeholder="Email"
                                     className="border border-white/40 bg-white/10 placeholder:text-brand-white/60 px-4 text-brand-white py-2 transition-all duration-200 rounded-full outline-none focus:border-brand"
@@ -29,12 +46,14 @@ export default function Login() {
                                 />
                                 <input
                                     id="password"
+                                    name="password"
                                     type="password"
                                     placeholder="Password"
                                     className="border border-white/40 bg-white/10 placeholder:text-brand-white/60 px-4 text-brand-white py-2 transition-all duration-200 rounded-full outline-none focus:border-brand"
                                     required
                                 />
 
+                                {!state.success && <p className="text-xs text-red-300">{state.error}</p>}
                                 <Button type="submit" variant="secondary">
                                     Log In
                                 </Button>
@@ -44,7 +63,7 @@ export default function Login() {
 
                             <p className="w-full flex items-center justify-center">
                                 No account yet? 
-                                <Link href="/register" className="ml-1 hover:text-brand transition-colors duration-300">Register now</Link>
+                                <Link href="/register" className="ml-1 hover:text-brand transition-colors duration-300 underline decoration-dotted underline-offset-2">Register now</Link>
                             </p>
 
                         </AnimateOnLoad>

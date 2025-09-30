@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { ToastContainer, Bounce } from "react-toastify";
 import { Onest, Poppins } from "next/font/google";
 import { Navigation } from "./components/navigation";
 import { Footer } from "./components/footer";
@@ -38,6 +38,20 @@ export default function RootLayout({
         <Navigation />
         {children}
         <Footer />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+          />
+          <ToastContainer />
       </body>
     </html>
   );
