@@ -11,6 +11,7 @@ interface NewsArticle {
     image: string;
     featured?: boolean;
     readTime: string;
+    url: string;
 }
 
 const mockNewsArticles: NewsArticle[] = [
@@ -24,63 +25,65 @@ const mockNewsArticles: NewsArticle[] = [
         category: "Technology",
         image: "/services/estimation.png",
         featured: true,
-        readTime: "5 min read"
-    },
-    {
-        id: "2",
-        title: "Malaysia's Insurance Industry Embraces Digital Transformation",
-        excerpt: "New BNM regulations drive adoption of automated claims systems, with SNK leading the charge in digital innovation and customer experience enhancement.",
-        content: "The Malaysian insurance sector is experiencing unprecedented digital transformation as new regulatory frameworks from Bank Negara Malaysia encourage...",
-        author: "Nicholas Raj",
-        date: "December 12, 2024",
-        category: "Industry News",
-        image: "/images/g70.jpg",
-        readTime: "4 min read"
-    },
-    {
-        id: "3",
-        title: "SNK Partners with Major Insurers for Regional Expansion",
-        excerpt: "Strategic partnerships with Allianz, Etiqa, and MSIG enable SNK to expand its insurtech solutions across Southeast Asia, reaching over 2 million customers.",
-        content: "SNK Market Data Research has secured strategic partnerships with three major insurance providers, marking a significant milestone in the company's...",
-        author: "Nicholas Raj",
-        date: "December 10, 2024",
-        category: "Company News",
-        image: "/images/mazda.jpg",
-        readTime: "3 min read"
-    },
-    {
-        id: "4",
-        title: "AI-Powered Vehicle Valuation Reaches 95% Accuracy Milestone",
-        excerpt: "SNK's machine learning algorithms achieve industry-leading accuracy in vehicle damage assessment, revolutionizing the claims estimation process.",
-        content: "After months of development and testing, SNK's AI-powered vehicle valuation system has achieved a remarkable 95% accuracy rate in damage assessment...",
-        author: "Nicholas Raj",
-        date: "December 8, 2024",
-        category: "Technology",
-        image: "/services/value.jpg",
-        readTime: "6 min read"
-    },
-    {
-        id: "5",
-        title: "Road Ranger App Surpasses 100,000 Downloads",
-        excerpt: "SNK's mobile application for roadside assistance and claims reporting reaches a major milestone, demonstrating strong user adoption and satisfaction.",
-        content: "SNK Market Data Research celebrates a significant achievement as its Road Ranger mobile application surpasses 100,000 downloads across Malaysia...",
-        author: "Nicholas Raj",
-        date: "December 5, 2024",
-        category: "Company News",
-        image: "/services/roadside.jpg",
-        readTime: "4 min read"
-    },
-    {
-        id: "6",
-        title: "Thailand Insurance Market Adopts SNK's Digital Solutions",
-        excerpt: "Expansion into Thailand's insurance market brings SNK's innovative claims processing technology to a new region, with promising early adoption rates.",
-        content: "SNK Market Data Research has successfully launched its digital insurance solutions in Thailand, marking the company's first major expansion outside...",
-        author: "Nicholas Raj",
-        date: "December 3, 2024",
-        category: "International",
-        image: "/images/g70.jpg",
-        readTime: "5 min read"
-    },
+        readTime: "5 min read",
+        url: "/news/article"
+    }
+    // },
+    // {
+    //     id: "2",
+    //     title: "Malaysia's Insurance Industry Embraces Digital Transformation",
+    //     excerpt: "New BNM regulations drive adoption of automated claims systems, with SNK leading the charge in digital innovation and customer experience enhancement.",
+    //     content: "The Malaysian insurance sector is experiencing unprecedented digital transformation as new regulatory frameworks from Bank Negara Malaysia encourage...",
+    //     author: "Nicholas Raj",
+    //     date: "December 12, 2024",
+    //     category: "Industry News",
+    //     image: "/images/g70.jpg",
+    //     readTime: "4 min read"
+    // },
+    // {
+    //     id: "3",
+    //     title: "SNK Partners with Major Insurers for Regional Expansion",
+    //     excerpt: "Strategic partnerships with Allianz, Etiqa, and MSIG enable SNK to expand its insurtech solutions across Southeast Asia, reaching over 2 million customers.",
+    //     content: "SNK Market Data Research has secured strategic partnerships with three major insurance providers, marking a significant milestone in the company's...",
+    //     author: "Nicholas Raj",
+    //     date: "December 10, 2024",
+    //     category: "Company News",
+    //     image: "/images/mazda.jpg",
+    //     readTime: "3 min read"
+    // },
+    // {
+    //     id: "4",
+    //     title: "AI-Powered Vehicle Valuation Reaches 95% Accuracy Milestone",
+    //     excerpt: "SNK's machine learning algorithms achieve industry-leading accuracy in vehicle damage assessment, revolutionizing the claims estimation process.",
+    //     content: "After months of development and testing, SNK's AI-powered vehicle valuation system has achieved a remarkable 95% accuracy rate in damage assessment...",
+    //     author: "Nicholas Raj",
+    //     date: "December 8, 2024",
+    //     category: "Technology",
+    //     image: "/services/value.jpg",
+    //     readTime: "6 min read"
+    // },
+    // {
+    //     id: "5",
+    //     title: "Road Ranger App Surpasses 100,000 Downloads",
+    //     excerpt: "SNK's mobile application for roadside assistance and claims reporting reaches a major milestone, demonstrating strong user adoption and satisfaction.",
+    //     content: "SNK Market Data Research celebrates a significant achievement as its Road Ranger mobile application surpasses 100,000 downloads across Malaysia...",
+    //     author: "Nicholas Raj",
+    //     date: "December 5, 2024",
+    //     category: "Company News",
+    //     image: "/services/roadside.jpg",
+    //     readTime: "4 min read"
+    // },
+    // {
+    //     id: "6",
+    //     title: "Thailand Insurance Market Adopts SNK's Digital Solutions",
+    //     excerpt: "Expansion into Thailand's insurance market brings SNK's innovative claims processing technology to a new region, with promising early adoption rates.",
+    //     content: "SNK Market Data Research has successfully launched its digital insurance solutions in Thailand, marking the company's first major expansion outside...",
+    //     author: "Nicholas Raj",
+    //     date: "December 3, 2024",
+    //     category: "International",
+    //     image: "/images/g70.jpg",
+    //     readTime: "5 min read"
+    // },
 
 ];
 
@@ -97,37 +100,13 @@ export function NewsGrid() {
                     </p>
                 </div> */}
 
-                {/* News Grid - Unique Layout */}
+                {/* News Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                     {mockNewsArticles.map((article, index) => (
                         <NewsArticle key={article.id} article={article} index={index} />
                     ))}
                 </div>
 
-                {/* Newsletter Signup */}
-                {/* <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-brand/20 shadow-lg">
-                    <div className="text-center">
-                        <h3 className="text-brand text-2xl md:text-3xl font-bold mb-4">Stay Updated</h3>
-                        <p className="text-brand text-lg mb-8 max-w-2xl mx-auto">
-                            Subscribe to our newsletter for the latest insurtech insights, industry updates, and SNK developments delivered to your inbox.
-                        </p>
-                        
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-                            <input 
-                                type="email" 
-                                placeholder="Enter your email address"
-                                className="flex-1 px-4 py-3 rounded-xl border border-brand/20 focus:outline-none focus:ring-2 focus:ring-brand-element text-brand placeholder-brand/50"
-                            />
-                            <button className="bg-brand text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-hover transition-colors duration-200">
-                                Subscribe
-                            </button>
-                        </div>
-                        
-                        <p className="text-brand/60 text-sm mt-4">
-                            We respect your privacy. Unsubscribe at any time.
-                        </p>
-                    </div>
-                </div> */}
 
 
                 {/* <div className="text-center mt-12">

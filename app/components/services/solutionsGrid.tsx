@@ -1,59 +1,7 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 import Image from 'next/image';
 import { Button } from '../ui/button';
-
-interface Solution {
-    title: string;
-    description: string;
-    image: string;
-    features: string[];
-    learnMoreUrl?: string;
-}
-
-const solutions: Solution[] = [
-    {
-        title: "AllClaims",
-        description: "Advanced accident damage estimation system providing accurate assessments in minutes using AI-powered image analysis.",
-        image: "/services/estimation.png",
-        features: ["AI-powered analysis", "Real-time processing", "Mobile compatibility", "Insurance integration"],
-        learnMoreUrl: "/services/allclaims"
-    },
-    {
-        title: "Road Ranger",
-        description: "Comprehensive end-to-end accident and claims management platform connecting all stakeholders in the insurance ecosystem.",
-        image: "/services/towtruck.jpg",
-        features: ["End-to-end workflow", "Multi-stakeholder access", "Real-time updates", "Document management"],
-        learnMoreUrl: "/solutions/roadranger"
-    },
-    {
-        title: "Digital Marketing Platform",
-        description: "Instant policy issuance and management system enabling insurers to buy and issue policies seamlessly, anytime, anywhere.",
-        image: "/services/policy.jpg",
-        features: ["Instant issuance", "24/7 availability", "Secure transactions", "Policy management"],
-        learnMoreUrl: "/solutions/digital-platform"
-    },
-    {
-        title: "Road Ranger App",
-        description: "Mobile application providing roadside assistance, accident reporting, and repair estimates on the go for customers.",
-        image: "/services/roadside.jpg",
-        features: ["Mobile-first design", "GPS integration", "Photo capture", "Emergency assistance"],
-        learnMoreUrl: "/solutions/roadranger-app"
-    },
-    {
-        title: "Real-Time Vehicle Valuation",
-        description: "Instant, reliable valuations for cars, bikes, and commercial vehicles using comprehensive market data and AI algorithms.",
-        image: "/services/value.jpg",
-        features: ["Real-time data", "Multi-vehicle support", "Market analysis", "API integration"],
-        learnMoreUrl: "/solutions/valuation"
-    },
-    {
-        title: "Claims Online Estimation",
-        description: "Online claims estimation system reducing manual work and improving accuracy through intelligent workflow management.",
-        image: "/services/estimation.png",
-        features: ["Automated workflows", "Fraud detection", "Document processing", "Analytics dashboard"],
-        learnMoreUrl: "/solutions/automation"
-    },
-];
+import { solutions } from '../../data/solutions';
 
 export function SolutionsGrid() {
     return(

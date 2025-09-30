@@ -1,5 +1,10 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 
+interface FeatureProps {
+    header:string;
+    caption:string;
+}
+
 interface Feature {
     title: string;
     description: string;
@@ -63,7 +68,7 @@ const features: Feature[] = [
     }
 ];
 
-export function AllClaimsFeatures() {
+export function ProductFeatures({header,caption}:FeatureProps) {
     return(
         <section className="w-full py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl mx-auto">
@@ -71,9 +76,9 @@ export function AllClaimsFeatures() {
                 {/* Section Header */}
                 <AnimateOnLoad animation="fade-in-up">
                     <div className="text-center mb-16">
-                        <h2 className="text-brand text-4xl md:text-5xl font-bold mb-6">Powerful Features</h2>
-                        <p className="text-brand text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-                            AllClaims combines cutting-edge technology with user-friendly design to deliver the most comprehensive damage assessment solution available.
+                        <h2 className="text-brand text-4xl md:text-5xl font-bold mb-6">{header}</h2>
+                        <p className="text-brand text-lg md:text-xl mx-auto leading-relaxed">
+                            {caption}
                         </p>
                     </div>
                 </AnimateOnLoad>

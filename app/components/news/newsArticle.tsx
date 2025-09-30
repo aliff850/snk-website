@@ -1,20 +1,22 @@
-import Image from 'next/image';
-import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
+import Image from 'next/image'
+import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
+import Link from 'next/link'
 
 interface NewsArticleProps {
     article: {
-        id: string;
-        title: string;
-        excerpt: string;
-        content: string;
-        author: string;
-        date: string;
-        category: string;
-        image: string;
-        featured?: boolean;
-        readTime: string;
-    };
-    index: number;
+        id: string
+        title: string
+        excerpt: string
+        content: string
+        author: string
+        date: string
+        category: string
+        image: string
+        featured?: boolean
+        readTime: string
+        url: string
+    }
+    index: number
 }
 
 export function NewsArticle({ article, index }: NewsArticleProps) {
@@ -38,12 +40,12 @@ export function NewsArticle({ article, index }: NewsArticleProps) {
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t group-hover:from-brand/30 to-transparent transition-all duration-300"></div>
                     
-                    {/* Category Badge */}
+                    {/* 
                     <div className="absolute top-4 left-4">
                         <span className="bg-brand-element text-white px-3 py-1 rounded-full text-xs font-semibold">
                             {article.category}
                         </span>
-                    </div>
+                    </div> */}
 
                     {/* Featured Badge */}
                     {article.featured && (
@@ -84,9 +86,10 @@ export function NewsArticle({ article, index }: NewsArticleProps) {
                         </div>
                         <div className="flex items-center justify-between">
                             <span className="text-brand/60 text-sm">{article.date}</span>
-                            <button className="text-brand-element hover:text-brand font-semibold text-sm transition-colors duration-200">
-                                Read More →
-                            </button>
+                            <Link href={article.url} className="flex gap-2 items-center text-brand-element hover:text-brand font-semibold text-sm transition-colors duration-200">
+                                Read More
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                            </Link>
                         </div>
                     </div>
                 </div>

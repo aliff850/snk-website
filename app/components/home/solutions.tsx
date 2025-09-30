@@ -1,10 +1,13 @@
 import { SolutionCard } from "../ui/solutionCard"
 import { Button } from "../ui/button"
+import AnimateOnLoad from "../ui/AnimateOnLoad"
+import { solutions } from "../../data/solutions"
+
+
 
 export function SolutionsSection() {
 
     return(
-
         <section className="bg-brand flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 py-16 font-onest text-white">
 
             <div className="w-full max-w-7xl flex flex-col justify-center items-center gap-8">
@@ -15,54 +18,28 @@ export function SolutionsSection() {
                 </div>
 
                 <div className="w-full max-w-7xl grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <SolutionCard 
-
-                        title="AllClaims"
-                        description="Accurate vehicle claims estimates in minutes."
-                        learnMoreUrl="/services/allclaims"
-                        image="services/estimation.png"
                     
-                    />
-                    <SolutionCard 
+                    {solutions.map((solution, index) => (
+                        
+                        <AnimateOnLoad 
+                            key={index}
+                            animation="fade-in-up" 
+                            delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
+                        >
 
-                        title="Road Ranger"
-                        description="End-to-end accident and claims management platform."
-                        learnMoreUrl="/"
-                        image="services/towtruck.jpg"
-                    
-                    />
-                    <SolutionCard 
+                            <SolutionCard
+                                title={solution.title}
+                                description={solution.description}
+                                learnMoreUrl={solution.learnMoreUrl}
+                                image={solution.image}                            
+                            />
 
-                        title="Digital Marketing Platform"
-                        description="Buy and issue insurance policies instantly, anytime."
-                        learnMoreUrl="/"
-                        image="services/policy.jpg"
-                    
-                    />
-                    <SolutionCard 
 
-                        title="Road Ranger App"
-                        description="Roadside help, accident reporting, and repair estimates on the go."
-                        learnMoreUrl="/"
-                        image="services/roadside.jpg"
-                    
-                    />
-                    <SolutionCard 
+                        </AnimateOnLoad>
 
-                        title="Real-Time Online Vehicle Valuation"
-                        description="Instant, reliable valuations for cars, bikes, and commercial vehicles."
-                        learnMoreUrl="/"
-                        image="services/value.jpg"
-                    
-                    />
-                    <SolutionCard 
+                    ))}
 
-                        title="Claims Online Estimation"
-                        description="Accurate accident damage estimates in minutes."
-                        learnMoreUrl="/"
-                        image="images/g70.jpg"
-                    
-                    />
+
                 </div>
 
                 <Button 

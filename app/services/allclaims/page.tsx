@@ -1,6 +1,6 @@
 import { ProductHero } from '@/app/components/services/products/hero';
 import { ProductOverview } from '@/app/components/services/products/overview';
-import { AllClaimsFeatures } from '@/app/components/services/products/features';
+import { ProductFeatures } from '@/app/components/services/products/features';
 import { AllClaimsHowItWorks } from '@/app/components/services/products/howItWorks';
 import { ProductCTA } from '@/app/components/services/products/cta';
 import { PreviewVideo } from '@/app/components/services/products/video';
@@ -14,17 +14,21 @@ export default function AllClaimsPage() {
             />
 
             <ProductOverview
-                overview="AllClaims leverages cutting-edge artificial intelligence and computer vision technology to analyze vehicle damage from photos, providing instant, accurate repair estimates that streamline the claims process.
-                <br><br>
-                Our system processes thousands of damage scenarios, learning from each assessment to continuously improve accuracy and reduce processing time from hours to minutes.
+                title="What is AllClaims?"
+                overview="
+                AllClaims is a cloud-based, end-to-end motor insurance claims processing and management platform, accredited by MRC, PIAM, and Bank Negara Malaysia. Designed to cover the entire claims lifecycle — from the point of accident to final settlement — AllClaims connects all stakeholders in the ecosystem, including workshops, adjusters, insurers, legal firms, and regulators. With intelligent automation, real-time data processing, and advanced fraud detection, the system ensures faster, more transparent, and accurate claims handling.
                 "
-                image="/services/estimation.png"
+                image="/services/allclaims2.png"
+                alt="AllClaims Landing Page"
             />
 
-            <AllClaimsFeatures />
+            <ProductFeatures 
+                header="Features in AllClaims"
+                caption="AllClaim comes with a variety of features designed to streamline the estimation process."
+            />
 
             <PreviewVideo 
-                filename='Auto estimation.mp4'
+                filename='https://www.youtube.com/embed/wXlRf90vHIw?si=Q-ExL2lnoVaEUGzj'
             />
             
             {/* <AllClaimsHowItWorks /> */}
