@@ -1,10 +1,5 @@
 {
   "version": 2,
-  "functions": {
-    "api/main.py": {
-      "runtime": "@vercel/python@3.13.0"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -15,6 +10,5 @@
       "destination": "/$1"
     }
   ],
-  "installCommand": "pip install -r ./backend/requirements.txt && npm install",
   "buildCommand": "npm run build"
 }
