@@ -1,7 +1,7 @@
-import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
-import Image from 'next/image';
-import { Button } from '../ui/button';
-import { solutions } from '../../data/solutions';
+import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
+import Image from 'next/image'
+import { Button } from '../ui/button'
+import { solutions } from '@/app/data/solutions'
 
 export function SolutionsGrid() {
     return(

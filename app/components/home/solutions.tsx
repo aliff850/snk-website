@@ -1,7 +1,7 @@
 import { SolutionCard } from "../ui/solutionCard"
 import { Button } from "../ui/button"
 import AnimateOnLoad from "../ui/AnimateOnLoad"
-import { solutions } from "../../data/solutions"
+import { solutions } from "@/app/data/solutions"
 
 
 
