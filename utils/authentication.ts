@@ -10,8 +10,7 @@ export async function login(formData: FormData) {
   };
 
   const { data, error } = await supabase.auth.signInWithPassword(auth_data);
-  if (error) return { success: false, error: error.message };
-  return { success: true, error: ''};
+  if (error) throw error.message;
 }
 
 export async function signup(formData: FormData) {
@@ -21,20 +20,20 @@ export async function signup(formData: FormData) {
     password: formData.get("password") as string,
     options: {
       data: {
-        fullname: formData.get("fullname") as string,
+        full_name: formData.get("fullname") as string,
+        // not sure what user metadata to save for account creation
       },
+      redirectTo: `${process.env.NODE_ENV === "development" ? "http://127.0.0.1:3000" : process.env.NEXT_PUBLIC_APP_URL}`,
     },
   };
 
   const { data, error } = await supabase.auth.signUp(auth_data);
-  if (error) { return { success: false, error: error.message }; }
-  return { success: true, error: ''} 
+  if (error) throw error.message;
 }
 
 export async function signout() {
   const supabase = await createClient();
 
   const { error } = await supabase.auth.signOut();
-  if (error) return { success: false, error: error.message };
-  return { success: true, error: ''}
+  if (error) throw error.message;
 }

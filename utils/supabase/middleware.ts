@@ -39,7 +39,7 @@ export async function updateSession(request: NextRequest) {
 
   console.log(request.nextUrl.pathname)
   
-  const require_auth = ['']
+  const require_auth = ['/valuation']
   if (
     !user &&
     require_auth.includes(request.nextUrl.pathname)
