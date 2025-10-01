@@ -13,9 +13,8 @@ const onest = Onest({
 
 const poppins = Poppins({
   variable: "--font-poppins",
-  weight: ["100","200","300","400","500","600","700","800","900"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
-
 });
 
 export const metadata: Metadata = {
@@ -28,7 +27,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  <ScrollToTop/>
+  <ScrollToTop />;
 
   return (
     <html lang="en" className="scroll-smooth">
@@ -50,8 +49,7 @@ export default function RootLayout({
           pauseOnHover
           theme="light"
           transition={Bounce}
-          />
-          <ToastContainer />
+        />
       </body>
     </html>
   );

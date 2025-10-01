@@ -1,15 +1,19 @@
-import { type NextRequest } from 'next/server'
-import { signout } from '@/utils/authentication'
-import { redirect } from 'next/navigation'
-// import { useEffect } from "react"
-// import { toast } from "react-toastify";
+import { createClient } from '@/utils/supabase/server'
+import { NextResponse, type NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest) {
-    signout()
-    redirect('/')
+  const supabase = await createClient()
 
-    // useEffect(() => {
-    //     if (success) toast.success(`Successfully logged in`);
-    //     else toast.error("Login attempt failed");
-    // }, [])
+  // Check if a user's logged in
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (user) {
+    await supabase.auth.signOut()
+  }
+
+  return NextResponse.redirect(new URL('/login', request.url), {
+    status: 302,
+  })
 }
