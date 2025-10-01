@@ -8,10 +8,10 @@ export interface Solution {
 
 export const solutions: Solution[] = [
     {
-        title: "SNK AllClaims",
-        description: "Online motor insurance claims processing and management platform",
+        title: "SNK COLS",
+        description: "Online system for motor vehicle accident investigation",
         learnMoreUrl: "/services/allclaims",
-        image: "/services/estimation.png",
+        image: "/services/cols_2.jpg",
         features: ["AI-powered analysis", "Real-time processing", "Mobile compatibility", "Insurance integration"]
     },
     {
@@ -20,13 +20,6 @@ export const solutions: Solution[] = [
         learnMoreUrl: "/services/valuation",
         image: "/services/value.jpg",
         features: ["Real-time data", "Multi-vehicle support", "Market analysis", "API integration"]
-    },
-    {
-        title: "SNK COLS AI",
-        description: "Online system for motor vehicle accident investigation",
-        learnMoreUrl: "/services/cols",
-        image: "/services/cols_2.jpg",
-        features: ["AI-powered analysis", "Automated workflows", "Fraud detection", "Document processing"]
     },
     {
         title: "SNK Auto Estimation",

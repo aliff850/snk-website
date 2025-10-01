@@ -59,7 +59,7 @@ export function Navigation() {
 
           <Link href="/" className="hidden md:flex items-center gap-2 group">
             {/* <span className="text-xl font-bold text-brand">SNK Market Data Research</span> */}
-            <Image src="/placeholder_2.svg" alt="Site logo" className="group-hover:scale-105 transition-all duration-300" width={90} height={0} />
+            <Image src="/placeholder_3.svg" alt="Site logo" className="group-hover:scale-105 transition-all duration-300" width={130} height={0} />
           </Link>
 
           <div id="navigations" className="hidden md:flex justify-center justify-self-center items-center gap-8">
@@ -101,7 +101,7 @@ export function Navigation() {
               className="md:hidden flex items-center justify-between p-8 w-full h-10 shrink-0 rounded-xl bg-brand-white transition-all shadow-lg"
             >
               <Link href="/" className="flex items-center justify-center md:hidden">
-                <Image src="/placeholder_2.svg" alt="Site logo" width={70} height={0} />
+                <Image src="/placeholder_3.svg" alt="Site logo" width={100} height={0} />
               </Link>
               {/* INSANE HAMBURGER ANIMATIONS */}
               

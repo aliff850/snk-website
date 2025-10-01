@@ -9,17 +9,23 @@ export default function AllClaimsPage() {
     return(
         <div className="min-h-screen bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
             <ProductHero
-                title="AllClaims"
-                caption="Online Motor Insurance Claims Processing and Management Solutions"
+                title="COLS Investigation System"
+                caption="End-to-end online system for motor vehicle accident investigation platform designed for insurance companies and adjusters."
             />
 
             <ProductOverview
-                title="What is AllClaims?"
+                title="What is COLS?"
                 overview="
-                AllClaims is a cloud-based, end-to-end motor insurance claims processing and management platform, accredited by MRC, PIAM, and Bank Negara Malaysia. Designed to cover the entire claims lifecycle — from the point of accident to final settlement — AllClaims connects all stakeholders in the ecosystem, including workshops, adjusters, insurers, legal firms, and regulators. With intelligent automation, real-time data processing, and advanced fraud detection, the system ensures faster, more transparent, and accurate claims handling.
+                COLS AI is a comprehensive online system that unifies claims processing, handling, and investigation into a single platform. Built for insurance companies, claims handlers, and adjusters, it digitizes and standardizes reporting to improve accuracy, efficiency, and consistency in every investigation.
+                <br><br>
+                With built-in fraud detection, investigation tracking, and automated reporting, COLS AI ensures that no detail is overlooked. The result is a streamlined investigation process that delivers insurers a complete, professional report with material insights and clear recommendations for every claim.
                 "
-                image="/services/allclaims2.png"
                 alt="AllClaims Landing Page"
+                galleryImages={[
+                    { src: '/services/cols/allclaims.png', alt: 'AllClaims dashboard' },
+                    { src: '/services/cols/allclaims2.png', alt: 'Accident intake' },
+                    { src: '/services/cols/cols.png', alt: 'Logo'}
+                ]}
             />
 
             <ProductFeatures 
