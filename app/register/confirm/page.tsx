@@ -3,12 +3,12 @@
 import AnimateOnLoad from "@/app/components/ui/AnimateOnLoad";
 import { Button } from "@/app/components/ui/button";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "react-toastify";
 
-export default function ConfirmRegistration() {
+function ConfirmRegistrationContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialEmail = useMemo(
@@ -20,7 +20,6 @@ export default function ConfirmRegistration() {
 
   useEffect(() => {
     if (!email) return;
-    // Keep URL in sync with entered email (so refresh/back keeps it)
     const params = new URLSearchParams(Array.from(searchParams.entries()));
     params.set("email", email);
     router.replace(`?${params.toString()}`);
@@ -122,5 +121,13 @@ export default function ConfirmRegistration() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function ConfirmRegistration() {
+  return (
+    <Suspense fallback={<div className="w-full min-h-screen bg-black/50" />}>
+      <ConfirmRegistrationContent />
+    </Suspense>
   );
 }
