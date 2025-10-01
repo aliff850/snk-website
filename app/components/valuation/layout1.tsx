@@ -190,6 +190,7 @@ export function ValuationLayout() {
             // Debug logging
             console.log('Mudah request body:', mudahBody)
             console.log('Search query:', searchQuery)
+            console.log('hello Nicholas')
 
             const response = await fetch(`/api/mudah/search`, { method: "POST", headers, body: JSON.stringify(mudahBody) })
 
@@ -217,18 +218,19 @@ export function ValuationLayout() {
     return(
         <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 py-16 pt-30">
             <div className="max-w-6xl mx-auto">
+
                 <div className="mb-8">
                     <h1 className="text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
                     <h3 className="text-4xl font-bold text-brand-white">For Motor Vehicle Valuation</h3>
                 </div>
 
-                {/* Basically section for Zigwheels */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="rounded-2xl border border-gray-200 shadow-sm p-6 bg-brand-white">
-                        <h3 className="text-2xl font-semibold text-gray-900">ZigWheels</h3>
 
+                    {/* Section for specifications from Zigwheels */}
+                    <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
+                        <h3 className="text-2xl font-semibold text-gray-900">Vehicle Specifications</h3>
 
-                        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                        <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Make</label>
                                 <input 
@@ -247,21 +249,7 @@ export function ValuationLayout() {
                                     placeholder="e.g. dolphin, x50, vios" 
                                 />
                             </div>
-                            {/* <div>
-                                <label className="block text-sm font-medium text-gray-700">Variants (optional)</label>
-                                <select 
-                                    multiple 
-                                    value={variants} 
-                                    onChange={(e) => setVariants(Array.from(e.target.selectedOptions).map(o => o.value))} 
-                                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 h-28 focus:outline-none focus:ring-2 focus:ring-brand-element/60"
-                                >
-                                    <option value="Standard Range">Standard Range</option>
-                                    <option value="Premium">Premium</option>
-                                    <option value="Executive">Executive</option>
-                                    <option value="Flagship">Flagship</option>
-                                </select>
-                                <p className="mt-1 text-xs text-gray-500">Multi-select optional variants to narrow results.</p>
-                            </div> */}
+                            
                             <div className="flex justify-center">
                                 <Button
                                     onClick={() => {
@@ -274,7 +262,7 @@ export function ValuationLayout() {
                                     size="lg"
                                     disabled={!canSubmit || loading}
                                 >
-                                    Get All ZigWheels Data
+                                    Get Specifications
                                 </Button>
                             </div>
                             
@@ -283,13 +271,55 @@ export function ValuationLayout() {
                     </div>
 
                     {/* Section for Mudah */}
-                    <div className="rounded-2xl border border-gray-200 shadow-sm p-6 bg-brand-white">
+                    <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
                         
-                        <h3 className="text-2xl font-semibold text-gray-900">Mudah</h3>
+                        <h3 className="text-2xl font-semibold">Vehicle Valuation</h3>
 
-                        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                        <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                
                                 <div>
+                                    {/* Very epic make and model dropdown */}
+                                    <label className="block text-sm font-medium">Make</label>
+                                    <select 
+                                        value={make} 
+                                        onChange={(e) => {
+                                            setMake(e.target.value)
+                                            if (e.target.value) {
+                                                fetchModels(slug(e.target.value))
+                                            } else {
+                                                setAvailableModels({})
+                                            }
+                                        }} 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        disabled={loadingMakes}
+                                    >
+                                        <option value="">Select a make...</option>
+                                        {Object.keys(availableMakes).map(makeKey => (
+                                            <option key={makeKey} value={makeKey}>{makeKey.replace(/-/g, ' ').toUpperCase()}</option>
+                                        ))}
+                                    </select>
+                                    {loadingMakes && <p className="mt-1 text-xs">Loading makes...</p>}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium">Model</label>
+                                    <select 
+                                        value={model} 
+                                        onChange={(e) => setModel(e.target.value)} 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        disabled={!make || Object.keys(availableModels).length === 0}
+                                    >
+                                        <option value="">Select a model...</option>
+                                        {Object.keys(availableModels).map(modelKey => (
+                                            <option key={modelKey} value={modelKey}>{modelKey.replace(/-/g, ' ').toUpperCase()}</option>
+                                        ))}
+                                    </select>
+                                    {make && Object.keys(availableModels).length === 0 && !loadingMakes && (
+                                        <p className="mt-1 text-xs text-gray-500">No models found for this make</p>
+                                    )}
+                                </div>
+
+                                {/* <div>
                                     <label className="block text-sm font-medium text-gray-700">Make</label>
                                     <input 
                                         value={make} 
@@ -306,11 +336,11 @@ export function ValuationLayout() {
                                         className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-element/60" 
                                         placeholder="e.g. x70, vios, city" 
                                     />
-                                </div>
+                                </div> */}
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">Offset (From)</label>
+                                {/* <div>
+                                    <label className="block text-sm font-medium">Offset (From)</label>
                                     <input 
                                         type="number" 
                                         min={0} 
@@ -318,25 +348,25 @@ export function ValuationLayout() {
                                         onChange={(e) => setFromOffset(Number(e.target.value))} 
                                         className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" 
                                     />
-                                </div>
+                                </div> */}
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Limit</label>
+                                    <label className="block text-sm font-medium">Limit</label>
                                     <input 
                                         type="number" 
                                         min={1} 
                                         value={limit} 
                                         onChange={(e) => setLimit(Number(e.target.value))} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2" 
                                     />
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Sort By</label>
+                                    <label className="block text-sm font-medium">Sort By</label>
                                     <select 
                                         value={sortby} 
                                         onChange={(e) => setSortby(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
                                     >
                                         <option value="price_asc">Price Asc</option>
                                         <option value="price_desc">Price Desc</option>
@@ -344,22 +374,22 @@ export function ValuationLayout() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Type</label>
+                                    <label className="block text-sm font-medium">Type</label>
                                     <select 
                                         value={type} 
                                         onChange={(e) => setType(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
                                     >
                                         <option value="sell">Sell</option>
                                         <option value="let">Let</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Fuel Type</label>
+                                    <label className="block text-sm font-medium">Fuel Type</label>
                                     <select 
                                         value={fueltype} 
                                         onChange={(e) => setFueltype(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
                                     >
                                         <option value="">Any</option>
                                         <option value="petrol">Petrol</option>
@@ -370,11 +400,11 @@ export function ValuationLayout() {
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Condition</label>
+                                    <label className="block text-sm font-medium">Condition</label>
                                     <select 
                                         value={condition} 
                                         onChange={(e) => setCondition(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
                                     >
                                         <option value="">Any</option>
                                         <option value="used">Used</option>
@@ -383,11 +413,11 @@ export function ValuationLayout() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Transmission</label>
+                                    <label className="block text-sm font-medium">Transmission</label>
                                     <select 
                                         value={transmission} 
                                         onChange={(e) => setTransmission(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
                                     >
                                         <option value="">Any</option>
                                         <option value="auto">Auto</option>
@@ -395,11 +425,11 @@ export function ValuationLayout() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Body Type</label>
+                                    <label className="block text-sm font-medium">Body Type</label>
                                     <select 
                                         value={carType} 
                                         onChange={(e) => setCarType(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
                                     >
                                         <option value="">Any</option>
                                         <option value="sedan">Sedan</option>
@@ -416,48 +446,52 @@ export function ValuationLayout() {
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Year (range)</label>
+                                    <label className="block text-sm font-medium">Year (range)</label>
                                     <input 
                                         value={mfgYear} 
                                         onChange={(e) => setMfgYear(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2" 
                                         placeholder="e.g. 2015-2020 or 2018-" 
                                         pattern="^\d{4}-(\d{4})?$"
                                     />
-                                    <p className="mt-1 text-xs text-gray-500">Format: YYYY-YYYY or YYYY- (e.g. 2015-2020 or 2018-)</p>
+                                    {/* <p className="mt-1 text-xs text-gray-500">Format: YYYY-YYYY or YYYY- (e.g. 2015-2020 or 2018-)</p> */}
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Mileage (km range)</label>
+                                    <label className="block text-sm font-medium">Mileage (km range)</label>
                                     <input 
                                         value={mileage} 
                                         onChange={(e) => setMileage(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2" 
                                         placeholder="e.g. 0-80000" 
                                         pattern="^\d{1,6}-(\d{1,6})?$"
                                     />
-                                    <p className="mt-1 text-xs text-gray-500">Format: number-number (e.g. 0-80000)</p>
+                                    {/* <p className="mt-1 text-xs text-gray-500">Format: number-number (e.g. 0-80000)</p> */}
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Price (MYR range)</label>
+                                    <label className="block text-sm font-medium">Price (MYR range)</label>
                                     <input 
                                         value={price} 
                                         onChange={(e) => setPrice(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2" 
                                         placeholder="e.g. 20000-90000" 
                                         pattern="^\d{1,10}-(\d{1,10})?$"
                                     />
-                                    <p className="mt-1 text-xs text-gray-500">Format: number-number (e.g. 20000-90000)</p>
+                                    {/* <p className="mt-1 text-xs text-gray-500">Format: number-number (e.g. 20000-90000)</p> */}
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                                 <Button 
                                     type="button" 
-                                    onClick={getMudahData} 
+                                    onClick={() => {
+                                        getMudahData(),
+                                        clearResults()
+                                    
+                                    }} 
                                     disabled={!canSubmit || loading}
                                     variant="secondary"
                                     size="sm"
                                 >
-                                    Search Listings
+                                    Get Listings
                                 </Button>
                                 <Button 
                                     type="button" 

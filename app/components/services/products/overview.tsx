@@ -41,22 +41,23 @@ export function ProductOverview({ title, overview, image, alt, galleryImages }:P
                     </AnimateOnLoad>
 
                     {/* Visual */}
-                    <AnimateOnLoad animation="fade-in-right">
-                        <div className="h-72 md:h-80 lg:h-96 flex">
-                            {(() => {
-                                const slides = galleryImages && galleryImages.length > 0
-                                    ? galleryImages
-                                    : (image ? [{ src: image, alt }] : []);
-                                return slides.length > 0 ? (
-                                    <ImageGallery
-                                        images={slides}
-                                        intervalMs={3500}
-                                        className="w-full h-full"
-                                    />
-                                ) : null;
-                            })()}
-                        </div>
-                    </AnimateOnLoad>
+                        <AnimateOnLoad animation="fade-in-right">
+                            <div className="h-72 md:h-80 lg:h-96 flex">
+                                {(() => {
+                                    const slides = galleryImages && galleryImages.length > 0
+                                        ? galleryImages
+                                        : (image ? [{ src: image, alt }] : []);
+                                    return slides.length > 0 ? (
+                                        <ImageGallery
+                                            images={slides}
+                                            intervalMs={3500}
+                                            className="w-full h-full"
+                                        />
+                                    ) : null;
+                                })()}
+                            </div>
+                        </AnimateOnLoad>
+                    
 
                 </div>
             </div>

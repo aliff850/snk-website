@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Button } from "../ui/button"
+import MudahListingsDisplay from "./MudahListingsDisplay"
 
 interface ValuationResultsProps {
     results: any | null
@@ -13,9 +14,11 @@ interface ValuationResultsProps {
 export function ValuationResults({ results, error, loading, onClearResults }: ValuationResultsProps) {
     return (
         <div className="mt-10">
-            <div className="rounded-2xl border border-gray-200 shadow-sm bg-white">
-                <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-                    <h4 className="text-lg font-semibold text-gray-900">Results</h4>
+            <div className="rounded-3xl border border-foreground/20 shadow-sm bg-brand-white">
+
+                <div className="p-6 border-b border-foreground/20 flex items-center justify-between">
+
+                    <h4 className="text-3xl text-brand font-bold">All Results</h4>
                     <div className="flex gap-3">
                         <Button 
                             onClick={onClearResults} 
@@ -33,13 +36,13 @@ export function ValuationResults({ results, error, loading, onClearResults }: Va
                         </div>
                     )}
                     {!results && !loading && (
-                        <div className="rounded-xl border border-dashed border-gray-300 p-6 text-center text-gray-500">
+                        <div className="rounded-xl border border-dashed border-foreground/20 p-6 text-center text-gray-500">
                             <p className="text-sm">Your pricing, specifications, features, and listings will appear here.</p>
                         </div>
                     )}
                     {results && (
                         <div className="space-y-8">
-                            <div>
+                            {/* <div>
                                 <h5 className="text-base font-semibold text-gray-900">
                                     {results.make?.toUpperCase()} {results.model?.toUpperCase()}
                                 </h5>
@@ -77,14 +80,15 @@ export function ValuationResults({ results, error, loading, onClearResults }: Va
                                         {JSON.stringify(results.features, null, 2)}
                                     </pre>
                                 </div>
-                            </div>
-                            <div className="rounded-lg border border-gray-200 p-4">
-                                <h6 className="font-semibold text-gray-900 mb-2">Mudah Listings</h6>
-                                <div className="overflow-auto">
+                            </div> */}
+                            <div className="rounded-3xl border border-foreground/20 p-4">
+                                {/* <h6 className="font-semibold text-gray-900 mb-2">Mudah Listings</h6> */}
+                                <MudahListingsDisplay listings={results.listings} />
+                                {/* <div className="overflow-auto">
                                     <pre className="text-xs text-gray-700 whitespace-pre-wrap">
                                         {JSON.stringify(results.listings, null, 2)}
                                     </pre>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     )}

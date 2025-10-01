@@ -20,14 +20,14 @@ function cn(...classes: Array<string | false | null | undefined>) {
 const baseClasses = "inline-flex items-center justify-center font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-white text-brand hover:bg-gray-100",
-  secondary: "bg-brand text-white hover:bg-brand-hover",
+  primary: "bg-brand-white text-brand hover:bg-brand-white/90",
+  secondary: "bg-brand text-white hover:bg-brand/90",
 }
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "px-8 py-3",
-  md: "px-16 py-3",
-  lg: "px-24 py-3"
+  sm: "px-4 md:px-8 py-2",
+  md: "px-4 md:px-16 py-3",
+  lg: "grow px-4: md:px-24 py-3"
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
