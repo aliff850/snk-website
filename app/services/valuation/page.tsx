@@ -1,5 +1,6 @@
 import { ProductHero } from '@/app/components/services/products/hero';
-import { ProductOverview } from '@/app/components/services/products/overview';
+// import { ProductOverview } from '@/app/components/services/products/overview';
+import { ProductOverviewAlt } from '@/app/components/services/products/overviewAlt';
 import { ProductFeatures } from '@/app/components/services/products/features';
 import { ProductCTA } from '@/app/components/services/products/cta';
 import { PreviewVideo } from '@/app/components/services/products/video';
@@ -12,8 +13,7 @@ export default function ValuationPage() {
                 caption="Online real-time enquiry for motor vehicle valuation."
             />
 
-            <ProductOverview
-                title="Real-Time Enquiries"
+            <ProductOverviewAlt
                 overview="
                 The SNK Real-Time Online Enquiry Platform is a comprehensive vehicle valuation solution designed to provide instant, reliable, and up-to-date information for a wide range of vehicles. With a database of over 22,322 vehicle valuations spanning 52 makes and models from 1990 to the present, it ensures users have access to accurate market values at their fingertips. The platform covers more than 15 major makes and models, representing about 80% of vehicles on the road, making it an essential tool for automotive professionals, insurers, dealers, and individuals alike.
                 <br><br>
@@ -41,7 +41,7 @@ export default function ValuationPage() {
 
                 title="Transform your valuation process today"
                 caption="Get instant real-time vehicle valuation through inquiries today"
-                button="Try SNK Valuation Today"
+                button="Try The Real-Time Inquiry Platform"
                 target="_blank"
                 link="/valuation"
             

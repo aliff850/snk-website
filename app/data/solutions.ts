@@ -8,7 +8,7 @@ export interface Solution {
 
 export const solutions: Solution[] = [
     {
-        title: "SNK COLS",
+        title: "SNK COLS Investigation System",
         description: "Online system for motor vehicle accident investigation",
         learnMoreUrl: "/services/allclaims",
         image: "/services/cols_2.jpg",

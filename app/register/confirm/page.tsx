@@ -88,8 +88,9 @@ function ConfirmRegistrationContent() {
               </p>
             </div>
 
-            <div className="w-full flex flex-col md:flex-row gap-3 md:gap-4">
+            <div className="w-full flex flex-col gap-2 md:gap-3">
               <Button
+                size="sm"
                 onClick={handleResend}
                 variant="secondary"
                 disabled={isLoading}

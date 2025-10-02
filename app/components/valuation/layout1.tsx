@@ -224,28 +224,31 @@ export function ValuationLayout() {
                     <h3 className="text-4xl font-bold text-brand-white">For Motor Vehicle Valuation</h3>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 gap-8">
 
                     {/* Section for specifications from Zigwheels */}
                     <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
-                        <h3 className="text-2xl font-semibold text-gray-900">Vehicle Specifications</h3>
+                        <div>
+                            <h3 className="text-2xl font-semibold text-foreground">Vehicle Specifications</h3>
+                            <p className="text-sm text-foreground/50">For retrieving vehicle specifications</p>
+                        </div>
 
                         <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Make</label>
+                                <label className="block text-sm font-medium text-foreground">Make</label>
                                 <input 
                                     value={make} 
                                     onChange={(e) => setMake(e.target.value)} 
-                                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-element/60" 
+                                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
                                     placeholder="e.g. byd, proton, toyota" 
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Model</label>
+                                <label className="block text-sm font-medium text-foreground">Model</label>
                                 <input 
                                     value={model} 
                                     onChange={(e) => setModel(e.target.value)} 
-                                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-element/60" 
+                                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
                                     placeholder="e.g. dolphin, x50, vios" 
                                 />
                             </div>
@@ -273,13 +276,17 @@ export function ValuationLayout() {
                     {/* Section for Mudah */}
                     <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
                         
-                        <h3 className="text-2xl font-semibold">Vehicle Valuation</h3>
+                        <div>
+                            <h3 className="text-2xl font-semibold">Vehicle Valuation</h3>
+                            <p className="text-sm text-foreground/50">For retrieving vehicle market value</p>
+                        </div>
+                        
 
                         <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 
                                 <div>
-                                    {/* Very epic make and model dropdown */}
+                                    {/* Very epic make dropdown */}
                                     <label className="block text-sm font-medium">Make</label>
                                     <select 
                                         value={make} 
@@ -302,15 +309,18 @@ export function ValuationLayout() {
                                     {loadingMakes && <p className="mt-1 text-xs">Loading makes...</p>}
                                 </div>
                                 <div>
+                                    {/* Very epic model dropdown */}
                                     <label className="block text-sm font-medium">Model</label>
                                     <select 
                                         value={model} 
                                         onChange={(e) => setModel(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         disabled={!make || Object.keys(availableModels).length === 0}
                                     >
                                         <option value="">Select a model...</option>
-                                        {Object.keys(availableModels).map(modelKey => (
+                                        {Object.keys(availableModels)
+                                        .filter(modelKey => modelKey !== '__id__')
+                                        .map(modelKey => (
                                             <option key={modelKey} value={modelKey}>{modelKey.replace(/-/g, ' ').toUpperCase()}</option>
                                         ))}
                                     </select>
@@ -319,36 +329,9 @@ export function ValuationLayout() {
                                     )}
                                 </div>
 
-                                {/* <div>
-                                    <label className="block text-sm font-medium text-gray-700">Make</label>
-                                    <input 
-                                        value={make} 
-                                        onChange={(e) => setMake(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-element/60" 
-                                        placeholder="e.g. proton, toyota, honda" 
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">Model</label>
-                                    <input 
-                                        value={model} 
-                                        onChange={(e) => setModel(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-element/60" 
-                                        placeholder="e.g. x70, vios, city" 
-                                    />
-                                </div> */}
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                {/* <div>
-                                    <label className="block text-sm font-medium">Offset (From)</label>
-                                    <input 
-                                        type="number" 
-                                        min={0} 
-                                        value={fromOffset} 
-                                        onChange={(e) => setFromOffset(Number(e.target.value))} 
-                                        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" 
-                                    />
-                                </div> */}
+
                                 <div>
                                     <label className="block text-sm font-medium">Limit</label>
                                     <input 
@@ -356,7 +339,7 @@ export function ValuationLayout() {
                                         min={1} 
                                         value={limit} 
                                         onChange={(e) => setLimit(Number(e.target.value))} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2" 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
                                     />
                                 </div>
                             </div>
@@ -366,7 +349,7 @@ export function ValuationLayout() {
                                     <select 
                                         value={sortby} 
                                         onChange={(e) => setSortby(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                     >
                                         <option value="price_asc">Price Asc</option>
                                         <option value="price_desc">Price Desc</option>
@@ -378,7 +361,7 @@ export function ValuationLayout() {
                                     <select 
                                         value={type} 
                                         onChange={(e) => setType(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                     >
                                         <option value="sell">Sell</option>
                                         <option value="let">Let</option>
@@ -389,7 +372,7 @@ export function ValuationLayout() {
                                     <select 
                                         value={fueltype} 
                                         onChange={(e) => setFueltype(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                     >
                                         <option value="">Any</option>
                                         <option value="petrol">Petrol</option>
@@ -404,7 +387,7 @@ export function ValuationLayout() {
                                     <select 
                                         value={condition} 
                                         onChange={(e) => setCondition(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                     >
                                         <option value="">Any</option>
                                         <option value="used">Used</option>
@@ -417,7 +400,7 @@ export function ValuationLayout() {
                                     <select 
                                         value={transmission} 
                                         onChange={(e) => setTransmission(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                     >
                                         <option value="">Any</option>
                                         <option value="auto">Auto</option>
@@ -429,7 +412,7 @@ export function ValuationLayout() {
                                     <select 
                                         value={carType} 
                                         onChange={(e) => setCarType(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2"
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                     >
                                         <option value="">Any</option>
                                         <option value="sedan">Sedan</option>
@@ -450,7 +433,7 @@ export function ValuationLayout() {
                                     <input 
                                         value={mfgYear} 
                                         onChange={(e) => setMfgYear(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2" 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
                                         placeholder="e.g. 2015-2020 or 2018-" 
                                         pattern="^\d{4}-(\d{4})?$"
                                     />
@@ -461,7 +444,7 @@ export function ValuationLayout() {
                                     <input 
                                         value={mileage} 
                                         onChange={(e) => setMileage(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2" 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
                                         placeholder="e.g. 0-80000" 
                                         pattern="^\d{1,6}-(\d{1,6})?$"
                                     />
@@ -472,7 +455,7 @@ export function ValuationLayout() {
                                     <input 
                                         value={price} 
                                         onChange={(e) => setPrice(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2" 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
                                         placeholder="e.g. 20000-90000" 
                                         pattern="^\d{1,10}-(\d{1,10})?$"
                                     />
