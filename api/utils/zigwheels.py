@@ -1,11 +1,18 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from requests import get
 from lxml import etree
+from os import path
+from json import load
 
 informationRouter = APIRouter(prefix='/information')
 htmlParser = etree.HTMLParser()
 URL = 'https://www.zigwheels.my/new-cars/{}/{}'
+
+MAKE_MODEL_MAP_PATH = path.join(path.dirname(__file__), 'zigwheels_map.json')
+with open(MAKE_MODEL_MAP_PATH, 'r', encoding='utf-8') as f:
+    MAKE_MODEL_MAP = load(f)
+
 
 class AboutResponse(BaseModel):
     model_name: str
@@ -70,7 +77,7 @@ def get_details(keys: list[str], tab_panels: list[etree._Element]):
 def about(make: str, model: str):
     html = get(URL.format(make.replace(' ', '-'), model.replace(' ', '-')), headers={'User-Agent': 'Mozilla/5.0'})
     if not html.ok and not html.status_code == 200:
-        raise ValueError('An unexpected error occured.')
+        return HTTPException(500, "An unexpected error occured")
 
     tree = etree.fromstring(html.text, htmlParser)
     variants = tree.xpath('//*[@id="sec-variants"]/div[2]/div[1]/table/tbody/tr/td[1]/span/a') # BYD Dolphin
@@ -88,7 +95,7 @@ def about(make: str, model: str):
 def price(make: str, model: str, variants: list[str] = []):
     html = get((URL+'/price').format(make.replace(' ', '-'), model.replace(' ', '-')), headers={'User-Agent': 'Mozilla/5.0'})
     if not html.ok and not html.status_code == 200:
-        raise ValueError('An unexpected error occured.')
+        return HTTPException(500, "An unexpected error occured")
     
     tree = etree.fromstring(html.text, htmlParser)
     variants_groups = tree.xpath('/html/body/main/div/div[1]/section[1]/div/div')
@@ -109,7 +116,7 @@ def price(make: str, model: str, variants: list[str] = []):
 def specifications(make: str, model: str, variants: list[str] = []):
     html = get((URL+'/specifications').format(make.replace(' ', '-'), model.replace(' ', '-')), headers={'User-Agent': 'Mozilla/5.0'})
     if not html.ok and not html.status_code == 200:
-        raise ValueError('An unexpected error occured.')
+        return HTTPException(500, "An unexpected error occured")
     
     tree = etree.fromstring(html.text, htmlParser)
     variants_groups = tree.xpath('//*[@id="sec-variants"]/div/div')
@@ -125,7 +132,7 @@ def specifications(make: str, model: str, variants: list[str] = []):
             details_url = f"https://www.zigwheels.my/variant/variant-feature?variantId={variant.attrib.get('data-variantid')}&categorySlug=cars&langCode=en&pageType=specification"
             details_html = get(details_url, headers={'User-Agent': 'Mozilla/5.0'})
             if not details_html.ok and details_html.status_code == 200:
-                raise ValueError('An unexpected error occured.')
+                return HTTPException(500, "An unexpected error occured")
             
             details_tree = etree.fromstring(details_html.text, htmlParser)
             spec_keys = [key.text.strip() for key in details_tree.xpath('//*[@id="specification"]/ul/li')]
@@ -147,7 +154,7 @@ def specifications(make: str, model: str, variants: list[str] = []):
 def features(make: str, model: str, variants: list[str] = []):
     html = get((URL+'/specifications').format(make.replace(' ', '-'), model.replace(' ', '-')), headers={'User-Agent': 'Mozilla/5.0'})
     if not html.ok and not html.status_code == 200:
-        raise ValueError('An unexpected error occured.')
+        return HTTPException(500, "An unexpected error occured")
     
     tree = etree.fromstring(html.text, htmlParser)
     variants_groups = tree.xpath('//*[@id="modelFeatureSection"]/div/div')
@@ -163,7 +170,7 @@ def features(make: str, model: str, variants: list[str] = []):
             details_url = f"https://www.zigwheels.my/variant/variant-feature?variantId={variant.attrib.get('data-variantid')}&categorySlug=cars&langCode=en&pageType=specification"
             details_html = get(details_url, headers={'User-Agent': 'Mozilla/5.0'})
             if not details_html.ok and details_html.status_code == 200:
-                raise ValueError('An unexpected error occured.')
+                return HTTPException(500, "An unexpected error occured")
             
             details_tree = etree.fromstring(details_html.text, htmlParser)
             feat_keys = [key.text.strip() for key in details_tree.xpath('//*[@id="feature"]/ul/li')]
@@ -179,3 +186,57 @@ def features(make: str, model: str, variants: list[str] = []):
         })
 
     return response
+
+
+@informationRouter.get('/all_vehicles')
+def vehicle_map(make: str = None, model: str = None):
+    # Return full map if no make specified
+    if not make: return MAKE_MODEL_MAP
+
+    # Normalize make name
+    normalized_make = make.replace(' ', '-')
+
+    # Validate make exists
+    if normalized_make not in MAKE_MODEL_MAP:
+        return HTTPException(404, f'Unknown make provided: {make}')
+
+    make_data = MAKE_MODEL_MAP[normalized_make]
+
+    # Return all models for make if no model specified
+    if not model: return make_data
+
+    # Validate model exists
+    if model not in make_data:
+        return HTTPException(404, f'Unknown model provided: {model}')
+
+    # Return specific model variants
+    return make_data[model]
+    
+
+# def generate_model_map():
+#     all_brands = ['Perodua', 'Proton', 'Honda', 'Toyota', 'Nissan', 'Mazda', 'Suzuki', 'Volkswagen', 'Mercedes Benz', 'Mitsubishi', 'BMW', 'Audi', 'Kia', 'Hyundai', 'Volvo', 'Ford', 'MG', 'Daihatsu', 'Smart', 'Aston Martin', 'Bentley', 'Chery', 'Citroen', 'Ferrari', 'Infiniti', 'Isuzu', 'Jaguar', 'Jeep', 'Lamborghini', 'Land Rover', 'Lexus', 'Lotus', 'Maserati', 'Maxus', 'McLaren', 'Mini', 'Peugeot', 'Porsche', 'Renault', 'Rolls Royce', 'Subaru', 'Tesla', 'BYD', 'Denza', 'Dongfeng', 'Foton', 'GAC', 'GWM', 'ICAUR', 'JAC', 'JAECOO', 'Jetour', 'LEAPMOTOR', 'Neta', 'XPENG', 'ZEEKR']
+#     result = {}
+#     for brand in all_brands:
+#         normalized_brand = brand.lower().replace(' ', '-')
+#         model_url = f'https://www.zigwheels.my/new-cars/{normalized_brand}'
+#         print(model_url)
+
+#         html = get(model_url, headers={'User-Agent': 'Mozilla/5.0'})
+#         if not html.ok and not html.status_code == 200:
+#             return HTTPException(500, "An unexpected error occured")
+
+#         tree = etree.fromstring(html.text, htmlParser)
+#         models = tree.xpath("//*[@id='listing-card']/li[contains(@data-page-id,'1')]")
+
+#         result[normalized_brand] = {}
+#         for model in models:
+#             model_name = model.xpath('.//div[2]/a[1]')[0].text.strip().lower().replace(' ', '-')
+#             variants = [i.text.strip().lower().replace(' ', '-') for i in model.xpath('.//div[2]/div[3]/div/div[2]/div[1]/table/tbody/tr/td[1]')]
+
+#             result[normalized_brand][model_name] = variants
+
+#     return result
+
+# with open('zigwheels_map.json', 'x') as f:
+#     model_map = generate_model_map()
+#     dump(model_map, f)
