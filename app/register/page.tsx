@@ -31,18 +31,32 @@ export default function Register() {
         },
       },
       error: {
-        render({ data }: { data: string }) {
-          return String(data) || "An unexpected error occurred";
+        render({ data }: { data: any }) {
+          const message =
+            typeof data?.message === "string"
+              ? data.message
+              : typeof data === "string"
+              ? data
+              : undefined;
+          return message || "An unexpected error occurred";
         },
       },
     });
 
     try {
-      await signupPromise;
-      const email = formData.get("email") as string;
-      router.push(`/register/confirm?email=${encodeURIComponent(email)}`);
+      const result = (await signupPromise) as { ok: boolean; message?: string };
+      if (result?.ok) {
+        const email = formData.get("email") as string;
+        router.push(`/register/confirm?email=${encodeURIComponent(email)}`);
+      } else {
+        throw result?.message || "Unable to register";
+      }
     } catch (err: any) {
-      setError(String(err) || "An unexpected error occurred");
+      setError(
+        typeof err === "string"
+          ? err
+          : err?.message || "An unexpected error occurred"
+      );
     } finally {
       setIsLoading(false);
     }

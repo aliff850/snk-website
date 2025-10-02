@@ -30,17 +30,31 @@ export default function Login() {
         },
       },
       error: {
-        render({ data }: { data: string }) {
-          return String(data) || "An unexpected error occurred";
+        render({ data }: { data: any }) {
+          const message =
+            typeof data?.message === "string"
+              ? data.message
+              : typeof data === "string"
+              ? data
+              : undefined;
+          return message || "An unexpected error occurred";
         },
       },
     });
 
     try {
-      await loginPromise;
-      router.push("/");
+      const result = (await loginPromise) as { ok: boolean; message?: string };
+      if (result?.ok) {
+        router.push("/");
+      } else {
+        throw result?.message || "Unable to log in";
+      }
     } catch (err: any) {
-      setError(String(err) || "An unexpected error occurred");
+      setError(
+        typeof err === "string"
+          ? err
+          : err?.message || "An unexpected error occurred"
+      );
     } finally {
       setIsLoading(false);
     }
