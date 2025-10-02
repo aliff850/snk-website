@@ -17,11 +17,11 @@ function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ")
 }
 
-const baseClasses = "inline-flex items-center justify-center font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+const baseClasses = "inline-flex items-center justify-center font-semibold rounded-full transition-all duration-150 shadow-lg hover:shadow-xl"
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary: "bg-brand-white text-brand hover:bg-brand-white/90",
-  secondary: "bg-brand text-white hover:bg-brand/90",
+  secondary: "bg-brand text-white hover:bg-brand/90 active:bg-brand-element",
 }
 
 const sizes: Record<ButtonSize, string> = {
