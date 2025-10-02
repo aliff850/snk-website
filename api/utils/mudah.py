@@ -4,10 +4,10 @@ from typing import Literal, Annotated
 
 from fastapi import APIRouter, Response, HTTPException
 from pydantic import BaseModel, Field, StringConstraints, field_validator
-import os
+from os import path
 
 mudahRouter = APIRouter(prefix='/mudah')
-MAKE_MODEL_MAP_PATH = os.path.join(os.path.dirname(__file__), 'make_model_map.json')
+MAKE_MODEL_MAP_PATH = path.join(path.dirname(__file__), 'mudah_map.json')
 with open(MAKE_MODEL_MAP_PATH, 'r', encoding='utf-8') as f:
     MAKE_MODEL_MAP = load(f)
 
@@ -95,11 +95,15 @@ def search(searchQuery: CarSearchQuery,
                  summary="Returns a map of every make and model available with their corresponding IDs. Or return a list of models from a specified make with their corresponding IDs",
                  response_model=dict[str, str] | dict[str, dict[str, str]])
 def vehicle_map(make: str = None):
+    # Return full map if no make specified
     if not make: return MAKE_MODEL_MAP
-    make = make.replace(' ', '-')
 
-    if make not in MAKE_MODEL_MAP:
-        return HTTPException(400, f'Unknown make provided: {make}')
-    else:
-        return MAKE_MODEL_MAP.get(make)
-    
+    # Normalize make name
+    normalized_make = make.replace(' ', '-')
+
+    # Validate make exists
+    if normalized_make not in MAKE_MODEL_MAP:
+        return HTTPException(404, f'Unknown make provided: {make}')
+
+    # Return specific make's models
+    return MAKE_MODEL_MAP[normalized_make]
