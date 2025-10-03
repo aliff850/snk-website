@@ -35,15 +35,11 @@ export async function login(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword(auth_data);
-    if (error) {
-      return { ok: false, message: toSafeMessage(error.message) } as AuthResult;
-    }
-    return { ok: true } as AuthResult;
-  } catch (err: any) {
-    return { ok: false, message: toSafeMessage(err?.message) } as AuthResult;
+  const { data, error } = await supabase.auth.signInWithPassword(auth_data);
+  if (error) {
+    throw new Error(toSafeMessage(error.message));
   }
+  return { ok: true } as AuthResult;
 }
 
 export async function signup(formData: FormData) {
@@ -60,27 +56,19 @@ export async function signup(formData: FormData) {
     },
   };
 
-  try {
-    const { data, error } = await supabase.auth.signUp(auth_data);
-    if (error) {
-      return { ok: false, message: toSafeMessage(error.message) } as AuthResult;
-    }
-    return { ok: true } as AuthResult;
-  } catch (err: any) {
-    return { ok: false, message: toSafeMessage(err?.message) } as AuthResult;
+  const { data, error } = await supabase.auth.signUp(auth_data);
+  if (error) {
+    throw new Error(toSafeMessage(error.message));
   }
+  return { ok: true } as AuthResult;
 }
 
 export async function signout() {
   const supabase = await createClient();
 
-  try {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      return { ok: false, message: toSafeMessage(error.message) } as AuthResult;
-    }
-    return { ok: true } as AuthResult;
-  } catch (err: any) {
-    return { ok: false, message: toSafeMessage(err?.message) } as AuthResult;
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    throw new Error(toSafeMessage(error.message));
   }
+  return { ok: true } as AuthResult;
 }

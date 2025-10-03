@@ -43,12 +43,8 @@ export default function Login() {
     });
 
     try {
-      const result = (await loginPromise) as { ok: boolean; message?: string };
-      if (result?.ok) {
-        router.push("/");
-      } else {
-        throw result?.message || "Unable to log in";
-      }
+      await loginPromise;
+      router.push("/");
     } catch (err: any) {
       setError(
         typeof err === "string"

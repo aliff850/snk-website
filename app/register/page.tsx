@@ -44,13 +44,9 @@ export default function Register() {
     });
 
     try {
-      const result = (await signupPromise) as { ok: boolean; message?: string };
-      if (result?.ok) {
-        const email = formData.get("email") as string;
-        router.push(`/register/confirm?email=${encodeURIComponent(email)}`);
-      } else {
-        throw result?.message || "Unable to register";
-      }
+      await signupPromise;
+      const email = formData.get("email") as string;
+      router.push(`/register/confirm?email=${encodeURIComponent(email)}`);
     } catch (err: any) {
       setError(
         typeof err === "string"
