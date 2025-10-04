@@ -1,6 +1,6 @@
-import { ExternalLink, Calendar, Gauge, Fuel, Settings, Car, Trash2 } from 'lucide-react'
+import { ExternalLink, Calendar, Gauge, Fuel, Settings, Car, Trash2, ArrowUpDown } from 'lucide-react'
 import { Button } from '../ui/button'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 interface MudahListing {
     model_name: string
@@ -17,6 +17,8 @@ interface MudahListing {
     engine_capacity: string
     car_type_name: string
     adview_url: string
+    image: string
+    variant?: string
 }
 
 interface MudahListingsDisplayProps {
@@ -26,9 +28,22 @@ interface MudahListingsDisplayProps {
 export default function MudahListingsDisplay({ listings = [] }: MudahListingsDisplayProps) {
     
     const [filteredListings, setFilteredListings] = useState<MudahListing[]>(listings)
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'none'>('none')
 
     const removeListing = (index: number) => {
         setFilteredListings(prev => prev.filter((_, i) => i !== index))
+    }
+
+    const sortListings = (order: 'asc' | 'desc' | 'none') => {
+        setSortOrder(order)
+        if (order === 'none') {
+            setFilteredListings(listings)
+        } else {
+            const sorted = [...filteredListings].sort((a, b) => {
+                return order === 'asc' ? a.price - b.price : b.price - a.price
+            })
+            setFilteredListings(sorted)
+        }
     }
 
     const formatPrice = (price: number) => {
@@ -60,7 +75,7 @@ export default function MudahListingsDisplay({ listings = [] }: MudahListingsDis
     // }
 
     // calculating all the price statistics
-    const prices = listings.map(l => l.price)
+    const prices = filteredListings.map(l => l.price)
     const lowestPrice = Math.min(...prices)
     const highestPrice = Math.max(...prices)
     const averagePrice = Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length)
@@ -68,6 +83,14 @@ export default function MudahListingsDisplay({ listings = [] }: MudahListingsDis
     return (
         <div className="space-y-4">
 
+            <div className="flex flex-col mb-4">
+                <h6 className="font-semibold text-2xl">
+                    Found {filteredListings.length} {filteredListings.length === 1 ? 'listing' : 'listings'}
+                {/* Found {listings.length} {listings.length === 1 ? 'listing' : 'listings'} */}
+                </h6>
+                <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
+            </div>
+            
             {/* Container to display all prices and average */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="rounded-xl bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-4">
@@ -86,12 +109,23 @@ export default function MudahListingsDisplay({ listings = [] }: MudahListingsDis
                 </div>
             </div>
 
-            <div className="flex flex-col mb-4">
-                <h6 className="font-semibold text-xl">
-                    Found {filteredListings.length} {filteredListings.length === 1 ? 'listing' : 'listings'}
-                {/* Found {listings.length} {listings.length === 1 ? 'listing' : 'listings'} */}
-                </h6>
-                <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
+            
+
+            {/* Sort by price dropdown */}
+            <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-2">
+                    <ArrowUpDown className="w-4 h-4 text-gray-500" />
+                    <span className="font-medium text-gray-700">Sort by price:</span>
+                </div>
+                <select 
+                    value={sortOrder}
+                    onChange={(e) => sortListings(e.target.value as 'asc' | 'desc' | 'none')}
+                    className="px-3 py-1.5 border border-gray-300 rounded-lg outline-none focus:border-brand transition-colors"
+                >
+                    <option value="none">Original order</option>
+                    <option value="asc">Price: Low to High</option>
+                    <option value="desc">Price: High to Low</option>
+                </select>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -109,12 +143,18 @@ export default function MudahListingsDisplay({ listings = [] }: MudahListingsDis
                                 {listing.make_name} {listing.model_name}
                             </h3>
 
+                            {listing.variant && (
+                                <p className="text-sm text-gray-600 mt-1">
+                                    {listing.variant}
+                                </p>
+                            )}
+
                             <div className="flex items-center gap-2 mt-1">
                                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                                 listing.condition_name === 'New' 
                                     ? 'bg-green-100 text-green-800' 
                                     : listing.condition_name === 'Used'
-                                    ? 'bg-brand-100 text-blue-800'
+                                    ? 'bg-blue-100 text-blue-800'
                                     : 'bg-purple-100 text-purple-800'
                                 }`}>
                                 {listing.condition_name}
@@ -129,14 +169,26 @@ export default function MudahListingsDisplay({ listings = [] }: MudahListingsDis
                                 {formatPrice(listing.price)}
                             </div>
 
-                            <button className="hover:text-red-500 transition-colors">
+                            <button onClick={() => removeListing(index)} className="hover:text-red-500 transition-colors">
                                 <Trash2 className="w-6 h-6" />
                             </button>
 
                         </div>
                     </div>
                     
-                    {/* Todo: Add image */}
+                    {listing.image && (
+                        <div className="mt-3 rounded-lg overflow-hidden bg-gray-100">
+                            <img 
+                                src={listing.image} 
+                                alt={`${listing.make_name} ${listing.model_name}`}
+                                className="w-full h-48 object-cover"
+                                onError={(e) => {
+                                    // fallback if image fails to load
+                                    e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23e5e7eb" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="18" fill="%236b7280"%3ENo Image%3C/text%3E%3C/svg%3E'
+                                }}
+                            />
+                        </div>
+                    )}
 
                     {/* Specs Grid */}
                     <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">

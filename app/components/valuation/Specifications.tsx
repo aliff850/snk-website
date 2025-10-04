@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useMemo, useEffect } from "react"
+import { ArrowRight } from 'lucide-react'
 import { Button } from "../ui/button"
 import { SpecResults } from "./SpecResults"
 
@@ -174,11 +175,17 @@ export function CarSpecifications() {
 
                 <div className="grid grid-cols-1 gap-8">
 
+                    <div className="flex justify-end">
+                        <Button href="/valuation" variant="secondary" size="sm" className="flex gap-2">
+                            Return to Vehicle Valuation <ArrowRight />
+                        </Button>
+                    </div>
+
                     <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
-                        <div>
+                        {/* <div>
                             <h3 className="text-2xl font-semibold text-foreground">Vehicle Specifications</h3>
                             <p className="text-sm text-foreground/50">Select vehicle to retrieve specifications</p>
-                        </div>
+                        </div> */}
 
                         <form className="flex flex-col gap-8" onSubmit={(e) => e.preventDefault()}>
                             {/* Make Dropdown */}

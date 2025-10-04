@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useMemo, useEffect } from "react"
+import { Car, ArrowRight } from 'lucide-react'
 import { ValuationResults } from "./ValuationResults"
 import { Button } from "../ui/button"
 
@@ -8,7 +9,7 @@ export function ValuationLayout() {
     // Existing states
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
-    const [variants, setVariants] = useState<string[]>([])
+    // const [variants, setVariants] = useState<string[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [results, setResults] = useState<any | null>(null)
@@ -20,7 +21,7 @@ export function ValuationLayout() {
 
     // States for Mudah filters
     const [fromOffset, setFromOffset] = useState<number>(0)
-    const [limit, setLimit] = useState<number>(10)
+    const [limit, setLimit] = useState<number>(50)
     const [sortby, setSortby] = useState("price_asc")
     const [type, setType] = useState("sell")
     const [fueltype, setFueltype] = useState("")
@@ -75,9 +76,9 @@ export function ValuationLayout() {
     const resetAll = () => {
         setMake("")
         setModel("")
-        setVariants([])
+        // setVariants([])
         setFromOffset(0)
-        setLimit(10)
+        setLimit(50)
         setSortby("price_asc")
         setType("sell")
         setFueltype("")
@@ -189,15 +190,20 @@ export function ValuationLayout() {
 
                 <div className="grid grid-cols-1 gap-8">
 
+                    <div className="flex justify-end">
+                        <Button href="/valuation/specifications" variant="secondary" size="sm" className="flex gap-2">
+                            Go to Vehicle Specifications <ArrowRight />
+                        </Button>
+                    </div>
+
                     {/* Vehicle valuation section */}
                     <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
                         
-                        <div>
+                        {/* <div>
                             <h3 className="text-2xl font-semibold">Vehicle Valuation</h3>
                             <p className="text-sm text-foreground/50">For retrieving vehicle market value</p>
-                        </div>
+                        </div> */}
                         
-
                         <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 

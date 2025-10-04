@@ -1,4 +1,4 @@
-import { CarSpecifications } from "../components/valuation/Specifications";
+import { CarSpecifications } from "@/components/valuation/Specifications";
 
 export default function VehicleSpecification() {
 
