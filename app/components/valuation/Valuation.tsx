@@ -5,10 +5,20 @@ import { ValuationResults } from "./ValuationResults"
 import { Button } from "../ui/button"
 
 export function ValuationLayout() {
+    // Existing states
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
     const [variants, setVariants] = useState<string[]>([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [results, setResults] = useState<any | null>(null)
 
+    // Mudah state
+    const [availableMakes, setAvailableMakes] = useState<Record<string, any>>({})
+    const [availableModels, setAvailableModels] = useState<Record<string, string>>({})
+    const [loadingMakes, setLoadingMakes] = useState(false)
+
+    // States for Mudah filters
     const [fromOffset, setFromOffset] = useState<number>(0)
     const [limit, setLimit] = useState<number>(10)
     const [sortby, setSortby] = useState("price_asc")
@@ -21,18 +31,10 @@ export function ValuationLayout() {
     const [mileage, setMileage] = useState("")
     const [price, setPrice] = useState("")
 
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
-    const [results, setResults] = useState<any | null>(null)
-    const [availableMakes, setAvailableMakes] = useState<Record<string, any>>({})
-    const [availableModels, setAvailableModels] = useState<Record<string, string>>({})
-    const [loadingMakes, setLoadingMakes] = useState(false)
-
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
-
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
 
-    // Fetch available makes on component mount
+    // Fetch Mudah makes
     const fetchMakes = async () => {
         setLoadingMakes(true)
         try {
@@ -48,7 +50,7 @@ export function ValuationLayout() {
         }
     }
 
-    // fetch models for selected make
+    // Fetch Mudah models
     const fetchModels = async (makeSlug: string) => {
         try {
             const response = await fetch(`/api/mudah/all_vehicles?make=${encodeURIComponent(makeSlug)}`)
@@ -62,11 +64,14 @@ export function ValuationLayout() {
         }
     }
 
-    // loads all makes on mount
+
+    // Fetch Mudah makes on mount
     useEffect(() => {
         fetchMakes()
     }, [])
 
+
+    // resets all
     const resetAll = () => {
         setMake("")
         setModel("")
@@ -91,48 +96,6 @@ export function ValuationLayout() {
         setError(null)
     }
 
-    // faisal help me
-    const getZigWheelsData = async (endpoint: 'about' | 'pricing' | 'specifications' | 'features') => {
-        if (!canSubmit) return
-        setLoading(true)
-        setError(null)
-        try {
-            const makeSlug = slug(make)
-            const modelSlug = slug(model)
-            const headers = { "Content-Type": "application/json" }
-    
-            let response
-            if (endpoint === 'about') {
-                response = await fetch(`/api/information/about?make=${encodeURIComponent(makeSlug)}&model=${encodeURIComponent(modelSlug)}`)
-            } else {
-                // FIX: Add make and model as query params, only send variants in body
-                response = await fetch(`/api/information/${endpoint}?make=${encodeURIComponent(makeSlug)}&model=${encodeURIComponent(modelSlug)}`, { 
-                    method: "POST", 
-                    headers, 
-                    body: JSON.stringify(variants) // Send variants array directly
-                })
-            }
-    
-            if (!response.ok) {
-                const errorText = await response.text()
-                console.error(`ZigWheels ${endpoint} API error:`, response.status, errorText)
-                throw new Error(`Failed to fetch ZigWheels ${endpoint}: ${response.status} - ${errorText}`)
-            }
-    
-            const data = await response.json()
-            setResults((prev: any) => ({ 
-                ...prev, 
-                [endpoint]: data, 
-                make: makeSlug, 
-                model: modelSlug,
-                source: 'ZigWheels'
-            }))
-        } catch (e: any) {
-            setError(e?.message || "Something went wrong")
-        } finally {
-            setLoading(false)
-        }
-    }
 
     const getMudahData = async () => {
         if (!canSubmit) return
@@ -226,54 +189,7 @@ export function ValuationLayout() {
 
                 <div className="grid grid-cols-1 gap-8">
 
-                    {/* Section for specifications from Zigwheels */}
-                    <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
-                        <div>
-                            <h3 className="text-2xl font-semibold text-foreground">Vehicle Specifications</h3>
-                            <p className="text-sm text-foreground/50">For retrieving vehicle specifications</p>
-                        </div>
-
-                        <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-                            <div>
-                                <label className="block text-sm font-medium text-foreground">Make</label>
-                                <input 
-                                    value={make} 
-                                    onChange={(e) => setMake(e.target.value)} 
-                                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
-                                    placeholder="e.g. byd, proton, toyota" 
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-foreground">Model</label>
-                                <input 
-                                    value={model} 
-                                    onChange={(e) => setModel(e.target.value)} 
-                                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
-                                    placeholder="e.g. dolphin, x50, vios" 
-                                />
-                            </div>
-                            
-                            <div className="flex justify-center">
-                                <Button
-                                    onClick={() => {
-                                        getZigWheelsData('about');
-                                        getZigWheelsData('pricing');
-                                        getZigWheelsData('specifications');
-                                        getZigWheelsData('features');
-                                    }}
-                                    variant="secondary"
-                                    size="lg"
-                                    disabled={!canSubmit || loading}
-                                >
-                                    Get Specifications
-                                </Button>
-                            </div>
-                            
-                            
-                        </form>
-                    </div>
-
-                    {/* Section for Mudah */}
+                    {/* Vehicle valuation section */}
                     <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
                         
                         <div>
@@ -466,9 +382,8 @@ export function ValuationLayout() {
                                 <Button 
                                     type="button" 
                                     onClick={() => {
-                                        getMudahData(),
+                                        getMudahData()
                                         clearResults()
-                                    
                                     }} 
                                     disabled={!canSubmit || loading}
                                     variant="secondary"
@@ -488,10 +403,6 @@ export function ValuationLayout() {
                         </form>
                     </div>
                 </div>
-
-                {/* Section for literally ALL */}
-
-                {/* I've not done it yet */}
 
                 {/* Section to display all results */}
 

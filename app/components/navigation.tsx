@@ -133,45 +133,49 @@ export function Navigation() {
 
           {/* Mobile menu and Login button */}
           <div className="w-full flex items-center gap-3 md:justify-end">
-            <button
-              type="button"
-              aria-label="Toggle navigation menu"
-              aria-expanded={isMenuOpen}
-              onClick={() => setIsMenuOpen((open) => !open)}
-              className="md:hidden flex items-center justify-between p-8 w-full h-10 shrink-0 rounded-xl bg-brand-white transition-all shadow-lg"
-            >
+            {/* Mobile Navigation Bar */}
+            <div className="md:hidden flex items-center justify-between w-full px-6 py-3 rounded-xl bg-brand-white shadow-lg">
               <Link
                 href="/"
-                className="flex items-center justify-center md:hidden"
+                className="flex items-center justify-center"
               >
                 <Image
                   src="/placeholder_3.svg"
                   alt="Site logo"
+                  className="hover:scale-105 transition-transform duration-200"
                   width={100}
                   height={0}
                 />
               </Link>
-              {/* INSANE HAMBURGER ANIMATIONS */}
 
-              <span className="sr-only">Open menu</span>
-              <span className={`relative block w-5 h-3.5 transition-all`}>
-                <span
-                  className={`absolute left-0 top-0 h-0.5 w-5 bg-foreground transition-transform rounded-full ${
-                    isMenuOpen ? "translate-y-1.5 rotate-45" : ""
-                  }`}
-                ></span>
-                <span
-                  className={`absolute left-0 top-1.5 h-0.5 w-5 bg-foreground transition-opacity rounded-full ${
-                    isMenuOpen ? "opacity-0" : "opacity-100"
-                  }`}
-                ></span>
-                <span
-                  className={`absolute left-0 bottom-0 h-0.5 w-5 bg-foreground transition-transform rounded-full ${
-                    isMenuOpen ? "-translate-y-1.5 -rotate-45" : ""
-                  }`}
-                ></span>
-              </span>
-            </button>
+              {/* Insane Hamburger Menu Button */}
+              <button
+                type="button"
+                aria-label="Toggle navigation menu"
+                aria-expanded={isMenuOpen}
+                onClick={() => setIsMenuOpen((open) => !open)}
+                className="flex items-center justify-center p-2.5 rounded-lg hover:bg-brand/10 active:bg-brand/20 transition-all duration-200"
+              >
+                <span className="sr-only">Open menu</span>
+                <span className="relative block w-6 h-5">
+                  <span
+                    className={`absolute left-0 top-0 h-0.5 w-6 bg-foreground transition-all duration-300 ease-in-out rounded-full ${
+                      isMenuOpen ? "translate-y-2 rotate-45" : ""
+                    }`}
+                  ></span>
+                  <span
+                    className={`absolute left-0 top-2 h-0.5 w-6 bg-foreground transition-all duration-300 ease-in-out rounded-full ${
+                      isMenuOpen ? "opacity-0 scale-75" : "opacity-100 scale-100"
+                    }`}
+                  ></span>
+                  <span
+                    className={`absolute left-0 bottom-0 h-0.5 w-6 bg-foreground transition-all duration-300 ease-in-out rounded-full ${
+                      isMenuOpen ? "-translate-y-2 -rotate-45" : ""
+                    }`}
+                  ></span>
+                </span>
+              </button>
+            </div>
 
             <div className="hidden md:block">
               {isLoggedIn ? (

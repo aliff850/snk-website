@@ -77,7 +77,7 @@ def get_details(keys: list[str], tab_panels: list[etree._Element]):
 def about(make: str, model: str):
     html = get(URL.format(make.replace(' ', '-'), model.replace(' ', '-')), headers={'User-Agent': 'Mozilla/5.0'})
     if not html.ok and not html.status_code == 200:
-        return HTTPException(500, "An unexpected error occured")
+        raise HTTPException(500, "An unexpected error occured")
 
     tree = etree.fromstring(html.text, htmlParser)
     variants = tree.xpath('//*[@id="sec-variants"]/div[2]/div[1]/table/tbody/tr/td[1]/span/a') # BYD Dolphin
@@ -94,8 +94,8 @@ def about(make: str, model: str):
 @informationRouter.post('/pricing', summary='Retrieves price data of the vehicle model variant(s)', response_model=list[PricingResponse])
 def price(make: str, model: str, variants: list[str] = []):
     html = get((URL+'/price').format(make.replace(' ', '-'), model.replace(' ', '-')), headers={'User-Agent': 'Mozilla/5.0'})
-    if not html.ok and not html.status_code == 200:
-        return HTTPException(500, "An unexpected error occured")
+    if not html.ok and not html.status_code != 200:
+        raise HTTPException(500, "An unexpected error occured")
     
     tree = etree.fromstring(html.text, htmlParser)
     variants_groups = tree.xpath('/html/body/main/div/div[1]/section[1]/div/div')
@@ -116,7 +116,7 @@ def price(make: str, model: str, variants: list[str] = []):
 def specifications(make: str, model: str, variants: list[str] = []):
     html = get((URL+'/specifications').format(make.replace(' ', '-'), model.replace(' ', '-')), headers={'User-Agent': 'Mozilla/5.0'})
     if not html.ok and not html.status_code == 200:
-        return HTTPException(500, "An unexpected error occured")
+        raise HTTPException(500, "An unexpected error occured")
     
     tree = etree.fromstring(html.text, htmlParser)
     variants_groups = tree.xpath('//*[@id="sec-variants"]/div/div')
@@ -132,7 +132,7 @@ def specifications(make: str, model: str, variants: list[str] = []):
             details_url = f"https://www.zigwheels.my/variant/variant-feature?variantId={variant.attrib.get('data-variantid')}&categorySlug=cars&langCode=en&pageType=specification"
             details_html = get(details_url, headers={'User-Agent': 'Mozilla/5.0'})
             if not details_html.ok and details_html.status_code == 200:
-                return HTTPException(500, "An unexpected error occured")
+                raise HTTPException(500, "An unexpected error occured")
             
             details_tree = etree.fromstring(details_html.text, htmlParser)
             spec_keys = [key.text.strip() for key in details_tree.xpath('//*[@id="specification"]/ul/li')]
@@ -154,7 +154,7 @@ def specifications(make: str, model: str, variants: list[str] = []):
 def features(make: str, model: str, variants: list[str] = []):
     html = get((URL+'/specifications').format(make.replace(' ', '-'), model.replace(' ', '-')), headers={'User-Agent': 'Mozilla/5.0'})
     if not html.ok and not html.status_code == 200:
-        return HTTPException(500, "An unexpected error occured")
+        raise HTTPException(500, "An unexpected error occured")
     
     tree = etree.fromstring(html.text, htmlParser)
     variants_groups = tree.xpath('//*[@id="modelFeatureSection"]/div/div')
@@ -170,7 +170,7 @@ def features(make: str, model: str, variants: list[str] = []):
             details_url = f"https://www.zigwheels.my/variant/variant-feature?variantId={variant.attrib.get('data-variantid')}&categorySlug=cars&langCode=en&pageType=specification"
             details_html = get(details_url, headers={'User-Agent': 'Mozilla/5.0'})
             if not details_html.ok and details_html.status_code == 200:
-                return HTTPException(500, "An unexpected error occured")
+                raise HTTPException(500, "An unexpected error occured")
             
             details_tree = etree.fromstring(details_html.text, htmlParser)
             feat_keys = [key.text.strip() for key in details_tree.xpath('//*[@id="feature"]/ul/li')]
@@ -198,7 +198,7 @@ def vehicle_map(make: str = None, model: str = None):
 
     # Validate make exists
     if normalized_make not in MAKE_MODEL_MAP:
-        return HTTPException(404, f'Unknown make provided: {make}')
+        raise HTTPException(404, f'Unknown make provided: {make}')
 
     make_data = MAKE_MODEL_MAP[normalized_make]
 
@@ -207,7 +207,7 @@ def vehicle_map(make: str = None, model: str = None):
 
     # Validate model exists
     if model not in make_data:
-        return HTTPException(404, f'Unknown model provided: {model}')
+        raise HTTPException(404, f'Unknown model provided: {model}')
 
     # Return specific model variants
     return make_data[model]

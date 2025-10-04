@@ -1,6 +1,6 @@
 'use client'
 
-import { ValuationLayout } from "../components/valuation/layout1"
+import { ValuationLayout } from "../components/valuation/Valuation"
 // import { ValuationLayoutAlt } from "../components/valuation/layout2"
 
 export default function VehicleValuation() {

@@ -17,7 +17,7 @@ function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ")
 }
 
-const baseClasses = "inline-flex items-center justify-center font-semibold rounded-full transition-all duration-150 shadow-lg hover:shadow-xl"
+const baseClasses = "inline-flex items-center justify-center font-semibold rounded-full transition-all duration-150 shadow-lg hover:shadow-xl w-full md:w-auto md:text-xl min-w-[120px]"
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary: "bg-brand-white text-brand hover:bg-brand-white/90",
@@ -25,9 +25,9 @@ const variantClasses: Record<ButtonVariant, string> = {
 }
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "px-4 md:px-8 py-2",
-  md: "px-4 md:px-16 py-3",
-  lg: "grow px-4: md:px-24 py-3"
+  sm: "md:px-8 py-2",
+  md: "md:px-16 py-3",
+  lg: "md:px-24 py-3"
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

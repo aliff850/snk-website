@@ -41,7 +41,7 @@ export default function ValuationPage() {
 
                 title="Transform your valuation process today"
                 caption="Get instant real-time vehicle valuation through inquiries today"
-                button="Try The Real-Time Inquiry Platform"
+                button="Try Now"
                 target="_blank"
                 link="/valuation"
             

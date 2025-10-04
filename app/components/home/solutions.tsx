@@ -8,7 +8,7 @@ import { solutions } from "@/app/data/solutions"
 export function SolutionsSection() {
 
     return(
-        <section className="bg-brand flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 py-16 font-onest text-white">
+        <section className="bg-brand flex flex-col justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest text-white">
 
             <div className="w-full max-w-7xl flex flex-col justify-center items-center gap-8">
 
@@ -45,7 +45,7 @@ export function SolutionsSection() {
                 <Button 
                     href="/services"
                     variant="primary"
-                    size="sm"
+                    size="md"
                     className="text-xl">
                     Explore All Our Solutions
                     <svg 
