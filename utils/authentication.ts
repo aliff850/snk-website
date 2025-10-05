@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient } from "./supabase/server";
+import { unstable_noStore as noStore } from "next/cache";
+
 
 type AuthResult = {
   ok: boolean;
@@ -30,6 +32,7 @@ function toSafeMessage(message: string | undefined): string {
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
+  noStore()
   const auth_data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -44,6 +47,7 @@ export async function login(formData: FormData) {
 
 export async function signup(formData: FormData) {
   const supabase = await createClient();
+  noStore()
   const auth_data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -65,6 +69,7 @@ export async function signup(formData: FormData) {
 
 export async function signout() {
   const supabase = await createClient();
+  noStore()
 
   const { error } = await supabase.auth.signOut();
   if (error) {
