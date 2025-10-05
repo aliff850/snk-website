@@ -3,7 +3,7 @@ import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 export function ContactHero() {
     return(
         <section className="w-full bg-[url('/images/w214.jpg')] bg-cover bg-center font-onest">
-            <div className="w-full h-full bg-black/40 pt-32 pb-16 px-4 md:px-12 lg:px-24">
+            <div className="w-full h-full bg-black/50 pt-32 pb-16 px-4 md:px-12 lg:px-24">
                 <div className="text-center flex flex-col gap-6">
                     <AnimateOnLoad animation="fade-in-up">
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-4">

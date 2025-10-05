@@ -1,0 +1,933 @@
+{
+  "perodua": {
+    "perodua-bezza": [
+      "bezza-1.0-g-mt",
+      "bezza-1.0-g-at",
+      "bezza-1.3-x-at",
+      "bezza-1.3-av-at"
+    ],
+    "perodua-alza": ["alza-1.5l-x", "alza-1.5l-h", "alza-1.5l-av"],
+    "perodua-axia": [
+      "axia-1.0l-e-mt",
+      "axia-1.0l-av-cvt",
+      "axia-1.0l-se-cvt",
+      "axia-1.0l-x-cvt",
+      "axia-1.0l-g-cvt"
+    ],
+    "perodua-ativa": [
+      "ativa-1.0l-turbo-av-(metallic)",
+      "ativa-1.0l-turbo-x-(metallic)",
+      "ativa-1.0l-turbo-h-(metallic)",
+      "ativa-1.0l-turbo-h-(special-metallic)",
+      "ativa-1.0l-turbo-av-(special-metallic)",
+      "ativa-1.0l-turbo-av-(2-tone-special-metallic-black-roof)"
+    ],
+    "perodua-myvi": [
+      "myvi-1.5l-advance",
+      "myvi-1.5l-h",
+      "myvi-1.5l-x",
+      "myvi-1.3l-g",
+      "myvi-1.3l-g-(without-psda)"
+    ],
+    "perodua-aruz": ["aruz-1.5x", "aruz-1.5av"]
+  },
+  "proton": {
+    "proton-saga": [
+      "saga-1.3l-standard-mt",
+      "saga-1.3l-standard-at",
+      "saga-1.3l-premium-at",
+      "saga-1.3l-premium-s-at"
+    ],
+    "proton-s70": [
+      "proton-s70-1.5t-executive",
+      "proton-s70-1.5t-premium",
+      "proton-s70-1.5t-flagship",
+      "proton-s70-1.5t-flagship-x"
+    ],
+    "proton-iriz": [
+      "iriz-1.3l-standard-cvt",
+      "iriz-1.6l-executive-cvt",
+      "iriz-1.6l-active-cvt"
+    ],
+    "proton-persona": [
+      "persona-1.6l-standard-cvt",
+      "persona-1.6l-executive-cvt",
+      "persona-1.6l-premium-cvt"
+    ],
+    "proton-x90": [
+      "proton-x90-1.5-tgdi-bsg-standard",
+      "proton-x90-1.5-tgdi-bsg-executive",
+      "proton-x90-1.5-tgdi-bsg-premium",
+      "proton-x90-1.5-tgdi-bsg-flagship"
+    ],
+    "proton-e.mas-7": ["e.mas-7-prime", "e.mas-7-premium"],
+    "proton-x70": [
+      "proton-x70-1.5l-standard",
+      "proton-x70-1.5l-executive",
+      "proton-x70-1.5l-premium",
+      "proton-x70-1.5l-premium-x"
+    ],
+    "proton-x50": [
+      "proton-x50-executive",
+      "proton-x50-premium",
+      "proton-x50-flagship"
+    ]
+  },
+  "honda": {
+    "honda-city": [
+      "city-1.5l-s",
+      "city-1.5l-e",
+      "city-1.5l-v",
+      "city-1.5l-rs",
+      "city-1.5l-ehev-rs"
+    ],
+    "honda-city-hatchback": [
+      "city-hatchback-1.5l-s",
+      "city-hatchback-1.5l-e",
+      "city-hatchback-1.5l-v",
+      "city-hatchback-1.5l-rs",
+      "city-hatchback-1.5l-ehev"
+    ],
+    "honda-cr-v": [
+      "honda-cr-v-1.5l-s",
+      "honda-cr-v-1.5l-e",
+      "honda-cr-v-1.5l-v",
+      "honda-cr-v-2.0l-ehev-rs-hybrid"
+    ],
+    "honda-wr-v": [
+      "honda-wr-v-1.5l-s-cvt",
+      "honda-wr-v-1.5l-e-cvt",
+      "honda-wr-v-1.5l-v-cvt",
+      "honda-wr-v-1.5l-rs-cvt"
+    ],
+    "honda-civic-type-r": ["civic-type-r-2.0l-mt"],
+    "honda-e:n1": ["honda-e:n1-ev"],
+    "honda-civic": [
+      "civic-1.5l-e",
+      "civic-1.5l-v",
+      "civic-1.5l-rs",
+      "civic-2.0l-ehev-rs"
+    ],
+    "honda-hr-v": [
+      "honda-hr-v-1.5l-s",
+      "honda-hr-v-1.5l-turbo-e",
+      "honda-hr-v-1.5l-turbo-v",
+      "honda-hr-v-1.5l-ehev-rs"
+    ]
+  },
+  "toyota": {
+    "toyota-veloz": ["veloz-1.5-at"],
+    "toyota-yaris": ["yaris-1.5-e-at", "yaris-1.5-g-at", "yaris-g-limited"],
+    "toyota-vios": ["vios-1.5-e-at", "vios-1.5-g-at"],
+    "toyota-corolla-cross": [
+      "corolla-cross-1.8g-a/t",
+      "corolla-cross-1.8v-a/t",
+      "corolla-cross-gr-sport"
+    ],
+    "toyota-hilux": [
+      "hilux-single-cab-2.4-(mt)-4x4",
+      "hilux-double-cab-2.4e-(at)-4x4",
+      "hilux-double-cab-2.4v-(at)-4x4",
+      "hilux-double-cab-2.8-rogue-(at)-4x4",
+      "hilux-double-cab-2.4e-(mt)-4x4",
+      "hilux-double-cab-2.8-gr-sport-at-4x4"
+    ],
+    "toyota-rush": ["rush-1.5s-at", "rush-1.5g-at"],
+    "toyota-fortuner": [
+      "fortuner-2.4l-at-4x4",
+      "fortuner-2.7l-srz-at-4x4",
+      "fortuner-2.8l-vrz-at-4x4"
+    ],
+    "toyota-innova-zenix": ["innova-zenix-2.0-hev", "innova-zenix-2.0-v"],
+    "toyota-harrier": ["harrier-2.0-luxury", "harrier-2.0-luxury-se"],
+    "toyota-innova": ["innova-2.0g-at", "innova-2.0x-at"],
+    "toyota-camry": ["camry-2.5v"],
+    "toyota-corolla": ["corolla-1.8e", "corolla-1.8g"],
+    "toyota-hiace-slwb": ["hiace-slwb-2.8l-turbo"],
+    "toyota-hiace": ["hiace-panel-van-2.5-turbo-diesel"],
+    "toyota-camry-hybrid": ["camry-hybrid-2.5-hev"],
+    "toyota-corolla-gr-sport": ["corolla-gr-sport-1.8l-gr-sport"],
+    "toyota-vellfire": ["vellfire-2.5l"],
+    "toyota-gr-86": ["toyota-gr-86-2.4-mt", "toyota-gr-86-2.4-at"],
+    "toyota-alphard": ["alphard-2.4t-executive-lounge"],
+    "toyota-gr-supra": ["gr-supra-3.0l-at", "gr-supra-3.0l-mt"],
+    "toyota-gr-yaris": ["gr-yaris-1.6-mt", "gr-yaris-1.6-at"],
+    "toyota-gr-corolla": ["gr-corolla-1.6l-mt"],
+    "toyota-corolla-cross-hybrid": [
+      "corolla-cross-hybrid-1.8-v",
+      "corolla-cross-hybrid-1.8-hev",
+      "corolla-cross-hybrid-1.8-hev-gr-sport"
+    ]
+  },
+  "nissan": {
+    "nissan-almera": [
+      "almera-1.0l-turbo-vl",
+      "almera-1.0l-turbo-vlp",
+      "almera-1.0l-turbo-vlt"
+    ],
+    "nissan-x-trail": ["x-trail-2.0l-2wd", "x-trail-2.0l-hybrid"],
+    "nissan-serena": [
+      "serena-2.0l-premium-highway-star",
+      "serena-2.0l-highway-star",
+      "serena-j-impul"
+    ],
+    "nissan-navara": [
+      "navara-x-tremer-pro-4x-at",
+      "navara-2.5l-single-cab-mt",
+      "navara-2.5l-double-cab-se-at",
+      "navara-2.5l-double-cab-x-tremer-v-at",
+      "navara-2.5l-double-cab-x-tremer-vl-at"
+    ],
+    "nissan-leaf": ["leaf-electric"],
+    "nissan-nv200": [
+      "nissan-nv200-1.6l-panel-van",
+      "nissan-nv200-1.6l-semi-panel-van"
+    ],
+    "nissan-kicks-e-power": ["kicks-e-power-vl", "kicks-e-power-vlt"]
+  },
+  "mazda": {
+    "mazda-cx-5": [
+      "mazda-cx-5-2.0g-mid-2wd",
+      "mazda-cx-5-2.0g-high-2wd",
+      "mazda-cx-5-2.5g-high-2wd",
+      "mazda-cx-5-2.5g-turbo-awd",
+      "mazda-cx-5-2.2d-high-2wd"
+    ],
+    "mazda-cx-30": [
+      "mazda-cx-30-2.0g-high",
+      "mazda-cx-30-2.0l-2wd",
+      "mazda-cx-30-2.0l-high+",
+      "mazda-cx-30-2.0l-high-premium+"
+    ],
+    "mazda-cx-3": [
+      "mazda-cx-3-2.0l-high",
+      "mazda-cx-3-1.5l-core",
+      "mazda-cx-3-2.0l-core"
+    ],
+    "mazda-cx-8": [
+      "mazda-cx-8-2.2d-high-plus",
+      "mazda-cx-8-2.5g-mid",
+      "mazda-cx-8-2.5g-high-plus",
+      "mazda-cx-8-2.5g-high",
+      "mazda-cx-8-2.5g-turbo-high-plus"
+    ],
+    "mazda-3-liftback": [
+      "3-liftback-2.0l-high-plus",
+      "3-liftback-1.5l",
+      "3-liftback-2.0l-ignite-edition"
+    ],
+    "mazda-3-sedan": ["3-sedan-2.0l-high", "3-sedan-2.0l-high-plus"],
+    "mazda-2-hatchback": ["2-hatchback-high"],
+    "mazda-2-sedan": ["2-sedan-high"],
+    "mazda-cx-9": ["mazda-cx-9-2.5l-turbo-2wd"],
+    "mazda-6": ["mazda-6-2.0l", "mazda-6-2.5l"],
+    "mazda-bt-50": [
+      "mazda-bt-50-1.9l-single-cab-mt",
+      "mazda-bt-50-1.9l-mid-mt",
+      "mazda-bt-50-1.9l-mid-at",
+      "mazda-bt-50-1.9l-high-at",
+      "mazda-bt-50-3.0l-high-plus-at"
+    ],
+    "mazda-mx-5-rf": [
+      "mx-5-rf-2wd-auto",
+      "mx-5-rf-2wd-manual",
+      "mx-5-rf-35th-anniversary-edition"
+    ],
+    "mazda-cx-60": ["mazda-cx-60-2.5l-2wd-high"],
+    "mazda-6-touring": ["6-touring-2.5l"],
+    "mazda-mx-30": ["mazda-mx-30-ev-high"],
+    "mazda-cx-80": ["mazda-cx-80-phev-awd"]
+  },
+  "suzuki": {
+    "suzuki-jimny": ["jimny-1.5l", "jimny-rhino-edition"],
+    "suzuki-swift-sport": ["swift-sport-1.4l"],
+    "suzuki-jimny-5-door": ["jimny-5-door-1.5l-at"]
+  },
+  "volkswagen": {
+    "volkswagen-golf-r": ["golf-r-r-performance-package"],
+    "volkswagen-tiguan-allspace-r-line": [
+      "tiguan-allspace-r-line-2.0-tsi-r-line"
+    ],
+    "volkswagen-tiguan-allspace-life": ["tiguan-allspace-life-1.4l-tsi"],
+    "volkswagen-arteon-r-line": ["arteon-r-line-2.0tsi-r-line-4motion"],
+    "volkswagen-golf-gti": ["golf-gti-2.0tsi"],
+    "volkswagen-tiguan-allspace-elegance": [
+      "tiguan-allspace-elegance-1.4-tsi-elegance"
+    ],
+    "volkswagen-touareg-r-line": ["touareg-r-line-3.0-tsi-r-line"]
+  },
+  "mercedes-benz": {
+    "mercedes-benz-gla-class": [
+      "gla-class-250-4matic-amg-line",
+      "gla-class-200-progressive-line",
+      "gla-class-amg-35-4matic",
+      "gla-class-45s-4matic-plus"
+    ],
+    "mercedes-benz-e-class-saloon": [
+      "e-class-saloon-e-200-avantgarde",
+      "e-class-saloon-e-350-e-amg-line"
+    ],
+    "mercedes-benz-gle-class": [
+      "gle-class-450-4matic-amg-line",
+      "gle-class-63-s-4matic-plus"
+    ],
+    "mercedes-benz-eqa": ["mercedes-benz-eqa-250-amg-line"],
+    "mercedes-benz-glc-class": [
+      "glc-class-300-4matic",
+      "glc-class-350-e-4matic"
+    ],
+    "mercedes-benz-a-class-sedan": [
+      "a-class-sedan-200-progressive-line",
+      "a-class-sedan-amg-a35-4matic",
+      "a-class-sedan-250-4matic-amg-line"
+    ],
+    "mercedes-benz-c-class-saloon": [
+      "c-class-saloon-amg-c43-4matic",
+      "c-class-saloon-c200-avantgarde-line",
+      "c-class-saloon-c350e-amg-line",
+      "c-class-saloon-c63s-e-performance-f1-edition",
+      "c-class-saloon-c-200-amg-line"
+    ],
+    "mercedes-benz-glc-class-coupe": [
+      "glc-class-coupe-350e-4matic",
+      "glc-class-coupe-43-4matic"
+    ],
+    "mercedes-benz-a-class": ["a-class-45-s-4matic-plus-edition-1"],
+    "mercedes-benz-glb-class": [
+      "glb-class-200-progressive-line",
+      "glb-class-250-4matic-amg-line",
+      "glb-class-35-4matic"
+    ],
+    "mercedes-benz-s-class-saloon": [
+      "s-class-saloon-s-580e",
+      "s-class-saloon-amg-s-63-e-performance"
+    ],
+    "mercedes-benz-g-class": ["g-class-amg-g-63"],
+    "mercedes-benz-eqe": [
+      "mercedes-benz-eqe-350+",
+      "mercedes-benz-eqe-amg-53-4matic+",
+      "mercedes-benz-eqe-350+-electric-art-line",
+      "mercedes-benz-eqe-350+-amg-line"
+    ],
+    "mercedes-benz-eqe-suv": [
+      "eqe-suv-500-4matic",
+      "eqe-suv-350-plus-electric-art-line",
+      "eqe-suv-350-plus-amg-line"
+    ],
+    "mercedes-benz-sl-class": [
+      "sl-class-amg-sl-43",
+      "sl-class-63-4matic-plus",
+      "sl-class-amg-sl-63-s-e-performance"
+    ],
+    "mercedes-benz-amg-gt": ["amg-gt-63-s-e-performance"],
+    "mercedes-benz-eqs": [
+      "mercedes-benz-eqs-500-4matic",
+      "mercedes-benz-eqs-53-4matic+"
+    ],
+    "mercedes-benz-eqb": ["mercedes-benz-eqb-350-4matic"],
+    "mercedes-benz-eqc": ["mercedes-benz-eqc-400-4matic"],
+    "mercedes-benz-maybach-gls-class": ["maybach-gls-class-600-4matic"],
+    "mercedes-benz-cla-class-coupe": ["cla-class-coupe-45-s-4matic-plus"],
+    "mercedes-benz-gle-class-coupe": [
+      "gle-class-coupe-53-4matic-plus",
+      "gle-class-coupe-63-s-4matic-plus"
+    ],
+    "mercedes-benz-gls-class": ["gls-class-450-4matic"],
+    "mercedes-benz-maybach-s-class": ["maybach-s-class-maybach-s-580"],
+    "mercedes-benz-eqs-suv": [
+      "eqs-suv-580-4matic",
+      "eqs-suv-450-4matic",
+      "eqs-suv-maybach-680-4matic"
+    ],
+    "mercedes-benz-amg-gt-2-door": ["amg-gt-2-door-63-4matic+"],
+    "mercedes-benz-g-class-electric": [
+      "g-class-electric-g-580",
+      "g-class-electric-g-580-edition-one"
+    ],
+    "mercedes-benz-eqv": ["mercedes-benz-eqv-300-avantgarde"]
+  },
+  "mitsubishi": {
+    "mitsubishi-xpander": ["xpander-1.5l", "xpander-1.5l-plus"],
+    "mitsubishi-triton": [
+      "triton-single-cab-mt",
+      "triton-gl-mt",
+      "triton-gl-at",
+      "triton-premium-at",
+      "triton-athlete"
+    ]
+  },
+  "bmw": {
+    "bmw-x1": ["bmw-x1-sdrive20i-xline"],
+    "bmw-3-series-sedan": [
+      "3-series-sedan-330i-m-sport",
+      "3-series-sedan-320i-sport",
+      "3-series-sedan-330li-m-sport",
+      "3-series-sedan-m340i-xdrive-m-sport-pro"
+    ],
+    "bmw-x3": [
+      "bmw-x3-xdrive-30i-m-sport",
+      "bmw-x3-sdrive20i-m-sport",
+      "bmw-x3-xdrive30e-m-sport",
+      "bmw-x3-sdrive20i-final-edition",
+      "bmw-x3-xdrive30e-final-edition",
+      "bmw-x3-20-xdrive-m-sport"
+    ],
+    "bmw-5-series-sedan": [
+      "5-series-sedan-520i",
+      "5-series-sedan-520i-m-sport"
+    ],
+    "bmw-2-series-gran-coupe": ["2-series-gran-coupe-218i-sport"],
+    "bmw-x4": ["bmw-x4-xdrive30i-m-sport-pro"],
+    "bmw-ix1": ["bmw-ix1-xdrive30-m-sport", "bmw-ix1-edrive20-m-sport"],
+    "bmw-ix2": ["bmw-ix2-xdrive30"],
+    "bmw-x7": ["bmw-x7-xdrive40i-pure-excellence", "bmw-x7-xdrive40i-m-sport"],
+    "bmw-ix": ["bmw-ix-xdrive45-sport", "bmw-ix-xdrive60-m-sport"],
+    "bmw-7-series-sedan": [
+      "7-series-sedan-750e-xdrive-m-sport",
+      "7-series-sedan-750e-xdrive-pure-excellence"
+    ],
+    "bmw-1-series": ["1-series-m135i-xdrive"],
+    "bmw-x6": ["bmw-x6-xdrive-40i-m-sport"],
+    "bmw-x5": ["bmw-x5-xdrive40i-m-sport", "bmw-x5-xdrive50e-m-sport"],
+    "bmw-8-series-coupe": ["8-series-coupe-m850i-xdrive"],
+    "bmw-ix3": ["bmw-ix3-final-edition"],
+    "bmw-i7": ["bmw-i7-xdrive60-m-sport"],
+    "bmw-xm": [
+      "bmw-xm-night-gold-line",
+      "bmw-xm-shadow-line",
+      "bmw-xm-label-red"
+    ],
+    "bmw-4-series-coupe": ["4-series-coupe-430i-m-sport-pro"],
+    "bmw-6-series-gran-turismo": ["6-series-gran-turismo-630i-gt-m-sport"],
+    "bmw-m3-competition": [
+      "m3-competition-3.0l",
+      "m3-competition-3.0l-m-xdrive-pro-package",
+      "m3-competition-3.0l-pro-package",
+      "m3-competition-m-xdrive"
+    ],
+    "bmw-m4-competition": ["m4-competition-m-xdrive"],
+    "bmw-m5": ["bmw-m5"],
+    "bmw-z4": ["bmw-z4-sdrive30i-m-sport"],
+    "bmw-i4": [
+      "bmw-i4-edrive40-m-sport",
+      "bmw-i4-edrive35",
+      "bmw-i4-edrive35-m-sport"
+    ],
+    "bmw-i4-m50": ["bmw-i4-m50-electric"],
+    "bmw-m2-coupe": ["m2-coupe-3.0l"],
+    "bmw-i5": ["bmw-i5-edrive40-m-sport", "bmw-i5-m60"]
+  },
+  "audi": {
+    "audi-q8": ["audi-q8-3.0l-tfsi-quattro"],
+    "audi-q5": ["audi-q5-2.0-tfsi-quattro"],
+    "audi-q8-e-tron": [
+      "q8-e-tron-advanced-50-quattro",
+      "q8-e-tron-s-line-55-quattro"
+    ],
+    "audi-a8-l": ["audi-a8-l-3.0-tfsi-quattro"],
+    "audi-q2": ["audi-q2-1.4-tfsi"],
+    "audi-q3": ["audi-q3-1.4-tfsi-s-tronic"],
+    "audi-a3-sedan": ["a3-sedan-s-line-2.0-tfsi"],
+    "audi-a7-sportback": ["a7-sportback-3.0-tfsi-quattro"],
+    "audi-a5": ["audi-a5-2.0-tfsi"],
+    "audi-rs-4-avant": ["rs-4-avant-2.9-tfsi-quattro"],
+    "audi-rs-5-sportback": ["rs-5-sportback-2.9-tfsi-quattro"],
+    "audi-rs-6-avant": ["rs-6-avant-4.0-tfsi-quattro"],
+    "audi-rs-7-sportback": ["rs-7-sportback-4.0-tfsi-quattro"],
+    "audi-q3-sportback": ["q3-sportback-2.0-tfsi-quattro"],
+    "audi-q5-sportback": ["q5-sportback-s-line-2.0-tfsi-quattro"],
+    "audi-rs-3-sedan": ["rs-3-sedan-2.5-tfsi"],
+    "audi-rs-q8": ["audi-rs-q8-4.0-tfsi-quattro"],
+    "audi-e-tron-gt": [
+      "e-tron-gt-quattro",
+      "e-tron-gt-quattro-with-dynamic-package"
+    ],
+    "audi-q8-sportback-e-tron": [
+      "q8-sportback-e-tron-advanced-50-quattro",
+      "q8-sportback-e-tron-s-line-55-quattro"
+    ],
+    "audi-rs-e-tron-gt": ["rs-e-tron-gt-quattro"],
+    "audi-q7": ["audi-q7-s-line-3.0-tfsi-quattro"]
+  },
+  "kia": {
+    "kia-carnival": [
+      "carnival-2.2d-11-seater",
+      "carnival-2.2d-8-seater-mid",
+      "carnival-2.2d-8-seater-high",
+      "carnival-2.2d-7-seater-high"
+    ],
+    "kia-sorento": [
+      "sorento-2.5-awd-6-seater",
+      "sorento-2.2d-awd-6-seater",
+      "sorento-2.5-2wd-7-seater"
+    ],
+    "kia-ev9": [
+      "kia-ev9-gt-line-awd-(6-seater)",
+      "kia-ev9-gt-line-awd-(7-seater)"
+    ],
+    "kia-sportage": [
+      "sportage-2.0l",
+      "sportage-2.0l-high",
+      "sportage-1.6t-high",
+      "sportage-1.6t-high-awd"
+    ],
+    "kia-ev6": ["kia-ev6-gt-line-awd"],
+    "kia-niro-ev": ["niro-ev-electric"]
+  },
+  "hyundai": {
+    "hyundai-staria": ["staria-lite", "staria-plus", "staria-max"],
+    "hyundai-kona": [
+      "kona-1.6-turbo",
+      "kona-2.0",
+      "kona-2.0-active",
+      "kona-1.6-n-line"
+    ],
+    "hyundai-santa-fe": ["santa-fe-1.6l-hybrid", "santa-fe-2.2l-diesel"],
+    "hyundai-ioniq-5": [
+      "ioniq-5-lite-58-kwh",
+      "ioniq-5-plus-58-kwh",
+      "ioniq-5-max-72.6-kwh"
+    ],
+    "hyundai-palisade": [
+      "palisade-3.8l-luxury-7",
+      "palisade-3.8l-executive-8",
+      "palisade-2.2l-luxury-7",
+      "palisade-2.2l-executive-8"
+    ],
+    "hyundai-kona-electric": [
+      "kona-electric-e-lite",
+      "kona-electric-e-plus",
+      "kona-electric-e-max"
+    ],
+    "hyundai-creta": ["creta-plus"],
+    "hyundai-tucson": [
+      "tucson-2.0-lite",
+      "tucson-1.6t-plus",
+      "tucson-1.6t-max"
+    ],
+    "hyundai-ioniq-6": [
+      "ioniq-6-max-rwd",
+      "ioniq-6-max-awd",
+      "ioniq-6-lite-rwd",
+      "ioniq-6-plus-rwd"
+    ]
+  },
+  "volvo": {
+    "volvo-xc40": [
+      "volvo-xc40-t5",
+      "volvo-xc40-recharge-t5",
+      "volvo-xc40-b5-ultimate"
+    ],
+    "volvo-xc60": ["volvo-xc60-b5-awd-core", "volvo-xc60-t8-awd-ultra"],
+    "volvo-s60": ["volvo-s60-recharge-t8-r-design"],
+    "volvo-c40-recharge": ["c40-recharge-pure-electric"],
+    "volvo-ex90": ["volvo-ex90-ultra"],
+    "volvo-xc40-recharge": [],
+    "volvo-s90": ["volvo-s90-recharge-t8-inscription-plus"],
+    "volvo-v60": ["volvo-v60-recharge-t8-ultimate"],
+    "volvo-ex30": [
+      "volvo-ex30-plus",
+      "volvo-ex30-ultra",
+      "volvo-ex30-ultra-twin-performance"
+    ],
+    "volvo-xc90": ["volvo-xc90-b5-mhev", "volvo-xc90-t8-phev"],
+    "volvo-ec40": [
+      "volvo-ec40-twin-motor-ultra",
+      "volvo-ec40-single-motor-ultra"
+    ]
+  },
+  "ford": {
+    "ford-ranger": [
+      "ranger-2.0l-xl-mt",
+      "ranger-2.0l-xl-at",
+      "ranger-2.0l-xlt-mt",
+      "ranger-2.0l-xlt-at",
+      "ranger-2.0l-xlt-plus-at",
+      "ranger-2.0l-wildtrak-at",
+      "ranger-2.0l-single-cab-xl-4x4-mt",
+      "ranger-2.0l-platinum-at",
+      "ranger-stormtrak-4x4",
+      "ranger-3.0l-v6-turbo-diesel-wildtrak-at-4x4",
+      "ranger-2.0l-xlt-plus-special-edition-at-4x4"
+    ],
+    "ford-ranger-raptor": [
+      "ranger-raptor-3.0l-v6-twin-turbo-ecoboost",
+      "ranger-raptor-2.0l-diesel"
+    ],
+    "ford-everest": [
+      "everest-2.0l-turbo-sport-4x2-6at",
+      "everest-2.0l-bi-turbo-trend-4x4-10at",
+      "everest-2.0l-bi-turbo-titanium-4x4-10at"
+    ]
+  },
+  "mg": {
+    "mg-zs-ev": ["zs-ev-luxury"],
+    "mg-4-ev": [
+      "mg-4-ev-standard",
+      "mg-4-ev-luxury",
+      "mg-4-ev-extended-range",
+      "mg-4-ev-xpower"
+    ],
+    "mg-hs": ["mg-hs-standard", "mg-hs-luxury"],
+    "mg-cyberster": ["cyberster-4wd", "cyberster-rwd"],
+    "mg-5": ["mg-5-1.5l"],
+    "mg-s5-ev": [
+      "mg-s5-ev-com",
+      "mg-s5-ev-lux-long-range",
+      "mg-s5-ev-com-long-range"
+    ]
+  },
+  "daihatsu": {
+    "daihatsu-gran-max": [
+      "gran-max-pick-up-mt",
+      "gran-max-panel-van-mt",
+      "gran-max-panel-van-at",
+      "gran-max-semi-panel-van-mt",
+      "gran-max-semi-panel-van-at"
+    ]
+  },
+  "smart": {
+    "smart-#1": ["#1-pro", "#1-premium", "#1-brabus"],
+    "smart-#3": ["#3-pro", "#3-premium", "#3-brabus"]
+  },
+  "aston-martin": {
+    "aston-martin-vantage": [],
+    "aston-martin-dbx": [],
+    "aston-martin-vanquish": ["vanquish-5.2l"],
+    "aston-martin-db11": [],
+    "aston-martin-dbs-superleggera": []
+  },
+  "bentley": {
+    "bentley-bentayga": [
+      "bentayga-v8",
+      "bentayga-speed",
+      "bentayga-s",
+      "bentayga-ewb-azure"
+    ],
+    "bentley-flying-spur": [],
+    "bentley-continental": []
+  },
+  "chery": {
+    "chery-tiggo-7-pro": ["tiggo-7-pro-1.6t"],
+    "chery-tiggo-8-pro": ["tiggo-8-pro-premium"],
+    "chery-omoda-e5": ["omoda-e5-ev"],
+    "chery-tiggo-cross": ["tiggo-cross-1.5-turbo", "tiggo-cross-1.5-hybrid"],
+    "chery-o5": ["chery-o5-1.5-turbo"]
+  },
+  "citroen": {
+    "citroen-c3-aircross": ["c3-aircross-1.2l"],
+    "citroen-grand-c4-spacetourer": ["grand-c4-spacetourer-1.6l-thp"]
+  },
+  "ferrari": {
+    "ferrari-f8-tributo": [],
+    "ferrari-portofino": [],
+    "ferrari-488-gtb": [],
+    "ferrari-gtc-4lusso": [],
+    "ferrari-488-spider": [],
+    "ferrari-roma": [],
+    "ferrari-gtc-4lusso-t": [],
+    "ferrari-812-superfast": []
+  },
+  "infiniti": {
+    "infiniti-qx60": [],
+    "infiniti-q60": ["infiniti-q60-2.0l-t"],
+    "infiniti-q50": ["infiniti-q50-gt", "infiniti-q50-gt-technology"],
+    "infiniti-qx50": [],
+    "infiniti-qx80": [],
+    "infiniti-qx55": []
+  },
+  "isuzu": {
+    "isuzu-d-max": [
+      "d-max-x-terrain-3.0l-4x4-at",
+      "d-max-premium-3.0l-4x4-at",
+      "d-max-premium-1.9l-4x4-at",
+      "d-max-autoplus-1.9l-4x2-at",
+      "d-max-standard-1.9l-4x4-at",
+      "d-max-standard-1.9l-4x4-mt",
+      "d-max-1.9l-4x4-single-cab",
+      "d-max-3.0l-4x4-single-cab",
+      "d-max-low-ride-4x2-mt"
+    ]
+  },
+  "jaguar": {
+    "jaguar-i-pace": ["i-pace-ev400-black", "i-pace-ev400-hse"],
+    "jaguar-f-pace": ["f-pace-2.0-r-dynamic"],
+    "jaguar-xf": ["jaguar-xf-2.0-r-sport"],
+    "jaguar-xe": ["jaguar-xe-2.0-r-dynamic"],
+    "jaguar-f-type": ["f-type-2.0l-coupe"],
+    "jaguar-e-pace": ["e-pace-2.0l"]
+  },
+  "jeep": {
+    "jeep-wrangler-unlimited": [
+      "wrangler-unlimited-sport",
+      "wrangler-unlimited-sahara"
+    ],
+    "jeep-wrangler": ["wrangler-rubicon"],
+    "jeep-cherokee": ["cherokee-longitude", "cherokee-trailhawk"],
+    "jeep-grand-cherokee-srt": ["grand-cherokee-srt-6.4l"],
+    "jeep-grand-cherokee": ["grand-cherokee-limited", "grand-cherokee-overland"]
+  },
+  "lamborghini": {
+    "lamborghini-urus": [],
+    "lamborghini-huracan-spyder": [],
+    "lamborghini-aventador": [],
+    "lamborghini-huracan-evo": [],
+    "lamborghini-huracan-tecnica": [],
+    "lamborghini-temerario": ["temerario-v8"]
+  },
+  "land-rover": {
+    "land-rover-discovery-sport": ["discovery-sport-r-dynamic-(5-seater)"],
+    "land-rover-range-rover-velar": [
+      "range-rover-velar-2.0l-r-dynamic-se",
+      "range-rover-velar-2.0l-r-dynamic-se-(h-spec)",
+      "range-rover-velar-2.0l-dynamic-hse-(lux-spec)"
+    ],
+    "land-rover-defender-90": ["defender-90-p400-3.0l-mhev"],
+    "land-rover-range-rover": [
+      "range-rover-4.4l-swb-hse",
+      "range-rover-4.4l-swb-autobiography"
+    ],
+    "land-rover-range-rover-sport": [
+      "range-rover-sport-3.0l-mhev",
+      "range-rover-sport-5.0l-svr"
+    ],
+    "land-rover-defender": ["defender-110-3.0l-mhev", "defender-v8"],
+    "land-rover-range-rover-evoque": [
+      "range-rover-evoque-2.0l-dynamic-se-(m-spec)",
+      "range-rover-evoque-2.0l-dynamic-se-(h-spec)",
+      "range-rover-evoque-2.0l-dynamic-hse-(lux-spec)"
+    ],
+    "land-rover-defender-130": ["defender-130-v8"]
+  },
+  "lexus": {
+    "lexus-rx": ["lexus-rx-350-luxury", "lexus-rx-500h-f-sport"],
+    "lexus-es": [
+      "lexus-es-250-premium",
+      "lexus-es-250-luxury",
+      "lexus-es-250-f-sport"
+    ],
+    "lexus-nx": ["lexus-nx-250-luxury", "lexus-nx-350-f-sport"],
+    "lexus-ls": ["lexus-ls-500-luxury", "lexus-ls-500-executive"],
+    "lexus-lc": ["lexus-lc-500"],
+    "lexus-lm": ["lexus-lm-350h-7-seater", "lexus-lm-500h-4-seater"],
+    "lexus-lc-convertible": ["lc-convertible-500"],
+    "lexus-rz": ["lexus-rz-450e-luxury"],
+    "lexus-lbx": ["lexus-lbx-premium", "lexus-lbx-luxury"]
+  },
+  "lotus": {
+    "lotus-eletre": ["eletre-base", "eletre-s", "eletre-r"],
+    "lotus-evora": ["evora-sport-410"],
+    "lotus-emira": ["emira-v6-first-edition"],
+    "lotus-emeya": [
+      "emeya-600",
+      "emeya-600-gt-se",
+      "emeya-600-sport-se",
+      "emeya-900-sport",
+      "emeya-900-sport-carbon"
+    ]
+  },
+  "maserati": {
+    "maserati-ghibli": ["ghibli-3.0l"],
+    "maserati-levante": ["levante-gt-hybrid"],
+    "maserati-grecale": ["grecale-gt", "grecale-trofeo"],
+    "maserati-granturismo": ["granturismo-modena", "granturismo-trofeo"]
+  },
+  "maxus": {
+    "maxus-g10-se": [],
+    "maxus-t60": ["maxus-t60-at"],
+    "maxus-mifa-9": ["mifa-9-luxury", "mifa-9-premium"]
+  },
+  "mclaren": {
+    "mclaren-570s": [],
+    "mclaren-gt": [],
+    "mclaren-720s-spider": [],
+    "mclaren-artura": []
+  },
+  "mini": {
+    "mini-electric": ["electric-3-door-cooper-se"],
+    "mini-3-door": [
+      "3-door-cooper-s",
+      "3-door-all-new-cooper-se",
+      "3-door-all-new-cooper-s"
+    ],
+    "mini-john-cooper-works": [
+      "john-cooper-works-3-door",
+      "john-cooper-works-countryman-all4",
+      "john-cooper-works-3-door-electric",
+      "john-cooper-works-aceman"
+    ],
+    "mini-countryman-electric": ["countryman-electric-se-all4"],
+    "mini-5-door": ["5-door-cooper-s-5-door"],
+    "mini-convertible": ["convertible-cooper-s-convertible"],
+    "mini-clubman": ["clubman-cooper-s-clubman"],
+    "mini-countryman": ["countryman-s-all4"],
+    "mini-aceman": ["aceman-se"]
+  },
+  "peugeot": {
+    "peugeot-3008": ["peugeot-3008-allure"],
+    "peugeot-2008": ["peugeot-2008-allure"],
+    "peugeot-408": [
+      "peugeot-408-allure",
+      "peugeot-408-premium",
+      "peugeot-408-gt"
+    ],
+    "peugeot-5008": ["peugeot-5008-allure"],
+    "peugeot-landtrek": ["landtrek-1.9d-allure"]
+  },
+  "porsche": {
+    "porsche-macan": [],
+    "porsche-cayenne": ["cayenne-3.0l-turbo", "cayenne-s-e-hybrid"],
+    "porsche-taycan": [
+      "taycan-turbo",
+      "taycan-turbo-s",
+      "taycan-standard",
+      "taycan-4s",
+      "taycan-turbo-gt",
+      "taycan-turbo-gt-with-weissach-package",
+      "taycan-4-cross-turismo",
+      "taycan-4s-cross-turismo",
+      "taycan-turbo-cross-turismo"
+    ],
+    "porsche-718": [],
+    "porsche-911": [
+      "porsche-911-carrera",
+      "porsche-911-carrera-s-pdk",
+      "porsche-911-carrera-4s-pdk",
+      "porsche-911-carrera-4-gts",
+      "porsche-911-turbo-s-pdk",
+      "porsche-911-gt3-pdk",
+      "porsche-911-gt3-manual",
+      "porsche-911-gt3-touring-package-manual",
+      "porsche-911-gt3-touring-package-pdk"
+    ],
+    "porsche-panamera": [],
+    "porsche-macan-electric": [
+      "macan-electric-electric",
+      "macan-electric-4",
+      "macan-electric-4s",
+      "macan-electric-turbo"
+    ]
+  },
+  "renault": {
+    "renault-captur": ["captur-standard", "captur-plus", "captur-trophy"],
+    "renault-koleos": [
+      "koleos-signature",
+      "koleos-standard",
+      "koleos-signature-plus"
+    ],
+    "renault-zoe": ["renault-zoe-ze50-r110", "renault-zoe-ze50-r135"],
+    "renault-megane-rs": ["megane-rs-300-trophy"]
+  },
+  "rolls-royce": {
+    "rolls-royce-cullinan": [],
+    "rolls-royce-phantom": [],
+    "rolls-royce-ghost": [],
+    "rolls-royce-wraith": []
+  },
+  "subaru": {
+    "subaru-xv": ["subaru-xv-2.0i-p", "subaru-xv-gt-edition"],
+    "subaru-forester": [
+      "forester-2.0i-s-eyesight-gt-edition",
+      "forester-2.0i-l-gt-lite-edition",
+      "forester-2.0i-s-eyesight"
+    ],
+    "subaru-brz": ["subaru-brz-2.4l-6at-eyesight", "subaru-brz-2.4l-6mt"],
+    "subaru-wrx-sedan": ["wrx-sedan-2.4l-mt", "wrx-sedan-2.4l-eyesight-cvt"],
+    "subaru-outback": [
+      "outback-2.5-i-touring-eyesight",
+      "outback-2.4-xt-touring-eyesight"
+    ],
+    "subaru-wrx-wagon": ["wrx-wagon-2.4l-gt-s-eyesight-cvt"]
+  },
+  "tesla": {
+    "tesla-model-3": [
+      "model-3-rwd",
+      "model-3-long-range-awd",
+      "model-3-performance"
+    ],
+    "tesla-model-y": [
+      "model-y-standard-range-rwd",
+      "model-y-long-range-awd",
+      "model-y-performance-awd"
+    ]
+  },
+  "byd": {
+    "byd-dolphin": [
+      "dolphin-dynamic-standard-range",
+      "dolphin-premium-extended-range"
+    ],
+    "byd-atto-3": [
+      "atto-3-standard-range",
+      "atto-3-extended-range",
+      "atto-3-ultra"
+    ],
+    "byd-seal": ["seal-performance-awd", "seal-rwd-premium"],
+    "byd-m6": ["byd-m6-standard", "byd-m6-extended"],
+    "byd-sealion-7": ["sealion-7-premium", "sealion-7-performance"],
+    "byd-atto-2": ["atto-2-ev"],
+    "byd-seal-6": ["seal-6-dynamic", "seal-6-premium"]
+  },
+  "denza": { "denza-d9": ["denza-d9-advanced-fwd", "denza-d9-premium-awd"] },
+  "dongfeng": { "dongfeng-box": ["dongfeng-box-e2", "dongfeng-box-e3"] },
+  "foton": { "foton-view-cs2": [], "foton-view-c2": [] },
+  "gac": {
+    "gac-gs3": ["gac-gs3-standard", "gac-gs3-premium"],
+    "gac-gs3-emzoom": [
+      "gs3-emzoom-exclusive",
+      "gs3-emzoom-premium-r",
+      "gs3-emzoom-standard"
+    ],
+    "gac-aion-y-plus": ["aion-y-plus-elite", "aion-y-plus-premium"],
+    "gac-aion-es": ["aion-es-ev"]
+  },
+  "gwm": {
+    "gwm-ora-good-cat": ["ora-good-cat-400-pro", "ora-good-cat-500-ultra"],
+    "gwm-haval-h6-hev": ["haval-h6-hev-1.5l-turbo"],
+    "gwm-ora-07": ["gwm-ora-07-long-range", "gwm-ora-07-performance"],
+    "gwm-tank-300": ["tank-300-2.0l"],
+    "gwm-tank-500": ["tank-500-ultra"]
+  },
+  "icaur": { "icaur-03": ["icaur-03-2wd", "icaur-03-iwd"] },
+  "jac": { "jac-t9": ["jac-t9-ice", "jac-t9-ev"] },
+  "jaecoo": {
+    "jaecoo-j7": ["jaecoo-j7-2wd", "jaecoo-j7-awd"],
+    "jaecoo-j8": ["jaecoo-j8-2wd", "jaecoo-j8-awd"],
+    "jaecoo-j7-phev": ["j7-phev-2wd"],
+    "jaecoo-omoda-c9": ["omoda-c9-2wd", "omoda-c9-awd"]
+  },
+  "jetour": {
+    "jetour-dashing": ["dashing-prime", "dashing-comfort"],
+    "jetour-vt9": ["jetour-vt9-comfort", "jetour-vt9-prime"]
+  },
+  "leapmotor": { "leapmotor-c10": ["leapmotor-c10-rwd"] },
+  "neta": {
+    "neta-x": ["neta-x-400-comfort", "neta-x-400-luxury", "neta-x-500-luxury"],
+    "neta-v": ["neta-v-ev"]
+  },
+  "xpeng": {
+    "xpeng-g6": ["xpeng-g6-580-standard-range", "xpeng-g6-755-long-range"],
+    "xpeng-x9": [
+      "xpeng-x9-standard-range-2wd-pro",
+      "xpeng-x9-long-range-2wd-pro",
+      "xpeng-x9-long-range-2wd-pro-plus"
+    ],
+    "xpeng-g6-2025": [
+      "xpeng-g6-2025-rwd-long-range-pro",
+      "xpeng-g6-2025-awd-performance",
+      "xpeng-g6-2025-awd-black-edition"
+    ]
+  },
+  "zeekr": {
+    "zeekr-x": ["zeekr-x-premium", "zeekr-x-flagship-awd"],
+    "zeekr-009": [
+      "zeekr-009-luxury-7-seater",
+      "zeekr-009-ultra-luxury-6-seater",
+      "zeekr-009-executive"
+    ],
+    "zeekr-7x": [
+      "zeekr-7x-rwd-standard",
+      "zeekr-7x-rwd-long-range",
+      "zeekr-7x-awd-performance"
+    ]
+  }
+}

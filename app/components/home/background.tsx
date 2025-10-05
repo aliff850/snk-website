@@ -5,14 +5,14 @@ import { Button } from "../ui/button"
 export function Background() {
     return (
 
-        <section id="background" className="w-full bg-brand flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 py-16 font-onest text-white snap-proximity">
+        <section id="background" className="w-full bg-brand flex flex-col justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest text-white snap-proximity">
 
             <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl">
 
                 <AnimateOnLoad animation="fade-in" className="h-full">
                     <div className="relative flex flex-col justify-end h-full flex flex-col gap-8">
                         <div className="h-full rounded-3xl overflow-hidden group">
-                            <Image src="/images/mazda.jpg" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width={1200} height={1200} alt="NICHOLAS"/>
+                            <Image src="/images/insurtech.jpg" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width={1200} height={1200} alt="NICHOLAS"/>
                         </div>
 
                         {/* <div className="absolute grid grid-cols-1 md:grid-cols-3 gap-4 p-4">

@@ -13,22 +13,22 @@ interface Achievement {
 const achievements: Achievement[] = [
     {
         title: "20+ Years of Excellence",
-        description: "Over two decades of proven expertise in vehicle insurance, valuations, and insurtech innovation across Malaysia and Southeast Asia.",
-        image: "/images/g70.jpg",
+        description: "Our multi-disciplinary team has strong industry knowledge having been involved in the insurance and claims space for close to two decades",
+        image: "/images/timeline/leader.jpeg",
         stat: "20+",
         statLabel: "Years Experience"
     },
     {
-        title: "Trusted by Leading Insurers",
-        description: "Partnered with major insurance companies including Allianz, Etiqa, MSIG, Tokio Marine, Great Eastern, and Chubb for comprehensive claims solutions.",
+        title: "Trusted by Many",
+        description: "We have a strong track record in the sector and our platform has all the necessary regulatory approvals from MRC and Bank Negara following industry standards.",
         image: "/images/handshake.jpg",
         stat: "10+",
         statLabel: "Insurance Partners"
     },
     {
         title: "Regional Market Leader",
-        description: "Expanding operations across Thailand, India, and Southeast Asia, establishing SNK as the premier insurtech provider in the region.",
-        image: "/images/sea.png",
+        description: "We are familiar with the motor claims landscape in Malaysia, Philippines, Thailand and are working towards digitizing your claims processing with greater accuracy, transparency and efficiency",
+        image: "/images/sea_2.png",
         stat: "3+",
         statLabel: "Countries Served"
     }
@@ -95,7 +95,7 @@ export function Achievements() {
                 </div>
             </div>
 
-            <AnimateOnLoad animation="fade-in-up" delay={400}>
+            {/* <AnimateOnLoad animation="fade-in-up" delay={400}>
                 <div className="w-full max-w-5xl mx-auto">
                     <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-brand/20 shadow-lg">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -114,7 +114,7 @@ export function Achievements() {
                         </div>
                     </div>
                 </div>
-            </AnimateOnLoad>
+            </AnimateOnLoad> */}
 
         </section>
     )

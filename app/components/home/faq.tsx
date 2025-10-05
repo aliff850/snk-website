@@ -34,7 +34,7 @@ export function FAQSection() {
     ]
   
     return (
-      <section className="bg-brand justify-center items-center px-4 md:px-12 lg:px-24 py-16 font-onest">
+      <section className="bg-brand justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest">
         <div className="w-full max-w-7xl mx-auto flex flex-col gap-8">
             <AnimateOnLoad animation="fade-in-up">
                 <div className="text-center text-brand-foreground flex flex-col">
