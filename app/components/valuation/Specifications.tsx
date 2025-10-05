@@ -168,7 +168,7 @@ export function CarSpecifications() {
         <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 py-16 pt-30">
             <div className="max-w-6xl mx-auto">
 
-                <div className="mb-8">
+                <div className="mb-8 text-center">
                     <h1 className="text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
                     <h3 className="text-4xl font-bold text-brand-white">Vehicle Specification</h3>
                 </div>

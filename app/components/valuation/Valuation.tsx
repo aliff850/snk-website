@@ -22,7 +22,8 @@ export function ValuationLayout() {
     // States for Mudah filters
     const [fromOffset, setFromOffset] = useState<number>(0)
     const [limit, setLimit] = useState<number>(50)
-    const [sortby, setSortby] = useState("price_asc")
+    // const [sortby, setSortby] = useState("price_asc")
+    const [viewMode, setViewMode] = useState<'ascending' | 'descending'>('ascending')
     const [type, setType] = useState("sell")
     const [fueltype, setFueltype] = useState("")
     const [condition, setCondition] = useState("")
@@ -79,7 +80,7 @@ export function ValuationLayout() {
         // setVariants([])
         setFromOffset(0)
         setLimit(50)
-        setSortby("price_asc")
+        // setSortby("price_asc")
         setType("sell")
         setFueltype("")
         setCondition("")
@@ -97,7 +98,6 @@ export function ValuationLayout() {
         setError(null)
     }
 
-
     const getMudahData = async () => {
         if (!canSubmit) return
         setLoading(true)
@@ -105,69 +105,102 @@ export function ValuationLayout() {
         try {
             const makeSlug = slug(make)
             const modelSlug = slug(model)
-
             const headers = { "Content-Type": "application/json" }
-
-            // Create searchQuery object as expected by Mudah API
-            const searchQuery: Record<string, any> = { 
-                make_id: makeSlug, 
-                model_id: modelSlug, 
-                From: fromOffset, 
-                limit, 
-                sortby, 
-                type 
-            }
-
-            // optional fields with validation
-            if (mfgYear) {
-                // Validate year format: YYYY-YYYY or YYYY-
-                const yearPattern = /^\d{4}-(\d{4})?$/
-                if (!yearPattern.test(mfgYear)) {
-                    throw new Error('Year must be in format YYYY-YYYY or YYYY- (e.g. 2015-2020 or 2018-)')
+    
+            // Helper function to fetch listings
+            const fetchListings = async (sortOrder: 'price_asc' | 'price_desc') => {
+                const searchQuery: Record<string, any> = { 
+                    make_id: makeSlug, 
+                    model_id: modelSlug, 
+                    From: fromOffset, 
+                    limit, 
+                    sortby: sortOrder,
+                    type 
                 }
-                searchQuery.mfg_year = mfgYear
-            }
-            if (fueltype) searchQuery.fueltype = fueltype
-            if (condition) searchQuery.condition = condition
-            if (mileage) {
-                // validate mileage format: number-number
-                const mileagePattern = /^\d{1,6}-(\d{1,6})?$/
-                if (!mileagePattern.test(mileage)) {
-                    throw new Error('Mileage must be in format number-number (e.g. 0-80000)')
+    
+                // Apply optional filters
+                if (mfgYear) {
+                    const yearPattern = /^\d{4}-(\d{4})?$/
+                    if (!yearPattern.test(mfgYear)) {
+                        throw new Error('Year must be in format YYYY-YYYY or YYYY- (e.g. 2015-2020 or 2018-)')
+                    }
+                    searchQuery.mfg_year = mfgYear
                 }
-                searchQuery.mileage = mileage
-            }
-            if (carType) searchQuery.car_type_id = carType
-            if (transmission) searchQuery.transmission_id = transmission
-            if (price) {
-                // validate price format: number-number
-                const pricePattern = /^\d{1,10}-(\d{1,10})?$/
-                if (!pricePattern.test(price)) {
-                    throw new Error('Price must be in format number-number (e.g. 20000-90000)')
+                if (fueltype) searchQuery.fueltype = fueltype
+                if (condition) searchQuery.condition = condition
+                if (mileage) {
+                    const mileagePattern = /^\d{1,6}-(\d{1,6})?$/
+                    if (!mileagePattern.test(mileage)) {
+                        throw new Error('Mileage must be in format number-number (e.g. 0-80000)')
+                    }
+                    searchQuery.mileage = mileage
                 }
-                searchQuery.price = price
+                if (carType) searchQuery.car_type_id = carType
+                if (transmission) searchQuery.transmission_id = transmission
+                if (price) {
+                    const pricePattern = /^\d{1,10}-(\d{1,10})?$/
+                    if (!pricePattern.test(price)) {
+                        throw new Error('Price must be in format number-number (e.g. 20000-90000)')
+                    }
+                    searchQuery.price = price
+                }
+    
+                const response = await fetch(`/api/mudah/search`, { 
+                    method: "POST", 
+                    headers, 
+                    body: JSON.stringify({ searchQuery }) 
+                })
+    
+                if (!response.ok) {
+                    const errorText = await response.text()
+                    throw new Error(`Failed to fetch Mudah Listings: ${response.status} - ${errorText}`)
+                }
+    
+                return await response.json()
+            }
+                
+            // Fetch all listings
+            const ascendingListings = await fetchListings('price_asc')
+
+            let descendingListings: any[] = []
+            let uniqueAscending: any[] = []
+            let uniqueDescending: any[] = []
+
+            // If less than 50 listings, use only ascending
+            if (ascendingListings.length < 50) {
+                uniqueAscending = ascendingListings
+                uniqueDescending = [] // less than 50 listings, keep descending empty
+            } else {
+                // If we got 50 or more, also fetch descending
+                descendingListings = await fetchListings('price_desc')
+
+                // create a map using adview_url as the key to deduplicate
+                const listingsMap: Record<string, any> = {}
+                
+                // Add ascending listings
+                ascendingListings.forEach((listing: any) => {
+                    if (listing.adview_url) {
+                        listingsMap[listing.adview_url] = listing
+                    }
+                })
+                
+                // Add descending listings
+                descendingListings.forEach((listing: any) => {
+                    if (listing.adview_url) {
+                        listingsMap[listing.adview_url] = listing
+                    }
+                })
+                // convert map values to arrays and sort
+                const allListings = Object.values(listingsMap)
+                uniqueAscending = [...allListings].sort((a: any, b: any) => a.price - b.price)
+                uniqueDescending = [...allListings].sort((a: any, b: any) => b.price - a.price)
             }
 
-            // Wrap in searchQuery object as expected by the API
-            const mudahBody = { searchQuery }
-
-            // Debug logging
-            console.log('Mudah request body:', mudahBody)
-            console.log('Search query:', searchQuery)
-            console.log('hello Nicholas')
-
-            const response = await fetch(`/api/mudah/search`, { method: "POST", headers, body: JSON.stringify(mudahBody) })
-
-            if (!response.ok) {
-                const errorText = await response.text()
-                console.error('Mudah API error:', response.status, errorText)
-                throw new Error(`Failed to fetch Mudah Listings: ${response.status} - ${errorText}`)
-            }
-
-            const listings = await response.json()
             setResults((prev: any) => ({ 
                 ...prev, 
-                listings, 
+                listings: uniqueAscending,
+                listingsAscending: uniqueAscending,
+                listingsDescending: uniqueDescending,
                 make: makeSlug, 
                 model: modelSlug,
                 source: 'Mudah'
@@ -179,13 +212,94 @@ export function ValuationLayout() {
         }
     }
 
+    // const getMudahData = async () => {
+    //     if (!canSubmit) return
+    //     setLoading(true)
+    //     setError(null)
+    //     try {
+    //         const makeSlug = slug(make)
+    //         const modelSlug = slug(model)
+
+    //         const headers = { "Content-Type": "application/json" }
+
+    //         // Create searchQuery object as expected by Mudah API
+    //         const searchQuery: Record<string, any> = { 
+    //             make_id: makeSlug, 
+    //             model_id: modelSlug, 
+    //             From: fromOffset, 
+    //             limit, 
+    //             // sortby, 
+    //             type 
+    //         }
+
+    //         // optional fields with validation
+    //         if (mfgYear) {
+    //             // Validate year format: YYYY-YYYY or YYYY-
+    //             const yearPattern = /^\d{4}-(\d{4})?$/
+    //             if (!yearPattern.test(mfgYear)) {
+    //                 throw new Error('Year must be in format YYYY-YYYY or YYYY- (e.g. 2015-2020 or 2018-)')
+    //             }
+    //             searchQuery.mfg_year = mfgYear
+    //         }
+    //         if (fueltype) searchQuery.fueltype = fueltype
+    //         if (condition) searchQuery.condition = condition
+    //         if (mileage) {
+    //             // validate mileage format: number-number
+    //             const mileagePattern = /^\d{1,6}-(\d{1,6})?$/
+    //             if (!mileagePattern.test(mileage)) {
+    //                 throw new Error('Mileage must be in format number-number (e.g. 0-80000)')
+    //             }
+    //             searchQuery.mileage = mileage
+    //         }
+    //         if (carType) searchQuery.car_type_id = carType
+    //         if (transmission) searchQuery.transmission_id = transmission
+    //         if (price) {
+    //             // validate price format: number-number
+    //             const pricePattern = /^\d{1,10}-(\d{1,10})?$/
+    //             if (!pricePattern.test(price)) {
+    //                 throw new Error('Price must be in format number-number (e.g. 20000-90000)')
+    //             }
+    //             searchQuery.price = price
+    //         }
+
+    //         // Wrap in searchQuery object as expected by the API
+    //         const mudahBody = { searchQuery }
+
+    //         // Debug logging
+    //         console.log('Mudah request body:', mudahBody)
+    //         console.log('Search query:', searchQuery)
+    //         console.log('hello Nicholas')
+
+    //         const response = await fetch(`/api/mudah/search`, { method: "POST", headers, body: JSON.stringify(mudahBody) })
+
+    //         if (!response.ok) {
+    //             const errorText = await response.text()
+    //             console.error('Mudah API error:', response.status, errorText)
+    //             throw new Error(`Failed to fetch Mudah Listings: ${response.status} - ${errorText}`)
+    //         }
+
+    //         const listings = await response.json()
+    //         setResults((prev: any) => ({ 
+    //             ...prev, 
+    //             listings, 
+    //             make: makeSlug, 
+    //             model: modelSlug,
+    //             source: 'Mudah'
+    //         }))
+    //     } catch (e: any) {
+    //         setError(e?.message || "Something went wrong")
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
+
     return(
         <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 py-16 pt-30">
             <div className="max-w-6xl mx-auto">
 
-                <div className="mb-8">
+                <div className="mb-8 text-center">
                     <h1 className="text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
-                    <h3 className="text-4xl font-bold text-brand-white">For Motor Vehicle Valuation</h3>
+                    <h3 className="text-4xl font-bold text-brand-white">Motor Vehicle Valuation</h3>
                 </div>
 
                 <div className="grid grid-cols-1 gap-8">
@@ -252,7 +366,7 @@ export function ValuationLayout() {
                                 </div>
 
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
+                            {/* <div className="grid grid-cols-2 gap-4">
 
                                 <div>
                                     <label className="block text-sm font-medium">Limit</label>
@@ -264,9 +378,9 @@ export function ValuationLayout() {
                                         className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
                                     />
                                 </div>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div>
+                            </div> */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {/* <div>
                                     <label className="block text-sm font-medium">Sort By</label>
                                     <select 
                                         value={sortby} 
@@ -277,7 +391,7 @@ export function ValuationLayout() {
                                         <option value="price_desc">Price Desc</option>
                                         <option value="newest">Newest</option>
                                     </select>
-                                </div>
+                                </div> */}
                                 <div>
                                     <label className="block text-sm font-medium">Type</label>
                                     <select 

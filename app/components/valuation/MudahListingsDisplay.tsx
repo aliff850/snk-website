@@ -1,6 +1,6 @@
 import { ExternalLink, Calendar, Gauge, Fuel, Settings, Car, Trash2, ArrowUpDown } from 'lucide-react'
 import { Button } from '../ui/button'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 
 interface MudahListing {
     model_name: string
@@ -23,28 +23,79 @@ interface MudahListing {
 
 interface MudahListingsDisplayProps {
     listings: MudahListing[]
+    listingsAscending?: MudahListing[]
+    listingsDescending?: MudahListing[]
 }
 
-export default function MudahListingsDisplay({ listings = [] }: MudahListingsDisplayProps) {
+export default function MudahListingsDisplay({ 
+    listings = [], 
+    listingsAscending = [],
+    listingsDescending = []
+}: MudahListingsDisplayProps) {
     
-    const [filteredListings, setFilteredListings] = useState<MudahListing[]>(listings)
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'none'>('none')
+    const [removedUrls, setRemovedUrls] = useState<Set<string>>(new Set())
+    const [viewMode, setViewMode] = useState<'ascending' | 'descending'>('ascending')
+    const [isFloating, setIsFloating] = useState(false)
+    const [shouldShowFloating, setShouldShowFloating] = useState(false)
+    const priceContainerRef = useRef<HTMLDivElement>(null)
+    // const [filteredListings, setFilteredListings] = useState<MudahListing[]>(listings)
+    //const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'none'>('none')
 
-    const removeListing = (index: number) => {
-        setFilteredListings(prev => prev.filter((_, i) => i !== index))
-    }
-
-    const sortListings = (order: 'asc' | 'desc' | 'none') => {
-        setSortOrder(order)
-        if (order === 'none') {
-            setFilteredListings(listings)
+    // Update filtered listings when view mode changes
+    const displayListings = useMemo(() => {
+        let source: MudahListing[]
+        
+        if (listingsAscending.length > 0 && listingsDescending.length > 0) {
+            source = viewMode === 'ascending' ? listingsAscending : listingsDescending
         } else {
-            const sorted = [...filteredListings].sort((a, b) => {
-                return order === 'asc' ? a.price - b.price : b.price - a.price
-            })
-            setFilteredListings(sorted)
+            source = listings
         }
+        // Filter out removed listings using adview_url
+        return source.filter(listing => !removedUrls.has(listing.adview_url))
+    }, [viewMode, listingsAscending, listingsDescending, listings, removedUrls])
+
+    const removeListing = (adviewUrl: string) => {
+        setRemovedUrls(prev => new Set(prev).add(adviewUrl))
     }
+
+    // Scroll detection for floating price container with smooth animations
+    useEffect(() => {
+        const handleScroll = () => {
+            if (priceContainerRef.current) {
+                const rect = priceContainerRef.current.getBoundingClientRect()
+                const shouldFloat = rect.top < 0
+                
+                if (shouldFloat !== isFloating) {
+                    setIsFloating(shouldFloat)
+                    
+                    if (shouldFloat) {
+                        // Show floating container immediately when scrolling down
+                        setShouldShowFloating(true)
+                    } else {
+                        // Hide floating container with delay when scrolling up
+                        setTimeout(() => {
+                            setShouldShowFloating(false)
+                        }, 300) // Match the duration of the exit animation
+                    }
+                }
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [isFloating])
+
+    // const sortListings = (order: 'asc' | 'desc' | 'none') => {
+    //     setSortOrder(order)
+    //     if (order === 'none') {
+    //         setFilteredListings(listings)
+    //     } else {
+    //         const sorted = [...filteredListings].sort((a, b) => {
+    //             return order === 'asc' ? a.price - b.price : b.price - a.price
+    //         })
+    //         setFilteredListings(sorted)
+    //     }
+    // }
 
     const formatPrice = (price: number) => {
         return `RM ${price.toLocaleString()}`
@@ -56,7 +107,7 @@ export default function MudahListingsDisplay({ listings = [] }: MudahListingsDis
         return `${gte} - ${lte} km`
     }
 
-    if (!filteredListings || filteredListings.length === 0) {
+    if (!displayListings || displayListings.length === 0) {
         return (
           <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center">
             <Car className="w-12 h-12 mx-auto text-gray-400 mb-3" />
@@ -75,44 +126,100 @@ export default function MudahListingsDisplay({ listings = [] }: MudahListingsDis
     // }
 
     // calculating all the price statistics
-    const prices = filteredListings.map(l => l.price)
+    const prices = displayListings.map(l => l.price)
     const lowestPrice = Math.min(...prices)
     const highestPrice = Math.max(...prices)
     const averagePrice = Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length)
 
+    // Price summary component
+    const PriceSummary = ({ className = "" }: { className?: string }) => (
+        <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${className}`}>
+            <div className="rounded-xl flex justify-between sm:items-center md:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
+                <p className="text-sm font-medium text-green-700">Lowest Price</p>
+                <p className="md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
+            </div>
+            
+            <div className="rounded-xl flex justify-between sm:items-center md:flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-2 md:p-4">
+                <p className="text-sm font-medium text-blue-700">Average Price</p>
+                <p className="md:text-4xl font-bold text-blue-900">{formatPrice(averagePrice)}</p>
+            </div>
+            
+            <div className="rounded-xl flex justify-between sm:items-center md:flex-col bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-2 md:p-4">
+                <p className="text-sm font-medium text-purple-700">Highest Price</p>
+                <p className="md:text-4xl font-bold text-purple-900">{formatPrice(highestPrice)}</p>
+            </div>
+        </div>
+    )
+
     return (
         <div className="space-y-4">
+            
+            {listingsAscending.length > 0 && listingsDescending.length > 0 && (
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-2">
+                        <ArrowUpDown className="w-4 h-4 text-gray-500" />
+                        <span className="font-medium text-gray-700">View:</span>
+                    </div>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => setViewMode('ascending')}
+                            className={`p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${
+                                viewMode === 'ascending'
+                                    ? 'bg-brand text-white'
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                        >
+                            Price: Low to High ({listingsAscending.length})
+                        </button>
+                        <button
+                            onClick={() => setViewMode('descending')}
+                            className={`p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${
+                                viewMode === 'descending'
+                                    ? 'bg-brand text-white'
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                        >
+                            Price: High to Low ({listingsDescending.length})
+                        </button>
+                    </div>
+                </div>
+            )}
 
+            {/* Floating price container */}
+            {shouldShowFloating && (
+                <div className={`hidden md:block fixed top-24 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-6xl px-4 transition-all duration-300 ease-out ${
+                    isFloating 
+                        ? 'animate-in slide-in-from-top-4 fade-in' 
+                        : 'animate-out slide-out-to-top-4 fade-out'
+                }`}>
+                    <div className="bg-brand-white rounded-3xl p-4 shadow-2xl border border-gray-100 backdrop-blur-sm">
+                        <PriceSummary className="mb-0" />
+                    </div>
+                </div>
+            )}
+            {/* Header section */}
             <div className="flex flex-col mb-4">
                 <h6 className="font-semibold text-2xl">
-                    Found {filteredListings.length} {filteredListings.length === 1 ? 'listing' : 'listings'}
-                {/* Found {listings.length} {listings.length === 1 ? 'listing' : 'listings'} */}
+                    {listingsAscending.length > 0 && listingsDescending.length > 0 ? (
+                        viewMode === 'ascending' 
+                            ? `Showing ${listingsAscending.length} Lowest Price Listings`
+                            : `Showing ${listingsDescending.length} Highest Price Listings`
+                    ) : (
+                        `Found ${displayListings.length} ${displayListings.length === 1 ? 'listing' : 'listings'}`
+                    )}
                 </h6>
                 <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
             </div>
             
             {/* Container to display all prices and average */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="rounded-xl bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-4">
-                    <p className="text-sm font-medium text-green-700 mb-1">Lowest Price</p>
-                    <p className="text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
-                </div>
-                
-                <div className="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-4">
-                    <p className="text-sm font-medium text-blue-700 mb-1">Average Price</p>
-                    <p className="text-4xl font-bold text-blue-900">{formatPrice(averagePrice)}</p>
-                </div>
-                
-                <div className="rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-4">
-                    <p className="text-sm font-medium text-purple-700 mb-1">Highest Price</p>
-                    <p className="text-4xl font-bold text-purple-900">{formatPrice(highestPrice)}</p>
-                </div>
+            <div ref={priceContainerRef} className="mb-6">
+                <PriceSummary />
             </div>
 
-            
 
-            {/* Sort by price dropdown */}
-            <div className="flex items-center gap-3 mb-4">
+            {/* Sort by price dropdown -- CHANGE THIS SO THAT IT SWITCHES BETWEEN THE TWO DIFFERENT SETS OF LISTINGS (one ascending and one descending) */}
+
+            {/* <div className="flex items-center gap-3 mb-4">
                 <div className="flex items-center gap-2">
                     <ArrowUpDown className="w-4 h-4 text-gray-500" />
                     <span className="font-medium text-gray-700">Sort by price:</span>
@@ -126,15 +233,19 @@ export default function MudahListingsDisplay({ listings = [] }: MudahListingsDis
                     <option value="asc">Price: Low to High</option>
                     <option value="desc">Price: High to Low</option>
                 </select>
-            </div>
+            </div> */}
+
+            {/* Options to switch between different listing views */}
+
+            
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {filteredListings.map((listing, index) => (
+                {displayListings.map((listing) => (
                 <div 
-                    key={index}
+                    key={listing.adview_url}
                     className="rounded-xl border border-foreground/20 bg-brand-white hover:shadow-md transition-shadow duration-200"
                 >
-                    <div className="p-5">
+                    <div className="p-4 md:p-5">
                     {/* Header */}
                     <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
@@ -159,17 +270,17 @@ export default function MudahListingsDisplay({ listings = [] }: MudahListingsDis
                                 }`}>
                                 {listing.condition_name}
                                 </span>
-                                <span className="text-sm text-gray-500">{listing.car_type_name}</span>
+                                <span className="text-xs md:text-sm text-gray-500">{listing.car_type_name}</span>
                             </div>
 
                         </div>
 
                         <div className="text-right flex gap-2">
-                            <div className="text-2xl font-bold text-brand">
+                            <div className="text-xl md:text-2xl font-bold text-brand">
                                 {formatPrice(listing.price)}
                             </div>
 
-                            <button onClick={() => removeListing(index)} className="hover:text-red-500 transition-colors">
+                            <button onClick={() => removeListing(listing.adview_url)} className="hover:text-red-500 transition-colors">
                                 <Trash2 className="w-6 h-6" />
                             </button>
 

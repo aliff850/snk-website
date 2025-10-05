@@ -79,11 +79,11 @@ def search(searchQuery: CarSearchQuery,
     listings = html.json()['data']
     
     # DEBUG logs
-    # if listings:
+    if listings:
+        print ("First listing variant field:" , listings[0].get('attributes', {}).get('listing_id'))
     #    print ("First listing variant field:" , listings[0].get('attributes', {}).get('variant'))
     #    print("First listing image field:", listings[0].get('attributes', {}).get('image'))
     #    print("First listing image type:", type(listings[0].get('attributes', {}).get('image')))
-
 
     response = []
     if whitelist_attributes:
