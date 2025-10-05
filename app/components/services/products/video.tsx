@@ -42,7 +42,7 @@ export function PreviewVideo({ filename }: VideoDisplayComponents) {
 
 function VideoComponent({ url }: { url: string }) {
     return (
-        <div className="relative w-full aspect-video overflow-hidden rounded-3xl">
+        <div className="relative w-full aspect-video overflow-hidden rounded-3xl border border-brand/70">
             <iframe 
                 src={url} 
                 className="absolute inset-0 w-full h-full"

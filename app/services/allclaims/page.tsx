@@ -1,9 +1,35 @@
 import { ProductHero } from '@/app/components/services/products/hero';
 import { ProductOverview } from '@/app/components/services/products/overview';
 import { ProductFeatures } from '@/app/components/services/products/features';
-import { AllClaimsHowItWorks } from '@/app/components/services/products/howItWorks';
 import { ProductCTA } from '@/app/components/services/products/cta';
 import { PreviewVideo } from '@/app/components/services/products/video';
+
+const allClaimsFeatures = [
+    {
+        title: "End-to-End Claims Management",
+        description: " Process, investigate, and report within one system."
+    },
+    {
+        title: "Standardized Digital Reporting",
+        description: "Predefined templates ensure consistent documentation."
+    },
+    {
+        title: "Fraud Detection & Risk Alerts",
+        description: "Flags recurring drivers, vehicles, or suspicious patterns."
+    },
+    {
+        title: "Investigation Tracking",
+        description: "Monitor all steps and ensure compliance."
+    },
+    {
+        title: "Panel of Adjusters Integration",
+        description: "Centralized collaboration for insurers and adjusters."
+    },
+    {
+        title: "Final Comprehensive Reports",
+        description: "Professional reports with key insights and recommendations."
+    }
+];
 
 export default function AllClaimsPage() {
     return(
@@ -29,22 +55,22 @@ export default function AllClaimsPage() {
             />
 
             <ProductFeatures 
-                header="Features in AllClaims"
-                caption="AllClaim comes with a variety of features designed to streamline the estimation process."
+                header="Features in COLS"
+                caption="The COLS Investigation System comes with a variety of features designed to streamline the estimation process."
+                features={allClaimsFeatures}
             />
 
             <PreviewVideo 
                 filename='https://www.youtube.com/embed/wXlRf90vHIw?si=Q-ExL2lnoVaEUGzj'
             />
             
-            {/* <AllClaimsHowItWorks /> */}
             <ProductCTA 
 
                 title="Ready to Transform Your Claims Process?"
                 caption="Join leading insurance companies who have already revolutionized their damage assessment process with AllClaims."
-                button="Try AllClaims Today"
-                target="_blank"
-                link="https://allclaims.com.my/"
+                button="Request a demo today"
+                target=""
+                link="/contact"
             
             />
         </div>

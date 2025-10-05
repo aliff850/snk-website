@@ -15,37 +15,37 @@ const timelineEvents: TimelineEvent[] = [
         year: "2002",
         title: "The Beginning",
         description: "Founded as SNK Holdings, offering motor vehicle valuations to MBA Insurance. Launched the first real-time web-based vehicle valuation platform, covering 80% of private cars.",
-        image: "/images/g70.jpg"
+        image: "/images/timeline/beginning.png"
     },
     {
         year: "2008",
         title: "Becoming SNKMDR",
         description: "Rebranded as SNKMDR, a dedicated Insurtech provider. Accredited by the Motor Research Consortium; approved by BNM & PIAM to deliver accident estimation systems.",
-        image: "/images/g70.jpg"
+        image: "/images/timeline/snknew.png"
     },
     {
         year: "2014",
         title: "Expanding Horizons",
         description: "Registered with MDEC for motor claims solutions. Formed SNKMDR India to expand regional Insurtech services.",
-        image: "/images/g70.jpg"
+        image: "/images/timeline/expand.png"
     },
     {
         year: "2016",
         title: "Advanced Solutions",
         description: "Extended valuation services to six Malaysian insurers and one in Thailand. First to provide valuations for lorries (up to 10 tonnes) and motorcycles.",
-        image: "/images/g70.jpg"
+        image: "/images/timeline/lorries.jpg"
     },
     {
         year: "2018",
         title: "Road Ranger Thailand",
         description: "Developed and launched Road Ranger for Thailand's insurers, covering accident assistance, estimation, adjusting, and repair payments.",
-        image: "/images/g70.jpg"
+        image: "/images/timeline/thai.jpeg"
     },
     {
         year: "Today",
         title: "Regional Insurtech Leader",
         description: "Trusted by Allianz, Etiqa, MSIG, Tokio Marine, Great Eastern, Chubb, and more. Driving AI-powered claims estimation with AIT Thailand.",
-        image: "/images/g70.jpg"
+        image: "/images/timeline/leader.jpeg"
     },
     
 ];
@@ -109,7 +109,7 @@ function TimelineEventComponent({ event, index }: TimelineEventProps) {
                         animation={isLeft ? "fade-in-left" : "fade-in-right"} 
                         delay={animationDelay}
                     >
-                        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
+                        <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:bg-brand-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
                             <div className="text-brand text-4xl font-bold mb-2">{event.year}</div>
                             <h3 className="text-brand text-xl md:text-2xl font-semibold mb-3">{event.title}</h3>
                             <p className="text-brand/80 text-sm md:text-base leading-relaxed">{event.description}</p>
@@ -133,16 +133,16 @@ function TimelineEventComponent({ event, index }: TimelineEventProps) {
                         animation={isLeft ? "fade-in-left" : "fade-in-right"} 
                         delay={animationDelay}
                     >
-                        <div className="relative h-64 rounded-2xl overflow-hidden shadow-lg">
+                        <div className="relative h-64 rounded-2xl overflow-hidden shadow-lg group">
                             <Image
                                 src={event.image}
                                 alt={event.title}
                                 fill
-                                className="object-cover hover:scale-105 transition-transform duration-300 ease-in-out"
+                                className="object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
                             />
                             {/* Overlay for better visual appeal */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-brand/20 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-brand/10 to-transparent"></div>
                         </div>
                     </AnimateOnLoad>
                 </div>

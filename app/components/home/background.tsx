@@ -12,7 +12,7 @@ export function Background() {
                 <AnimateOnLoad animation="fade-in" className="h-full">
                     <div className="relative flex flex-col justify-end h-full flex flex-col gap-8">
                         <div className="h-full rounded-3xl overflow-hidden group">
-                            <Image src="/images/mazda.jpg" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width={1200} height={1200} alt="NICHOLAS"/>
+                            <Image src="/images/insurtech.jpg" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width={1200} height={1200} alt="NICHOLAS"/>
                         </div>
 
                         {/* <div className="absolute grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
