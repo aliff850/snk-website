@@ -40,7 +40,7 @@ export function Background() {
                 
 
                 <AnimateOnLoad animation="fade-in-left" className="h-full">
-                    <div className="w-full h-full flex flex-col gap-4 justify-center">
+                    <div className="w-full h-full flex flex-col gap-8 justify-center">
                         <h1 className="text-4xl lg:text-6xl font-bold">About SNK</h1>
 
                         {/* <p className="w-full">We are a pioneer in Malaysia’s Insurtech industry, with over 20 years of experience delivering innovative solutions for motor vehicle valuation and insurance claims. Since 2002, we have grown from providing valuation services to developing advanced digital platforms that connect insurers, adjusters, workshops, and customers in one seamless ecosystem. Our mission is to simplify and automate insurance processes through technology—making claims faster, valuations more accurate, and assistance more accessible to the public.</p> */}
@@ -69,7 +69,7 @@ export function Background() {
 
                         </div>
 
-                        <Button href="/about">
+                        <Button href="/about" className="text-xl">
                             <p>Learn more about SNK</p>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2 lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
                         </Button>

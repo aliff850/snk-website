@@ -3,8 +3,6 @@ import { Button } from "../ui/button"
 import AnimateOnLoad from "../ui/AnimateOnLoad"
 import { solutions } from "@/app/data/solutions"
 
-
-
 export function SolutionsSection() {
 
     return(

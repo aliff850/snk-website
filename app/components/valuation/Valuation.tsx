@@ -1,7 +1,9 @@
 "use client"
 
 import React, { useState, useMemo, useEffect } from "react"
-import { Car, ArrowRight } from 'lucide-react'
+import { ArrowRight, RotateCcw, ArrowDown } from 'lucide-react'
+import { FaCar } from "react-icons/fa";
+import { FaCarOn } from "react-icons/fa6"
 import { ValuationResults } from "./ValuationResults"
 import { Button } from "../ui/button"
 
@@ -295,23 +297,24 @@ export function ValuationLayout() {
 
     return(
         <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 py-16 pt-30">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-6xl mx-auto flex flex-col gap-12">
 
-                <div className="mb-8 text-center">
-                    <h1 className="text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
-                    <h3 className="text-4xl font-bold text-brand-white">Motor Vehicle Valuation</h3>
-                </div>
-
-                <div className="grid grid-cols-1 gap-8">
-
-                    <div className="flex justify-end">
-                        <Button href="/valuation/specifications" variant="secondary" size="sm" className="flex gap-2">
-                            Go to Vehicle Specifications <ArrowRight />
-                        </Button>
+                <div className="flex flex-col items-center gap-4 md:gap-6">
+                    <div className="p-8 rounded-full bg-brand-element w-32 h-32">
+                        <FaCar className="w-16 h-16 text-brand-white/80"/>
                     </div>
 
+                    <div className="flex flex-col gap-4 text-center">
+                        <h1 className="text-4xl md:text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
+                        <h3 className="text-2xl md:text-4xl font-bold text-brand-white">For Motor Vehicle Market Valuation</h3>
+                    </div>
+                </div>
+                
+
+                <div className="grid grid-cols-1 gap-12">
+
                     {/* Vehicle valuation section */}
-                    <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
+                    <div className="rounded-3xl border border-foreground/40 shadow-sm p-6 bg-brand-white">
                         
                         {/* <div>
                             <h3 className="text-2xl font-semibold">Vehicle Valuation</h3>
@@ -508,31 +511,58 @@ export function ValuationLayout() {
                                     disabled={!canSubmit || loading}
                                     variant="secondary"
                                     size="sm"
+                                    className="text-xl flex gap-2"
                                 >
-                                    Get Listings
+                                    Get Market Value
+                                    <ArrowDown className="h-5 w-5" />
                                 </Button>
                                 <Button 
                                     type="button" 
                                     onClick={resetAll} 
                                     variant="secondary"
                                     size="sm"
+                                    className="text-xl flex items-center gap-2"
                                 >
                                     Reset
+                                    <RotateCcw className="h-5 w-5" />
                                 </Button>
                             </div>
+
                         </form>
+
                     </div>
+
+                    {/* Section to display all results */}
+
+                    <ValuationResults 
+                        results={results}
+                        error={error}
+                        loading={loading}
+                        onClearResults={clearResults}
+                    />
+
                 </div>
 
-                {/* Section to display all results */}
+                
 
-                <ValuationResults 
-                    results={results}
-                    error={error}
-                    loading={loading}
-                    onClearResults={clearResults}
-                />
+                <div className="bg-brand-white rounded-3xl border border-foreground/40 p-6">
+                    <div className="p-6 w-full flex flex-col gap-4 justify-center items-center border border-dashed border-foreground/20 rounded-2xl">
+                        <div className="p-4 rounded-3xl bg-brand-element/10">
+                            <FaCarOn className="w-16 h-16 text-brand"/>
+                        </div>
+                        
+                        <h3 className="text-3xl font-bold text-brand">Get Detailed Specifications Regarding Your Vehicle</h3>
+
+                        <Button href="/valuation/specifications" variant="secondary" size="sm" className="flex text-xl gap-2">
+                            Go to Vehicle Specifications <ArrowRight />
+                        </Button>
+                    </div>
+                    
+                
+                </div>
+
             </div>
+
         </div>
     )
 }

@@ -168,24 +168,24 @@ export function CarSpecifications() {
         <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 py-16 pt-30">
             <div className="max-w-6xl mx-auto">
 
-                <div className="mb-8 text-center">
+                <div className="mb-8 flex flex-col gap-2 text-center">
                     <h1 className="text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
                     <h3 className="text-4xl font-bold text-brand-white">Vehicle Specification</h3>
                 </div>
 
                 <div className="grid grid-cols-1 gap-8">
 
-                    <div className="flex justify-end">
-                        <Button href="/valuation" variant="secondary" size="sm" className="flex gap-2">
-                            Return to Vehicle Valuation <ArrowRight />
-                        </Button>
-                    </div>
-
                     <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
                         {/* <div>
                             <h3 className="text-2xl font-semibold text-foreground">Vehicle Specifications</h3>
                             <p className="text-sm text-foreground/50">Select vehicle to retrieve specifications</p>
                         </div> */}
+
+                        <div className="flex justify-end">
+                            <Button href="/valuation" variant="secondary" size="sm" className="flex gap-2 text-xl">
+                                Return to Vehicle Valuation <ArrowRight />
+                            </Button>
+                        </div>
 
                         <form className="flex flex-col gap-8" onSubmit={(e) => e.preventDefault()}>
                             {/* Make Dropdown */}
@@ -269,6 +269,7 @@ export function CarSpecifications() {
                                     onClick={resetAll} 
                                     variant="secondary"
                                     size="sm"
+                                    className="text-xl"
                                 >
                                     Reset
                                 </Button>
@@ -284,6 +285,7 @@ export function CarSpecifications() {
                                     variant="secondary"
                                     size="lg"
                                     disabled={!make || !model || loading}
+                                    className="text-xl"
                                 >
                                     Get Specifications
                                 </Button>
@@ -291,15 +293,17 @@ export function CarSpecifications() {
                         </form>
                     </div>
 
+                    {/* Section to display specification results */}
+                    <SpecResults 
+                        results={results}
+                        error={error}
+                        loading={loading}
+                        onClearResults={clearResults}
+                    />
+
                 </div>
 
-                {/* Section to display specification results */}
-                <SpecResults 
-                    results={results}
-                    error={error}
-                    loading={loading}
-                    onClearResults={clearResults}
-                />
+                
             </div>
         </div>
     )

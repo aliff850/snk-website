@@ -58,7 +58,7 @@ export function History() {
                 <div className="flex flex-col text-center gap-4 max-w-4xl mx-auto">
                     <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Our Journey</h1>
                     <p className="text-brand text-lg md:text-xl px-4">
-                        Over 20 years of innovation, growth, and transformation in the insurtech industry.
+                        Over 25 years of innovation, growth, and transformation in the insurtech industry.
                     </p>
                 </div>
             </AnimateOnLoad>

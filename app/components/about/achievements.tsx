@@ -12,25 +12,25 @@ interface Achievement {
 
 const achievements: Achievement[] = [
     {
-        title: "20+ Years of Excellence",
-        description: "Our multi-disciplinary team has strong industry knowledge having been involved in the insurance and claims space for close to two decades",
+        title: "25 Years of Excellence",
+        description: "Our multi-disciplinary team has strong industry knowledge having been involved in the insurance and claims space for close to two decades.",
         image: "/images/timeline/leader.jpeg",
-        stat: "20+",
-        statLabel: "Years Experience"
+        stat: "",
+        statLabel: ""
     },
     {
         title: "Trusted by Many",
         description: "We have a strong track record in the sector and our platform has all the necessary regulatory approvals from MRC and Bank Negara following industry standards.",
         image: "/images/handshake.jpg",
-        stat: "10+",
-        statLabel: "Insurance Partners"
+        stat: "",
+        statLabel: ""
     },
     {
         title: "Regional Market Leader",
         description: "We are familiar with the motor claims landscape in Malaysia, Philippines, Thailand and are working towards digitizing your claims processing with greater accuracy, transparency and efficiency",
         image: "/images/sea_2.png",
-        stat: "3+",
-        statLabel: "Countries Served"
+        stat: "",
+        statLabel: ""
     }
 ];
 

@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Button } from "../ui/button"
+import { TiDelete } from "react-icons/ti";
 import MudahListingsDisplay from "./MudahListingsDisplay"
 
 interface ValuationResultsProps {
@@ -13,7 +14,7 @@ interface ValuationResultsProps {
 
 export function ValuationResults({ results, error, loading, onClearResults }: ValuationResultsProps) {
     return (
-        <div className="mt-10">
+        <div>
             <div className="rounded-3xl border border-foreground/20 shadow-sm bg-brand-white">
 
                 <div className="p-6 border-b border-foreground/20 flex items-center justify-between">
@@ -24,8 +25,11 @@ export function ValuationResults({ results, error, loading, onClearResults }: Va
                             onClick={onClearResults} 
                             variant="secondary"
                             size="sm"
+                            className="text-xl flex gap-2"
                         >
                             Clear
+                            <TiDelete className="h-7 w-7" />
+
                         </Button>
                     </div>
                 </div>
@@ -43,15 +47,9 @@ export function ValuationResults({ results, error, loading, onClearResults }: Va
                     {loading && (
                         <div className="space-y-8">
                             <div className="rounded-3xl border border-foreground/20 p-4">
-                                {/* Loading animation skeleton */}
+
                                 <div className="space-y-6">
-                                    {/* Header skeleton */}
-                                    <div className="flex flex-col mb-4">
-                                        <div className="h-8 rounded-lg w-64 mb-2 animate-shimmer"></div>
-                                        <div className="h-4 rounded-lg w-96 animate-shimmer"></div>
-                                    </div>
-                                    
-                                    {/* Price cards skeleton */}
+
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                         <div className="rounded-xl border border-gray-300 p-4 overflow-hidden">
                                             <div className="h-4 rounded w-20 mb-2 animate-shimmer"></div>
@@ -67,7 +65,11 @@ export function ValuationResults({ results, error, loading, onClearResults }: Va
                                         </div>
                                     </div>
 
-                                    {/* View toggle skeleton */}
+                                    <div className="flex flex-col mb-4">
+                                        <div className="h-8 rounded-lg w-64 mb-2 animate-shimmer"></div>
+                                        <div className="h-4 rounded-lg w-96 animate-shimmer"></div>
+                                    </div>
+
                                     <div className="flex items-center gap-3 mb-4">
                                         <div className="flex items-center gap-2">
                                             <div className="w-4 h-4 rounded animate-shimmer"></div>
@@ -79,12 +81,12 @@ export function ValuationResults({ results, error, loading, onClearResults }: Va
                                         </div>
                                     </div>
                                     
-                                    {/* Listing cards skeleton */}
+
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                         {Array.from({ length: 2 }).map((_, index) => (
                                             <div key={index} className="rounded-xl border border-foreground/20 bg-brand-white overflow-hidden">
                                                 <div className="p-4 md:p-5">
-                                                    {/* Header skeleton */}
+
                                                     <div className="flex items-start justify-between mb-3">
                                                         <div className="flex-1">
                                                             <div className="h-6 rounded w-48 mb-2 animate-shimmer"></div>
@@ -100,10 +102,8 @@ export function ValuationResults({ results, error, loading, onClearResults }: Va
                                                         </div>
                                                     </div>
                                                     
-                                                    {/* Image skeleton */}
                                                     <div className="mt-3 rounded-lg h-48 animate-shimmer"></div>
                                                     
-                                                    {/* Specs skeleton */}
                                                     <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
                                                         {Array.from({ length: 4 }).map((_, specIndex) => (
                                                             <div key={specIndex} className="flex items-center gap-2">
@@ -116,7 +116,7 @@ export function ValuationResults({ results, error, loading, onClearResults }: Va
                                                         ))}
                                                     </div>
                                                     
-                                                    {/* Button skeleton */}
+                                                    
                                                     <div className="mt-4 h-10 rounded-xl animate-shimmer"></div>
                                                 </div>
                                             </div>
