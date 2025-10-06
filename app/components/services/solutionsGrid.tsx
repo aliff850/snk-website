@@ -7,7 +7,7 @@ import { LucideAArrowDown } from 'lucide-react'
 
 export function SolutionsGrid() {
     return(
-        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 min-h-screen justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-12 font-onest">
 
             <div className="w-full max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -64,7 +64,7 @@ export function SolutionsGrid() {
             </div>
 
             <AnimateOnLoad animation="fade-in-up" delay={400}>
-                <div className="w-full max-w-4xl mx-auto text-center">
+                <div className="w-full mx-auto text-center">
                     <div className="bg-brand-white/95 rounded-3xl px-16 py-8 border border-brand/20 shadow-lg">
                         <h3 className="text-brand text-2xl md:text-3xl font-bold mb-4">Ready to Transform Your Insurance Operations?</h3>
                         <p className="text-brand text-lg mb-6">

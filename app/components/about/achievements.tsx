@@ -36,7 +36,7 @@ const achievements: Achievement[] = [
 
 export function Achievements() {
     return(
-        <section className="w-full min-h-screen justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-12 font-onest">
             
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">

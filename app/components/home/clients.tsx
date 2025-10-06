@@ -14,7 +14,7 @@ export function ClientSection() {
 
     return(
 
-        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 min-h-screen justify-center items-center px-24 py-16 grid grid-cols-2 gap-8 font-onest text-white">
+        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 min-h-svh justify-center items-center px-24 py-16 grid grid-cols-2 gap-8 font-onest text-white">
 
             <div className="flex flex-col justify-center items-center gap-4">
                 <h1 className="text-brand text-6xl font-bold">Trusted by Industry Leaders</h1>

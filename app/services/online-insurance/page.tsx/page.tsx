@@ -31,9 +31,9 @@ const motorPalFeatures = [
     }
 ];
 
-export default function AllClaimsPage() {
+export default function OnlineInsurancePage() {
     return(
-        <div className="min-h-screen bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+        <div className="min-h-svh bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
             <ProductHero
                 title="Online Digital Insurance Platform"
                 caption="Buy insurance the smart way — quick, simple, and fully online"

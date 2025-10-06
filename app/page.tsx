@@ -13,7 +13,7 @@ import { FAQSection } from "./components/home/faq";
 export default function Home() {
 
   return (
-    <div className="min-h-screen">      
+    <div className="min-h-svh">      
       <HeroSection/>
       <Background/>
       <ReasonSection/>

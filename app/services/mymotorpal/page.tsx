@@ -31,9 +31,9 @@ const motorPalFeatures = [
     }
 ];
 
-export default function AllClaimsPage() {
+export default function MotorPalPage() {
     return(
-        <div className="min-h-screen bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+        <div className="min-h-svh bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
             <ProductHero
                 title="SNK MyMotorPal"
                 caption="A one stop solution app for motor vehicle services, information and products"

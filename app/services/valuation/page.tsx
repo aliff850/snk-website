@@ -34,7 +34,7 @@ const allClaimsFeatures = [
 
 export default function ValuationPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+    <div className="min-h-svh bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
       <ProductHero
         title="SNK Real-Time Valuation Enquiry"
         caption="Online real-time enquiry for motor vehicle valuation."

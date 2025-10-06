@@ -40,7 +40,7 @@ const objectives: Objective[] = [
 
 export function Values() {
     return(
-        <section className="w-full min-h-screen justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-12 font-onest">
             
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">
@@ -68,7 +68,7 @@ export function Values() {
                         </div>
 
                         <div>
-                            <p className="text-lg text-brand leading-relaxed">
+                            <p className="text-sm md:text-lg text-brand text-center leading-relaxed">
                                 To be the leading Insurtech provider in the region, transforming the insurance ecosystem through innovation, automation, and trust. We envision a seamless digital environment where insurers, adjusters, workshops, and the public are connected through transparent, efficient, and technology-driven claims and assistance services.
                             </p>
                         </div>
@@ -88,7 +88,7 @@ export function Values() {
                         </div>
 
                         <div>
-                            <p className="text-lg text-brand leading-relaxed">
+                            <p className="text-sm md:text-lg text-brand text-center leading-relaxed">
                                 Our mission is to simplify and automate insurance processes by uniting all stakeholders on a single digital platform. We are committed to delivering accurate, transparent, and accessible valuation and claims solutions powered by advanced technologies, and make insurance processes faster, smarter, and more reliable for everyone.
                             </p>
                             {/* <ul className="text-brand leading-relaxed space-y-3 w-full">

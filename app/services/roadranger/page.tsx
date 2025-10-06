@@ -4,49 +4,49 @@ import { ProductFeatures } from '@/app/components/services/products/features';
 import { ProductCTA } from '@/app/components/services/products/cta';
 import { PreviewVideo } from '@/app/components/services/products/video';
 
-const motorPalFeatures = [
+const roadRangerFeatures = [
     {
-        title: "Smart Claims & Assistance",
-        description: "Get instant roadside assistance and connect directly to SNKMDR’s call center or your insurer’s support team for help when you need it most."
+        title: "Multi-Channel Connectivity",
+        description: "Seamlessly connects to customers through multiple channels — including the MyMotorPal app, phone, web app, SMS, and WhatsApp — ensuring instant accessibility and support."
     },
     {
-        title: "AI Damage Estimation",
-        description: "Use AI-powered image analysis to estimate repair costs and generate on-demand adjuster reports within minutes."
+        title: "Live Tow Truck Tracking",
+        description: "Integrated GPS tracking allows call center agents to locate and dispatch the nearest available tow truck in real time, reducing response times and improving customer satisfaction."
     },
     {
-        title: "Vehicle Valuation & Insurance Insights",
-        description: "Receive accurate car market valuations and coverage updates to prevent over- or under-insurance."
+        title: "Full Ecosystem Integration",
+        description: "Links the call center with insurers, workshops, and the AllClaims BI system — ensuring that every accident record flows automatically from initial report to claim resolution."
     },
     {
-        title: "Workshop & Service Locator",
-        description: "Find nearby authorized or third-party workshops, tyre, battery, and accessory providers — all verified and accessible in-app."
+        title: "Centralized Job Allocation",
+        description: "Provides a unified platform for managing towing, repair, and claims tasks, with smart job distribution based on proximity, workload, and service availability."
     },
     {
-        title: "Renewal Reminders",
-        description: "Never miss an insurance renewal or payment deadline with automated notifications and reminders."
+        title: "Insurer Collaboration Platform",
+        description: "Designed for insurer integration — enabling companies without the MyMotorPal app to utilize the same CRM and communication channels for seamless claim management."
     },
     {
-        title: "Emergency GPS Assistance",
-        description: "Activate GPS-based emergency help for towing or accidents, connected to a network of over 1,000 tow truck operators."
+        title: "Industry-Driven, Connected Infrastructure",
+        description: "Built as a centralized, industry-supported solution that benefits both customers and insurers by improving transparency, reducing duplication, and enhancing service reliability."
     }
 ];
 
-export default function AllClaimsPage() {
+export default function RoadRangerPage() {
     return(
-        <div className="min-h-screen bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+        <div className="min-h-svh bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
             <ProductHero
                 title="SNK Road Ranger"
-                caption="A Call Center CRM System That Connect Accident Incident To Call Centre"
+                caption="A Call Center CRM System That Connects Accident Incident To Call Centre"
             />
 
             <ProductOverview
                 title="What is Road Ranger"
                 overview="
-                SNK MyMotorPal is a next-generation mobile app designed to simplify motor ownership and insurance management for everyday drivers. Built for convenience and reliability, the app connects users to essential motor services, real-time assistance, and vehicle information through one seamless platform. Whether it’s handling insurance claims, locating workshops, or getting emergency help, MyMotorPal delivers fast, reliable solutions right from your phone.
+                SNK Road Ranger is a powerful Call Center CRM system that bridges every element of the motor claims ecosystem — from roadside assistance to final claims settlement. Designed to enhance efficiency, transparency, and communication, it connects drivers, insurers, workshops, and tow truck operators through a single integrated platform.
                 <br><br>
-                Available on both Apple and Android devices, MyMotorPal is integrated with SNKMDR’s Road Ranger CRM system and call center, ensuring users have immediate access to support and trusted service providers. With intelligent automation and smart notifications, the app keeps you informed, protected, and in control — wherever the road takes you.
+                At the core of the system is real-time coordination between the SNKMDR call center, MyMotorPal mobile app, and AllClaims BI. Whether a customer reaches out via mobile app, phone call, SMS, or WhatsApp, Road Ranger ensures every incident is captured, tracked, and resolved efficiently — providing a unified experience for all parties involved.
                 "
-                alt="AllClaims Landing Page"
+                alt="Road Ranger Interface"
                 galleryImages={[
                     { src: '/services/cols/allclaims.png', alt: 'AllClaims dashboard' },
                     { src: '/services/cols/allclaims2.png', alt: 'Accident intake' },
@@ -57,18 +57,18 @@ export default function AllClaimsPage() {
             <ProductFeatures 
                 header="Key Features in Road Ranger"
                 caption="The all-in-one CRM solution that keeps the motor claims ecosystem moving."
-                features={motorPalFeatures}
+                features={roadRangerFeatures}
             />
 
-            <PreviewVideo 
+            {/* <PreviewVideo 
                 filename='https://www.youtube.com/embed/wXlRf90vHIw?si=Q-ExL2lnoVaEUGzj'
-            />
+            /> */}
             
             <ProductCTA 
 
-                title="Drive smarter. Stay protected. Be in control."
-                caption="Download the SNK MyMotorPal and experience the future of motor services in one powerful app."
-                button="Contact us today for a free demo"
+                title="Experience the Power of Road Ranger"
+                caption="Transform how your organization manages motor claims and roadside incidents with SNK Road Ranger."
+                button="Request a Demo"
                 target=""
                 link="/contact"
             

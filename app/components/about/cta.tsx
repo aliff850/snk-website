@@ -1,5 +1,7 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 import { Button } from '../ui/button';
+import { ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
 
 
 export function AboutCTA() {
@@ -36,8 +38,8 @@ export function AboutCTA() {
                             </p>
 
 
-                            <Button href="/services" variant="primary" className="text-2xl">
-                                Explore Our Products
+                            <Button href="/services" variant="primary" className="text-2xl flex gap-2">
+                                Explore Our Products <ArrowUpRight className="h-8 w-8" />
                             </Button>
                             
                             {/* CTA Buttons */}
@@ -59,16 +61,51 @@ export function AboutCTA() {
                             </div> */}
                             
                             {/* Trust Indicators */}
-                            {/* <div className="border-t border-white/20 pt-6">
-                                <p className="text-white text-sm mb-4 opacity-80">Trusted by leading insurers</p>
-                                <div className="flex flex-wrap justify-center gap-8 items-center opacity-70">
-                                    <div className="text-white font-semibold">Allianz</div>
-                                    <div className="text-white font-semibold">Etiqa</div>
-                                    <div className="text-white font-semibold">MSIG</div>
-                                    <div className="text-white font-semibold">Tokio Marine</div>
-                                    <div className="text-white font-semibold">Great Eastern</div>
+                            <div className="border-t border-white/50 pt-6">
+                                <p className="text-brand-white mb-4">Trusted by leading insurers</p>
+                                <div className="flex flex-wrap justify-center gap-8 items-center bg-brand-white/60 p-8 rounded-3xl shadow-lg">
+                                    <Image
+                                        src="/clients/allianz.svg"
+                                        alt="Allianz"
+                                        width={120}
+                                        height={40}
+                                        className="h-6 md:h-8 w-auto"
+                                        sizes="(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 120px"
+                                    />
+                                    <Image
+                                        src="/clients/etiqa.svg"
+                                        alt="Etiqa"
+                                        width={120}
+                                        height={40}
+                                        className="h-6 md:h-8 w-auto"
+                                        sizes="(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 120px"
+                                    />
+                                    <Image
+                                        src="/clients/msig.png"
+                                        alt="MSIG"
+                                        width={120}
+                                        height={40}
+                                        className="h-6 md:h-8 w-auto"
+                                        sizes="(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 120px"
+                                    />
+                                    <Image
+                                        src="/clients/tokio.svg"
+                                        alt="Tokio Marine"
+                                        width={140}
+                                        height={40}
+                                        className="h-8 md:h-10 w-auto"
+                                        sizes="(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 140px"
+                                    />
+                                    <Image
+                                        src="/clients/great-eastern.png"
+                                        alt="Great Eastern"
+                                        width={140}
+                                        height={40}
+                                        className="h-6 md:h-8 w-auto"
+                                        sizes="(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 140px"
+                                    />
                                 </div>
-                            </div> */}
+                            </div>
                         </div>
                     </div>
                 </AnimateOnLoad>

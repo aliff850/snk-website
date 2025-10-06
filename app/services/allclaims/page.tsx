@@ -33,7 +33,7 @@ const allClaimsFeatures = [
 
 export default function AllClaimsPage() {
     return(
-        <div className="min-h-screen bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+        <div className="min-h-svh bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
             <ProductHero
                 title="COLS Investigation System"
                 caption="End-to-end online system for motor vehicle accident investigation platform designed for insurance companies and adjusters."

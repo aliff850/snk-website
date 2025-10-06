@@ -3,7 +3,7 @@ import { NewsGrid } from '@/components/news/newsGrid';
 
 export default function News() {
     return(
-        <div className="min-h-screen">
+        <div className="min-h-svh">
             <NewsHero />
             <NewsGrid />
         </div>

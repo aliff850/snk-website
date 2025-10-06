@@ -6,6 +6,7 @@ import { FaCar } from "react-icons/fa";
 import { FaCarOn } from "react-icons/fa6"
 import { ValuationResults } from "./ValuationResults"
 import { Button } from "../ui/button"
+import { yearOptions, mileageOptions, priceOptions, MIN_VALUES } from "./ranges"
 
 export function ValuationLayout() {
     // Existing states
@@ -31,9 +32,16 @@ export function ValuationLayout() {
     const [condition, setCondition] = useState("")
     const [transmission, setTransmission] = useState("")
     const [carType, setCarType] = useState("")
-    const [mfgYear, setMfgYear] = useState("")
-    const [mileage, setMileage] = useState("")
-    const [price, setPrice] = useState("")
+    // const [mfgYear, setMfgYear] = useState("")
+    // const [mileage, setMileage] = useState("")
+    // const [price, setPrice] = useState("")
+    // All states for dropdown ranges
+    const [yearFrom, setYearFrom] = useState<string>("")
+    const [yearTo, setYearTo] = useState<string>("")
+    const [mileageFrom, setMileageFrom] = useState<string>("")
+    const [mileageTo, setMileageTo] = useState<string>("")
+    const [priceFrom, setPriceFrom] = useState<string>("")
+    const [priceTo, setPriceTo] = useState<string>("")
 
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
@@ -88,9 +96,15 @@ export function ValuationLayout() {
         setCondition("")
         setTransmission("")
         setCarType("")
-        setMfgYear("")
-        setMileage("")
-        setPrice("")
+        // setMfgYear("")
+        // setMileage("")
+        // setPrice("")
+        setYearFrom("")
+        setYearTo("")
+        setMileageFrom("")
+        setMileageTo("")
+        setPriceFrom("")
+        setPriceTo("")
         setResults(null)
         setError(null)
     }
@@ -120,32 +134,38 @@ export function ValuationLayout() {
                     type 
                 }
     
-                // Apply optional filters
-                if (mfgYear) {
-                    const yearPattern = /^\d{4}-(\d{4})?$/
-                    if (!yearPattern.test(mfgYear)) {
-                        throw new Error('Year must be in format YYYY-YYYY or YYYY- (e.g. 2015-2020 or 2018-)')
-                    }
-                    searchQuery.mfg_year = mfgYear
-                }
+                // building the range filters
+                const yearQuery = (() => {
+                    const from = yearFrom || ""
+                    const to = yearTo || ""
+                    if (!from && !to) return ""
+                    if (from && to) return `${from}-${to}`
+                    if (from && !to) return `${from}-`
+                    return `${MIN_VALUES.year}-${to}`
+                })()
+                if (yearQuery) searchQuery.mfg_year = yearQuery
                 if (fueltype) searchQuery.fueltype = fueltype
                 if (condition) searchQuery.condition = condition
-                if (mileage) {
-                    const mileagePattern = /^\d{1,6}-(\d{1,6})?$/
-                    if (!mileagePattern.test(mileage)) {
-                        throw new Error('Mileage must be in format number-number (e.g. 0-80000)')
-                    }
-                    searchQuery.mileage = mileage
-                }
+                const mileageQuery = (() => {
+                    const from = mileageFrom || ""
+                    const to = mileageTo || ""
+                    if (!from && !to) return ""
+                    if (from && to) return `${from}-${to}`
+                    if (from && !to) return `${from}-`
+                    return `${MIN_VALUES.mileage}-${to}`
+                })()
+                if (mileageQuery) searchQuery.mileage = mileageQuery
                 if (carType) searchQuery.car_type_id = carType
                 if (transmission) searchQuery.transmission_id = transmission
-                if (price) {
-                    const pricePattern = /^\d{1,10}-(\d{1,10})?$/
-                    if (!pricePattern.test(price)) {
-                        throw new Error('Price must be in format number-number (e.g. 20000-90000)')
-                    }
-                    searchQuery.price = price
-                }
+                const priceQuery = (() => {
+                    const from = priceFrom || ""
+                    const to = priceTo || ""
+                    if (!from && !to) return ""
+                    if (from && to) return `${from}-${to}`
+                    if (from && !to) return `${from}-`
+                    return `${MIN_VALUES.price}-${to}`
+                })()
+                if (priceQuery) searchQuery.price = priceQuery
     
                 const response = await fetch(`/api/mudah/search`, { 
                     method: "POST", 
@@ -321,8 +341,9 @@ export function ValuationLayout() {
                             <p className="text-sm text-foreground/50">For retrieving vehicle market value</p>
                         </div> */}
                         
-                        <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <form className="flex flex-col gap-8" onSubmit={(e) => e.preventDefault()}>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 
                                 <div>
                                     {/* Very epic make dropdown */}
@@ -347,6 +368,7 @@ export function ValuationLayout() {
                                     </select>
                                     {loadingMakes && <p className="mt-1 text-xs">Loading makes...</p>}
                                 </div>
+
                                 <div>
                                     {/* Very epic model dropdown */}
                                     <label className="block text-sm font-medium">Model</label>
@@ -368,6 +390,26 @@ export function ValuationLayout() {
                                     )}
                                 </div>
 
+                                <div>
+                                    <label className="block text-sm font-medium">Body Type</label>
+                                    <select 
+                                        value={carType} 
+                                        onChange={(e) => setCarType(e.target.value)} 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                    >
+                                        <option value="">Any</option>
+                                        <option value="sedan">Sedan</option>
+                                        <option value="hatchback">Hatchback</option>
+                                        <option value="suvs">SUV</option>
+                                        <option value="mpvs">MPV</option>
+                                        <option value="coupe">Coupe</option>
+                                        <option value="sports">Sports</option>
+                                        <option value="pick_up">Pick-up</option>
+                                        <option value="4_wheels">4-Wheels</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
                             </div>
                             {/* <div className="grid grid-cols-2 gap-4">
 
@@ -382,7 +424,7 @@ export function ValuationLayout() {
                                     />
                                 </div>
                             </div> */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
                                 {/* <div>
                                     <label className="block text-sm font-medium">Sort By</label>
                                     <select 
@@ -395,7 +437,7 @@ export function ValuationLayout() {
                                         <option value="newest">Newest</option>
                                     </select>
                                 </div> */}
-                                <div>
+                                {/* <div>
                                     <label className="block text-sm font-medium">Type</label>
                                     <select 
                                         value={type} 
@@ -405,7 +447,22 @@ export function ValuationLayout() {
                                         <option value="sell">Sell</option>
                                         <option value="let">Let</option>
                                     </select>
-                                </div>
+                                </div> */}
+                                {/* <div>
+                                    <label className="block text-sm font-medium">Fuel Type</label>
+                                    <select 
+                                        value={fueltype} 
+                                        onChange={(e) => setFueltype(e.target.value)} 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                    >
+                                        <option value="">Any</option>
+                                        <option value="petrol">Petrol</option>
+                                        <option value="diesal">Diesel</option>
+                                        <option value="electric">Electric</option>
+                                    </select>
+                                </div> */}
+                            {/* </div> */}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium">Fuel Type</label>
                                     <select 
@@ -419,8 +476,6 @@ export function ValuationLayout() {
                                         <option value="electric">Electric</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium">Condition</label>
                                     <select 
@@ -446,59 +501,83 @@ export function ValuationLayout() {
                                         <option value="manual">Manual</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-medium">Body Type</label>
-                                    <select 
-                                        value={carType} 
-                                        onChange={(e) => setCarType(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        <option value="">Any</option>
-                                        <option value="sedan">Sedan</option>
-                                        <option value="hatchback">Hatchback</option>
-                                        <option value="suvs">SUV</option>
-                                        <option value="mpvs">MPV</option>
-                                        <option value="coupe">Coupe</option>
-                                        <option value="sports">Sports</option>
-                                        <option value="pick_up">Pick-up</option>
-                                        <option value="4_wheels">4-Wheels</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
+                                
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium">Year (range)</label>
-                                    <input 
-                                        value={mfgYear} 
-                                        onChange={(e) => setMfgYear(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
-                                        placeholder="e.g. 2015-2020 or 2018-" 
-                                        pattern="^\d{4}-(\d{4})?$"
-                                    />
-                                    {/* <p className="mt-1 text-xs text-gray-500">Format: YYYY-YYYY or YYYY- (e.g. 2015-2020 or 2018-)</p> */}
+                                    <label className="block text-sm font-medium">Year</label>
+                                    <div className="mt-1 grid grid-cols-2 gap-2">
+                                        <select 
+                                            value={yearFrom}
+                                            onChange={(e) => setYearFrom(e.target.value)}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">From (Any)</option>
+                                            {yearOptions.filter(v => v !== 'Any').map(y => (
+                                                <option key={y} value={y}>{y}</option>
+                                            ))}
+                                        </select>
+                                        <select 
+                                            value={yearTo}
+                                            onChange={(e) => setYearTo(e.target.value)}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">To (Any)</option>
+                                            {yearOptions.filter(v => v !== 'Any').map(y => (
+                                                <option key={y} value={y}>{y}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium">Mileage (km range)</label>
-                                    <input 
-                                        value={mileage} 
-                                        onChange={(e) => setMileage(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
-                                        placeholder="e.g. 0-80000" 
-                                        pattern="^\d{1,6}-(\d{1,6})?$"
-                                    />
-                                    {/* <p className="mt-1 text-xs text-gray-500">Format: number-number (e.g. 0-80000)</p> */}
+                                    <label className="block text-sm font-medium">Mileage (km)</label>
+                                    <div className="mt-1 grid grid-cols-2 gap-2">
+                                        <select 
+                                            value={mileageFrom}
+                                            onChange={(e) => setMileageFrom(e.target.value)}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">From (Any)</option>
+                                            {mileageOptions.filter(v => v !== 'Any').map(m => (
+                                                <option key={m} value={m}>{Number(m).toLocaleString()}</option>
+                                            ))}
+                                        </select>
+                                        <select 
+                                            value={mileageTo}
+                                            onChange={(e) => setMileageTo(e.target.value)}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">To (Any)</option>
+                                            {mileageOptions.filter(v => v !== 'Any').map(m => (
+                                                <option key={m} value={m}>{Number(m).toLocaleString()}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium">Price (MYR range)</label>
-                                    <input 
-                                        value={price} 
-                                        onChange={(e) => setPrice(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
-                                        placeholder="e.g. 20000-90000" 
-                                        pattern="^\d{1,10}-(\d{1,10})?$"
-                                    />
-                                    {/* <p className="mt-1 text-xs text-gray-500">Format: number-number (e.g. 20000-90000)</p> */}
+                                    <label className="block text-sm font-medium">Price (MYR)</label>
+                                    <div className="mt-1 grid grid-cols-2 gap-2">
+                                        <select 
+                                            value={priceFrom}
+                                            onChange={(e) => setPriceFrom(e.target.value)}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">From (Any)</option>
+                                            {priceOptions.filter(v => v !== 'Any').map(p => (
+                                                <option key={p} value={p}>{Number(p).toLocaleString()}</option>
+                                            ))}
+                                        </select>
+                                        <select 
+                                            value={priceTo}
+                                            onChange={(e) => setPriceTo(e.target.value)}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">To (Any)</option>
+                                            {priceOptions.filter(v => v !== 'Any').map(p => (
+                                                <option key={p} value={p}>{Number(p).toLocaleString()}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
