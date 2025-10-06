@@ -26,8 +26,8 @@ export function PreviewVideo({ filename }: VideoDisplayComponents) {
     const embedUrl = getYouTubeEmbedUrl(filename);
     
     return (
-        <section className="w-full flex flex-col justify-center items-center py-16 px-4 md:px-12 lg:px-24 font-onest">
-            <div className="w-full max-w-7xl flex flex-col gap-8">
+        <section className="w-full flex flex-col justify-center items-center py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
+            <div className="w-full max-w-7xl flex flex-col gap-4 md:gap-8">
                 <AnimateOnLoad animation="fade-in-up">
                     <div className="text-center">
                         <h2 className="text-brand text-4xl md:text-5xl font-bold">How It Works</h2>

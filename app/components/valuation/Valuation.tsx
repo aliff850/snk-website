@@ -580,7 +580,7 @@ export function ValuationLayout() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <Button 
                                     type="button" 
                                     onClick={() => {
@@ -630,9 +630,9 @@ export function ValuationLayout() {
                             <FaCarOn className="w-16 h-16 text-brand"/>
                         </div>
                         
-                        <h3 className="text-3xl font-bold text-brand">Get Detailed Specifications Regarding Your Vehicle</h3>
+                        <h3 className="text-xl md:text-3xl font-bold text-center text-brand">Get Detailed Specifications Regarding Your Vehicle</h3>
 
-                        <Button href="/valuation/specifications" variant="secondary" size="sm" className="flex text-xl gap-2">
+                        <Button href="/valuation/specifications" variant="secondary" size="sm" className="flex md:text-xl gap-2">
                             Go to Vehicle Specifications <ArrowRight />
                         </Button>
                     </div>

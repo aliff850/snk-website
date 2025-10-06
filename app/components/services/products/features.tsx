@@ -13,12 +13,12 @@ interface FeatureProps {
 
 export function ProductFeatures({header, caption, features}: FeatureProps) {
     return(
-        <section className="w-full py-16 px-4 md:px-12 lg:px-24 font-onest">
+        <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl mx-auto">
                 
                 {/* Section Header */}
                 <AnimateOnLoad animation="fade-in-up">
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-8 md:mb-16">
                         <h2 className="text-brand text-4xl md:text-5xl font-bold mb-6">{header}</h2>
                         <p className="text-brand text-lg md:text-xl mx-auto leading-relaxed">
                             {caption}
@@ -27,7 +27,7 @@ export function ProductFeatures({header, caption, features}: FeatureProps) {
                 </AnimateOnLoad>
 
                 {/* Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                     {features.map((feature, index) => (
                         <AnimateOnLoad 
                             key={index}
