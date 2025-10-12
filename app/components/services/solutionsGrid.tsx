@@ -3,11 +3,14 @@ import Image from 'next/image'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { Button } from '../ui/button'
 import { solutions } from '@/app/data/solutions'
+import { ValuationBanner } from './valuationSection'
 import { LucideAArrowDown } from 'lucide-react'
 
 export function SolutionsGrid() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-24 py-8 md:py-16 flex flex-col gap-12 font-onest">
+
+            <ValuationBanner/>
 
             <div className="w-full max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -52,7 +55,7 @@ export function SolutionsGrid() {
 
                                     {/* Learn More Button */}
                                     {solution.learnMoreUrl && (
-                                        <Button variant="secondary" href={solution.learnMoreUrl} className="text-xl flex items-center gap-2">
+                                        <Button variant="secondary" href={solution.learnMoreUrl} className="md:text-xl flex items-center gap-2">
                                             Learn More <ArrowUpRight />
                                         </Button>
                                     )}

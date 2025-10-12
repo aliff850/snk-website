@@ -137,11 +137,11 @@ export function ValuationLayout() {
                 // building the range filters
                 const yearQuery = (() => {
                     const from = yearFrom || ""
-                    const to = yearTo || ""
-                    if (!from && !to) return ""
-                    if (from && to) return `${from}-${to}`
-                    if (from && !to) return `${from}-`
-                    return `${MIN_VALUES.year}-${to}`
+                    // const to = yearTo || ""
+                    if (!from) return ""
+                    if (from) return `${from}-${from}`
+                    // if (from && !to) return `${from}-${from}`
+                    return `${MIN_VALUES.year}-`
                 })()
                 if (yearQuery) searchQuery.mfg_year = yearQuery
                 if (fueltype) searchQuery.fueltype = fueltype
