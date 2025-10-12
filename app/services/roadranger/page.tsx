@@ -33,14 +33,14 @@ const roadRangerFeatures = [
 
 export default function RoadRangerPage() {
     return(
-        <div className="min-h-svh bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+        <div className="min-h-svh bg-brand-element/10">
             <ProductHero
                 title="SNK Road Ranger"
                 caption="A Call Center CRM System That Connects Accident Incident To Call Centre"
             />
 
             <ProductOverview
-                title="What is Road Ranger"
+                title="What is Road Ranger?"
                 overview="
                 SNK Road Ranger is a powerful Call Center CRM system that bridges every element of the motor claims ecosystem — from roadside assistance to final claims settlement. Designed to enhance efficiency, transparency, and communication, it connects drivers, insurers, workshops, and tow truck operators through a single integrated platform.
                 <br><br>
@@ -48,9 +48,9 @@ export default function RoadRangerPage() {
                 "
                 alt="Road Ranger Interface"
                 galleryImages={[
-                    { src: '/services/cols/allclaims.png', alt: 'AllClaims dashboard' },
-                    { src: '/services/cols/allclaims2.png', alt: 'Accident intake' },
-                    { src: '/services/cols/cols.png', alt: 'Logo'}
+                    { src: '/services/roadranger/ranger.png', alt: 'Main' },
+                    { src: '/services/roadranger/ranger1.png', alt: 'UI 1' },
+                    { src: '/services/roadranger/ranger2.png', alt: 'UI 2' },
                 ]}
             />
 
@@ -60,9 +60,9 @@ export default function RoadRangerPage() {
                 features={roadRangerFeatures}
             />
 
-            {/* <PreviewVideo 
-                filename='https://www.youtube.com/embed/wXlRf90vHIw?si=Q-ExL2lnoVaEUGzj'
-            /> */}
+            <PreviewVideo 
+                filename='https://www.youtube.com/embed/qL0nY95lyv0?si=HYTG1DlWs-zdJZhh'
+            />
             
             <ProductCTA 
 

@@ -48,9 +48,9 @@ export default function MotorPalPage() {
                 "
                 alt="AllClaims Landing Page"
                 galleryImages={[
-                    { src: '/services/cols/allclaims.png', alt: 'AllClaims dashboard' },
-                    { src: '/services/cols/allclaims2.png', alt: 'Accident intake' },
-                    { src: '/services/cols/cols.png', alt: 'Logo'}
+                    { src: '/services/motorpal/motorpal1.png', alt: 'UI' },
+                    { src: '/services/motorpal/motorpal2.png', alt: 'UI 2' },
+                    { src: '/services/motorpal/motorpal3.png', alt: 'Logo'}
                 ]}
             />
 
@@ -60,9 +60,9 @@ export default function MotorPalPage() {
                 features={motorPalFeatures}
             />
 
-            <PreviewVideo 
+            {/* <PreviewVideo 
                 filename='https://www.youtube.com/embed/wXlRf90vHIw?si=Q-ExL2lnoVaEUGzj'
-            />
+            /> */}
             
             <ProductCTA 
 

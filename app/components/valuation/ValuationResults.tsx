@@ -15,9 +15,9 @@ interface ValuationResultsProps {
 export function ValuationResults({ results, error, loading, onClearResults }: ValuationResultsProps) {
     return (
         <div>
-            <div className="rounded-3xl border border-foreground/20 shadow-sm bg-brand-white">
+            <div className="rounded-2xl md:rounded-3xl border border-foreground/20 shadow-sm bg-brand-white">
 
-                <div className="p-6 border-b border-foreground/20 flex items-center justify-between">
+                <div className="p-4 md:p-6 border-b border-foreground/20 flex items-center justify-between">
 
                     <h4 className="text-2xl md:text-3xl text-brand font-bold">Market Listings</h4>
                     <div className="flex gap-3">
@@ -33,7 +33,7 @@ export function ValuationResults({ results, error, loading, onClearResults }: Va
                         </Button>
                     </div>
                 </div>
-                <div className="p-6">
+                <div className="p-4 md:p-6">
                     {error && (
                         <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-red-700 text-sm">
                             {error}

@@ -33,7 +33,7 @@ const allClaimsFeatures = [
 
 export default function AllClaimsPage() {
     return(
-        <div className="min-h-svh bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+        <div className="min-h-svh bg-brand-element/10">
             <ProductHero
                 title="COLS Investigation System"
                 caption="End-to-end online system for motor vehicle accident investigation platform designed for insurance companies and adjusters."
@@ -55,7 +55,7 @@ export default function AllClaimsPage() {
             />
 
             <ProductFeatures 
-                header="Features in COLS"
+                header="Key Features in COLS"
                 caption="The COLS Investigation System comes with a variety of features designed to streamline the estimation process."
                 features={allClaimsFeatures}
             />

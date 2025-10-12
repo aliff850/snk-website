@@ -20,7 +20,7 @@ function cn(...classes: Array<string | false | null | undefined>) {
 const baseClasses = "inline-flex items-center justify-center font-semibold rounded-full transition-all duration-150 shadow-lg hover:shadow-xl w-full md:w-auto min-w-[120px]"
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-brand-white text-brand hover:bg-brand-white/90",
+  primary: "bg-brand-white text-brand hover:bg-brand-white/90 active:bg-brand-element",
   secondary: "bg-brand text-white hover:bg-brand/90 active:bg-brand-element",
 }
 

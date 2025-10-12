@@ -334,7 +334,7 @@ export function ValuationLayout() {
                 <div className="grid grid-cols-1 gap-12">
 
                     {/* Vehicle valuation section */}
-                    <div className="rounded-3xl border border-foreground/40 shadow-sm p-6 bg-brand-white">
+                    <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
                         
                         {/* <div>
                             <h3 className="text-2xl font-semibold">Vehicle Valuation</h3>
@@ -391,13 +391,40 @@ export function ValuationLayout() {
                                 </div>
 
                                 <div>
+                                    <label className="block text-sm font-medium">Engine Capacity (CC)</label>
+                                    <select 
+                                        disabled
+                                        value={carType} 
+                                        onChange={(e) => setCarType(e.target.value)} 
+                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                    >
+                                        {/* <option value="">Any</option> */}
+                                        <option value="1000">1000 CC</option>
+                                        <option value="1200">1200 CC</option>
+                                        <option value="1300">1300 CC</option>
+                                        <option value="1500">1500 CC</option>
+                                        <option value="1600">1600 CC</option>
+                                        <option value="1800">1800 CC</option>
+                                        <option value="2000">2000 CC</option>
+                                        <option value="2200">2200 CC</option>
+                                        <option value="2500">2500 CC</option>
+                                        <option value="3000">3000 CC</option>
+                                        <option value="3500">3500 CC</option>
+                                        <option value="4000">4000 CC</option>
+                                        <option value="4500">4500 CC</option>
+                                        <option value="5000">5000 CC</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                {/* <div>
                                     <label className="block text-sm font-medium">Body Type</label>
                                     <select 
                                         value={carType} 
                                         onChange={(e) => setCarType(e.target.value)} 
                                         className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                     >
-                                        <option value="">Any</option>
+
                                         <option value="sedan">Sedan</option>
                                         <option value="hatchback">Hatchback</option>
                                         <option value="suvs">SUV</option>
@@ -408,60 +435,10 @@ export function ValuationLayout() {
                                         <option value="4_wheels">4-Wheels</option>
                                         <option value="other">Other</option>
                                     </select>
-                                </div>
+                                </div> */}
 
                             </div>
-                            {/* <div className="grid grid-cols-2 gap-4">
-
-                                <div>
-                                    <label className="block text-sm font-medium">Limit</label>
-                                    <input 
-                                        type="number" 
-                                        min={1} 
-                                        value={limit} 
-                                        onChange={(e) => setLimit(Number(e.target.value))} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
-                                    />
-                                </div>
-                            </div> */}
-                            {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
-                                {/* <div>
-                                    <label className="block text-sm font-medium">Sort By</label>
-                                    <select 
-                                        value={sortby} 
-                                        onChange={(e) => setSortby(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        <option value="price_asc">Price Asc</option>
-                                        <option value="price_desc">Price Desc</option>
-                                        <option value="newest">Newest</option>
-                                    </select>
-                                </div> */}
-                                {/* <div>
-                                    <label className="block text-sm font-medium">Type</label>
-                                    <select 
-                                        value={type} 
-                                        onChange={(e) => setType(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        <option value="sell">Sell</option>
-                                        <option value="let">Let</option>
-                                    </select>
-                                </div> */}
-                                {/* <div>
-                                    <label className="block text-sm font-medium">Fuel Type</label>
-                                    <select 
-                                        value={fueltype} 
-                                        onChange={(e) => setFueltype(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        <option value="">Any</option>
-                                        <option value="petrol">Petrol</option>
-                                        <option value="diesal">Diesel</option>
-                                        <option value="electric">Electric</option>
-                                    </select>
-                                </div> */}
-                            {/* </div> */}
+                            
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium">Fuel Type</label>
@@ -470,23 +447,25 @@ export function ValuationLayout() {
                                         onChange={(e) => setFueltype(e.target.value)} 
                                         className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                     >
-                                        <option value="">Any</option>
+                                        {/* <option value="">Any</option> */}
                                         <option value="petrol">Petrol</option>
                                         <option value="diesal">Diesel</option>
                                         <option value="electric">Electric</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium">Condition</label>
+                                    <label className="block text-sm font-medium">Origin</label>
                                     <select 
                                         value={condition} 
                                         onChange={(e) => setCondition(e.target.value)} 
                                         className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                     >
-                                        <option value="">Any</option>
-                                        <option value="used">Used</option>
-                                        <option value="new">New</option>
-                                        <option value="recon">Recon</option>
+                                        {/* <option value="">Any</option> */}
+                                        <option value="new">New Local</option>
+                                        <option value="new">New Import</option>
+                                        <option value="recon">Reconditioned</option>
+                                        <option value="used">CBU</option>
+                                        <option value="used">CKD</option>
                                     </select>
                                 </div>
                                 <div>
@@ -496,7 +475,7 @@ export function ValuationLayout() {
                                         onChange={(e) => setTransmission(e.target.value)} 
                                         className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                     >
-                                        <option value="">Any</option>
+                                        {/* <option value="">Any</option> */}
                                         <option value="auto">Auto</option>
                                         <option value="manual">Manual</option>
                                     </select>
@@ -506,18 +485,18 @@ export function ValuationLayout() {
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium">Year</label>
-                                    <div className="mt-1 grid grid-cols-2 gap-2">
+                                    <div className="mt-1 grid grid-cols-1">
                                         <select 
                                             value={yearFrom}
                                             onChange={(e) => setYearFrom(e.target.value)}
                                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                         >
-                                            <option value="">From (Any)</option>
+                                            <option value="">Select Year</option>
                                             {yearOptions.filter(v => v !== 'Any').map(y => (
                                                 <option key={y} value={y}>{y}</option>
                                             ))}
                                         </select>
-                                        <select 
+                                        {/* <select 
                                             value={yearTo}
                                             onChange={(e) => setYearTo(e.target.value)}
                                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
@@ -526,12 +505,12 @@ export function ValuationLayout() {
                                             {yearOptions.filter(v => v !== 'Any').map(y => (
                                                 <option key={y} value={y}>{y}</option>
                                             ))}
-                                        </select>
+                                        </select> */}
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium">Mileage (km)</label>
-                                    <div className="mt-1 grid grid-cols-2 gap-2">
+                                    <label className="block text-sm font-medium">Mileage (KM)</label>
+                                    <div className="mt-1 grid grid-cols-1">
                                         <select 
                                             value={mileageFrom}
                                             onChange={(e) => setMileageFrom(e.target.value)}
@@ -542,7 +521,7 @@ export function ValuationLayout() {
                                                 <option key={m} value={m}>{Number(m).toLocaleString()}</option>
                                             ))}
                                         </select>
-                                        <select 
+                                        {/* <select 
                                             value={mileageTo}
                                             onChange={(e) => setMileageTo(e.target.value)}
                                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
@@ -551,12 +530,14 @@ export function ValuationLayout() {
                                             {mileageOptions.filter(v => v !== 'Any').map(m => (
                                                 <option key={m} value={m}>{Number(m).toLocaleString()}</option>
                                             ))}
-                                        </select>
+                                        </select> */}
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium">Price (MYR)</label>
-                                    <div className="mt-1 grid grid-cols-2 gap-2">
+                                    <label className="block text-sm font-medium">Previous Insured Sum (MYR)</label>
+                                    {/* Add function to save this to supabase */}
+                                    <input type="number" max={9999999} placeholder="88888" className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"/>
+                                    {/* <div className="mt-1 grid grid-cols-2 gap-2">
                                         <select 
                                             value={priceFrom}
                                             onChange={(e) => setPriceFrom(e.target.value)}
@@ -577,7 +558,7 @@ export function ValuationLayout() {
                                                 <option key={p} value={p}>{Number(p).toLocaleString()}</option>
                                             ))}
                                         </select>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -624,9 +605,9 @@ export function ValuationLayout() {
 
                 
 
-                <div className="bg-brand-white rounded-3xl border border-foreground/40 p-6">
+                <div className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/40 p-4 md:p-6">
                     <div className="p-6 w-full flex flex-col gap-4 justify-center items-center border border-dashed border-foreground/20 rounded-2xl">
-                        <div className="p-4 rounded-3xl bg-brand-element/10">
+                        <div className="p-4 rounded-2xl md:rounded-3xl bg-brand-element/10">
                             <FaCarOn className="w-16 h-16 text-brand"/>
                         </div>
                         

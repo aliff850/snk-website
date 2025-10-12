@@ -26,7 +26,7 @@ const mockNewsArticles: NewsArticle[] = [
         image: "/services/estimation.png",
         featured: true,
         readTime: "5 min read",
-        url: "/news/article"
+        url: "/"
     }
     // },
     // {

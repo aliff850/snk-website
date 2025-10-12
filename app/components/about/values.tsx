@@ -57,7 +57,7 @@ export function Values() {
             <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
 
                 <AnimateOnLoad animation="fade-in-left" delay={200}>
-                    <div className="bg-brand-white rounded-3xl p-8 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 shadow-lg h-full">
+                    <div className="bg-brand-white rounded-3xl p-8 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
@@ -77,7 +77,7 @@ export function Values() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-right" delay={300}>
-                    <div className="bg-brand-white rounded-3xl p-8 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 shadow-lg h-full">
+                    <div className="bg-brand-white rounded-3xl p-8 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
@@ -133,7 +133,7 @@ export function Values() {
                                 animation="fade-in-up" 
                                 delay={(index * 100 + 500) as 0 | 100 | 200 | 300 | 400}
                             >
-                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full">
+                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full">
                                     <div className="text-center">
                                         <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-element rounded-full mb-4 text-white">
                                             {objective.icon}

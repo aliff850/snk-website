@@ -12,7 +12,7 @@ export function AchievementCard() {
                 
                 <AnimateOnLoad animation="fade-in">
 
-                    <div className="bg-brand-white rounded-3xl w-full max-w-sm mx-auto p-10 h-48 border border-brand/20 shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300">
+                    <div className="bg-brand-white rounded-3xl w-full max-w-sm mx-auto p-10 h-48 border border-brand/20 shadow-lg hover:border-brand hover:scale-105 transition-all duration-300">
                         <div className="flex flex-col items-center justify-center h-full">
                             <Image 
                                 src="/images/mdec.png" 
@@ -37,7 +37,7 @@ export function AchievementCard() {
             <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
 
                 <AnimateOnLoad animation="fade-in-left" delay={100}>
-                    <div className="bg-brand-white rounded-3xl w-full max-w-sm p-10 h-48 border border-brand/20 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group">
+                    <div className="bg-brand-white rounded-3xl w-full max-w-sm p-10 h-48 border border-brand/20 hover:border-brand shadow-lg hover:scale-105 transition-all duration-300 group">
                         <div className="flex flex-col items-center justify-center h-full transition-transform duration-300">
                             <Image
                                 src="/images/bnm.png"
@@ -56,7 +56,7 @@ export function AchievementCard() {
 
 
                 <AnimateOnLoad animation="fade-in-right" delay={200}>
-                    <div className="bg-brand-white rounded-3xl w-full max-w-sm p-10 h-48 border border-brand/20 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group">
+                    <div className="bg-brand-white rounded-3xl w-full max-w-sm p-10 h-48 border border-brand/20 hover:border-brand shadow-lg hover:scale-105 transition-all duration-300 group">
                         <div className="flex flex-col items-center justify-center h-full transition-transform duration-300">
                             <Image
                                 src="/images/piam.png"

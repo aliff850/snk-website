@@ -61,7 +61,7 @@ export function Achievements() {
                             animation="fade-in-up" 
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
+                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
                                 
 
                                 <div className="relative h-48 w-full">

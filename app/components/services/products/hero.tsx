@@ -3,11 +3,15 @@ import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 interface ProductHeroProps {
     title: string;
     caption: string;
+    backgroundImage?: string;
 }
 
-export function ProductHero({ title, caption }: ProductHeroProps) {
+export function ProductHero({ title, caption, backgroundImage = '/services/estimation.png' }: ProductHeroProps) {
     return(
-        <section className="w-full bg-[url('/services/estimation.png')] bg-cover bg-center font-onest text-white">
+        <section 
+            className="w-full bg-cover bg-center font-onest text-white"
+            style={{ backgroundImage: `url(${backgroundImage})` }}
+        >
             <div className="w-full h-full bg-black/50 px-4 md:px-12 lg:px-24 pt-32 pb-24 flex flex-col gap-8 justify-center items-center">
                 <div className="text-center flex flex-col gap-6">
                     <AnimateOnLoad animation="fade-in-up">

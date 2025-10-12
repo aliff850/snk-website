@@ -24,7 +24,7 @@ export function NewsArticle({ article, index }: NewsArticleProps) {
     
     return (
         <AnimateOnLoad animation="fade-in-up" delay={animationDelay}>
-            <article className={`bg-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col group ${
+            <article className={`bg-brand-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:border-brand hover:bg-brand-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col group ${
                 article.featured ? 'md:col-span-2' : ''
             }`}>
                 

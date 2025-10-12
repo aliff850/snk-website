@@ -109,7 +109,7 @@ function TimelineEventComponent({ event, index }: TimelineEventProps) {
                         animation={isLeft ? "fade-in-left" : "fade-in-right"} 
                         delay={animationDelay}
                     >
-                        <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:bg-brand-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
+                        <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:bg-brand-white hover:border-brand transition-all duration-300 ease-in-out shadow-lg">
                             <div className="text-brand text-4xl font-bold mb-2">{event.year}</div>
                             <h3 className="text-brand text-xl md:text-2xl font-semibold mb-3">{event.title}</h3>
                             <p className="text-brand/80 text-sm md:text-base leading-relaxed">{event.description}</p>
@@ -133,7 +133,7 @@ function TimelineEventComponent({ event, index }: TimelineEventProps) {
                         animation={isLeft ? "fade-in-left" : "fade-in-right"} 
                         delay={animationDelay}
                     >
-                        <div className="relative h-64 rounded-2xl overflow-hidden shadow-lg group">
+                        <div className="relative h-64 rounded-2xl border border-brand/20 hover:border-brand transition-all duration-300 overflow-hidden shadow-lg group">
                             <Image
                                 src={event.image}
                                 alt={event.title}
