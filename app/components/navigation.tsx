@@ -208,7 +208,7 @@ export function Navigation() {
                   className={`flex items-center ${
                     isScrolled
                       ? "text-brand-white hover:bg-brand hover:scale-105 bg-brand/80"
-                      : "text-brand backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-150"
+                      : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-150"
                   } transition-all px-4 py-2 rounded-xl`}
                 >
                   Log In
