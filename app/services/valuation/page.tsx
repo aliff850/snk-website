@@ -54,10 +54,11 @@ export default function ValuationPage() {
                 "
         alt="Valuation Images"
         galleryImages={[
+          { src: "/services/valuation/val4.png", alt: "valuation4" },
           { src: "/services/valuation/val1.jpg", alt: "valuation1" },
           { src: "/services/valuation/val2.jpg", alt: "valuation2" },
           { src: "/services/valuation/val3.png", alt: "valuation3" },
-          { src: "/services/valuation/val4.png", alt: "valuation4" },
+          
         ]}
       />
 
@@ -69,13 +70,13 @@ export default function ValuationPage() {
 
       {/* <PreviewVideo filename="https://www.youtube.com/embed/wXlRf90vHIw?si=Q-ExL2lnoVaEUGzj" /> */}
 
-      {/* <ProductCTA
+      <ProductCTA
         title="Transform your valuation process today"
         caption="Get instant real-time vehicle valuation through inquiries today"
-        button="Try Now"
+        button="Get Your Valuation"
         target="_blank"
         link="/valuation"
-      /> */}
+      />
     </div>
   );
 }

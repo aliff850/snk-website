@@ -33,7 +33,7 @@ const motorPalFeatures = [
 
 export default function MotorPalPage() {
     return(
-        <div className="min-h-svh bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+        <div className="min-h-svh bg-brand-element/10">
             <ProductHero
                 title="SNK MyMotorPal"
                 caption="A one stop solution app for motor vehicle services, information and products"
@@ -48,9 +48,10 @@ export default function MotorPalPage() {
                 "
                 alt="AllClaims Landing Page"
                 galleryImages={[
+                    { src: '/services/motorpal/motorpal3.png', alt: 'Logo'},
                     { src: '/services/motorpal/motorpal1.png', alt: 'UI' },
                     { src: '/services/motorpal/motorpal2.png', alt: 'UI 2' },
-                    { src: '/services/motorpal/motorpal3.png', alt: 'Logo'}
+                    
                 ]}
             />
 

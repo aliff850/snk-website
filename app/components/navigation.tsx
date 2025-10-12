@@ -86,12 +86,25 @@ export function Navigation() {
         }`}
       >
         <div className="flex md:grid md:grid-cols-3 items-center">
-          <Link href="/" className="hidden md:flex items-center gap-2 group">
+          <Link href="/" className="hidden md:flex items-center gap-2 group relative">
             {/* <span className="text-xl font-bold text-brand">SNK Market Data Research</span> */}
+            {/* White logo - shown when not scrolled */}
+            <Image
+              src="/placeholder_4.svg"
+              alt="Site logo"
+              className={`group-hover:scale-105 transition-all duration-300 absolute ${
+                isScrolled ? "opacity-0 scale-95" : "opacity-100 scale-100"
+              }`}
+              width={130}
+              height={0}
+            />
+            {/* Brand color logo - shown when scrolled */}
             <Image
               src="/placeholder_3.svg"
               alt="Site logo"
-              className="group-hover:scale-105 transition-all duration-300"
+              className={`group-hover:scale-105 transition-all duration-300 absolute ${
+                isScrolled ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
               width={130}
               height={0}
             />

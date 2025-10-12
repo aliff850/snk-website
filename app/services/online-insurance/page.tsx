@@ -66,9 +66,9 @@ export default function OnlineInsurancePage() {
             
             <ProductCTA 
 
-                title="Drive smarter. Stay protected. Be in control."
-                caption="Download the SNK MyMotorPal and experience the future of motor services in one powerful app."
-                button="Contact Us For a Free Demo"
+                title="Experience Digital Insurance, Redefined"
+                caption="SNK Online Digital Insurance Platform — built by SNK to deliver a faster, smarter, and more seamless way to buy and manage insurance online"
+                button="Try Today"
                 target=""
                 link="/contact"
             

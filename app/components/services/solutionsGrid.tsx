@@ -7,7 +7,7 @@ import { LucideAArrowDown } from 'lucide-react'
 
 export function SolutionsGrid() {
     return(
-        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-12 font-onest">
 
             <div className="w-full max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

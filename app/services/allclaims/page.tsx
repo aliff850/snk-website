@@ -48,9 +48,11 @@ export default function AllClaimsPage() {
                 "
                 alt="AllClaims Landing Page"
                 galleryImages={[
+                    { src: '/services/cols/cols2.png', alt: 'Logo'},
                     { src: '/services/cols/allclaims.png', alt: 'AllClaims dashboard' },
                     { src: '/services/cols/allclaims2.png', alt: 'Accident intake' },
-                    { src: '/services/cols/cols.png', alt: 'Logo'}
+                    { src: '/services/cols/allclaims3.png', alt: 'Accident intake 2' },
+                    
                 ]}
             />
 
