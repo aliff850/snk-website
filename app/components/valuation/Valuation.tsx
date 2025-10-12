@@ -159,11 +159,11 @@ export function ValuationLayout() {
                 if (transmission) searchQuery.transmission_id = transmission
                 const priceQuery = (() => {
                     const from = priceFrom || ""
-                    const to = priceTo || ""
-                    if (!from && !to) return ""
-                    if (from && to) return `${from}-${to}`
-                    if (from && !to) return `${from}-`
-                    return `${MIN_VALUES.price}-${to}`
+                    // const to = priceTo || ""
+                    if (!from) return ""
+                    if (from) return `${from}-${from}`
+                    // if (from && !to) return `${from}-`
+                    return `${MIN_VALUES.price}-`
                 })()
                 if (priceQuery) searchQuery.price = priceQuery
     
@@ -333,159 +333,64 @@ export function ValuationLayout() {
 
                 <div className="grid grid-cols-1 gap-12">
 
-                    {/* Vehicle valuation section */}
                     <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
-                        
-                        {/* <div>
-                            <h3 className="text-2xl font-semibold">Vehicle Valuation</h3>
-                            <p className="text-sm text-foreground/50">For retrieving vehicle market value</p>
-                        </div> */}
-                        
+        
                         <form className="flex flex-col gap-8" onSubmit={(e) => e.preventDefault()}>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                                 
-                                <div>
-                                    {/* Very epic make dropdown */}
-                                    <label className="block text-sm font-medium">Make</label>
-                                    <select 
-                                        value={make} 
-                                        onChange={(e) => {
-                                            setMake(e.target.value)
-                                            if (e.target.value) {
-                                                fetchModels(slug(e.target.value))
-                                            } else {
-                                                setAvailableModels({})
-                                            }
-                                        }} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                        disabled={loadingMakes}
-                                    >
-                                        <option value="">Select a make...</option>
-                                        {Object.keys(availableMakes).map(makeKey => (
-                                            <option key={makeKey} value={makeKey}>{makeKey.replace(/-/g, ' ').toUpperCase()}</option>
-                                        ))}
-                                    </select>
-                                    {loadingMakes && <p className="mt-1 text-xs">Loading makes...</p>}
-                                </div>
+                                {/* Vehicle identity */}
+                                <div className="space-y-4">
+                                    <div className="pb-3 border-b-2 border-brand/20">
+                                        <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
+                                        <p className="text-xs text-foreground/60 mt-1">Basic vehicle information</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Make</label>
+                                        <select 
+                                            value={make} 
+                                            onChange={(e) => {
+                                                setMake(e.target.value)
+                                                if (e.target.value) {
+                                                    fetchModels(slug(e.target.value))
+                                                } else {
+                                                    setAvailableModels({})
+                                                }
+                                            }} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                            disabled={loadingMakes}
+                                        >
+                                            <option value="">Select a make...</option>
+                                            {Object.keys(availableMakes).map(makeKey => (
+                                                <option key={makeKey} value={makeKey}>{makeKey.replace(/-/g, ' ').toUpperCase()}</option>
+                                            ))}
+                                        </select>
+                                        {loadingMakes && <p className="mt-1 text-xs text-foreground/60">Loading makes...</p>}
+                                    </div>
 
-                                <div>
-                                    {/* Very epic model dropdown */}
-                                    <label className="block text-sm font-medium">Model</label>
-                                    <select 
-                                        value={model} 
-                                        onChange={(e) => setModel(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                                        disabled={!make || Object.keys(availableModels).length === 0}
-                                    >
-                                        <option value="">Select a model...</option>
-                                        {Object.keys(availableModels)
-                                        .filter(modelKey => modelKey !== '__id__')
-                                        .map(modelKey => (
-                                            <option key={modelKey} value={modelKey}>{modelKey.replace(/-/g, ' ').toUpperCase()}</option>
-                                        ))}
-                                    </select>
-                                    {make && Object.keys(availableModels).length === 0 && !loadingMakes && (
-                                        <p className="mt-1 text-xs text-gray-500">No models found for this make</p>
-                                    )}
-                                </div>
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Model</label>
+                                        <select 
+                                            value={model} 
+                                            onChange={(e) => setModel(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                            disabled={!make || Object.keys(availableModels).length === 0}
+                                        >
+                                            <option value="">Select a model...</option>
+                                            {Object.keys(availableModels)
+                                            .filter(modelKey => modelKey !== '__id__')
+                                            .map(modelKey => (
+                                                <option key={modelKey} value={modelKey}>{modelKey.replace(/-/g, ' ').toUpperCase()}</option>
+                                            ))}
+                                        </select>
+                                        {make && Object.keys(availableModels).length === 0 && !loadingMakes && (
+                                            <p className="mt-1 text-xs text-foreground/60">No models found for this make</p>
+                                        )}
+                                    </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium">Engine Capacity (CC)</label>
-                                    <select 
-                                        disabled
-                                        value={carType} 
-                                        onChange={(e) => setCarType(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                                    >
-                                        {/* <option value="">Any</option> */}
-                                        <option value="1000">1000 CC</option>
-                                        <option value="1200">1200 CC</option>
-                                        <option value="1300">1300 CC</option>
-                                        <option value="1500">1500 CC</option>
-                                        <option value="1600">1600 CC</option>
-                                        <option value="1800">1800 CC</option>
-                                        <option value="2000">2000 CC</option>
-                                        <option value="2200">2200 CC</option>
-                                        <option value="2500">2500 CC</option>
-                                        <option value="3000">3000 CC</option>
-                                        <option value="3500">3500 CC</option>
-                                        <option value="4000">4000 CC</option>
-                                        <option value="4500">4500 CC</option>
-                                        <option value="5000">5000 CC</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-
-                                {/* <div>
-                                    <label className="block text-sm font-medium">Body Type</label>
-                                    <select 
-                                        value={carType} 
-                                        onChange={(e) => setCarType(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-
-                                        <option value="sedan">Sedan</option>
-                                        <option value="hatchback">Hatchback</option>
-                                        <option value="suvs">SUV</option>
-                                        <option value="mpvs">MPV</option>
-                                        <option value="coupe">Coupe</option>
-                                        <option value="sports">Sports</option>
-                                        <option value="pick_up">Pick-up</option>
-                                        <option value="4_wheels">4-Wheels</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div> */}
-
-                            </div>
-                            
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium">Fuel Type</label>
-                                    <select 
-                                        value={fueltype} 
-                                        onChange={(e) => setFueltype(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        {/* <option value="">Any</option> */}
-                                        <option value="petrol">Petrol</option>
-                                        <option value="diesal">Diesel</option>
-                                        <option value="electric">Electric</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium">Origin</label>
-                                    <select 
-                                        value={condition} 
-                                        onChange={(e) => setCondition(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        {/* <option value="">Any</option> */}
-                                        <option value="new">New Local</option>
-                                        <option value="new">New Import</option>
-                                        <option value="recon">Reconditioned</option>
-                                        <option value="used">CBU</option>
-                                        <option value="used">CKD</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium">Transmission</label>
-                                    <select 
-                                        value={transmission} 
-                                        onChange={(e) => setTransmission(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        {/* <option value="">Any</option> */}
-                                        <option value="auto">Auto</option>
-                                        <option value="manual">Manual</option>
-                                    </select>
-                                </div>
-                                
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium">Year</label>
-                                    <div className="mt-1 grid grid-cols-1">
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Year</label>
                                         <select 
                                             value={yearFrom}
                                             onChange={(e) => setYearFrom(e.target.value)}
@@ -496,100 +401,200 @@ export function ValuationLayout() {
                                                 <option key={y} value={y}>{y}</option>
                                             ))}
                                         </select>
-                                        {/* <select 
-                                            value={yearTo}
-                                            onChange={(e) => setYearTo(e.target.value)}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Body Type</label>
+                                        <select 
+                                            value={carType} 
+                                            onChange={(e) => setCarType(e.target.value)} 
                                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                         >
-                                            <option value="">To (Any)</option>
-                                            {yearOptions.filter(v => v !== 'Any').map(y => (
-                                                <option key={y} value={y}>{y}</option>
-                                            ))}
-                                        </select> */}
+                                            <option value="">All</option>
+                                            <option value="sedan">Sedan</option>
+                                            <option value="hatchback">Hatchback</option>
+                                            <option value="suvs">SUV</option>
+                                            <option value="mpvs">MPV</option>
+                                            <option value="coupe">Coupe</option>
+                                            <option value="sports">Sports</option>
+                                            <option value="pick_up">Pick-up</option>
+                                            <option value="4_wheels">4-Wheels</option>
+                                            <option value="other">Other</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-medium">Mileage (KM)</label>
-                                    <div className="mt-1 grid grid-cols-1">
+
+                                {/* Technical specifications */}
+                                <div className="space-y-4">
+                                    <div className="pb-3 border-b-2 border-brand/20">
+                                        <h3 className="text-lg font-bold text-brand">Technical Specs</h3>
+                                        <p className="text-xs text-foreground/60 mt-1">Engine and performance details</p>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Engine Capacity (CC)</label>
+                                        <select 
+                                            disabled
+                                            value={carType} 
+                                            onChange={(e) => setCarType(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                        >
+                                            <option value="1000">1000 CC</option>
+                                            <option value="1200">1200 CC</option>
+                                            <option value="1300">1300 CC</option>
+                                            <option value="1500">1500 CC</option>
+                                            <option value="1600">1600 CC</option>
+                                            <option value="1800">1800 CC</option>
+                                            <option value="2000">2000 CC</option>
+                                            <option value="2200">2200 CC</option>
+                                            <option value="2500">2500 CC</option>
+                                            <option value="3000">3000 CC</option>
+                                            <option value="3500">3500 CC</option>
+                                            <option value="4000">4000 CC</option>
+                                            <option value="4500">4500 CC</option>
+                                            <option value="5000">5000 CC</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Fuel Type</label>
+                                        <select 
+                                            value={fueltype} 
+                                            onChange={(e) => setFueltype(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="petrol">Petrol</option>
+                                            <option value="hybrid">Hybrid</option>
+                                            <option value="diesel">Diesel</option>
+                                            <option value="electric">Electric</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Transmission</label>
+                                        <select 
+                                            value={transmission} 
+                                            onChange={(e) => setTransmission(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="auto">Auto</option>
+                                            <option value="manual">Manual</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Origin</label>
+                                        <select 
+                                            value={condition} 
+                                            onChange={(e) => setCondition(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">Any</option>
+                                            <option value="new">New Local</option>
+                                            <option value="new">New Import</option>
+                                            <option value="recon">Reconditioned</option>
+                                            <option value="used">CBU</option>
+                                            <option value="used">CKD</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {/* Condition */}
+                                <div className="space-y-4">
+                                    <div className="pb-3 border-b-2 border-brand/20">
+                                        <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
+                                        <p className="text-xs text-foreground/60 mt-1">Usage and valuation data</p>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
                                         <select 
                                             value={mileageFrom}
                                             onChange={(e) => setMileageFrom(e.target.value)}
                                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                         >
-                                            <option value="">From (Any)</option>
+                                            <option value="">Select Mileage</option>
                                             {mileageOptions.filter(v => v !== 'Any').map(m => (
                                                 <option key={m} value={m}>{Number(m).toLocaleString()}</option>
                                             ))}
                                         </select>
-                                        {/* <select 
-                                            value={mileageTo}
-                                            onChange={(e) => setMileageTo(e.target.value)}
-                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                        >
-                                            <option value="">To (Any)</option>
-                                            {mileageOptions.filter(v => v !== 'Any').map(m => (
-                                                <option key={m} value={m}>{Number(m).toLocaleString()}</option>
-                                            ))}
-                                        </select> */}
                                     </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium">Previous Insured Sum (MYR)</label>
-                                    {/* Add function to save this to supabase */}
-                                    <input type="number" max={9999999} placeholder="88888" className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"/>
-                                    {/* <div className="mt-1 grid grid-cols-2 gap-2">
-                                        <select 
-                                            value={priceFrom}
-                                            onChange={(e) => setPriceFrom(e.target.value)}
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Previous Insured Sum (MYR)</label>
+                                        <input 
+                                            type="number" 
+                                            max={9999999} 
+                                            placeholder="88888" 
                                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        />
+                                    </div>
+
+                                    {/* Spacer for visual balance */}
+                                    {/* <div className="hidden lg:block lg:h-[88px]"></div> */}
+
+                                    {/* Action Buttons - Aligned at bottom on desktop */}
+                                    {/* <div className="space-y-3 pt-4 lg:pt-0">
+                                        <Button 
+                                            type="button" 
+                                            onClick={() => {
+                                                getMudahData()
+                                                clearResults()
+                                            }} 
+                                            disabled={!canSubmit || loading}
+                                            variant="secondary"
+                                            size="sm"
+                                            className="w-full text-base md:text-lg flex justify-center gap-2"
                                         >
-                                            <option value="">From (Any)</option>
-                                            {priceOptions.filter(v => v !== 'Any').map(p => (
-                                                <option key={p} value={p}>{Number(p).toLocaleString()}</option>
-                                            ))}
-                                        </select>
-                                        <select 
-                                            value={priceTo}
-                                            onChange={(e) => setPriceTo(e.target.value)}
-                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                            Get Market Value
+                                            <ArrowDown className="h-5 w-5" />
+                                        </Button>
+                                        <Button 
+                                            type="button" 
+                                            onClick={resetAll} 
+                                            variant="secondary"
+                                            size="sm"
+                                            className="w-full text-base md:text-lg flex justify-center items-center gap-2"
                                         >
-                                            <option value="">To (Any)</option>
-                                            {priceOptions.filter(v => v !== 'Any').map(p => (
-                                                <option key={p} value={p}>{Number(p).toLocaleString()}</option>
-                                            ))}
-                                        </select>
+                                            Reset
+                                            <RotateCcw className="h-5 w-5" />
+                                        </Button>
                                     </div> */}
                                 </div>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <Button 
-                                    type="button" 
-                                    onClick={() => {
-                                        getMudahData()
-                                        clearResults()
-                                    }} 
-                                    disabled={!canSubmit || loading}
-                                    variant="secondary"
-                                    size="sm"
-                                    className="text-xl flex gap-2"
-                                >
-                                    Get Market Value
-                                    <ArrowDown className="h-5 w-5" />
-                                </Button>
-                                <Button 
-                                    type="button" 
-                                    onClick={resetAll} 
-                                    variant="secondary"
-                                    size="sm"
-                                    className="text-xl flex items-center gap-2"
-                                >
-                                    Reset
-                                    <RotateCcw className="h-5 w-5" />
-                                </Button>
+
+                                <div className="col-span-full flex pt-4 lg:pt-0 w-full">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
+                                    <Button 
+                                        type="button" 
+                                        onClick={() => {
+                                            getMudahData()
+                                            clearResults()
+                                        }} 
+                                        disabled={!canSubmit || loading}
+                                        variant="secondary"
+                                        size="sm"
+                                        className="w-full text-lg md:text-xl flex justify-center gap-2"
+                                    >
+                                        Get Market Value
+                                        <ArrowDown className="h-5 w-5" />
+                                    </Button>
+                                    <Button 
+                                        type="button" 
+                                        onClick={resetAll} 
+                                        variant="secondary"
+                                        size="sm"
+                                        className="w-full text-lg md:text-xl flex justify-center items-center gap-2"
+                                    >
+                                        Reset
+                                        <RotateCcw className="h-5 w-5" />
+                                    </Button>
+                                    </div>
+                                </div>
+
                             </div>
 
                         </form>
-
                     </div>
 
                     {/* Section to display all results */}

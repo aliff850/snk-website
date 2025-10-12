@@ -57,11 +57,11 @@ export function Values() {
             <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
 
                 <AnimateOnLoad animation="fade-in-left" delay={200}>
-                    <div className="bg-brand-white rounded-3xl p-8 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full">
+                    <div className="bg-brand-white rounded-3xl p-8 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
-                            <div className="inline-flex items-center justify-center w-24 h-24 bg-brand rounded-full mb-4">
+                            <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-300 rounded-full mb-4">
                                 <Eye className="h-12 w-12 text-white"/>
                             </div>
                             <h2 className="text-brand text-3xl md:text-4xl font-bold">Vision</h2>
@@ -77,11 +77,11 @@ export function Values() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-right" delay={300}>
-                    <div className="bg-brand-white rounded-3xl p-8 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full">
+                    <div className="bg-brand-white rounded-3xl p-8 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
-                            <div className="inline-flex items-center justify-center w-24 h-24 bg-brand rounded-full mb-4">
+                            <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-300 rounded-full mb-4">
                                 <Crosshair className="h-12 w-12 text-white"/>
                             </div>
                             <h2 className="text-brand text-3xl md:text-4xl font-bold">Mission</h2>
