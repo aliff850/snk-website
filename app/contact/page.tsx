@@ -5,7 +5,7 @@ import { ContactMap } from '@/components/contact/contactMap';
 
 export default function Contact() {
     return(
-        <div className="min-h-screen">
+        <div className="min-h-svh">
             <ContactHero />
             <ContactForm />
             {/* <ContactInfo /> */}

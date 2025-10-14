@@ -154,6 +154,24 @@ export default function MudahListingsDisplay({
     return (
         <div className="space-y-4">
             
+            {/* Floating price container */}
+            {shouldShowFloating && (
+                <div className={`hidden md:block fixed top-24 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-6xl px-4 transition-all duration-300 ease-out ${
+                    isFloating 
+                        ? 'animate-in slide-in-from-top-4 fade-in' 
+                        : 'animate-out slide-out-to-top-4 fade-out'
+                }`}>
+                    <div className="bg-brand-white rounded-3xl p-4 shadow-2xl border border-foreground/40 backdrop-blur-sm">
+                        <PriceSummary className="mb-0" />
+                    </div>
+                </div>
+            )}
+            
+            {/* Container to display all prices and average */}
+            <div ref={priceContainerRef} className="mb-6">
+                <PriceSummary />
+            </div>
+
             {listingsAscending.length > 0 && listingsDescending.length > 0 && (
                 <div className="flex items-center gap-3 mb-4">
                     <div className="flex items-center gap-2">
@@ -185,18 +203,6 @@ export default function MudahListingsDisplay({
                 </div>
             )}
 
-            {/* Floating price container */}
-            {shouldShowFloating && (
-                <div className={`hidden md:block fixed top-24 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-6xl px-4 transition-all duration-300 ease-out ${
-                    isFloating 
-                        ? 'animate-in slide-in-from-top-4 fade-in' 
-                        : 'animate-out slide-out-to-top-4 fade-out'
-                }`}>
-                    <div className="bg-brand-white rounded-3xl p-4 shadow-2xl border border-gray-100 backdrop-blur-sm">
-                        <PriceSummary className="mb-0" />
-                    </div>
-                </div>
-            )}
             {/* Header section */}
             <div className="flex flex-col mb-4">
                 <h6 className="font-semibold text-2xl">
@@ -210,11 +216,7 @@ export default function MudahListingsDisplay({
                 </h6>
                 <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
             </div>
-            
-            {/* Container to display all prices and average */}
-            <div ref={priceContainerRef} className="mb-6">
-                <PriceSummary />
-            </div>
+
 
 
             {/* Sort by price dropdown -- CHANGE THIS SO THAT IT SWITCHES BETWEEN THE TWO DIFFERENT SETS OF LISTINGS (one ascending and one descending) */}

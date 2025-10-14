@@ -79,19 +79,32 @@ export function Navigation() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-col justify-center items-center p-4 font-onest">
       <div
-        className={`container md:py-3 md:px-8 transition-all duration-300 md:backdrop-blur-lg md:border md:border-brand-white/20 w-full max-w-7xl rounded-full ${
+        className={`container md:py-3 md:px-8 transition-all duration-300 md:backdrop-blur-lg md:border w-full max-w-7xl rounded-full ${
           isScrolled
-            ? "md:bg-brand-white md:shadow-lg text-foreground"
-            : "text-brand-white"
+            ? "md:bg-brand-white md:shadow-lg text-foreground border border-brand/50 md:border-brand/50"
+            : "text-brand-white md:border-brand-white/20"
         }`}
       >
         <div className="flex md:grid md:grid-cols-3 items-center">
-          <Link href="/" className="hidden md:flex items-center gap-2 group">
+          <Link href="/" className="hidden md:flex items-center gap-2 group relative">
             {/* <span className="text-xl font-bold text-brand">SNK Market Data Research</span> */}
+            {/* White logo - shown when not scrolled */}
+            <Image
+              src="/placeholder_4.svg"
+              alt="Site logo"
+              className={`group-hover:scale-105 transition-all duration-300 absolute ${
+                isScrolled ? "opacity-0 scale-95" : "opacity-100 scale-100"
+              }`}
+              width={130}
+              height={0}
+            />
+            {/* Brand color logo - shown when scrolled */}
             <Image
               src="/placeholder_3.svg"
               alt="Site logo"
-              className="group-hover:scale-105 transition-all duration-300"
+              className={`group-hover:scale-105 transition-all duration-300 absolute ${
+                isScrolled ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
               width={130}
               height={0}
             />
@@ -181,14 +194,22 @@ export function Navigation() {
               {isLoggedIn ? (
                 <Link
                   href="/auth/signout"
-                  className="flex items-center text-brand-white hover:bg-brand hover:scale-105 transition-all px-4 py-2 rounded-xl bg-brand/80"
+                  className={`flex items-center ${
+                    isScrolled
+                      ? "text-brand-white hover:bg-brand hover:scale-105 bg-brand/80"
+                      : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-150"
+                  } transition-all px-4 py-2 rounded-xl`}
                 >
                   Sign Out
                 </Link>
               ) : (
                 <Link
                   href="/login"
-                  className="flex items-center text-brand-white hover:bg-brand hover:scale-105 transition-all px-4 py-2 rounded-xl bg-brand/80"
+                  className={`flex items-center ${
+                    isScrolled
+                      ? "text-brand-white hover:bg-brand hover:scale-105 bg-brand/80"
+                      : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-150"
+                  } transition-all px-4 py-2 rounded-xl`}
                 >
                   Log In
                 </Link>

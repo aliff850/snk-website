@@ -24,7 +24,7 @@ export function NewsArticle({ article, index }: NewsArticleProps) {
     
     return (
         <AnimateOnLoad animation="fade-in-up" delay={animationDelay}>
-            <article className={`bg-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col group ${
+            <article className={`bg-brand-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:border-brand hover:bg-brand-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col group ${
                 article.featured ? 'md:col-span-2' : ''
             }`}>
                 
@@ -38,7 +38,7 @@ export function NewsArticle({ article, index }: NewsArticleProps) {
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t group-hover:from-brand/30 to-transparent transition-all duration-300"></div>
+                    <div className="opacity-10 group-hover:opacity-100 absolute inset-0 bg-gradient-to-t from-brand/40 to-transparent transition-all duration-300"></div>
                     
                     {/* 
                     <div className="absolute top-4 left-4">
@@ -86,7 +86,7 @@ export function NewsArticle({ article, index }: NewsArticleProps) {
                         </div>
                         <div className="flex items-center justify-between">
                             <span className="text-brand/60 text-sm">{article.date}</span>
-                            <Link href={article.url} className="flex gap-2 items-center text-brand-element hover:text-brand font-semibold text-sm transition-colors duration-200">
+                            <Link href={article.url} className="flex gap-2 items-center text-brand hover:text-brand/80 font-semibold transition-colors duration-200">
                                 Read More
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                             </Link>

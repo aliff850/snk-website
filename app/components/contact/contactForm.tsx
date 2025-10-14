@@ -1,4 +1,6 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '../ui/button';
 
 interface FormField {
     name: string;
@@ -157,19 +159,17 @@ export function ContactForm() {
                                 </AnimateOnLoad>
 
                                 <AnimateOnLoad animation="fade-in-up" delay={400}>
-                                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                                        <button 
+                                    <div className="flex justify-center">
+                                        <Button 
                                             type="submit"
-                                            className="flex-1 bg-brand text-white py-4 px-8 rounded-xl font-semibold hover:bg-brand-hover transition-colors duration-200 text-lg"
+                                            variant="secondary"
+                                            size="lg"
+                                            className="grow flex gap-2 text-xl"
                                         >
                                             Send Message
-                                        </button>
-                                        <button 
-                                            type="button"
-                                            className="flex-1 border-2 border-brand text-brand py-4 px-8 rounded-xl font-semibold hover:bg-brand hover:text-white transition-colors duration-200 text-lg"
-                                        >
-                                            Schedule Call
-                                        </button>
+                                            <ArrowRight/>
+                                        </Button>
+                                        
                                     </div>
                                 </AnimateOnLoad>
                             </form>

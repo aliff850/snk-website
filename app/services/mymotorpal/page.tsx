@@ -31,9 +31,9 @@ const motorPalFeatures = [
     }
 ];
 
-export default function AllClaimsPage() {
+export default function MotorPalPage() {
     return(
-        <div className="min-h-screen bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+        <div className="min-h-svh bg-brand-element/10">
             <ProductHero
                 title="SNK MyMotorPal"
                 caption="A one stop solution app for motor vehicle services, information and products"
@@ -48,9 +48,10 @@ export default function AllClaimsPage() {
                 "
                 alt="AllClaims Landing Page"
                 galleryImages={[
-                    { src: '/services/cols/allclaims.png', alt: 'AllClaims dashboard' },
-                    { src: '/services/cols/allclaims2.png', alt: 'Accident intake' },
-                    { src: '/services/cols/cols.png', alt: 'Logo'}
+                    { src: '/services/motorpal/motorpal3.png', alt: 'Logo'},
+                    { src: '/services/motorpal/motorpal1.png', alt: 'UI' },
+                    { src: '/services/motorpal/motorpal2.png', alt: 'UI 2' },
+                    
                 ]}
             />
 
@@ -60,9 +61,9 @@ export default function AllClaimsPage() {
                 features={motorPalFeatures}
             />
 
-            <PreviewVideo 
+            {/* <PreviewVideo 
                 filename='https://www.youtube.com/embed/wXlRf90vHIw?si=Q-ExL2lnoVaEUGzj'
-            />
+            /> */}
             
             <ProductCTA 
 

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export interface GalleryImage {
     src: string;
@@ -70,7 +71,7 @@ export default function ImageGallery({
             onTouchEnd={handleTouchEnd}
             aria-roledescription="carousel"
         >
-            <div className={`relative w-full h-full overflow-hidden group border border-brand/50 ${roundedClassName}`}>
+            <div className={`relative w-full h-full`}>
                 {slides.map((img, i) => (
                     <div
                         key={img.src + i}
@@ -85,26 +86,46 @@ export default function ImageGallery({
                             alt={img.alt ?? `Slide ${i + 1}`}
                             fill
                             priority={i === index}
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="object-cover transition-transform duration-500"
                         />
                     </div>
                 ))}
             </div>
 
             {total > 1 && (
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                    {slides.map((_, i) => (
-                        <button
-                            key={i}
-                            aria-label={`Go to slide ${i + 1}`}
-                            onClick={() => goTo(i)}
-                            className={
-                                "h-2.5 w-2.5 rounded-full transition-all duration-300 " +
-                                (i === index ? "bg-brand w-6" : "bg-brand/40 hover:bg-brand/70")
-                            }
-                        />
-                    ))}
-                </div>
+                <>
+                    {/* Navigation arrows */}
+                    <button
+                        aria-label="Previous image"
+                        onClick={prev}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-300 hover:scale-110"
+                    >
+                        <ArrowLeft className="w-5 h-5" />
+                    </button>
+                    
+                    <button
+                        aria-label="Next image"
+                        onClick={next}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-300 hover:scale-110"
+                    >
+                        <ArrowRight className="w-5 h-5" />
+                    </button>
+
+                    {/* Navigation dots */}
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                        {slides.map((_, i) => (
+                            <button
+                                key={i}
+                                aria-label={`Go to slide ${i + 1}`}
+                                onClick={() => goTo(i)}
+                                className={
+                                    "h-2.5 w-2.5 rounded-full transition-all duration-300 " +
+                                    (i === index ? "bg-brand w-6" : "bg-brand/40 hover:bg-brand/70")
+                                }
+                            />
+                        ))}
+                    </div>
+                </>
             )}
         </div>
     );

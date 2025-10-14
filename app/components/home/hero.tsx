@@ -5,8 +5,8 @@ export function HeroSection() {
 
     return (
 
-        <section className="bg-brand min-h-screen bg-[url('/images/w214.jpg')] bg-cover bg-center bg-fixed flex flex-col justify-center items-center">
-            <div className="min-h-screen w-full bg-black/50 flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 py-16">
+        <section className="bg-brand min-h-svh bg-[url('/images/w214.jpg')] bg-cover bg-center bg-fixed flex flex-col justify-center items-center">
+            <div className="h-svh w-full bg-black/50 flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 py-16">
 
                 <div className="mx-auto max-w-7xl font-onest">
                     <AnimateOnLoad animation="fade-in-up">
@@ -23,10 +23,11 @@ export function HeroSection() {
                         </p>
                         
 
-                        <Button variant="secondary" className="text-2xl" size="sm" href="#background">
+                        <Button variant="secondary" size="md" href="#background" className="text-2xl">
                             Explore
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
                         </Button>
+                        
                         {/* <button className="px-16 py-2 font-bold rounded-xl bg-brand text-white hover:scale-105 transition-all duration-300">
                             Explore
                         </button> */}

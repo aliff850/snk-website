@@ -3,7 +3,7 @@ import { SolutionsGrid } from '@/components/services/solutionsGrid';
 
 export default function Services() {
     return(
-        <div className="min-h-screen">
+        <div className="min-h-svh bg-brand-element/30">
             <ServicesHero />
             <SolutionsGrid />
         </div>

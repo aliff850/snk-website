@@ -1,11 +1,16 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
 import Image from 'next/image'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { Button } from '../ui/button'
 import { solutions } from '@/app/data/solutions'
+import { ValuationBanner } from './valuationSection'
+import { LucideAArrowDown } from 'lucide-react'
 
 export function SolutionsGrid() {
     return(
-        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 min-h-screen justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-24 py-8 md:py-16 flex flex-col gap-12 font-onest">
+
+            <ValuationBanner/>
 
             <div className="w-full max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -15,7 +20,7 @@ export function SolutionsGrid() {
                             animation="fade-in-up" 
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
+                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:bg-brand-white hover:border-brand hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col group">
                                 
                                 {/* Image */}
                                 <div className="relative h-48 w-full">
@@ -27,7 +32,7 @@ export function SolutionsGrid() {
                                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     />
                                     {/* Overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent"></div>
+                                    <div className="opacity-20 group-hover:opacity-100 duration-300 transition-all absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent"></div>
                                 </div>
 
                                 {/* Content */}
@@ -50,8 +55,8 @@ export function SolutionsGrid() {
 
                                     {/* Learn More Button */}
                                     {solution.learnMoreUrl && (
-                                        <Button variant="secondary" href={solution.learnMoreUrl} className="text-sm">
-                                            Learn More
+                                        <Button variant="secondary" href={solution.learnMoreUrl} className="md:text-xl flex items-center gap-2">
+                                            Learn More <ArrowUpRight />
                                         </Button>
                                     )}
                                 </div>
@@ -62,19 +67,16 @@ export function SolutionsGrid() {
             </div>
 
             <AnimateOnLoad animation="fade-in-up" delay={400}>
-                <div className="w-full max-w-4xl mx-auto text-center">
-                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 border border-brand/20 shadow-lg">
+                <div className="w-full mx-auto text-center">
+                    <div className="bg-brand-white/95 rounded-3xl px-16 py-8 border border-brand/20 shadow-lg">
                         <h3 className="text-brand text-2xl md:text-3xl font-bold mb-4">Ready to Transform Your Insurance Operations?</h3>
                         <p className="text-brand text-lg mb-6">
                             Contact us today to learn how our solutions can streamline your processes and enhance customer experiences.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <button className="bg-brand text-white py-3 px-8 rounded-xl font-semibold hover:bg-brand-hover transition-colors duration-200">
-                                Get Started
-                            </button>
-                            <button className="border border-brand text-brand py-3 px-8 rounded-xl font-semibold hover:bg-brand hover:text-white transition-colors duration-200">
-                                Contact Sales
-                            </button>
+                            <Button size="md" variant="secondary" href="/contact" className="flex text-xl gap-2">
+                                Get Started <ArrowRight/>
+                            </Button>
                         </div>
                     </div>
                 </div>

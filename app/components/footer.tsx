@@ -30,23 +30,33 @@ export function Footer() {
                     <h3 className="text-xl font-bold mb-6 text-white">Our Solutions</h3>
                     <ul className="space-y-3">
                         <li>
-                            <Link href="/services" className="text-brand-foreground hover:text-brand-element transition-colors duration-200">
-                                COLS Platform
+                            <Link href="/services/allclaims" className="text-brand-foreground hover:text-brand-element transition-colors duration-200">
+                                COLS Investigation
                             </Link>
                         </li>
                         <li>
-                            <Link href="/services" className="text-brand-foreground hover:text-brand-element transition-colors duration-200">
+                            <Link href="/services/valuation" className="text-brand-foreground hover:text-brand-element transition-colors duration-200">
                                 Vehicle Valuation
                             </Link>
                         </li>
                         <li>
-                            <Link href="/services" className="text-brand-foreground hover:text-brand-element transition-colors duration-200">
+                            <Link href="/services/estimation" className="text-brand-foreground hover:text-brand-element transition-colors duration-200">
+                                Accident Estimation
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/services/mymotorpal" className="text-brand-foreground hover:text-brand-element transition-colors duration-200">
+                                MyMotorPal
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/services/roadranger" className="text-brand-foreground hover:text-brand-element transition-colors duration-200">
                                 Road Ranger
                             </Link>
                         </li>
                         <li>
-                            <Link href="/services" className="text-brand-foreground hover:text-brand-element transition-colors duration-200">
-                                Insurance Solutions
+                            <Link href="/services/online-insurance" className="text-brand-foreground hover:text-brand-element transition-colors duration-200">
+                                Online Insurance Platform
                             </Link>
                         </li>
                     </ul>
@@ -62,7 +72,7 @@ export function Footer() {
                                     <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                                 </svg>
                             </div>
-                            <span className="text-brand-foreground">+60 3-1234 5678</span>
+                            <span className="text-brand-foreground">+603-8068-9409</span>
                         </div>
                         <div className="flex items-center space-x-3">
                             <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
@@ -71,7 +81,7 @@ export function Footer() {
                                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                                 </svg>
                             </div>
-                            <span className="text-brand-foreground">info@snk.com.my</span>
+                            <span className="text-brand-foreground">information@snkmdr.com</span>
                         </div>
                         <div className="flex items-start space-x-3">
                             <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mt-1">
@@ -81,7 +91,7 @@ export function Footer() {
                             </div>
                             <span className="text-brand-foreground">
                                 Subang Jaya,<br />
-                                Malaysia
+                                Selangor
                             </span>
                         </div>
                     </div>

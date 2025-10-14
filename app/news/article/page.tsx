@@ -4,7 +4,7 @@ import { ArticleLayout } from "@/app/components/news/article/_layout"
 export default function ArticleTemplate() {
 
     return(
-        <div className="min-h-screen">
+        <div className="min-h-svh">
             <ArticleHero />
             <ArticleLayout />
         </div>

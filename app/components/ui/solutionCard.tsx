@@ -15,7 +15,7 @@ export function SolutionCard({
 }:solutionCardProps) {
 
     return (
-        <div className="group relative h-80 w-full overflow-hidden rounded-2xl shadow-lg transition-all duration-500 hover:shadow-2xl hover:scale-105">
+        <div className="group relative h-80 w-full overflow-hidden rounded-2xl shadow-lg transition-all duration-500 hover:shadow-2xl hover:scale-105 border border-brand-white/20 hover:border-brand-white">
             {/* Background Image */}
             <div 
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"
@@ -31,8 +31,10 @@ export function SolutionCard({
                 </h2>
             </div>
             
+            {/* bg-gradient-to-br from-brand/95 via-brand-element/90 to-brand/95 */}
+
             {/* Sliding Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-brand/95 via-brand-element/90 to-brand/95 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
+            <div className="absolute inset-0 bg-brand/80 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
                 <div className="flex flex-col justify-center items-center h-full p-8 text-center">
                     <h3 className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
                         {title}

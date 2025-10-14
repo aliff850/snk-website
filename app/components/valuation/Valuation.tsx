@@ -1,9 +1,12 @@
 "use client"
 
 import React, { useState, useMemo, useEffect } from "react"
-import { Car, ArrowRight } from 'lucide-react'
+import { ArrowRight, RotateCcw, ArrowDown } from 'lucide-react'
+import { FaCar } from "react-icons/fa";
+import { FaCarOn } from "react-icons/fa6"
 import { ValuationResults } from "./ValuationResults"
 import { Button } from "../ui/button"
+import { yearOptions, mileageOptions, priceOptions, MIN_VALUES } from "./ranges"
 
 export function ValuationLayout() {
     // Existing states
@@ -29,9 +32,16 @@ export function ValuationLayout() {
     const [condition, setCondition] = useState("")
     const [transmission, setTransmission] = useState("")
     const [carType, setCarType] = useState("")
-    const [mfgYear, setMfgYear] = useState("")
-    const [mileage, setMileage] = useState("")
-    const [price, setPrice] = useState("")
+    // const [mfgYear, setMfgYear] = useState("")
+    // const [mileage, setMileage] = useState("")
+    // const [price, setPrice] = useState("")
+    // All states for dropdown ranges
+    const [yearFrom, setYearFrom] = useState<string>("")
+    const [yearTo, setYearTo] = useState<string>("")
+    const [mileageFrom, setMileageFrom] = useState<string>("")
+    const [mileageTo, setMileageTo] = useState<string>("")
+    const [priceFrom, setPriceFrom] = useState<string>("")
+    const [priceTo, setPriceTo] = useState<string>("")
 
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
@@ -86,9 +96,15 @@ export function ValuationLayout() {
         setCondition("")
         setTransmission("")
         setCarType("")
-        setMfgYear("")
-        setMileage("")
-        setPrice("")
+        // setMfgYear("")
+        // setMileage("")
+        // setPrice("")
+        setYearFrom("")
+        setYearTo("")
+        setMileageFrom("")
+        setMileageTo("")
+        setPriceFrom("")
+        setPriceTo("")
         setResults(null)
         setError(null)
     }
@@ -118,32 +134,38 @@ export function ValuationLayout() {
                     type 
                 }
     
-                // Apply optional filters
-                if (mfgYear) {
-                    const yearPattern = /^\d{4}-(\d{4})?$/
-                    if (!yearPattern.test(mfgYear)) {
-                        throw new Error('Year must be in format YYYY-YYYY or YYYY- (e.g. 2015-2020 or 2018-)')
-                    }
-                    searchQuery.mfg_year = mfgYear
-                }
+                // building the range filters
+                const yearQuery = (() => {
+                    const from = yearFrom || ""
+                    // const to = yearTo || ""
+                    if (!from) return ""
+                    if (from) return `${from}-${from}`
+                    // if (from && !to) return `${from}-${from}`
+                    return `${MIN_VALUES.year}-`
+                })()
+                if (yearQuery) searchQuery.mfg_year = yearQuery
                 if (fueltype) searchQuery.fueltype = fueltype
                 if (condition) searchQuery.condition = condition
-                if (mileage) {
-                    const mileagePattern = /^\d{1,6}-(\d{1,6})?$/
-                    if (!mileagePattern.test(mileage)) {
-                        throw new Error('Mileage must be in format number-number (e.g. 0-80000)')
-                    }
-                    searchQuery.mileage = mileage
-                }
+                const mileageQuery = (() => {
+                    const from = mileageFrom || ""
+                    const to = mileageTo || ""
+                    if (!from && !to) return ""
+                    if (from && to) return `${from}-${to}`
+                    if (from && !to) return `${from}-`
+                    return `${MIN_VALUES.mileage}-${to}`
+                })()
+                if (mileageQuery) searchQuery.mileage = mileageQuery
                 if (carType) searchQuery.car_type_id = carType
                 if (transmission) searchQuery.transmission_id = transmission
-                if (price) {
-                    const pricePattern = /^\d{1,10}-(\d{1,10})?$/
-                    if (!pricePattern.test(price)) {
-                        throw new Error('Price must be in format number-number (e.g. 20000-90000)')
-                    }
-                    searchQuery.price = price
-                }
+                const priceQuery = (() => {
+                    const from = priceFrom || ""
+                    // const to = priceTo || ""
+                    if (!from) return ""
+                    if (from) return `${from}-${from}`
+                    // if (from && !to) return `${from}-`
+                    return `${MIN_VALUES.price}-`
+                })()
+                if (priceQuery) searchQuery.price = priceQuery
     
                 const response = await fetch(`/api/mudah/search`, { 
                     method: "POST", 
@@ -295,244 +317,317 @@ export function ValuationLayout() {
 
     return(
         <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 py-16 pt-30">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-6xl mx-auto flex flex-col gap-12">
 
-                <div className="mb-8 text-center">
-                    <h1 className="text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
-                    <h3 className="text-4xl font-bold text-brand-white">Motor Vehicle Valuation</h3>
+                <div className="flex flex-col items-center gap-4 md:gap-6">
+                    <div className="p-8 rounded-full bg-brand-element w-32 h-32">
+                        <FaCar className="w-16 h-16 text-brand-white/80"/>
+                    </div>
+
+                    <div className="flex flex-col gap-4 text-center">
+                        <h1 className="text-4xl md:text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
+                        <h3 className="text-2xl md:text-4xl font-bold text-brand-white">For Motor Vehicle Market Valuation</h3>
+                    </div>
+                </div>
+                
+
+                <div className="grid grid-cols-1 gap-12">
+
+                    <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
+        
+                        <form className="flex flex-col gap-8" onSubmit={(e) => e.preventDefault()}>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                                
+                                {/* Vehicle identity */}
+                                <div className="space-y-4">
+                                    <div className="pb-3 border-b-2 border-brand/20">
+                                        <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
+                                        <p className="text-xs text-foreground/60 mt-1">Basic vehicle information</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Make</label>
+                                        <select 
+                                            value={make} 
+                                            onChange={(e) => {
+                                                setMake(e.target.value)
+                                                if (e.target.value) {
+                                                    fetchModels(slug(e.target.value))
+                                                } else {
+                                                    setAvailableModels({})
+                                                }
+                                            }} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                            disabled={loadingMakes}
+                                        >
+                                            <option value="">Select a make...</option>
+                                            {Object.keys(availableMakes).map(makeKey => (
+                                                <option key={makeKey} value={makeKey}>{makeKey.replace(/-/g, ' ').toUpperCase()}</option>
+                                            ))}
+                                        </select>
+                                        {loadingMakes && <p className="mt-1 text-xs text-foreground/60">Loading makes...</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Model</label>
+                                        <select 
+                                            value={model} 
+                                            onChange={(e) => setModel(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                            disabled={!make || Object.keys(availableModels).length === 0}
+                                        >
+                                            <option value="">Select a model...</option>
+                                            {Object.keys(availableModels)
+                                            .filter(modelKey => modelKey !== '__id__')
+                                            .map(modelKey => (
+                                                <option key={modelKey} value={modelKey}>{modelKey.replace(/-/g, ' ').toUpperCase()}</option>
+                                            ))}
+                                        </select>
+                                        {make && Object.keys(availableModels).length === 0 && !loadingMakes && (
+                                            <p className="mt-1 text-xs text-foreground/60">No models found for this make</p>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Year</label>
+                                        <select 
+                                            value={yearFrom}
+                                            onChange={(e) => setYearFrom(e.target.value)}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">Select Year</option>
+                                            {yearOptions.filter(v => v !== 'Any').map(y => (
+                                                <option key={y} value={y}>{y}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Body Type</label>
+                                        <select 
+                                            value={carType} 
+                                            onChange={(e) => setCarType(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">All</option>
+                                            <option value="sedan">Sedan</option>
+                                            <option value="hatchback">Hatchback</option>
+                                            <option value="suvs">SUV</option>
+                                            <option value="mpvs">MPV</option>
+                                            <option value="coupe">Coupe</option>
+                                            <option value="sports">Sports</option>
+                                            <option value="pick_up">Pick-up</option>
+                                            <option value="4_wheels">4-Wheels</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {/* Technical specifications */}
+                                <div className="space-y-4">
+                                    <div className="pb-3 border-b-2 border-brand/20">
+                                        <h3 className="text-lg font-bold text-brand">Technical Specs</h3>
+                                        <p className="text-xs text-foreground/60 mt-1">Engine and performance details</p>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Engine Capacity (CC)</label>
+                                        <select 
+                                            disabled
+                                            value={carType} 
+                                            onChange={(e) => setCarType(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                        >
+                                            <option value="1000">1000 CC</option>
+                                            <option value="1200">1200 CC</option>
+                                            <option value="1300">1300 CC</option>
+                                            <option value="1500">1500 CC</option>
+                                            <option value="1600">1600 CC</option>
+                                            <option value="1800">1800 CC</option>
+                                            <option value="2000">2000 CC</option>
+                                            <option value="2200">2200 CC</option>
+                                            <option value="2500">2500 CC</option>
+                                            <option value="3000">3000 CC</option>
+                                            <option value="3500">3500 CC</option>
+                                            <option value="4000">4000 CC</option>
+                                            <option value="4500">4500 CC</option>
+                                            <option value="5000">5000 CC</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Fuel Type</label>
+                                        <select 
+                                            value={fueltype} 
+                                            onChange={(e) => setFueltype(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="petrol">Petrol</option>
+                                            <option value="hybrid">Hybrid</option>
+                                            <option value="diesel">Diesel</option>
+                                            <option value="electric">Electric</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Transmission</label>
+                                        <select 
+                                            value={transmission} 
+                                            onChange={(e) => setTransmission(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="auto">Auto</option>
+                                            <option value="manual">Manual</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Origin</label>
+                                        <select 
+                                            value={condition} 
+                                            onChange={(e) => setCondition(e.target.value)} 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">Any</option>
+                                            <option value="new">New Local</option>
+                                            <option value="new">New Import</option>
+                                            <option value="recon">Reconditioned</option>
+                                            <option value="used">CBU</option>
+                                            <option value="used">CKD</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {/* Condition */}
+                                <div className="space-y-4">
+                                    <div className="pb-3 border-b-2 border-brand/20">
+                                        <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
+                                        <p className="text-xs text-foreground/60 mt-1">Usage and valuation data</p>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
+                                        <select 
+                                            value={mileageFrom}
+                                            onChange={(e) => setMileageFrom(e.target.value)}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        >
+                                            <option value="">Select Mileage</option>
+                                            {mileageOptions.filter(v => v !== 'Any').map(m => (
+                                                <option key={m} value={m}>{Number(m).toLocaleString()}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Previous Insured Sum (MYR)</label>
+                                        <input 
+                                            type="number" 
+                                            max={9999999} 
+                                            placeholder="88888" 
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                        />
+                                    </div>
+
+                                    {/* Spacer for visual balance */}
+                                    {/* <div className="hidden lg:block lg:h-[88px]"></div> */}
+
+                                    {/* Action Buttons - Aligned at bottom on desktop */}
+                                    {/* <div className="space-y-3 pt-4 lg:pt-0">
+                                        <Button 
+                                            type="button" 
+                                            onClick={() => {
+                                                getMudahData()
+                                                clearResults()
+                                            }} 
+                                            disabled={!canSubmit || loading}
+                                            variant="secondary"
+                                            size="sm"
+                                            className="w-full text-base md:text-lg flex justify-center gap-2"
+                                        >
+                                            Get Market Value
+                                            <ArrowDown className="h-5 w-5" />
+                                        </Button>
+                                        <Button 
+                                            type="button" 
+                                            onClick={resetAll} 
+                                            variant="secondary"
+                                            size="sm"
+                                            className="w-full text-base md:text-lg flex justify-center items-center gap-2"
+                                        >
+                                            Reset
+                                            <RotateCcw className="h-5 w-5" />
+                                        </Button>
+                                    </div> */}
+                                </div>
+
+                                <div className="col-span-full flex pt-4 lg:pt-0 w-full">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
+                                    <Button 
+                                        type="button" 
+                                        onClick={() => {
+                                            getMudahData()
+                                            clearResults()
+                                        }} 
+                                        disabled={!canSubmit || loading}
+                                        variant="secondary"
+                                        size="sm"
+                                        className="w-full text-lg md:text-xl flex justify-center gap-2"
+                                    >
+                                        Get Market Value
+                                        <ArrowDown className="h-5 w-5" />
+                                    </Button>
+                                    <Button 
+                                        type="button" 
+                                        onClick={resetAll} 
+                                        variant="secondary"
+                                        size="sm"
+                                        className="w-full text-lg md:text-xl flex justify-center items-center gap-2"
+                                    >
+                                        Reset
+                                        <RotateCcw className="h-5 w-5" />
+                                    </Button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </form>
+                    </div>
+
+                    {/* Section to display all results */}
+
+                    <ValuationResults 
+                        results={results}
+                        error={error}
+                        loading={loading}
+                        onClearResults={clearResults}
+                    />
+
                 </div>
 
-                <div className="grid grid-cols-1 gap-8">
+                
 
-                    <div className="flex justify-end">
-                        <Button href="/valuation/specifications" variant="secondary" size="sm" className="flex gap-2">
+                <div className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/40 p-4 md:p-6">
+                    <div className="p-6 w-full flex flex-col gap-4 justify-center items-center border border-dashed border-foreground/20 rounded-2xl">
+                        <div className="p-4 rounded-2xl md:rounded-3xl bg-brand-element/10">
+                            <FaCarOn className="w-16 h-16 text-brand"/>
+                        </div>
+                        
+                        <h3 className="text-xl md:text-3xl font-bold text-center text-brand">Get Detailed Specifications Regarding Your Vehicle</h3>
+
+                        <Button href="/valuation/specifications" variant="secondary" size="sm" className="flex md:text-xl gap-2">
                             Go to Vehicle Specifications <ArrowRight />
                         </Button>
                     </div>
-
-                    {/* Vehicle valuation section */}
-                    <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
-                        
-                        {/* <div>
-                            <h3 className="text-2xl font-semibold">Vehicle Valuation</h3>
-                            <p className="text-sm text-foreground/50">For retrieving vehicle market value</p>
-                        </div> */}
-                        
-                        <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                
-                                <div>
-                                    {/* Very epic make dropdown */}
-                                    <label className="block text-sm font-medium">Make</label>
-                                    <select 
-                                        value={make} 
-                                        onChange={(e) => {
-                                            setMake(e.target.value)
-                                            if (e.target.value) {
-                                                fetchModels(slug(e.target.value))
-                                            } else {
-                                                setAvailableModels({})
-                                            }
-                                        }} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                        disabled={loadingMakes}
-                                    >
-                                        <option value="">Select a make...</option>
-                                        {Object.keys(availableMakes).map(makeKey => (
-                                            <option key={makeKey} value={makeKey}>{makeKey.replace(/-/g, ' ').toUpperCase()}</option>
-                                        ))}
-                                    </select>
-                                    {loadingMakes && <p className="mt-1 text-xs">Loading makes...</p>}
-                                </div>
-                                <div>
-                                    {/* Very epic model dropdown */}
-                                    <label className="block text-sm font-medium">Model</label>
-                                    <select 
-                                        value={model} 
-                                        onChange={(e) => setModel(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                                        disabled={!make || Object.keys(availableModels).length === 0}
-                                    >
-                                        <option value="">Select a model...</option>
-                                        {Object.keys(availableModels)
-                                        .filter(modelKey => modelKey !== '__id__')
-                                        .map(modelKey => (
-                                            <option key={modelKey} value={modelKey}>{modelKey.replace(/-/g, ' ').toUpperCase()}</option>
-                                        ))}
-                                    </select>
-                                    {make && Object.keys(availableModels).length === 0 && !loadingMakes && (
-                                        <p className="mt-1 text-xs text-gray-500">No models found for this make</p>
-                                    )}
-                                </div>
-
-                            </div>
-                            {/* <div className="grid grid-cols-2 gap-4">
-
-                                <div>
-                                    <label className="block text-sm font-medium">Limit</label>
-                                    <input 
-                                        type="number" 
-                                        min={1} 
-                                        value={limit} 
-                                        onChange={(e) => setLimit(Number(e.target.value))} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
-                                    />
-                                </div>
-                            </div> */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {/* <div>
-                                    <label className="block text-sm font-medium">Sort By</label>
-                                    <select 
-                                        value={sortby} 
-                                        onChange={(e) => setSortby(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        <option value="price_asc">Price Asc</option>
-                                        <option value="price_desc">Price Desc</option>
-                                        <option value="newest">Newest</option>
-                                    </select>
-                                </div> */}
-                                <div>
-                                    <label className="block text-sm font-medium">Type</label>
-                                    <select 
-                                        value={type} 
-                                        onChange={(e) => setType(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        <option value="sell">Sell</option>
-                                        <option value="let">Let</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium">Fuel Type</label>
-                                    <select 
-                                        value={fueltype} 
-                                        onChange={(e) => setFueltype(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        <option value="">Any</option>
-                                        <option value="petrol">Petrol</option>
-                                        <option value="diesal">Diesel</option>
-                                        <option value="electric">Electric</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium">Condition</label>
-                                    <select 
-                                        value={condition} 
-                                        onChange={(e) => setCondition(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        <option value="">Any</option>
-                                        <option value="used">Used</option>
-                                        <option value="new">New</option>
-                                        <option value="recon">Recon</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium">Transmission</label>
-                                    <select 
-                                        value={transmission} 
-                                        onChange={(e) => setTransmission(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        <option value="">Any</option>
-                                        <option value="auto">Auto</option>
-                                        <option value="manual">Manual</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium">Body Type</label>
-                                    <select 
-                                        value={carType} 
-                                        onChange={(e) => setCarType(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                    >
-                                        <option value="">Any</option>
-                                        <option value="sedan">Sedan</option>
-                                        <option value="hatchback">Hatchback</option>
-                                        <option value="suvs">SUV</option>
-                                        <option value="mpvs">MPV</option>
-                                        <option value="coupe">Coupe</option>
-                                        <option value="sports">Sports</option>
-                                        <option value="pick_up">Pick-up</option>
-                                        <option value="4_wheels">4-Wheels</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium">Year (range)</label>
-                                    <input 
-                                        value={mfgYear} 
-                                        onChange={(e) => setMfgYear(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
-                                        placeholder="e.g. 2015-2020 or 2018-" 
-                                        pattern="^\d{4}-(\d{4})?$"
-                                    />
-                                    {/* <p className="mt-1 text-xs text-gray-500">Format: YYYY-YYYY or YYYY- (e.g. 2015-2020 or 2018-)</p> */}
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium">Mileage (km range)</label>
-                                    <input 
-                                        value={mileage} 
-                                        onChange={(e) => setMileage(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
-                                        placeholder="e.g. 0-80000" 
-                                        pattern="^\d{1,6}-(\d{1,6})?$"
-                                    />
-                                    {/* <p className="mt-1 text-xs text-gray-500">Format: number-number (e.g. 0-80000)</p> */}
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium">Price (MYR range)</label>
-                                    <input 
-                                        value={price} 
-                                        onChange={(e) => setPrice(e.target.value)} 
-                                        className="mt-1 w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150" 
-                                        placeholder="e.g. 20000-90000" 
-                                        pattern="^\d{1,10}-(\d{1,10})?$"
-                                    />
-                                    {/* <p className="mt-1 text-xs text-gray-500">Format: number-number (e.g. 20000-90000)</p> */}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-3">
-                                <Button 
-                                    type="button" 
-                                    onClick={() => {
-                                        getMudahData()
-                                        clearResults()
-                                    }} 
-                                    disabled={!canSubmit || loading}
-                                    variant="secondary"
-                                    size="sm"
-                                >
-                                    Get Listings
-                                </Button>
-                                <Button 
-                                    type="button" 
-                                    onClick={resetAll} 
-                                    variant="secondary"
-                                    size="sm"
-                                >
-                                    Reset
-                                </Button>
-                            </div>
-                        </form>
-                    </div>
+                    
+                
                 </div>
 
-                {/* Section to display all results */}
-
-                <ValuationResults 
-                    results={results}
-                    error={error}
-                    loading={loading}
-                    onClearResults={clearResults}
-                />
             </div>
+
         </div>
     )
 }
