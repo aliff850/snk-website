@@ -61,7 +61,7 @@ export default function RoadRangerPage() {
             />
 
             <PreviewVideo 
-                filename='https://www.youtube.com/embed/qL0nY95lyv0?si=HYTG1DlWs-zdJZhh'
+                filename='https://www.youtube.com/embed/dkQbyEnM8cg?si=YApSJVnBNzMcoq9E'
             />
             
             <ProductCTA 
