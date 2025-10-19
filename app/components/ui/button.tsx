@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Target } from "lucide-react"
 
 type ButtonVariant = "primary" | "secondary"
-type ButtonSize = "sm" | "md" | "lg"
+type ButtonSize = "sm" | "base" | "md" | "lg"
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
@@ -26,6 +26,7 @@ const variantClasses: Record<ButtonVariant, string> = {
 
 const sizes: Record<ButtonSize, string> = {
   sm: "md:px-8 py-2",
+  base: "md:px-8 py-3",
   md: "md:px-16 py-3",
   lg: "md:px-24 py-3"
 }

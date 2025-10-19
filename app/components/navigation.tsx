@@ -79,10 +79,10 @@ export function Navigation() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-col justify-center items-center p-4 font-onest">
       <div
-        className={`container md:py-3 md:px-8 transition-all duration-300 md:backdrop-blur-lg md:border w-full max-w-7xl rounded-full ${
+        className={`container md:py-3 md:px-8 transition-all duration-300 md:border md:border-brand-white/20 md:backdrop-blur-lg w-full max-w-7xl rounded-3xl ${
           isScrolled
-            ? "md:bg-brand-white md:shadow-lg text-foreground border border-brand/50 md:border-brand/50"
-            : "text-brand-white md:border-brand-white/20"
+            ? "md:bg-brand-white md:shadow-lg text-foreground"
+            : "text-brand-white"
         }`}
       >
         <div className="flex md:grid md:grid-cols-3 items-center">
@@ -128,13 +128,13 @@ export function Navigation() {
               Our Services
               <hr className="hidden md:block absolute w-full rounded-full border border-brand/80 right-24 top-5 group-hover:right-0 transition-all duration-150 ease-in-out" />
             </Link>
-            <Link
+            {/* <Link
               href="/news"
               className="hover:text-brand transition-colors overflow-hidden group relative whitespace-nowrap"
             >
               Latest News
               <hr className="hidden md:block absolute w-full rounded-full border border-brand/80 right-24 top-5 group-hover:right-0 transition-all duration-150 ease-in-out" />
-            </Link>
+            </Link> */}
             <Link
               href="/contact"
               className="hover:text-brand transition-colors overflow-hidden group relative whitespace-nowrap"
@@ -147,7 +147,7 @@ export function Navigation() {
           {/* Mobile menu and Login button */}
           <div className="w-full flex items-center gap-3 md:justify-end">
             {/* Mobile Navigation Bar */}
-            <div className="md:hidden flex items-center justify-between w-full px-6 py-3 rounded-xl bg-brand-white shadow-lg">
+            <div className="md:hidden flex items-center justify-between w-full px-6 py-3 rounded-2xl bg-brand-white shadow-lg">
               <Link
                 href="/"
                 className="flex items-center justify-center"
@@ -220,7 +220,7 @@ export function Navigation() {
 
         {/* Mobile menu */}
         <div
-          className={`md:hidden overflow-hidden rounded-2xl border border-brand-white/30 bg-white shadow-md transition-all duration-300 ${
+          className={`md:hidden overflow-hidden rounded-xl border border-brand-white/30 bg-white shadow-md transition-all duration-300 ${
             isMenuOpen
               ? "mt-3 opacity-100 scale-100 max-h-96"
               : "mt-0 opacity-0 scale-95 max-h-0"
@@ -249,13 +249,13 @@ export function Navigation() {
             >
               Our Services
             </Link>
-            <Link
+            {/* <Link
               href="/news"
               className="text-foreground hover:bg-brand-white/60 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Latest News
-            </Link>
+            </Link> */}
             <Link
               href="/contact"
               className="text-foreground hover:bg-brand-white/60 transition-colors"

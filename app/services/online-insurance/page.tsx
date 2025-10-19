@@ -60,15 +60,15 @@ export default function OnlineInsurancePage() {
                 features={motorPalFeatures}
             />
 
-            {/* <PreviewVideo 
-                filename='https://www.youtube.com/embed/wXlRf90vHIw?si=Q-ExL2lnoVaEUGzj'
-            /> */}
+            <PreviewVideo 
+                filename='https://www.youtube.com/embed/dmpKydJSLh8?si=Dafhp02b1n5tFba0'
+            />
             
             <ProductCTA 
 
                 title="Experience Digital Insurance, Redefined"
                 caption="SNK Online Digital Insurance Platform — built by SNK to deliver a faster, smarter, and more seamless way to buy and manage insurance online"
-                button="Try Today"
+                button="Contact Us For A Free Demo"
                 target=""
                 link="/contact"
             

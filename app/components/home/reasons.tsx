@@ -37,7 +37,7 @@ export function ReasonSection() {
     ];
 
     return(
-        <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 flex flex-col gap-8 justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest text-white snap-start">
+        <section className="w-full bg-brand-element/10 flex flex-col gap-8 justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest text-white snap-start">
 
             <div className="flex flex-col justify-center items-center text-center gap-4 max-w-4xl mx-auto">
                 <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Why Choose SNK?</h1>
@@ -53,7 +53,7 @@ export function ReasonSection() {
                             animation="fade-in-up" 
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
+                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:border-brand hover:bg-brand-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
                                 
                                 {/* Image */}
                                 <div className="relative h-48 w-full">
@@ -77,7 +77,7 @@ export function ReasonSection() {
                                 </div>
 
                                 {/* Content */}
-                                <div className="p-8 flex-1 flex flex-col">
+                                <div className="p-4 md:p-8 flex-1 flex flex-col">
                                     <h3 className="text-brand text-2xl font-bold mb-4">{achievement.title}</h3>
                                     <p className="text-brand/80 text-base leading-relaxed flex-1">{achievement.description}</p>
                                 </div>

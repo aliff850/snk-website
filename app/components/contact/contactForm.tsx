@@ -65,7 +65,7 @@ const formFields: FormField[] = [
 
 export function ContactForm() {
     return(
-        <section className="w-full bg-brand py-16 px-4 md:px-12 lg:px-24 font-onest">
+        <section className="w-full bg-brand py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl mx-auto">
                 
                 <AnimateOnLoad animation="fade-in-up">
@@ -79,7 +79,7 @@ export function ContactForm() {
 
                 <AnimateOnLoad animation="fade-in-up" delay={200}>
                     <div className="max-w-4xl mx-auto">
-                        <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-white/20 shadow-lg">
+                        <div className="bg-brand-white/95 backdrop-blur-sm rounded-3xl p-4 md:p-12 border border-brand-white/20 shadow-lg">
                             <form className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {formFields.slice(0, 4).map((field, index) => (

@@ -1,14 +1,18 @@
 "use client"
 
+import { HelpModal } from "./HelpModal";
 import React, { useState, useMemo, useEffect } from "react"
-import { ArrowRight, RotateCcw, ArrowDown } from 'lucide-react'
+import { ArrowRight, RotateCcw, ArrowDown, Info } from 'lucide-react'
 import { FaCar } from "react-icons/fa";
 import { FaCarOn } from "react-icons/fa6"
 import { ValuationResults } from "./ValuationResults"
 import { Button } from "../ui/button"
-import { yearOptions, mileageOptions, priceOptions, MIN_VALUES } from "./ranges"
+import { yearOptions, mileageOptions, priceOptions, MIN_VALUES, engineCapacityOptionsLiters, getEngineCcRangeFromLiterOption } from "./ranges"
+import Link from "next/link";
 
 export function ValuationLayout() {
+    // Help modal
+    const [isHelpOpen, setIsHelpOpen] = useState(false)
     // Existing states
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
@@ -32,6 +36,7 @@ export function ValuationLayout() {
     const [condition, setCondition] = useState("")
     const [transmission, setTransmission] = useState("")
     const [carType, setCarType] = useState("")
+    const [engineCapacityLiter, setEngineCapacityLiter] = useState<string>("")
     // const [mfgYear, setMfgYear] = useState("")
     // const [mileage, setMileage] = useState("")
     // const [price, setPrice] = useState("")
@@ -45,6 +50,7 @@ export function ValuationLayout() {
 
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
+    const fieldsDisabled = !canSubmit
 
     // Fetch Mudah makes
     const fetchMakes = async () => {
@@ -107,6 +113,7 @@ export function ValuationLayout() {
         setPriceTo("")
         setResults(null)
         setError(null)
+        setEngineCapacityLiter("")
     }
 
     const clearResults = () => {
@@ -135,6 +142,8 @@ export function ValuationLayout() {
                 }
     
                 // building the range filters
+                
+                // Model year
                 const yearQuery = (() => {
                     const from = yearFrom || ""
                     // const to = yearTo || ""
@@ -143,19 +152,37 @@ export function ValuationLayout() {
                     // if (from && !to) return `${from}-${from}`
                     return `${MIN_VALUES.year}-`
                 })()
+
                 if (yearQuery) searchQuery.mfg_year = yearQuery
                 if (fueltype) searchQuery.fueltype = fueltype
                 if (condition) searchQuery.condition = condition
+
+                // Engine capacity
+                const engineCapacityCcRange = (() => {
+                    if (!engineCapacityLiter) return null
+                    const range = getEngineCcRangeFromLiterOption(engineCapacityLiter)
+                    return range ? `${range.min}-${range.max}` : null
+                })()
+
+                // Mileage
                 const mileageQuery = (() => {
                     const from = mileageFrom || ""
-                    const to = mileageTo || ""
-                    if (!from && !to) return ""
-                    if (from && to) return `${from}-${to}`
-                    if (from && !to) return `${from}-`
-                    return `${MIN_VALUES.mileage}-${to}`
+                    // const to = mileageTo || ""
+                    if (!from) return ""
+                    const fromNum = parseInt(from, 10)
+                    if (Number.isNaN(fromNum)) return ""
+
+                    // Create a 5,000 KM window
+                    const maxOption = mileageOptions.filter(v => v !== 'Any').map(Number).at(-1) ?? fromNum
+                    const toNum = Math.min(fromNum + 5000, maxOption)
+
+                    // if (fromNum === toNum) return `${from}-${from}`
+                    return `${from}-${toNum}`
                 })()
+
                 if (mileageQuery) searchQuery.mileage = mileageQuery
                 if (carType) searchQuery.car_type_id = carType
+
                 if (transmission) searchQuery.transmission_id = transmission
                 const priceQuery = (() => {
                     const from = priceFrom || ""
@@ -165,8 +192,9 @@ export function ValuationLayout() {
                     // if (from && !to) return `${from}-`
                     return `${MIN_VALUES.price}-`
                 })()
+
                 if (priceQuery) searchQuery.price = priceQuery
-    
+
                 const response = await fetch(`/api/mudah/search`, { 
                     method: "POST", 
                     headers, 
@@ -316,8 +344,36 @@ export function ValuationLayout() {
     // }
 
     return(
-        <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 py-16 pt-30">
-            <div className="max-w-6xl mx-auto flex flex-col gap-12">
+        <div className="w-full bg-black/50 px-2 md:px-12 lg:px-24 py-8 md:py-16 pt-30 relative">
+            {/* Help Button */}
+            <button
+                onClick={() => setIsHelpOpen(true)}
+                className="fixed left-6 bottom-6 transform z-50 w-16 h-16 bg-brand border border-brand-element text-brand-white rounded-full shadow-lg hover:bg-brand/90 hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+                aria-label="Help"
+            >
+                <Info className="w-8 h-8" />
+                <span
+                    className="
+                        absolute left-[90%] 
+                        whitespace-nowrap 
+                        opacity-0 
+                        pointer-events-none 
+                        group-hover:opacity-100 
+                        group-hover:pointer-events-auto 
+                        transition-all 
+                        duration-300 
+                        translate-y-2 
+                        group-hover:translate-y-0
+                        bg-brand border border-brand-element text-brand-white font-medium px-3 py-1 rounded-xl shadow
+                        ml-4
+                        text-base
+                    "
+                >
+                    How To Use?
+                </span>
+            </button>
+            
+            <div className="max-w-6xl mx-auto flex flex-col gap-8 md:gap-12">
 
                 <div className="flex flex-col items-center gap-4 md:gap-6">
                     <div className="p-8 rounded-full bg-brand-element w-32 h-32">
@@ -331,12 +387,21 @@ export function ValuationLayout() {
                 </div>
                 
 
-                <div className="grid grid-cols-1 gap-12">
+                <div className="grid grid-cols-1 gap-8 md:gap-12">
 
-                    <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
+                    <div id="main" className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
         
-                        <form className="flex flex-col gap-8" onSubmit={(e) => e.preventDefault()}>
-
+                        <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+                            
+                            {/* <div className="flex">
+                                <Link href="" onClick={() => setIsHelpOpen(true)} className="shrink flex gap-2 bg-brand/10 text-brand hover:bg-brand hover:text-brand-white hover:scale-105 transition-all duration-300 border border-brand/40 px-4 py-2 rounded-xl">Help <Info /></Link>
+                            </div> */}
+                            
+                            <HelpModal 
+                                isOpen={isHelpOpen} 
+                                onClose={() => setIsHelpOpen(false)} 
+                            />
+                            
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                                 
                                 {/* Vehicle identity */}
@@ -347,7 +412,7 @@ export function ValuationLayout() {
                                     </div>
                                     
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Make</label>
+                                        <label className="block text-sm font-medium mb-1">*Make</label>
                                         <select 
                                             value={make} 
                                             onChange={(e) => {
@@ -370,7 +435,7 @@ export function ValuationLayout() {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Model</label>
+                                        <label className="block text-sm font-medium mb-1">*Model</label>
                                         <select 
                                             value={model} 
                                             onChange={(e) => setModel(e.target.value)} 
@@ -390,13 +455,14 @@ export function ValuationLayout() {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Year</label>
+                                        <label className="block text-sm font-medium mb-1">*Year</label>
                                         <select 
                                             value={yearFrom}
                                             onChange={(e) => setYearFrom(e.target.value)}
-                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                            disabled={fieldsDisabled}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         >
-                                            <option value="">Select Year</option>
+                                            <option value="">--</option>
                                             {yearOptions.filter(v => v !== 'Any').map(y => (
                                                 <option key={y} value={y}>{y}</option>
                                             ))}
@@ -404,13 +470,14 @@ export function ValuationLayout() {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Body Type</label>
+                                        <label className="block text-sm font-medium mb-1">*Body Type</label>
                                         <select 
                                             value={carType} 
                                             onChange={(e) => setCarType(e.target.value)} 
-                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                            disabled={fieldsDisabled}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         >
-                                            <option value="">All</option>
+                                            <option value="">--</option>
                                             <option value="sedan">Sedan</option>
                                             <option value="hatchback">Hatchback</option>
                                             <option value="suvs">SUV</option>
@@ -427,43 +494,35 @@ export function ValuationLayout() {
                                 {/* Technical specifications */}
                                 <div className="space-y-4">
                                     <div className="pb-3 border-b-2 border-brand/20">
-                                        <h3 className="text-lg font-bold text-brand">Technical Specs</h3>
+                                        <h3 className="text-lg font-bold text-brand">Technical Specifications</h3>
                                         <p className="text-xs text-foreground/60 mt-1">Engine and performance details</p>
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Engine Capacity (CC)</label>
+                                        <label className="block text-sm font-medium mb-1">*Engine Capacity (L)</label>
                                         <select 
-                                            disabled
-                                            value={carType} 
-                                            onChange={(e) => setCarType(e.target.value)} 
+                                            value={engineCapacityLiter}
+                                            onChange={(e) => setEngineCapacityLiter(e.target.value)} 
+                                            disabled={fieldsDisabled}
                                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         >
-                                            <option value="1000">1000 CC</option>
-                                            <option value="1200">1200 CC</option>
-                                            <option value="1300">1300 CC</option>
-                                            <option value="1500">1500 CC</option>
-                                            <option value="1600">1600 CC</option>
-                                            <option value="1800">1800 CC</option>
-                                            <option value="2000">2000 CC</option>
-                                            <option value="2200">2200 CC</option>
-                                            <option value="2500">2500 CC</option>
-                                            <option value="3000">3000 CC</option>
-                                            <option value="3500">3500 CC</option>
-                                            <option value="4000">4000 CC</option>
-                                            <option value="4500">4500 CC</option>
-                                            <option value="5000">5000 CC</option>
-                                            <option value="other">Other</option>
+                                            <option value="">--</option>
+                                            {engineCapacityOptionsLiters.filter(v => v !== 'Any').map(l => (
+                                                <option key={l} value={l}>{l}</option>
+                                            ))}
                                         </select>
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Fuel Type</label>
+                                        <label className="block text-sm font-medium mb-1">*Fuel Type</label>
                                         <select 
                                             value={fueltype} 
                                             onChange={(e) => setFueltype(e.target.value)} 
-                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                            disabled={fieldsDisabled}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         >
+
+                                            <option value="">--</option>
                                             <option value="petrol">Petrol</option>
                                             <option value="hybrid">Hybrid</option>
                                             <option value="diesel">Diesel</option>
@@ -472,25 +531,29 @@ export function ValuationLayout() {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Transmission</label>
+                                        <label className="block text-sm font-medium mb-1">*Transmission</label>
                                         <select 
                                             value={transmission} 
                                             onChange={(e) => setTransmission(e.target.value)} 
-                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                            disabled={fieldsDisabled}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         >
+
+                                            <option value="">--</option>
                                             <option value="auto">Auto</option>
                                             <option value="manual">Manual</option>
                                         </select>
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Origin</label>
+                                        <label className="block text-sm font-medium mb-1">*Origin</label>
                                         <select 
                                             value={condition} 
                                             onChange={(e) => setCondition(e.target.value)} 
-                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                            disabled={fieldsDisabled}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         >
-                                            <option value="">Any</option>
+                                            <option value="">--</option>
                                             <option value="new">New Local</option>
                                             <option value="new">New Import</option>
                                             <option value="recon">Reconditioned</option>
@@ -512,9 +575,10 @@ export function ValuationLayout() {
                                         <select 
                                             value={mileageFrom}
                                             onChange={(e) => setMileageFrom(e.target.value)}
-                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                            disabled={fieldsDisabled}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         >
-                                            <option value="">Select Mileage</option>
+                                            <option value="">--</option>
                                             {mileageOptions.filter(v => v !== 'Any').map(m => (
                                                 <option key={m} value={m}>{Number(m).toLocaleString()}</option>
                                             ))}
@@ -527,7 +591,8 @@ export function ValuationLayout() {
                                             type="number" 
                                             max={9999999} 
                                             placeholder="88888" 
-                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                                            disabled={fieldsDisabled}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         />
                                     </div>
 
@@ -564,33 +629,37 @@ export function ValuationLayout() {
                                 </div>
 
                                 <div className="col-span-full flex pt-4 lg:pt-0 w-full">
+                                    
                                     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
-                                    <Button 
-                                        type="button" 
-                                        onClick={() => {
-                                            getMudahData()
-                                            clearResults()
-                                        }} 
-                                        disabled={!canSubmit || loading}
-                                        variant="secondary"
-                                        size="sm"
-                                        className="w-full text-lg md:text-xl flex justify-center gap-2"
-                                    >
-                                        Get Market Value
-                                        <ArrowDown className="h-5 w-5" />
-                                    </Button>
-                                    <Button 
-                                        type="button" 
-                                        onClick={resetAll} 
-                                        variant="secondary"
-                                        size="sm"
-                                        className="w-full text-lg md:text-xl flex justify-center items-center gap-2"
-                                    >
-                                        Reset
-                                        <RotateCcw className="h-5 w-5" />
-                                    </Button>
+                                        <Button 
+                                            type="button"
+                                            href="#valuation" 
+                                            onClick={() => {
+                                                getMudahData()
+                                                clearResults()
+                                            }} 
+                                            disabled={!canSubmit || loading}
+                                            variant="secondary"
+                                            size="sm"
+                                            className="w-full text-lg md:text-xl flex justify-center gap-2"
+                                        >
+                                            Get Market Value
+                                            <ArrowDown className="h-5 w-5" />
+                                        </Button>
+                                        <Button 
+                                            type="button" 
+                                            href="#main"
+                                            onClick={resetAll} 
+                                            variant="secondary"
+                                            size="sm"
+                                            className="w-full text-lg md:text-xl flex justify-center items-center gap-2"
+                                        >
+                                            Reset
+                                            <RotateCcw className="h-5 w-5" />
+                                        </Button>
                                     </div>
                                 </div>
+
 
                             </div>
 
@@ -598,17 +667,20 @@ export function ValuationLayout() {
                     </div>
 
                     {/* Section to display all results */}
-
+                    
+                    <div id="valuation">
                     <ValuationResults 
                         results={results}
                         error={error}
                         loading={loading}
                         onClearResults={clearResults}
+                        link="#main"
                     />
+                    </div>
+                    
 
                 </div>
 
-                
 
                 <div className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/40 p-4 md:p-6">
                     <div className="p-6 w-full flex flex-col gap-4 justify-center items-center border border-dashed border-foreground/20 rounded-2xl">

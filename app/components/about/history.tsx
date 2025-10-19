@@ -52,7 +52,7 @@ const timelineEvents: TimelineEvent[] = [
 
 export function History() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-8 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-8 font-onest">
             
             <AnimateOnLoad animation="fade-in-up">
                 <div className="flex flex-col text-center gap-4 max-w-4xl mx-auto">
