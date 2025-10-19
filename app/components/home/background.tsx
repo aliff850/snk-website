@@ -7,12 +7,12 @@ export function Background() {
 
         <section id="background" className="w-full bg-brand flex flex-col justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest text-white snap-proximity">
 
-            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-7xl">
 
                 <AnimateOnLoad animation="fade-in" className="h-full">
-                    <div className="relative flex flex-col justify-end h-full flex flex-col gap-8">
-                        <div className="h-full rounded-3xl overflow-hidden group">
-                            <Image src="/images/insurtech.jpg" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width={1200} height={1200} alt="NICHOLAS"/>
+                    <div className="relative flex flex-col justify-end h-full flex flex-col gap-4 md:gap-8">
+                        <div className="h-full rounded-3xl border border-brand-white/40 hover:border-brand-white transition-colors duration-300 overflow-hidden group">
+                            <Image src="/images/snk.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width={1200} height={1200} alt="snk"/>
                         </div>
 
                         {/* <div className="absolute grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
@@ -40,11 +40,11 @@ export function Background() {
                 
 
                 <AnimateOnLoad animation="fade-in-left" className="h-full">
-                    <div className="w-full h-full flex flex-col gap-8 justify-center">
-                        <h1 className="text-4xl lg:text-6xl font-bold">About SNK</h1>
+                    <div className="w-full h-full flex flex-col gap-4 md:gap-8 justify-center">
+                        <h1 className="text-4xl lg:text-6xl font-bold">Who Are We?</h1>
 
                         {/* <p className="w-full">We are a pioneer in Malaysia’s Insurtech industry, with over 20 years of experience delivering innovative solutions for motor vehicle valuation and insurance claims. Since 2002, we have grown from providing valuation services to developing advanced digital platforms that connect insurers, adjusters, workshops, and customers in one seamless ecosystem. Our mission is to simplify and automate insurance processes through technology—making claims faster, valuations more accurate, and assistance more accessible to the public.</p> */}
-                        <p className="w-full">We are a pioneer in Malaysia’s Insurtech industry, with over 25 years of experience. Our focus is to automate and innovate the motor claims ecosystem by improving the efficiency, accessibility and functionality of the end to end claims process, in order to better serve key stakeholders and meet the guidelines set by the regulators</p>
+                        <p className="w-full">SNK Market Data Research are a pioneer in Malaysia’s Insurtech industry, with over 25 years of experience. Our focus is to automate and innovate the motor claims ecosystem by improving the efficiency, accessibility and functionality of the end to end claims process, in order to better serve key stakeholders and meet the guidelines set by the regulators</p>
 
                         <hr className="w-full border border-background"/>
                         

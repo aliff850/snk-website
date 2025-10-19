@@ -7,9 +7,10 @@ export default function Contact() {
     return(
         <div className="min-h-svh">
             <ContactHero />
+            <ContactMap />
             <ContactForm />
             {/* <ContactInfo /> */}
-            <ContactMap />
+            
         </div>
     )
 }

@@ -6,11 +6,11 @@ import Image from 'next/image';
 
 export function AboutCTA() {
     return(
-        <section className="w-full py-16 px-4 md:px-12 lg:px-24 font-onest">
+        <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-5xl mx-auto">
                 
                 <AnimateOnLoad animation="fade-in-up">
-                    <div className="bg-gradient-to-r from-brand to-brand-hover rounded-3xl p-12 text-center shadow-lg relative overflow-hidden">
+                    <div className="bg-gradient-to-r from-brand to-brand-hover rounded-3xl p-4 md:p-12 text-center shadow-lg relative overflow-hidden">
                         
                         {/* Background Pattern */}
                         <div className="absolute inset-0 opacity-10">
@@ -63,7 +63,7 @@ export function AboutCTA() {
                             {/* Trust Indicators */}
                             <div className="border-t border-white/50 pt-6">
                                 <p className="text-brand-white mb-4">Trusted by leading insurers</p>
-                                <div className="flex flex-wrap justify-center gap-8 items-center bg-brand-white/60 p-8 rounded-3xl shadow-lg">
+                                <div className="flex flex-wrap justify-center gap-8 items-center bg-brand-white/60 p-4 md:p-8 rounded-3xl shadow-lg">
                                     <Image
                                         src="/clients/allianz.svg"
                                         alt="Allianz"

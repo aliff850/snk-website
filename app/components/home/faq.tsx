@@ -18,7 +18,7 @@ export function FAQSection() {
         {
         question: "How accurate are your vehicle valuations?",
         answer:
-            "Our real-time valuation system covers about 80% of private vehicles in Malaysia and extends to commercial vehicles and motorcycles, ensuring reliable market values.",
+            "Our real-time valuation system covers about 99% of private vehicles in Malaysia and extends to commercial vehicles and motorcycles, ensuring reliable market values.",
         },
         {
         question: "Do you provide roadside assistance?",
@@ -53,7 +53,7 @@ export function FAQSection() {
                 <AnimateOnLoad key={faq.question} animation="fade-in-up">
                     <AccordionItemWithContext
                     value={`item-${index}`}
-                    className="bg-background rounded-2xl px-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                    className="bg-background rounded-2xl px-8  shadow-lg hover:shadow-xl transition-shadow duration-300"
                     >
                     <AccordionTrigger className="py-4 group">
                         <span className="text-lg font-semibold text-brand  group-hover:text-xl transition-all duration-300 ease-in-out">

@@ -11,7 +11,7 @@ const estimationFeatures = [
     },
     {
         title: "Integrated Industry Databases",
-        description: "Connected with MRC’s parts database and Thatcham Generic Time, ensuring accurate pricing, parts matching, and labour rate calculations"
+        description: "Integrated with industry approved vehicle parts price database, ensuring accurate pricing, parts matching, and labour rate calculations"
     },
     {
         title: "Comprehensive Vehicle Analysis",

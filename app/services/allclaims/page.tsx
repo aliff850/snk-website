@@ -6,28 +6,28 @@ import { PreviewVideo } from '@/app/components/services/products/video';
 
 const allClaimsFeatures = [
     {
-        title: "End-to-End Claims Management",
-        description: " Process, investigate, and report within one system."
+        title: "End-to-End Investigation System",
+        description: "Real-time front-end investigation reporting using mobile app"
     },
     {
         title: "Standardized Digital Reporting",
-        description: "Predefined templates ensure consistent documentation."
+        description: "Predefined templates ensure consistent documentation"
     },
     {
         title: "Fraud Detection & Risk Alerts",
-        description: "Flags recurring drivers, vehicles, or suspicious patterns."
+        description: "Flags recurring drivers, vehicles, or suspicious patterns"
     },
     {
-        title: "Investigation Tracking",
-        description: "Monitor all steps and ensure compliance."
+        title: "Technology Driven Investigation System",
+        description: "Monitors all steps of the investigation and ensures efficiency and compliance"
     },
     {
-        title: "Panel of Adjusters Integration",
-        description: "Centralized collaboration for insurers and adjusters."
+        title: "Integrated Front-End & Back-End Operations",
+        description: "Centralized collaboration for insurers and adjusters to ensure complete visibility, collaboration, and quality control"
     },
     {
-        title: "Final Comprehensive Reports",
-        description: "Professional reports with key insights and recommendations."
+        title: "System-Generated Comprehensive Final Reports",
+        description: "Professional final reports with key insights and recommendations"
     }
 ];
 
@@ -36,7 +36,7 @@ export default function AllClaimsPage() {
         <div className="min-h-svh bg-brand-element/10">
             <ProductHero
                 title="COLS Investigation System"
-                caption="End-to-end online system for motor vehicle accident investigation platform designed for insurance companies and adjusters."
+                caption="End-to-end online system for motor vehicle accident investigation designed for insurance companies and adjusters."
             />
 
             <ProductOverview
@@ -70,7 +70,7 @@ export default function AllClaimsPage() {
 
                 title="Ready to Transform Your Claims Process?"
                 caption="Join leading insurance companies who have already revolutionized their damage assessment process with AllClaims."
-                button="Request a demo today"
+                button="Contact Us For A Free Demo"
                 target=""
                 link="/contact"
             

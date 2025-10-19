@@ -109,10 +109,10 @@ export default function MudahListingsDisplay({
 
     if (!displayListings || displayListings.length === 0) {
         return (
-          <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center">
-            <Car className="w-12 h-12 mx-auto text-gray-400 mb-3" />
-            <p className="text-gray-500">No listings found</p>
-          </div>
+            <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center">
+                <Car className="w-12 h-12 mx-auto text-gray-400 mb-3" />
+                <p className="text-gray-500">No listings found</p>
+            </div>
         )
     }
 
@@ -173,7 +173,8 @@ export default function MudahListingsDisplay({
             </div>
 
             {listingsAscending.length > 0 && listingsDescending.length > 0 && (
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3 mb-4">
+
                     <div className="flex items-center gap-2">
                         <ArrowUpDown className="w-4 h-4 text-gray-500" />
                         <span className="font-medium text-gray-700">View:</span>
@@ -204,8 +205,8 @@ export default function MudahListingsDisplay({
             )}
 
             {/* Header section */}
-            <div className="flex flex-col mb-4">
-                <h6 className="font-semibold text-2xl">
+            <div className="flex flex-col text-center md:text-left mb-4">
+                <h6 className="font-semibold text-xl md:text-2xl">
                     {listingsAscending.length > 0 && listingsDescending.length > 0 ? (
                         viewMode === 'ascending' 
                             ? `Showing ${listingsAscending.length} Lowest Price Listings`

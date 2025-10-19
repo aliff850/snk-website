@@ -12,6 +12,9 @@ import { useState, useRef, useEffect } from 'react'
         { name: "Great Eastern", logo: "/clients/great-eastern.png" },
         { name: "Chubb", logo: "/clients/chubb.png" },
         { name: "Thai Pai Boon", logo: "/clients/thaipaiboon.svg" },
+        { name: "Lonpac", logo: "/clients/lonpac.png"},
+        { name: "Amanah", logo: "/clients/amanah.png"},
+        { name: "FPG", logo: "/clients/fpg.png"}
     ]
 
     // Duplicate clients array for seamless loop
@@ -36,14 +39,14 @@ import { useState, useRef, useEffect } from 'react'
     }, [inView]);
 
     return(
-        <section 
+        <section id="clients"
             className="w-full bg-gradient-to-br from-brand-element/20 via-background to-brand-element/20 px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest overflow-hidden">
             
             <div className="flex flex-col justify-center items-center gap-4 mb-4 max-w-7xl mx-auto text-center">
                 <h1 className="text-brand text-4xl md:text-6xl font-bold leading-tight">
-                    Trusted by Industry Leaders
+                    We Are Trusted by Industry Leaders
                 </h1>
-                <p className="text-brand/80 text-lg md:text-xl max-w-2xl leading-relaxed">
+                <p className="text-brand/80 text-lg md:text-xl leading-relaxed">
                     Join our satisfied clients who rely on our expertise for accurate vehicle valuations and exceptional service.
                 </p>
             </div>

@@ -36,7 +36,7 @@ const achievements: Achievement[] = [
 
 export function Achievements() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-12 font-onest">
             
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">
@@ -61,7 +61,7 @@ export function Achievements() {
                             animation="fade-in-up" 
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
+                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:border-brand hover:bg-brand-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
                                 
 
                                 <div className="relative h-48 w-full">
@@ -85,9 +85,9 @@ export function Achievements() {
                                 </div>
 
 
-                                <div className="p-8 flex-1 flex flex-col">
-                                    <h3 className="text-brand text-2xl font-bold mb-4">{achievement.title}</h3>
-                                    <p className="text-brand/80 text-base leading-relaxed flex-1">{achievement.description}</p>
+                                <div className="p-4 md:p-8 flex-1 flex flex-col">
+                                    <h3 className="text-brand text-xl md:text-2xl font-bold mb-4">{achievement.title}</h3>
+                                    <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{achievement.description}</p>
                                 </div>
                             </div>
                         </AnimateOnLoad>

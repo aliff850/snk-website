@@ -15,11 +15,11 @@ export default function Home() {
   return (
     <div className="min-h-svh">      
       <HeroSection/>
+      <ClientCarousel/>
       <Background/>
       <ReasonSection/>
-      <ValuationCTA/>
       <SolutionsSection/>
-      <ClientCarousel/>
+      <ValuationCTA/>
       <FAQSection/>
       {/* <ClientSectionNew/> */}
     </div>

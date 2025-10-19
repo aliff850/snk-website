@@ -19,7 +19,15 @@ export function ValuationCTA() {
                     </AnimateOnLoad>
                     
                     <AnimateOnLoad animation="fade-in-up" className="w-full flex justify-center">
-                        <Button variant="primary" size="md" href="/valuation" className="text-xl md:text-2xl flex gap-2">Try Now <ArrowUpRight /></Button>
+                        <Button 
+                            variant="primary" 
+                            size="md" 
+                            href="/valuation" 
+                            target="_blank"
+                            className="text-xl md:text-2xl flex gap-2"
+                        >
+                            Get Value <ArrowUpRight />
+                        </Button>
                     </AnimateOnLoad>
                     
                     
