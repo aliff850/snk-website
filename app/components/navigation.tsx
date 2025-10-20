@@ -77,7 +77,7 @@ export function Navigation() {
   }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex flex-col justify-center items-center p-4 font-onest">
+    <nav className="fixed top-0 left-0 right-0 z-50 flex flex-col justify-center items-center p-2 md:p-4 font-onest">
       <div
         className={`container md:py-3 md:px-8 transition-all duration-300 md:border md:border-brand-white/20 md:backdrop-blur-lg w-full max-w-7xl rounded-3xl ${
           isScrolled

@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export function AboutCTA() {
     return(
-        <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
+        <section className="w-full py-4 md:py-16 px-2 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-5xl mx-auto">
                 
                 <AnimateOnLoad animation="fade-in-up">
@@ -29,16 +29,16 @@ export function AboutCTA() {
                             </div> */}
                             
                             {/* Main Content */}
-                            <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold">
+                            <h2 className="text-white text-2xl md:text-4xl lg:text-5xl font-bold">
                                 Ready to Revolutionize your Vehicle Valuation Journey?
                             </h2>
                             
-                            <p className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
+                            <p className="text-white text-base md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
                                 Join leading insurance companies who have already utilized SNK's efficient and revolutionary services and offerings.
                             </p>
 
 
-                            <Button href="/services" variant="primary" className="text-2xl flex gap-2">
+                            <Button href="/services" variant="primary" className="text-lg md:text-2xl flex gap-2">
                                 Explore Our Products <ArrowUpRight className="h-8 w-8" />
                             </Button>
                             
@@ -61,7 +61,7 @@ export function AboutCTA() {
                             </div> */}
                             
                             {/* Trust Indicators */}
-                            <div className="border-t border-white/50 pt-6">
+                            <div className="border-t border-white/50 pt-4 md:pt-6">
                                 <p className="text-brand-white mb-4">Trusted by leading insurers</p>
                                 <div className="flex flex-wrap justify-center gap-8 items-center bg-brand-white/60 p-4 md:p-8 rounded-3xl shadow-lg">
                                     <Image
@@ -102,6 +102,14 @@ export function AboutCTA() {
                                         width={140}
                                         height={40}
                                         className="h-6 md:h-8 w-auto"
+                                        sizes="(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 140px"
+                                    />
+                                    <Image
+                                        src="/clients/amanah.png"
+                                        alt="Amanah Ikhtiar"
+                                        width={140}
+                                        height={60}
+                                        className="h-8 md:h-12 w-auto"
                                         sizes="(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 140px"
                                     />
                                 </div>

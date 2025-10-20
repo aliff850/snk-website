@@ -5,12 +5,12 @@ import { MdOutlineSmartphone } from "react-icons/md";
 
 export function ContactMap() {
     return(
-        <section className="w-full bg-brand py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
-            <div className="w-full max-w-7xl mx-auto">
+        <section className="w-full bg-brand py-4 md:py-16 px-2 md:px-12 lg:px-24 font-onest">
+            <div className="w-full max-w-7xl mx-auto flex flex-col gap-4 md:gap-8">
                 
                 <AnimateOnLoad animation="fade-in-up">
-                    <div className="text-center mb-12">
-                        <h2 className="text-white text-4xl md:text-5xl font-bold mb-6">Contact Information</h2>
+                    <div className="text-center flex flex-col gap-2 md:gap-4">
+                        <h2 className="text-white text-4xl md:text-5xl font-bold">Contact Information</h2>
                         <p className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
                             Get in touch with our team through any of the channels below, or visit our office.
                         </p>
@@ -18,7 +18,7 @@ export function ContactMap() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-up" delay={200}>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
                         
                         {/* Map Container */}
                         <div className="bg-white/95 backdrop-blur-sm rounded-3xl border border-white/20 shadow-lg">
@@ -39,10 +39,9 @@ export function ContactMap() {
                         </div>
 
                         {/* Location Details */}
-                        <div className="space-y-8">
-                        
+                        <div className="flex flex-col gap-4 md:gap-8">
 
-                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg">
+                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-4 md:p-8 border border-white/20 shadow-lg">
                                    
                                 <div className="flex flex-col gap-4">
 
@@ -72,7 +71,7 @@ export function ContactMap() {
 
                             </div>
 
-                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg">
+                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-4 md:p-8 border border-white/20 shadow-lg">
                                     
                                 <div className="flex flex-col gap-4">
                                     <div className="text-2xl flex items-center space-x-3 text-brand">

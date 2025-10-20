@@ -36,11 +36,11 @@ const achievements: Achievement[] = [
 
 export function Achievements() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-2 md:px-12 lg:px-24 py-4 md:py-16 flex flex-col gap-4 md:gap-12 font-onest">
             
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">
-                <div className="flex flex-col text-center gap-4 max-w-4xl mx-auto">
+                <div className="text-center max-w-4xl mx-auto">
                     <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Our Achievements</h1>
                     {/* <p className="text-brand text-lg md:text-xl px-4">
                         Milestones that define our journey as a leading insurtech innovator
@@ -53,8 +53,8 @@ export function Achievements() {
             </AnimateOnLoad>
 
             {/* Achievements Grid */}
-            <div className="w-full max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="mt-4 md:mt-0 w-full max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                     {achievements.map((achievement, index) => (
                         <AnimateOnLoad 
                             key={index}
@@ -85,8 +85,8 @@ export function Achievements() {
                                 </div>
 
 
-                                <div className="p-4 md:p-8 flex-1 flex flex-col">
-                                    <h3 className="text-brand text-xl md:text-2xl font-bold mb-4">{achievement.title}</h3>
+                                <div className="p-4 md:p-8 flex-1 flex flex-col gap-2">
+                                    <h3 className="text-brand text-xl md:text-2xl font-bold">{achievement.title}</h3>
                                     <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{achievement.description}</p>
                                 </div>
                             </div>

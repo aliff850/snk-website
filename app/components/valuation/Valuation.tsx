@@ -344,7 +344,7 @@ export function ValuationLayout() {
     // }
 
     return(
-        <div className="w-full bg-black/50 px-2 md:px-12 lg:px-24 py-8 md:py-16 pt-30 relative">
+        <div className="w-full bg-black/50 px-2 md:px-12 lg:px-24 pb-8 md:pb-16 pt-32 relative">
             {/* Help Button */}
             <button
                 onClick={() => setIsHelpOpen(true)}
@@ -375,7 +375,7 @@ export function ValuationLayout() {
             
             <div className="max-w-6xl mx-auto flex flex-col gap-8 md:gap-12">
 
-                <div className="flex flex-col items-center gap-4 md:gap-6">
+                <div id="main" className="flex flex-col items-center gap-4 md:gap-6">
                     <div className="p-8 rounded-full bg-brand-element w-32 h-32">
                         <FaCar className="w-16 h-16 text-brand-white/80"/>
                     </div>
@@ -389,7 +389,7 @@ export function ValuationLayout() {
 
                 <div className="grid grid-cols-1 gap-8 md:gap-12">
 
-                    <div id="main" className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
+                    <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
         
                         <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
                             
@@ -683,7 +683,7 @@ export function ValuationLayout() {
 
 
                 <div className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/40 p-4 md:p-6">
-                    <div className="p-6 w-full flex flex-col gap-4 justify-center items-center border border-dashed border-foreground/20 rounded-2xl">
+                    <div className="md:p-6 w-full flex flex-col gap-4 justify-center items-center md:border md:border-dashed md:border-foreground/20 rounded-2xl">
                         <div className="p-4 rounded-2xl md:rounded-3xl bg-brand-element/10">
                             <FaCarOn className="w-16 h-16 text-brand"/>
                         </div>

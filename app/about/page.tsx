@@ -6,7 +6,7 @@ import { AboutCTA } from "../components/about/cta"
 
 export default function About() {
     return(
-        <div className="min-h-svh bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40">
+        <div className="min-h-svh bg-brand-element/10">
             <AboutHero />
             <History />
             <Values />

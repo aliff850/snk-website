@@ -5,7 +5,7 @@ import { Button } from "../ui/button"
 export function Background() {
     return (
 
-        <section id="background" className="w-full bg-brand flex flex-col justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest text-white snap-proximity">
+        <section id="background" className="w-full bg-brand flex flex-col justify-center items-center px-2 py-4 md:px-12 lg:px-24 md:py-16 font-onest text-white snap-proximity">
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-7xl">
 
@@ -40,7 +40,7 @@ export function Background() {
                 
 
                 <AnimateOnLoad animation="fade-in-left" className="h-full">
-                    <div className="w-full h-full flex flex-col gap-4 md:gap-8 justify-center">
+                    <div className="w-full h-full flex flex-col gap-4 md:gap-8 justify-center text-center md:text-left">
                         <h1 className="text-4xl lg:text-6xl font-bold">Who Are We?</h1>
 
                         {/* <p className="w-full">We are a pioneer in Malaysia’s Insurtech industry, with over 20 years of experience delivering innovative solutions for motor vehicle valuation and insurance claims. Since 2002, we have grown from providing valuation services to developing advanced digital platforms that connect insurers, adjusters, workshops, and customers in one seamless ecosystem. Our mission is to simplify and automate insurance processes through technology—making claims faster, valuations more accurate, and assistance more accessible to the public.</p> */}
@@ -50,7 +50,7 @@ export function Background() {
                         
                         <p className="w-full">We are registered with MDEC, and recognized by Bank Negara Malaysia and the Insurance Association of Malaysia (PIAM), and trusted by leading insurers in Malaysia and across Asia.</p>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="p-4 bg-brand-white/90 shadow-lg rounded-2xl hover:scale-105 transition-transform duration-300">
                                 <div className="relative w-full h-16">
                                     <Image src="/images/bnm.png" alt="BNM" width={160} height={64} className="h-full w-auto object-contain mx-auto" />
@@ -66,7 +66,6 @@ export function Background() {
                                     <Image src="/images/mdec.png" alt="MDEC" width={160} height={64} className="h-full w-auto object-contain mx-auto" />
                                 </div>
                             </div>
-
                         </div>
 
                         <Button href="/about" className="text-xl">

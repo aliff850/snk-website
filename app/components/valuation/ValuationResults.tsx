@@ -20,7 +20,7 @@ export function ValuationResults({ link, results, error, loading, onClearResults
 
             <div className="p-4 md:p-6 border-b border-foreground/20 flex items-center justify-between">
 
-                <h4 className="text-2xl md:text-3xl text-brand font-bold">Market Listings</h4>
+                <h4 className="text-2xl md:text-3xl text-brand font-bold">Valuation Results</h4>
 
                 <div className="flex gap-3">
                     <Button 
