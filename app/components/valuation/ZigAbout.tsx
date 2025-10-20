@@ -64,7 +64,7 @@ function formatLabel(str: string): string {
 
 function AboutSection({ about }: { about: AboutData }) {
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-6 border border-blue-200">
+    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl md:rounded-3xl p-4 md:p-6 border border-blue-200">
       <div className="flex items-start gap-3 mb-4">
         <Info className="w-6 h-6 text-blue-600 mt-1" />
         <div className="flex-1">
@@ -125,7 +125,7 @@ function PricingSection({ pricing }: { pricing: PricingData[] }) {
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {pricing.map((variant, idx) => (
-          <div key={idx} className="bg-brand-white rounded-3xl border border-foreground/20 overflow-hidden hover:shadow-lg transition-shadow">
+          <div key={idx} className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/20 overflow-hidden hover:shadow-lg transition-shadow">
             <div className="bg-gradient-to-r from-green-500 to-green-600 p-4">
               <h4 className="font-bold text-white">{variant.Variant_Name}</h4>
               <p className="text-2xl font-bold text-white mt-1">{variant.On_Road_Price}</p>
@@ -168,7 +168,7 @@ function SpecificationsSection({ specifications }: { specifications: SpecsData[]
       </h3>
       
       {specifications.map((variant, idx) => (
-        <div key={idx} className="bg-brand-white rounded-3xl border border-foreground/20 overflow-hidden">
+        <div key={idx} className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/20 overflow-hidden">
           <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4">
             <h4 className="font-bold text-white text-lg">{variant.Variant_Name}</h4>
             <div className="flex flex-wrap gap-2 mt-2">
@@ -216,7 +216,7 @@ function FeaturesSection({ features }: { features: FeaturesData[] }) {
       </h3>
       
       {features.map((variant, idx) => (
-        <div key={idx} className="bg-brand-white rounded-3xl border border-foreground/20 overflow-hidden">
+        <div key={idx} className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/20 overflow-hidden">
           <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-4">
             <h4 className="font-bold text-white text-lg">{variant.Variant_Name}</h4>
             <div className="flex flex-wrap gap-2 mt-2">
