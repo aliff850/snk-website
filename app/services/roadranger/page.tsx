@@ -4,6 +4,10 @@ import { ProductFeatures } from '@/app/components/services/products/features';
 import { ProductCTA } from '@/app/components/services/products/cta';
 import { PreviewVideo } from '@/app/components/services/products/video';
 
+export const metadata = {
+    title: "Road Ranger",
+};
+
 const roadRangerFeatures = [
     {
         title: "Multi-Channel Connectivity",

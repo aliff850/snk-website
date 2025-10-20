@@ -8,6 +8,10 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
+export const metadata = {
+  title: "Registration",
+};
+
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");

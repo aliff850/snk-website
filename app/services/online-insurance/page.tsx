@@ -4,6 +4,10 @@ import { ProductFeatures } from '@/app/components/services/products/features';
 import { ProductCTA } from '@/app/components/services/products/cta';
 import { PreviewVideo } from '@/app/components/services/products/video';
 
+export const metadata = {
+    title: "Online Digital Insurance Platform",
+};
+
 const motorPalFeatures = [
     {
         title: "End-to-End Digital Insurance Journey",

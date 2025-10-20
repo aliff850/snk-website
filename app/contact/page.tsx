@@ -3,6 +3,10 @@ import { ContactHero } from '@/components/contact/hero';
 // import { ContactInfo } from '@/components/contact/contactInfo';
 import { ContactMap } from '@/components/contact/contactMap';
 
+export const metadata = {
+    title: "Contact Us",
+};
+
 export default function Contact() {
     return(
         <div className="min-h-svh">

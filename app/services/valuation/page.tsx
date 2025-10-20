@@ -3,7 +3,11 @@ import { ProductOverview } from '@/app/components/services/products/overview';
 // import { ProductOverviewAlt } from "@/app/components/services/products/overviewAlt";
 import { ProductFeatures } from "@/app/components/services/products/features";
 import { ProductCTA } from "@/app/components/services/products/cta";
-import { PreviewVideo } from "@/app/components/services/products/video";
+// import { PreviewVideo } from "@/app/components/services/products/video";
+
+export const metadata = {
+  title: "SNK Real-Time Valuation Inquiry",
+};
 
 const valuationFeatures = [
   {
