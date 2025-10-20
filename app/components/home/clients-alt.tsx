@@ -46,7 +46,7 @@ import { useState, useRef, useEffect } from 'react'
                 <h1 className="text-brand text-4xl md:text-6xl font-bold leading-tight">
                     We Are Trusted by Industry Leaders
                 </h1>
-                <p className="text-brand/80 text-lg md:text-xl leading-relaxed">
+                <p className="text-brand/80 md:text-xl leading-relaxed">
                     Join our satisfied clients who rely on our expertise for accurate vehicle valuations and exceptional service.
                 </p>
             </div>

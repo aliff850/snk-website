@@ -16,7 +16,7 @@ export function ProductCTA({title,caption,button,link,target}:ProductCTAProps) {
             <div className="w-full max-w-7xl mx-auto">
                 
                 <AnimateOnLoad animation="fade-in-up">
-                    <div className="bg-gradient-to-r from-brand to-brand-hover rounded-3xl p-6 md:p-12 text-center shadow-lg relative overflow-hidden">
+                    <div className="bg-gradient-to-r from-brand to-brand-hover rounded-2xl md:rounded-3xl p-6 md:p-12 text-center shadow-lg relative overflow-hidden">
                         
                         {/* Background Pattern */}
                         <div className="absolute inset-0 opacity-10">

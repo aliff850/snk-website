@@ -36,7 +36,7 @@ const achievements: Achievement[] = [
 
 export function Achievements() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-2 md:px-12 lg:px-24 py-4 md:py-16 flex flex-col gap-4 md:gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-2 md:px-12 lg:px-24 py-4 md:py-16 flex flex-col gap-4 md:gap-12 font-onest overflow-x-hidden">
             
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">
@@ -53,7 +53,7 @@ export function Achievements() {
             </AnimateOnLoad>
 
             {/* Achievements Grid */}
-            <div className="mt-4 md:mt-0 w-full max-w-7xl mx-auto">
+            <div className="mt-4 md:mt-0 w-full max-w-7xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                     {achievements.map((achievement, index) => (
                         <AnimateOnLoad 
@@ -61,7 +61,7 @@ export function Achievements() {
                             animation="fade-in-up" 
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:border-brand hover:bg-brand-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
+                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl overflow-hidden border border-brand/20 hover:border-brand hover:bg-brand-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col">
                                 
 
                                 <div className="relative h-48 w-full">

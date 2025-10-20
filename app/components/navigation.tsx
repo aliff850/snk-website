@@ -147,7 +147,7 @@ export function Navigation() {
           {/* Mobile menu and Login button */}
           <div className="w-full flex items-center gap-3 md:justify-end">
             {/* Mobile Navigation Bar */}
-            <div className="md:hidden flex items-center justify-between w-full px-6 py-3 rounded-2xl bg-brand-white shadow-lg">
+            <div className="md:hidden flex items-center justify-between w-full px-4 py-2 rounded-2xl bg-brand-white shadow-lg">
               <Link
                 href="/"
                 className="flex items-center justify-center"
@@ -227,8 +227,8 @@ export function Navigation() {
           }`}
         >
           <div
-            className={`flex flex-col gap-4 p-8 ${
-              isMenuOpen ? "py-8" : "py-8"
+            className={`flex flex-col gap-4 p-4 ${
+              isMenuOpen ? "py-4" : "py-4"
             }`}
           >
             {/* <Link href="/" className="flex items-center justify-center md:hidden">

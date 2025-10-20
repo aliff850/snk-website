@@ -8,7 +8,7 @@ import { LucideAArrowDown } from 'lucide-react'
 
 export function SolutionsGrid() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-2 md:px-24 py-4 md:py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-2 md:px-24 py-4 md:py-16 flex flex-col  gap-4 md:gap-12 font-onest">
 
             <ValuationBanner/>
 
@@ -20,7 +20,7 @@ export function SolutionsGrid() {
                             animation="fade-in-up" 
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:bg-brand-white hover:border-brand hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col text-center md:text-left group">
+                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl overflow-hidden border border-brand/20 hover:bg-brand-white hover:border-brand hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col text-center md:text-left group">
                                 
                                 {/* Image */}
                                 <div className="relative h-48 w-full">
@@ -68,7 +68,7 @@ export function SolutionsGrid() {
 
             <AnimateOnLoad animation="fade-in-up" delay={400}>
                 <div className="w-full mx-auto text-center">
-                    <div className="bg-brand-white/95 rounded-3xl px-4 md:px-16 py-4 md:py-8 border border-brand/20 shadow-lg">
+                    <div className="bg-brand-white/95 rounded-2xl md:rounded-3xl px-4 md:px-16 py-4 md:py-8 border border-brand/20 shadow-lg">
                         <h3 className="text-brand text-2xl md:text-3xl font-bold mb-4">Ready to Transform Your Insurance Operations?</h3>
                         <p className="text-brand md:text-lg mb-6">
                             Contact us today to learn how our solutions can streamline your processes and enhance customer experiences.

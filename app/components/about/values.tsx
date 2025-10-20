@@ -57,7 +57,7 @@ export function Values() {
             <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 
                 <AnimateOnLoad animation="fade-in-left" delay={200}>
-                    <div className="bg-brand-white rounded-3xl p-6 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
@@ -77,7 +77,7 @@ export function Values() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-right" delay={300}>
-                    <div className="bg-brand-white rounded-3xl p-6 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}

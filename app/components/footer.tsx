@@ -3,14 +3,14 @@ import Link from "next/link";
 export function Footer() {
 
     return(
-    <footer className="bg-brand text-brand-foreground font-onest border-t border-t-brand-element px-2 py-4 md:px-12 lg:px-24 md:py-16">
+    <footer className="bg-brand text-brand-foreground font-onest border-t border-t-brand-element px-4 py-8 md:px-12 lg:px-24 md:py-16">
         <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12">
                 
                 {/* About Us Section */}
                 <div className="lg:col-span-2">
-                    <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-6 text-white">About SNK</h3>
-                    <p className="text-brand-foreground text-justify leading-relaxed mb-6 max-w-lg">
+                    <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-6 text-center md:text-left text-white">About SNK</h3>
+                    <p className="text-brand-foreground text-center md:text-justify leading-relaxed mb-6 max-w-lg">
                         We are Malaysia&apos;s leading Insurtech provider with 25 years of experience in motor vehicle valuation and insurance claims solutions. Trusted by top insurers, we deliver innovative digital platforms that make insurance simple, fast, and accessible for everyone.
                     </p>
                     <div className="w-full md:w-fit flex justify-center space-x-2 md:space-x-4">

@@ -12,7 +12,7 @@ const valuationFeatures = [
       "Get instant, up-to-date vehicle valuations right at your fingertips.",
   },
   {
-    title: "Coverage of Popular Models",
+    title: "Coverage of All Models",
     description:
       "Covers over 50 major makes representing 99% of vehicles on the road.",
   },
