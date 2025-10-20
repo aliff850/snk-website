@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
+import { ChevronRight } from "lucide-react";
 
 export function HeroSection() {
 
@@ -23,9 +24,9 @@ export function HeroSection() {
                         </p>
                         
 
-                        <Button variant="secondary" size="base" href="#clients" className="text-xl md:text-2xl">
-                            Explore
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+                        <Button variant="secondary" size="base" href="#clients" className="text-xl md:text-2xl flex gap-2">
+                            Find Out More
+                            <ChevronRight className="w-6 h-6" />
                         </Button>
                         
                         {/* <button className="px-16 py-2 font-bold rounded-xl bg-brand text-white hover:scale-105 transition-all duration-300">

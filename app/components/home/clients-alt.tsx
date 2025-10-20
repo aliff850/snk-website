@@ -40,9 +40,9 @@ import { useState, useRef, useEffect } from 'react'
 
     return(
         <section id="clients"
-            className="w-full bg-gradient-to-br from-brand-element/20 via-background to-brand-element/20 px-2 py-4 md:px-12 lg:px-24 md:py-16 font-onest overflow-hidden">
+            className="w-full bg-brand/10 px-2 py-4 md:px-12 lg:px-24 md:py-16 font-onest overflow-hidden">
             
-            <div className="flex flex-col justify-center items-center gap-4 mb-4 max-w-7xl mx-auto text-center">
+            <div className="flex flex-col justify-center items-center gap-2 md:gap-4 max-w-7xl mx-auto text-center">
                 <h1 className="text-brand text-4xl md:text-6xl font-bold leading-tight">
                     We Are Trusted by Industry Leaders
                 </h1>
@@ -74,7 +74,6 @@ import { useState, useRef, useEffect } from 'react'
                     ))}
                 </div>
             </div>
-
         </section>
     )
 }
