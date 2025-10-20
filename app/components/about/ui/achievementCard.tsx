@@ -5,14 +5,13 @@ export function AchievementCard() {
 
     return(
 
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4 md:gap-8">
 
             {/* MDEC certification section */}
-            <div className="text-center w-full flex flex-col gap-8 justify-center items-center">
+            <div className="text-center w-full flex flex-col gap-4 md:gap-8 items-center">
                 
-                <AnimateOnLoad animation="fade-in">
-
-                    <div className="bg-brand-white rounded-3xl w-full max-w-sm mx-auto p-10 h-48 border border-brand/20 shadow-lg hover:border-brand hover:scale-105 transition-all duration-300">
+                <AnimateOnLoad animation="fade-in" className="w-full flex justify-center">
+                    <div className="bg-brand-white rounded-3xl w-full md:w-fit p-8 md:p-10 h-48 border border-brand/20 shadow-lg hover:border-brand hover:scale-105 transition-all duration-300">
                         <div className="flex flex-col items-center justify-center h-full">
                             <Image 
                                 src="/images/mdec.png" 
@@ -36,8 +35,8 @@ export function AchievementCard() {
             {/* BNM and PIAM approval */}
             <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
 
-                <AnimateOnLoad animation="fade-in-left" delay={100}>
-                    <div className="bg-brand-white rounded-3xl w-full max-w-sm p-10 h-48 border border-brand/20 hover:border-brand shadow-lg hover:scale-105 transition-all duration-300 group">
+                <AnimateOnLoad animation="fade-in-left" delay={100} className="w-full flex justify-end">
+                    <div className="bg-brand-white rounded-3xl w-full md:max-w-sm p-8 md:p-10 h-48 border border-brand/20 hover:border-brand shadow-lg hover:scale-105 transition-all duration-300 group">
                         <div className="flex flex-col items-center justify-center h-full transition-transform duration-300">
                             <Image
                                 src="/images/bnm.png"
@@ -47,16 +46,12 @@ export function AchievementCard() {
                                 className="object-contain"
                             />
                         </div>
-                        {/* <div>
-                            <h3 className="text-brand text-xl font-bold">Bank Negara Malaysia</h3>
-                            <p className="text-brand">Regulatory Approval</p>
-                        </div> */}
+
                     </div>
                 </AnimateOnLoad>
 
-
-                <AnimateOnLoad animation="fade-in-right" delay={200}>
-                    <div className="bg-brand-white rounded-3xl w-full max-w-sm p-10 h-48 border border-brand/20 hover:border-brand shadow-lg hover:scale-105 transition-all duration-300 group">
+                <AnimateOnLoad animation="fade-in-right" delay={200} className="w-full flex justify-start">
+                    <div className="bg-brand-white rounded-3xl w-full md:max-w-sm p-8 md:p-10 h-48 border border-brand/20 hover:border-brand shadow-lg hover:scale-105 transition-all duration-300 group">
                         <div className="flex flex-col items-center justify-center h-full transition-transform duration-300">
                             <Image
                                 src="/images/piam.png"
@@ -66,16 +61,13 @@ export function AchievementCard() {
                                 className="object-contain"
                             />
                         </div>
-                        {/* <div>
-                            <h3 className="text-brand text-xl font-bold">PIAM</h3>
-                            <p className="text-brand">Insurance Association</p>
-                        </div> */}
+
                     </div>
                 </AnimateOnLoad>
 
             </div>
 
-            <p className="text-brand text-center text-lg md:text-xl px-4 font-bold">
+            <p className="text-brand text-center text-base md:text-xl font-bold">
                 Recognized by Bank Negara Malaysia and the Insurance Association of Malaysia to provide accident vehicle damage estimation.
             </p>
             

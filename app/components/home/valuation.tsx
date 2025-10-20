@@ -8,7 +8,7 @@ export function ValuationCTA() {
 
 
         <section className="bg-[url('/images/g20_2.jpg')] bg-cover bg-center bg-fixed font-onest text-brand-white">
-            <div className="bg-black/70 w-full h-full px-4 md:px-12 lg:px-24 py-8 md:py-24">
+            <div className="bg-black/70 w-full h-full px-2 md:px-12 lg:px-24 py-4 md:py-24">
 
                 <div className="w-full mx-auto flex flex-col gap-8 items-center max-w-7xl">
                     <AnimateOnLoad animation="fade-in-up">

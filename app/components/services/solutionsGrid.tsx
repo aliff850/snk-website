@@ -8,19 +8,19 @@ import { LucideAArrowDown } from 'lucide-react'
 
 export function SolutionsGrid() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-24 py-8 md:py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-2 md:px-24 py-4 md:py-16 flex flex-col gap-12 font-onest">
 
             <ValuationBanner/>
 
             <div className="w-full max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                     {solutions.map((solution, index) => (
                         <AnimateOnLoad 
                             key={index}
                             animation="fade-in-up" 
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:bg-brand-white hover:border-brand hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col group">
+                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-3xl overflow-hidden border border-brand/20 hover:bg-brand-white hover:border-brand hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col text-center md:text-left group">
                                 
                                 {/* Image */}
                                 <div className="relative h-48 w-full">
@@ -36,9 +36,9 @@ export function SolutionsGrid() {
                                 </div>
 
                                 {/* Content */}
-                                <div className="p-6 flex-1 flex flex-col">
-                                    <h3 className="text-brand text-xl md:text-2xl font-bold mb-3">{solution.title}</h3>
-                                    <p className="text-brand/80 text-sm md:text-base leading-relaxed mb-4 flex-1">{solution.description}</p>
+                                <div className="p-4 md:p-6 flex-1 flex flex-col gap-2 md:gap-4">
+                                    <h3 className="text-brand text-xl md:text-2xl font-bold">{solution.title}</h3>
+                                    <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{solution.description}</p>
                                     
                                     {/* Features
                                     <div className="mb-4">
@@ -55,7 +55,7 @@ export function SolutionsGrid() {
 
                                     {/* Learn More Button */}
                                     {solution.learnMoreUrl && (
-                                        <Button variant="secondary" href={solution.learnMoreUrl} className="md:text-xl flex items-center gap-2">
+                                        <Button variant="secondary" size="sm" href={solution.learnMoreUrl} className="md:text-xl flex items-center gap-2">
                                             Learn More <ArrowUpRight />
                                         </Button>
                                     )}
@@ -68,13 +68,13 @@ export function SolutionsGrid() {
 
             <AnimateOnLoad animation="fade-in-up" delay={400}>
                 <div className="w-full mx-auto text-center">
-                    <div className="bg-brand-white/95 rounded-3xl px-16 py-8 border border-brand/20 shadow-lg">
+                    <div className="bg-brand-white/95 rounded-3xl px-4 md:px-16 py-4 md:py-8 border border-brand/20 shadow-lg">
                         <h3 className="text-brand text-2xl md:text-3xl font-bold mb-4">Ready to Transform Your Insurance Operations?</h3>
-                        <p className="text-brand text-lg mb-6">
+                        <p className="text-brand md:text-lg mb-6">
                             Contact us today to learn how our solutions can streamline your processes and enhance customer experiences.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Button size="md" variant="secondary" href="/contact" className="flex text-xl gap-2">
+                            <Button size="md" variant="secondary" href="/contact" className="flex md:text-xl gap-2">
                                 Get Started <ArrowRight/>
                             </Button>
                         </div>

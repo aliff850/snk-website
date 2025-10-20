@@ -40,13 +40,13 @@ const objectives: Objective[] = [
 
 export function Values() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-2 md:px-12 lg:px-24 py-4 md:py-16 flex flex-col gap-4 md:gap-12 font-onest">
             
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">
                 <div className="flex flex-col text-center gap-4 max-w-4xl mx-auto">
                     <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Our Values</h1>
-                    <p className="text-brand text-lg md:text-xl px-4">
+                    <p className="text-brand text-lg md:text-xl">
                         The principles that guide our mission to transform the insurtech industry
                     </p>
                 </div>
@@ -54,10 +54,10 @@ export function Values() {
 
 
             {/* VISION AND MISSION CONTAINER */}
-            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 
                 <AnimateOnLoad animation="fade-in-left" delay={200}>
-                    <div className="bg-brand-white rounded-3xl p-8 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
+                    <div className="bg-brand-white rounded-3xl p-6 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
@@ -77,7 +77,7 @@ export function Values() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-right" delay={300}>
-                    <div className="bg-brand-white rounded-3xl p-8 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
+                    <div className="bg-brand-white rounded-3xl p-6 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
@@ -119,21 +119,21 @@ export function Values() {
             {/* Objectives Container */}
             <AnimateOnLoad animation="fade-in-up" delay={400}>
                 <div className="w-full max-w-7xl mx-auto">
-                    <div className="text-center mb-12">
-                        <h2 className="text-brand text-3xl md:text-4xl font-bold mb-4">Our Objectives</h2>
-                        <p className="text-brand text-lg md:text-xl">
+                    <div className="text-center my-4 md:my-12 flex flex-col gap-2">
+                        <h2 className="text-brand text-3xl md:text-4xl font-bold">Our Objectives</h2>
+                        <p className="text-brand text-base md:text-xl">
                             Strategic goals that drive our commitment to excellence
                         </p>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         {objectives.map((objective, index) => (
                             <AnimateOnLoad 
                                 key={index}
                                 animation="fade-in-up" 
                                 delay={(index * 100 + 500) as 0 | 100 | 200 | 300 | 400}
                             >
-                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full">
+                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full">
                                     <div className="text-center">
                                         <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-element rounded-full mb-4 text-white">
                                             {objective.icon}

@@ -52,12 +52,12 @@ const timelineEvents: TimelineEvent[] = [
 
 export function History() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-8 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-2 md:px-12 lg:px-24 py-4 md:py-16 flex flex-col gap-4 md:gap-8 font-onest">
             
             <AnimateOnLoad animation="fade-in-up">
-                <div className="flex flex-col text-center gap-4 max-w-4xl mx-auto">
+                <div className="flex flex-col text-center gap-2 md:gap-4 max-w-4xl">
                     <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Our Journey</h1>
-                    <p className="text-brand text-lg md:text-xl px-4">
+                    <p className="text-brand text-base md:text-xl">
                         Over 25 years of innovation, growth, and transformation in the insurtech industry.
                     </p>
                 </div>
@@ -109,9 +109,9 @@ function TimelineEventComponent({ event, index }: TimelineEventProps) {
                         animation={isLeft ? "fade-in-left" : "fade-in-right"} 
                         delay={animationDelay}
                     >
-                        <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-6 border border-brand/20 hover:bg-brand-white hover:border-brand transition-all duration-300 ease-in-out shadow-lg">
-                            <div className="text-brand text-4xl font-bold mb-2">{event.year}</div>
-                            <h3 className="text-brand text-xl md:text-2xl font-semibold mb-3">{event.title}</h3>
+                        <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-brand/20 hover:bg-brand-white hover:border-brand transition-all duration-300 ease-in-out shadow-lg flex flex-col gap-1 md:gap-2">
+                            <div className="text-brand text-4xl font-bold">{event.year}</div>
+                            <h3 className="text-brand text-xl md:text-2xl font-semibold">{event.title}</h3>
                             <p className="text-brand/80 text-sm md:text-base leading-relaxed">{event.description}</p>
                         </div>
                     </AnimateOnLoad>

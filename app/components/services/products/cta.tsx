@@ -12,11 +12,11 @@ interface ProductCTAProps {
 
 export function ProductCTA({title,caption,button,link,target}:ProductCTAProps) {
     return(
-        <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
+        <section className="w-full py-8 md:py-16 px-2 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl mx-auto">
                 
                 <AnimateOnLoad animation="fade-in-up">
-                    <div className="bg-gradient-to-r from-brand to-brand-hover rounded-3xl p-8 md:p-12 text-center shadow-lg relative overflow-hidden">
+                    <div className="bg-gradient-to-r from-brand to-brand-hover rounded-3xl p-6 md:p-12 text-center shadow-lg relative overflow-hidden">
                         
                         {/* Background Pattern */}
                         <div className="absolute inset-0 opacity-10">
@@ -37,7 +37,7 @@ export function ProductCTA({title,caption,button,link,target}:ProductCTAProps) {
                             </p>
 
 
-                            <Button href={link} target={target} variant="primary" className="flex gap-2 text-2xl">
+                            <Button href={link} target={target} variant="primary" className="flex gap-1 md:gap-2 text-base font-semibold md:font-bold md:text-2xl">
                                 {button} <ArrowUpRight/>
                             </Button>
                             

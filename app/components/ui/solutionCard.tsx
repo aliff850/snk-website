@@ -25,8 +25,8 @@ export function SolutionCard({
             
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             
-            <div className="absolute bottom-0 left-0 right-0 p-6 group">
-                <h2 className="text-2xl font-bold text-white drop-shadow-lg group-hover:opacity-0 transition-all duration-300">
+            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 group">
+                <h2 className="text-center md:text-left text-2xl font-bold text-white drop-shadow-lg group-hover:opacity-0 transition-all duration-300">
                     {title}
                 </h2>
             </div>

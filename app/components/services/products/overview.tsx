@@ -12,19 +12,19 @@ interface ProductOverviewProps{
 
 export function ProductOverview({ title, overview, image, alt, galleryImages }:ProductOverviewProps) {
     return(
-        <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest relative overflow-hidden">
+        <section className="w-full py-4 md:py-16 px-2 md:px-12 lg:px-24 font-onest relative overflow-hidden">
             {/* Ambient Background Elements */}
-            <div className="absolute inset-0 -z-10">
+            {/* <div className="absolute inset-0 -z-10">
                 <div className="absolute top-20 right-10 w-96 h-96 bg-brand/5 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-20 left-10 w-80 h-80 bg-brand-element/5 rounded-full blur-3xl"></div>
-            </div>
+            </div> */}
 
             <div className="w-full h-full max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 gap-12 justify-center items-stretch h-full">
+                <div className="grid grid-cols-1 gap-4 md:gap-16 justify-center items-stretch h-full">
                     
                     {/* Content Section */}
                     <AnimateOnLoad animation="fade-in-up">
-                        <div className="flex flex-col gap-8 text-center max-w-5xl mx-auto">
+                        <div className="flex flex-col gap-4 md:gap-8 text-center max-w-5xl mx-auto">
                             {/* Decorative Element */}
                             <div className="inline-flex items-center justify-center gap-2 text-brand-element font-semibold text-sm tracking-wider mx-auto">
                                 <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-brand-element to-transparent"></div>
@@ -48,7 +48,7 @@ export function ProductOverview({ title, overview, image, alt, galleryImages }:P
 
                     {/* Visual Section */}
                     <AnimateOnLoad animation="fade-in-up" delay={200}>
-                        <div className="relative h-[380px] md:h-[650px]">
+                        <div className="relative h-[240px] md:h-[650px]">
 
                             {/* Main Image/Gallery Container */}
                             <div className="relative h-full rounded-3xl overflow-hidden border border-brand shadow-lg group">

@@ -65,12 +65,12 @@ const formFields: FormField[] = [
 
 export function ContactForm() {
     return(
-        <section className="w-full bg-brand py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
-            <div className="w-full max-w-7xl mx-auto">
+        <section className="w-full bg-brand py-4 md:py-16 px-2 md:px-12 lg:px-24 font-onest">
+            <div className="w-full max-w-7xl mx-auto flex flex-col gap-4 md:gap-8">
                 
                 <AnimateOnLoad animation="fade-in-up">
-                    <div className="text-center mb-12">
-                        <h2 className="text-white text-4xl md:text-5xl font-bold mb-6">Send Us a Message</h2>
+                    <div className="text-center flex flex-col gap-2 md:gap-4">
+                        <h2 className="text-white text-4xl md:text-5xl font-bold">Send Us a Message</h2>
                         <p className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
                             Fill out the form below and our team will get back to you within 24 hours
                         </p>
@@ -79,7 +79,7 @@ export function ContactForm() {
 
                 <AnimateOnLoad animation="fade-in-up" delay={200}>
                     <div className="max-w-4xl mx-auto">
-                        <div className="bg-brand-white/95 backdrop-blur-sm rounded-3xl p-4 md:p-12 border border-brand-white/20 shadow-lg">
+                        <div className="bg-brand-white/95 backdrop-blur-sm rounded-xl md:rounded-3xl p-2 md:p-12 border border-brand-white/20 shadow-lg">
                             <form className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {formFields.slice(0, 4).map((field, index) => (

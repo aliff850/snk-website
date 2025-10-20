@@ -217,30 +217,6 @@ export default function MudahListingsDisplay({
                 </h6>
                 <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
             </div>
-
-
-
-            {/* Sort by price dropdown -- CHANGE THIS SO THAT IT SWITCHES BETWEEN THE TWO DIFFERENT SETS OF LISTINGS (one ascending and one descending) */}
-
-            {/* <div className="flex items-center gap-3 mb-4">
-                <div className="flex items-center gap-2">
-                    <ArrowUpDown className="w-4 h-4 text-gray-500" />
-                    <span className="font-medium text-gray-700">Sort by price:</span>
-                </div>
-                <select 
-                    value={sortOrder}
-                    onChange={(e) => sortListings(e.target.value as 'asc' | 'desc' | 'none')}
-                    className="px-3 py-1.5 border border-gray-300 rounded-lg outline-none focus:border-brand transition-colors"
-                >
-                    <option value="none">Original order</option>
-                    <option value="asc">Price: Low to High</option>
-                    <option value="desc">Price: High to Low</option>
-                </select>
-            </div> */}
-
-            {/* Options to switch between different listing views */}
-
-            
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {displayListings.map((listing) => (
