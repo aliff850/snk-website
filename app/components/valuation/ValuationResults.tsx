@@ -2,7 +2,8 @@
 
 import React from "react"
 import { Button } from "../ui/button"
-import { TiDelete } from "react-icons/ti";
+import { Ban } from "lucide-react"
+// import { TiDelete } from "react-icons/ti";
 import MudahListingsDisplay from "./MudahListingsDisplay"
 
 interface ValuationResultsProps {
@@ -18,19 +19,19 @@ export function ValuationResults({ link, results, error, loading, onClearResults
 
         <div className="rounded-2xl md:rounded-3xl border border-foreground/20 shadow-sm bg-brand-white">
 
-            <div className="p-4 md:p-6 border-b border-foreground/20 flex flex-col gap-2 md:flex-row items-center md:justify-between">
+            <div className="p-4 md:p-6 border-b border-foreground/20 flex items-center justify-between">
                 <h4 className="text-2xl md:text-3xl text-brand font-bold">Valuation Results</h4>
 
                 <div className="flex gap-3">
                     <Button 
                         onClick={onClearResults} 
                         variant="secondary"
-                        size="sm"
+                        size="sm2"
                         className="md:text-xl flex gap-2"
                         href={link}
                     >
-                        Clear
-                        <TiDelete className="h-7 w-7" />
+                        <span className="hidden md:block">Clear</span>
+                        <Ban className="h-6 w-6" />
 
                     </Button>
                 </div>

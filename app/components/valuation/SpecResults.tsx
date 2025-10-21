@@ -3,7 +3,7 @@
 import React from "react"
 import { Button } from "../ui/button"
 import ZigWheelsDisplay from "./ZigAbout"
-import { CircleX } from "lucide-react"
+import { Ban } from "lucide-react"
 
 interface SpecResultsProps {
     results: any | null
@@ -21,11 +21,12 @@ export function SpecResults({ results, error, loading, onClearResults }: SpecRes
                     <Button 
                         onClick={onClearResults} 
                         variant="secondary"
-                        size="sm"
+                        size="sm2"
                         className="text-xl flex gap-2"
                     >
-                        Clear
-                        <CircleX />
+                        <span className="hidden md:block">Clear</span>
+                        <Ban className="h-6 w-6" />
+
                     </Button>
                 </div>
             </div>

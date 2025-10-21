@@ -62,6 +62,7 @@ export default function ValuationPage() {
           { src: "/services/valuation/val1.jpg", alt: "valuation1" },
           { src: "/services/valuation/val2.jpg", alt: "valuation2" },
           { src: "/services/valuation/val3.png", alt: "valuation3" },
+          { src: "/services/valuation/val5.png", alt: "valuation5" },
           
         ]}
       />
