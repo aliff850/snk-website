@@ -1,5 +1,9 @@
 import { CarSpecifications } from "@/components/valuation/Specifications";
 
+export const metadata = {
+    title: "Vehicle Specification",
+};
+
 export default function VehicleSpecification() {
 
     return(

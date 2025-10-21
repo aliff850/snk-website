@@ -41,7 +41,7 @@ export function FAQSection() {
                     <h2 className="text-4xl md:text-6xl font-bold mb-2 md:mb-6">
                     Frequently Asked Questions
                     </h2>
-                    <p className="text-lg md:text-xl">
+                    <p className="md:text-xl">
                     Get answers to common questions about our vehicle valuation services and process.
                     </p>
                 </div>

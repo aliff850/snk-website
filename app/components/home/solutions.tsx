@@ -12,7 +12,7 @@ export function SolutionsSection() {
 
                 <div className="flex flex-col text-center gap-4">
                     <h1 className="text-4xl lg:text-6xl font-bold text-background">Our Solutions</h1>
-                    <p className="text-lg md:text-xl">Discover our innovative Insurtech solutions designed to simplify claims, streamline processes, and make insurance faster, smarter, and more accessible for everyone.</p>
+                    <p className="md:text-xl">Discover our innovative Insurtech solutions designed to simplify claims, streamline processes, and make insurance faster, smarter, and more accessible for everyone.</p>
                 </div>
 
                 <div className="w-full max-w-7xl grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">

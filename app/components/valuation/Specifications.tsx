@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo, useEffect } from "react"
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, RefreshCcw, ArrowDown } from 'lucide-react'
 import { Button } from "../ui/button"
 import { SpecResults } from "./SpecResults"
 
@@ -165,17 +165,17 @@ export function CarSpecifications() {
 
     return(
 
-        <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 py-16 pt-30">
+        <div className="w-full bg-black/50 px-2 md:px-12 lg:px-24 py-16 pt-30">
             <div className="max-w-6xl mx-auto">
 
                 <div className="mb-8 flex flex-col gap-2 text-center">
-                    <h1 className="text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
-                    <h3 className="text-4xl font-bold text-brand-white">Vehicle Specification</h3>
+                    <h1 className="text-4xl md:text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
+                    <h3 className="text-2xl md:text-4xl font-bold text-brand-white">Vehicle Specification</h3>
                 </div>
 
                 <div className="grid grid-cols-1 gap-8">
 
-                    <div className="rounded-3xl border border-gray-200 shadow-sm p-6 bg-brand-white flex flex-col gap-4">
+                    <div className="rounded-3xl border border-gray-200 shadow-sm p-4 md:p-6 bg-brand-white flex flex-col gap-4">
                         {/* <div>
                             <h3 className="text-2xl font-semibold text-foreground">Vehicle Specifications</h3>
                             <p className="text-sm text-foreground/50">Select vehicle to retrieve specifications</p>
@@ -263,17 +263,8 @@ export function CarSpecifications() {
                             )}
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-3">                              
-                                <Button 
-                                    type="button" 
-                                    onClick={resetAll} 
-                                    variant="secondary"
-                                    size="sm"
-                                    className="text-xl"
-                                >
-                                    Reset
-                                </Button>
-
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">                              
+                                
                                 <Button
                                     onClick={() => {
                                         getZigWheelsData('about')
@@ -283,11 +274,23 @@ export function CarSpecifications() {
                                         clearResults()
                                     }}
                                     variant="secondary"
-                                    size="lg"
+                                    size="sm"
                                     disabled={!make || !model || loading}
-                                    className="text-xl"
+                                    className="text-xl flex gap-2 items-center"
                                 >
                                     Get Specifications
+                                    <ArrowDown />
+                                </Button>
+
+                                <Button 
+                                    type="button" 
+                                    onClick={resetAll} 
+                                    variant="secondary"
+                                    size="sm"
+                                    className="text-xl flex gap-2 items-center"
+                                >
+                                    Reset
+                                    <RefreshCcw />
                                 </Button>
                             </div>
                         </form>

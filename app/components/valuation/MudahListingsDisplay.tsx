@@ -1,6 +1,7 @@
-import { ExternalLink, Calendar, Gauge, Fuel, Settings, Car, Trash2, ArrowUpDown } from 'lucide-react'
+import { ExternalLink, Calendar, Gauge, Fuel, Settings, Car, Trash2, ArrowUpDown, Grid3x3, List } from 'lucide-react'
 import { Button } from '../ui/button'
 import { useState, useMemo, useEffect, useRef } from 'react'
+import MudahListingsListView from './ListingsListView'
 
 interface MudahListing {
     model_name: string
@@ -35,11 +36,10 @@ export default function MudahListingsDisplay({
     
     const [removedUrls, setRemovedUrls] = useState<Set<string>>(new Set())
     const [viewMode, setViewMode] = useState<'ascending' | 'descending'>('ascending')
+    const [displayMode, setDisplayMode] = useState<'grid' | 'list'>('grid')
     const [isFloating, setIsFloating] = useState(false)
     const [shouldShowFloating, setShouldShowFloating] = useState(false)
     const priceContainerRef = useRef<HTMLDivElement>(null)
-    // const [filteredListings, setFilteredListings] = useState<MudahListing[]>(listings)
-    //const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'none'>('none')
 
     // Update filtered listings when view mode changes
     const displayListings = useMemo(() => {
@@ -85,18 +85,6 @@ export default function MudahListingsDisplay({
         return () => window.removeEventListener('scroll', handleScroll)
     }, [isFloating])
 
-    // const sortListings = (order: 'asc' | 'desc' | 'none') => {
-    //     setSortOrder(order)
-    //     if (order === 'none') {
-    //         setFilteredListings(listings)
-    //     } else {
-    //         const sorted = [...filteredListings].sort((a, b) => {
-    //             return order === 'asc' ? a.price - b.price : b.price - a.price
-    //         })
-    //         setFilteredListings(sorted)
-    //     }
-    // }
-
     const formatPrice = (price: number) => {
         return `RM ${price.toLocaleString()}`
     }
@@ -115,15 +103,6 @@ export default function MudahListingsDisplay({
             </div>
         )
     }
-
-    // if (!listings || listings.length === 0) {
-    //     return (
-    //         <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center">
-    //             <Car className="w-12 h-12 mx-auto text-gray-400 mb-3" />
-    //             <p className="text-gray-500">No listings found</p>
-    //         </div>
-    //     )
-    // }
 
     // calculating all the price statistics
     const prices = displayListings.map(l => l.price)
@@ -172,165 +151,206 @@ export default function MudahListingsDisplay({
                 <PriceSummary />
             </div>
 
-            {listingsAscending.length > 0 && listingsDescending.length > 0 && (
-                <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3 mb-4">
+            {/* Controls Section - Price Sorting and Display Mode Toggle */}
+            <div className="flex flex-col gap-3">
+                {/* Price Sorting */}
+                {listingsAscending.length > 0 && listingsDescending.length > 0 && (
+                    <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
+                        <div className="flex items-center gap-2">
+                            <ArrowUpDown className="w-4 h-4 text-gray-500" />
+                            <span className="font-medium text-gray-700">View:</span>
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => setViewMode('ascending')}
+                                className={`p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${
+                                    viewMode === 'ascending'
+                                        ? 'bg-brand text-white'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                            >
+                                Price: Low to High ({listingsAscending.length})
+                            </button>
+                            <button
+                                onClick={() => setViewMode('descending')}
+                                className={`p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${
+                                    viewMode === 'descending'
+                                        ? 'bg-brand text-white'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                            >
+                                Price: High to Low ({listingsDescending.length})
+                            </button>
+                        </div>
+                    </div>
+                )}
 
-                    <div className="flex items-center gap-2">
-                        <ArrowUpDown className="w-4 h-4 text-gray-500" />
-                        <span className="font-medium text-gray-700">View:</span>
+                {/* Toggle for ascending and descending */}
+                <div className="flex items-center justify-between">
+
+                    <div className="flex flex-col text-center md:text-left">
+                        <h6 className="font-semibold text-xl md:text-2xl">
+                            {listingsAscending.length > 0 && listingsDescending.length > 0 ? (
+                                viewMode === 'ascending' 
+                                    ? `Showing ${listingsAscending.length} Lowest Price Listings`
+                                    : `Showing ${listingsDescending.length} Highest Price Listings`
+                            ) : (
+                                `Found ${displayListings.length} ${displayListings.length === 1 ? 'listing' : 'listings'}`
+                            )}
+                        </h6>
+                        <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
                     </div>
-                    <div className="flex gap-2">
+
+                    {/* Toggle for display mode */}
+                    <div className="hidden md:flex gap-2 items-center">
                         <button
-                            onClick={() => setViewMode('ascending')}
-                            className={`p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${
-                                viewMode === 'ascending'
+                            onClick={() => setDisplayMode('grid')}
+                            className={`p-2 rounded-lg transition-colors ${
+                                displayMode === 'grid'
                                     ? 'bg-brand text-white'
                                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
+                            aria-label="Grid view"
                         >
-                            Price: Low to High ({listingsAscending.length})
+                            <Grid3x3 className="w-5 h-5" />
                         </button>
                         <button
-                            onClick={() => setViewMode('descending')}
-                            className={`p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${
-                                viewMode === 'descending'
+                            onClick={() => setDisplayMode('list')}
+                            className={`p-2 rounded-lg transition-colors ${
+                                displayMode === 'list'
                                     ? 'bg-brand text-white'
                                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
+                            aria-label="List view"
                         >
-                            Price: High to Low ({listingsDescending.length})
+                            <List className="w-5 h-5" />
                         </button>
                     </div>
+
                 </div>
-            )}
-
-            {/* Header section */}
-            <div className="flex flex-col text-center md:text-left mb-4">
-                <h6 className="font-semibold text-xl md:text-2xl">
-                    {listingsAscending.length > 0 && listingsDescending.length > 0 ? (
-                        viewMode === 'ascending' 
-                            ? `Showing ${listingsAscending.length} Lowest Price Listings`
-                            : `Showing ${listingsDescending.length} Highest Price Listings`
-                    ) : (
-                        `Found ${displayListings.length} ${displayListings.length === 1 ? 'listing' : 'listings'}`
-                    )}
-                </h6>
-                <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {displayListings.map((listing) => (
-                <div 
-                    key={listing.adview_url}
-                    className="rounded-xl border border-foreground/20 bg-brand-white hover:shadow-md transition-shadow duration-200"
-                >
-                    <div className="p-4 md:p-5">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-
-                            <h3 className="font-bold text-lg">
-                                {listing.make_name} {listing.model_name}
-                            </h3>
-
-                            {listing.variant && (
-                                <p className="text-sm text-gray-600 mt-1">
-                                    {listing.variant}
-                                </p>
-                            )}
-
-                            <div className="flex items-center gap-2 mt-1">
-                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                listing.condition_name === 'New' 
-                                    ? 'bg-green-100 text-green-800' 
-                                    : listing.condition_name === 'Used'
-                                    ? 'bg-blue-100 text-blue-800'
-                                    : 'bg-purple-100 text-purple-800'
-                                }`}>
-                                {listing.condition_name}
-                                </span>
-                                <span className="text-xs md:text-sm text-gray-500">{listing.car_type_name}</span>
-                            </div>
-
-                        </div>
-
-                        <div className="text-right flex gap-2">
-                            <div className="text-xl md:text-2xl font-bold text-brand">
-                                {formatPrice(listing.price)}
-                            </div>
-
-                            <button onClick={() => removeListing(listing.adview_url)} className="hover:text-red-500 transition-colors">
-                                <Trash2 className="w-6 h-6" />
-                            </button>
-
-                        </div>
-                    </div>
-                    
-                    {listing.image && (
-                        <div className="mt-3 rounded-lg overflow-hidden bg-gray-100">
-                            <img 
-                                src={listing.image} 
-                                alt={`${listing.make_name} ${listing.model_name}`}
-                                className="w-full h-48 object-cover"
-                                onError={(e) => {
-                                    // fallback if image fails to load
-                                    e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23e5e7eb" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="18" fill="%236b7280"%3ENo Image%3C/text%3E%3C/svg%3E'
-                                }}
-                            />
-                        </div>
-                    )}
-
-                    {/* Specs Grid */}
-                    <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
-                        <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-gray-400" />
-                        <div>
-                            <p className="text-xs text-gray-500">Year</p>
-                            <p className="text-sm font-medium text-gray-900">{listing.manufactured_year}</p>
-                        </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                        <Gauge className="w-4 h-4 text-gray-400" />
-                        <div>
-                            <p className="text-xs text-gray-500">Mileage</p>
-                            <p className="text-sm font-medium text-gray-900">{formatMileage(listing.mileage)}</p>
-                        </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                        <Settings className="w-4 h-4 text-gray-400" />
-                        <div>
-                            <p className="text-xs text-gray-500">Transmission</p>
-                            <p className="text-sm font-medium text-gray-900">{listing.transmission_name}</p>
-                        </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                        <Fuel className="w-4 h-4 text-gray-400" />
-                        <div>
-                            <p className="text-xs text-gray-500">Fuel / Engine</p>
-                            <p className="text-sm font-medium text-gray-900 capitalize">
-                            {listing.fueltype} / {listing.engine_capacity}cc
-                            </p>
-                        </div>
-                        </div>
-                    </div>
-
-                    {/* View Listing Button */}
-                    <a
-                        href={listing.adview_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-brand/90 hover:bg-brand text-white font-medium rounded-xl transition-colors duration-200"
+            {/* Listings Display - switch between grid or list */}
+            {displayMode === 'list' ? (
+                <MudahListingsListView 
+                    listings={displayListings}
+                    onRemove={removeListing}
+                />
+            ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {displayListings.map((listing) => (
+                    <div 
+                        key={listing.adview_url}
+                        className="rounded-xl border border-foreground/20 bg-brand-white hover:shadow-md transition-shadow duration-200"
                     >
-                        View Listing
-                        <ExternalLink className="w-4 h-4" />
-                    </a>
+                        <div className="p-4 md:p-5">
+                        {/* Header */}
+                        <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+
+                                <h3 className="font-bold text-lg">
+                                    {listing.make_name} {listing.model_name}
+                                </h3>
+
+                                {listing.variant && (
+                                    <p className="text-sm text-gray-600 mt-1">
+                                        {listing.variant}
+                                    </p>
+                                )}
+
+                                <div className="flex items-center gap-2 mt-1">
+                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                    listing.condition_name === 'New' 
+                                        ? 'bg-green-100 text-green-800' 
+                                        : listing.condition_name === 'Used'
+                                        ? 'bg-blue-100 text-blue-800'
+                                        : 'bg-purple-100 text-purple-800'
+                                    }`}>
+                                    {listing.condition_name}
+                                    </span>
+                                    <span className="text-xs md:text-sm text-gray-500">{listing.car_type_name}</span>
+                                </div>
+
+                            </div>
+
+                            <div className="text-right flex gap-2">
+                                <div className="text-xl md:text-2xl font-bold text-brand">
+                                    {formatPrice(listing.price)}
+                                </div>
+
+                                <button onClick={() => removeListing(listing.adview_url)} className="hover:text-red-500 transition-colors">
+                                    <Trash2 className="w-6 h-6" />
+                                </button>
+
+                            </div>
+                        </div>
+                        
+                        {listing.image && (
+                            <div className="mt-3 rounded-lg overflow-hidden bg-gray-100">
+                                <img 
+                                    src={listing.image} 
+                                    alt={`${listing.make_name} ${listing.model_name}`}
+                                    className="w-full h-48 object-cover"
+                                    onError={(e) => {
+                                        // fallback if image fails to load
+                                        e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23e5e7eb" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="18" fill="%236b7280"%3ENo Image%3C/text%3E%3C/svg%3E'
+                                    }}
+                                />
+                            </div>
+                        )}
+
+                        {/* Specs Grid */}
+                        <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
+                            <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-gray-400" />
+                            <div>
+                                <p className="text-xs text-gray-500">Year</p>
+                                <p className="text-sm font-medium text-gray-900">{listing.manufactured_year}</p>
+                            </div>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                            <Gauge className="w-4 h-4 text-gray-400" />
+                            <div>
+                                <p className="text-xs text-gray-500">Mileage</p>
+                                <p className="text-sm font-medium text-gray-900">{formatMileage(listing.mileage)}</p>
+                            </div>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                            <Settings className="w-4 h-4 text-gray-400" />
+                            <div>
+                                <p className="text-xs text-gray-500">Transmission</p>
+                                <p className="text-sm font-medium text-gray-900">{listing.transmission_name}</p>
+                            </div>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                            <Fuel className="w-4 h-4 text-gray-400" />
+                            <div>
+                                <p className="text-xs text-gray-500">Fuel / Engine</p>
+                                <p className="text-sm font-medium text-gray-900 capitalize">
+                                {listing.fueltype} / {listing.engine_capacity}cc
+                                </p>
+                            </div>
+                            </div>
+                        </div>
+
+                        {/* View Listing Button */}
+                        <a
+                            href={listing.adview_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-brand/90 hover:bg-brand text-white font-medium rounded-xl transition-colors duration-200"
+                        >
+                            View Listing
+                            <ExternalLink className="w-4 h-4" />
+                        </a>
+                        </div>
                     </div>
+                    ))}
                 </div>
-                ))}
-            </div>
+            )}
         </div>
     )
 }

@@ -39,7 +39,7 @@ export function ProductFeatures({header, caption, features}: FeatureProps) {
                             animation="fade-in-up" 
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="group relative bg-brand-white rounded-3xl p-4 md:p-8 border border-brand/50 hover:border-brand shadow-lg transition-all duration-500 h-full overflow-hidden">
+                            <div className="group relative bg-brand-white rounded-2xl md:rounded-3xl p-4 md:p-8 border border-brand/50 hover:border-brand shadow-lg transition-all duration-500 h-full overflow-hidden">
                                 
                                 
                                 {/* feature number */}
@@ -50,7 +50,7 @@ export function ProductFeatures({header, caption, features}: FeatureProps) {
                                 
                                 <div className="flex flex-col gap-5 relative z-10">
                                     {/* Icon Badge */}
-                                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-brand to-brand-hover group-hover:scale-110 transition-transform duration-500 shadow-lg">
+                                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-brand to-brand-hover group-hover:scale-110 transition-transform duration-500 shadow-lg">
                                         <div className="text-white text-2xl font-bold">{index + 1}</div>
                                     </div>
                                     

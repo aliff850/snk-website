@@ -41,7 +41,7 @@ export function ReasonSection() {
 
             <div className="flex flex-col justify-center items-center text-center gap-4 max-w-4xl mx-auto">
                 <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Why Choose SNK?</h1>
-                <p className="text-brand text-lg md:text-xl md:px-4">We combine decades of expertise with modern technology to deliver the most accurate and reliable vehicle valuations in the industry.</p>
+                <p className="text-brand md:text-xl md:px-4">We combine decades of expertise with modern technology to deliver the most accurate and reliable vehicle valuations in the industry.</p>
             </div>
 
             {/* Achievements Grid */}

@@ -19,8 +19,11 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "SNK Market Data Research",
-  description: "Prototype website for SNK MDR",
+  title:  { 
+    default: "SNK Market Data Research",
+    template: '%s | SNK Market Data Research'
+  },
+  description: "25 years of expertise in the insurtech industry",
 };
 
 export default function RootLayout({

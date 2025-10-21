@@ -4,8 +4,12 @@ import { Values } from "../components/about/values"
 import { Achievements } from "../components/about/achievements"
 import { AboutCTA } from "../components/about/cta"
 
+export const metadata = {
+    title: "About Us",
+};
+
 export default function About() {
-    return(
+    return (
         <div className="min-h-svh bg-brand-element/10">
             <AboutHero />
             <History />
@@ -13,5 +17,5 @@ export default function About() {
             <Achievements />
             <AboutCTA />
         </div>
-    )
+    );
 }
