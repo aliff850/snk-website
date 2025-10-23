@@ -12,7 +12,7 @@ interface ProductCTAProps {
 
 export function ProductCTA({title,caption,button,link,target}:ProductCTAProps) {
     return(
-        <section className="w-full py-8 md:py-16 px-2 md:px-12 lg:px-24 font-onest">
+        <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl mx-auto">
                 
                 <AnimateOnLoad animation="fade-in-up">

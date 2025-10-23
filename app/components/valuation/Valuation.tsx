@@ -253,7 +253,19 @@ export function ValuationLayout() {
                 listingsDescending: uniqueDescending,
                 make: makeSlug, 
                 model: modelSlug,
-                source: 'Mudah'
+                source: 'Mudah',
+
+                userInputs: {
+                    make: make,
+                    model: model,
+                    year: yearFrom,
+                    bodyType: carType,
+                    engineCapacity: engineCapacityLiter,
+                    fuelType: fueltype,
+                    transmission: transmission,
+                    origin: condition,
+                    mileage: mileageFrom
+                }
             }))
         } catch (e: any) {
             setError(e?.message || "Something went wrong")
@@ -381,8 +393,8 @@ export function ValuationLayout() {
                     </div>
 
                     <div className="flex flex-col gap-4 text-center">
-                        <h1 className="text-4xl md:text-6xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
-                        <h3 className="text-2xl md:text-4xl font-bold text-brand-white">For Motor Vehicle Market Valuation</h3>
+                        <h1 className="text-4xl md:text-5xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
+                        <h3 className="text-2xl md:text-3xl font-bold text-brand-white">For Motor Vehicle Market Valuation</h3>
                     </div>
                 </div>
                 
@@ -667,7 +679,6 @@ export function ValuationLayout() {
                     </div>
 
                     {/* Section to display all results */}
-                    
                     <div id="valuation">
                     <ValuationResults 
                         results={results}
@@ -678,9 +689,7 @@ export function ValuationLayout() {
                     />
                     </div>
                     
-
                 </div>
-
 
                 <div className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/40 p-4 md:p-6">
                     <div className="md:p-6 w-full flex flex-col gap-4 justify-center items-center md:border md:border-dashed md:border-foreground/20 rounded-2xl">
@@ -694,12 +703,8 @@ export function ValuationLayout() {
                             Go to Vehicle Specifications <ArrowRight />
                         </Button>
                     </div>
-                    
-                
                 </div>
-
             </div>
-
         </div>
     )
 }

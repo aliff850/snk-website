@@ -12,7 +12,7 @@ export function Footer() {
                 <div className="lg:col-span-2">
                     <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-6 text-center md:text-left text-white">About SNK</h3>
                     <p className="text-brand-foreground text-sm text-center md:text-justify leading-relaxed mb-6 max-w-lg">
-                        We are Malaysia&apos;s leading Insurtech provider with 25 years of experience in motor vehicle valuation and insurance claims solutions. Trusted by top insurers, we deliver innovative digital platforms that make insurance simple, fast, and accessible for everyone.
+                        We are Malaysia's leading Insurtech provider with 25 years of experience in motor vehicle valuation and insurance claims solutions. Trusted by top insurers, we deliver innovative digital platforms that make insurance simple, fast, and accessible for everyone.
                     </p>
                     <div className="w-full md:w-fit flex justify-center space-x-2 md:space-x-4">
                         <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors duration-200">
