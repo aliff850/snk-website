@@ -5,7 +5,7 @@ import { Button } from "../ui/button"
 export function Background() {
     return (
 
-        <section id="background" className="w-full bg-brand flex flex-col justify-center items-center px-2 py-4 md:px-12 lg:px-24 md:py-16 font-onest text-white snap-proximity">
+        <section id="background" className="w-full bg-brand flex flex-col justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest text-white snap-proximity">
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-7xl">
 
@@ -41,7 +41,7 @@ export function Background() {
 
                 <AnimateOnLoad animation="fade-in-left" className="h-full">
                     <div className="w-full h-full flex flex-col gap-4 md:gap-8 justify-center text-center md:text-left">
-                        <h1 className="text-4xl lg:text-6xl font-bold">Who Are We?</h1>
+                        <h1 className="text-4xl lg:text-5xl font-bold">Who Are We?</h1>
 
                         {/* <p className="w-full">We are a pioneer in Malaysia’s Insurtech industry, with over 20 years of experience delivering innovative solutions for motor vehicle valuation and insurance claims. Since 2002, we have grown from providing valuation services to developing advanced digital platforms that connect insurers, adjusters, workshops, and customers in one seamless ecosystem. Our mission is to simplify and automate insurance processes through technology—making claims faster, valuations more accurate, and assistance more accessible to the public.</p> */}
                         <p className="w-full">SNK Market Data Research are a pioneer in Malaysia’s Insurtech industry, with over 25 years of experience. Our focus is to automate and innovate the motor claims ecosystem by improving the efficiency, accessibility and functionality of the end to end claims process, in order to better serve key stakeholders and meet the guidelines set by the regulators</p>

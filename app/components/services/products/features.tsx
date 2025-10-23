@@ -13,7 +13,7 @@ interface FeatureProps {
 
 export function ProductFeatures({header, caption, features}: FeatureProps) {
     return(
-        <section className="w-full py-4 md:py-16 px-2 md:px-12 lg:px-24 font-onest relative">
+        <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest relative">
             
             <div className="w-full max-w-7xl mx-auto flex flex-col gap-4 md:gap-16">
                 {/* Section Header */}

@@ -8,7 +8,7 @@ import { LucideAArrowDown } from 'lucide-react'
 
 export function SolutionsGrid() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-2 md:px-24 py-4 md:py-16 flex flex-col  gap-4 md:gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-24 py-8 md:py-16 flex flex-col  gap-4 md:gap-12 font-onest">
 
             <ValuationBanner/>
 

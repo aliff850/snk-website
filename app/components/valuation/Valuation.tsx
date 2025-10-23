@@ -344,7 +344,7 @@ export function ValuationLayout() {
     // }
 
     return(
-        <div className="w-full bg-black/50 px-2 md:px-12 lg:px-24 pb-8 md:pb-16 pt-32 relative">
+        <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 pb-8 md:pb-16 pt-32 relative">
             {/* Help Button */}
             <button
                 onClick={() => setIsHelpOpen(true)}

@@ -8,7 +8,7 @@ export function ValuationBanner() {
         <AnimateOnLoad animation="fade-in-up">
             <div className="bg-[url('/images/g20.jpg')] bg-cover bg-center rounded-2xl md:rounded-3xl max-w-7xl mx-auto overflow-hidden relative">
 
-                <div className="bg-black/70 w-full h-full px-4 md:px-16 py-4 md:py-16">
+                <div className="bg-black/70 w-full h-full px-4 md:px-16 py-8 md:py-16">
                     
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
                         

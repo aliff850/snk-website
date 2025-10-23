@@ -5,7 +5,7 @@ import { MdOutlineSmartphone } from "react-icons/md";
 
 export function ContactMap() {
     return(
-        <section className="w-full bg-brand py-4 md:py-16 px-2 md:px-12 lg:px-24 font-onest">
+        <section className="w-full bg-brand py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl mx-auto flex flex-col gap-4 md:gap-8">
                 
                 <AnimateOnLoad animation="fade-in-up">

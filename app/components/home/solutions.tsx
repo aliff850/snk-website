@@ -6,13 +6,13 @@ import { solutions } from "@/app/data/solutions"
 export function SolutionsSection() {
 
     return(
-        <section className="bg-brand flex flex-col justify-center items-center px-2 py-4 md:px-12 lg:px-24 md:py-16 font-onest text-white">
+        <section className="bg-brand flex flex-col justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest text-white">
 
             <div className="w-full max-w-7xl flex flex-col justify-center items-center gap-4 md:gap-8">
 
                 <div className="flex flex-col text-center gap-4">
-                    <h1 className="text-4xl lg:text-6xl font-bold text-background">Our Solutions</h1>
-                    <p className="md:text-xl">Discover our innovative Insurtech solutions designed to simplify claims, streamline processes, and make insurance faster, smarter, and more accessible for everyone.</p>
+                    <h1 className="text-4xl lg:text-5xl font-bold text-background">Our Solutions</h1>
+                    <p className="md:text-lg">Discover our innovative Insurtech solutions designed to simplify claims, streamline processes, and make insurance faster, smarter, and more accessible for everyone.</p>
                 </div>
 
                 <div className="w-full max-w-7xl grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">

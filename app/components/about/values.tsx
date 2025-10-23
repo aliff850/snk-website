@@ -40,13 +40,13 @@ const objectives: Objective[] = [
 
 export function Values() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-2 md:px-12 lg:px-24 py-4 md:py-16 flex flex-col gap-4 md:gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-4 md:gap-12 font-onest">
             
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">
                 <div className="flex flex-col text-center gap-4 max-w-4xl mx-auto">
-                    <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Our Values</h1>
-                    <p className="text-brand text-lg md:text-xl">
+                    <h1 className="text-brand text-4xl md:text-5xl font-bold">Our Values</h1>
+                    <p className="text-brand text-base md:text-lg">
                         The principles that guide our mission to transform the insurtech industry
                     </p>
                 </div>
@@ -57,14 +57,14 @@ export function Values() {
             <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 
                 <AnimateOnLoad animation="fade-in-left" delay={200}>
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
                             <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-300 rounded-full mb-4">
                                 <Eye className="h-12 w-12 text-white"/>
                             </div>
-                            <h2 className="text-brand text-3xl md:text-4xl font-bold">Vision</h2>
+                            <h2 className="text-brand text-2xl md:text-3xl font-bold">Vision</h2>
                         </div>
 
                         <div>
@@ -77,14 +77,14 @@ export function Values() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-right" delay={300}>
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
                             <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-300 rounded-full mb-4">
                                 <Crosshair className="h-12 w-12 text-white"/>
                             </div>
-                            <h2 className="text-brand text-3xl md:text-4xl font-bold">Mission</h2>
+                            <h2 className="text-brand text-2xl md:text-3xl font-bold">Mission</h2>
                         </div>
 
                         <div>

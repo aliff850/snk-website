@@ -52,12 +52,12 @@ const timelineEvents: TimelineEvent[] = [
 
 export function History() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-2 md:px-12 lg:px-24 py-4 md:py-16 flex flex-col gap-4 md:gap-8 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-4 md:gap-8 font-onest">
             
             <AnimateOnLoad animation="fade-in-up">
                 <div className="flex flex-col text-center gap-2 md:gap-4 max-w-4xl">
-                    <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Our Journey</h1>
-                    <p className="text-brand text-base md:text-xl">
+                    <h1 className="text-brand text-4xl md:text-5xl font-bold">Our Journey</h1>
+                    <p className="text-brand text-base md:text-lg">
                         Over 25 years of innovation, growth, and transformation in the insurtech industry.
                     </p>
                 </div>

@@ -28,7 +28,7 @@ export function ProductCTA({title,caption,button,link,target}:ProductCTAProps) {
                         <div className="relative z-10 flex flex-col gap-8 justify-center items-center">
                                                         
                             {/* Main Content */}
-                            <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold">
+                            <h2 className="text-white text-3xl md:text-4xl font-bold">
                                 {title}
                             </h2>
                             
@@ -37,7 +37,7 @@ export function ProductCTA({title,caption,button,link,target}:ProductCTAProps) {
                             </p>
 
 
-                            <Button href={link} target={target} variant="primary" className="flex gap-1 md:gap-2 text-base font-semibold md:font-bold md:text-2xl">
+                            <Button href={link} target={target} variant="primary" className="flex gap-1 md:gap-2 text-base font-semibold md:font-bold md:text-xl">
                                 {button} <ArrowUpRight/>
                             </Button>
                             

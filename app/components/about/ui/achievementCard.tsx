@@ -11,7 +11,7 @@ export function AchievementCard() {
             <div className="text-center w-full flex flex-col gap-4 md:gap-8 items-center">
                 
                 <AnimateOnLoad animation="fade-in" className="w-full flex justify-center">
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl w-full md:w-fit p-8 md:p-10 h-48 border border-brand/20 shadow-lg hover:border-brand hover:scale-105 transition-all duration-300">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl w-full md:w-fit p-8 md:p-10 h-48 border border-brand/20 shadow-lg hover:border-brand transition-all duration-300">
                         <div className="flex flex-col items-center justify-center h-full">
                             <Image 
                                 src="/images/mdec.png" 
@@ -26,7 +26,7 @@ export function AchievementCard() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in">
-                    <h3 className="text-brand text-2xl md:text-3xl font-bold">Registered with MDEC.</h3>
+                    <h3 className="text-brand text-xl md:text-2xl font-bold">Registered with MDEC.</h3>
                 </AnimateOnLoad>
 
 
@@ -36,7 +36,7 @@ export function AchievementCard() {
             <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
 
                 <AnimateOnLoad animation="fade-in-left" delay={100} className="w-full flex justify-end">
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl w-full md:max-w-sm p-8 md:p-10 h-48 border border-brand/20 hover:border-brand shadow-lg hover:scale-105 transition-all duration-300 group">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl w-full md:max-w-sm p-8 md:p-10 h-48 border border-brand/20 hover:border-brand shadow-lg transition-all duration-300 group">
                         <div className="flex flex-col items-center justify-center h-full transition-transform duration-300">
                             <Image
                                 src="/images/bnm.png"
@@ -51,7 +51,7 @@ export function AchievementCard() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-right" delay={200} className="w-full flex justify-start">
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl w-full md:max-w-sm p-8 md:p-10 h-48 border border-brand/20 hover:border-brand shadow-lg hover:scale-105 transition-all duration-300 group">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl w-full md:max-w-sm p-8 md:p-10 h-48 border border-brand/20 hover:border-brand shadow-lg transition-all duration-300 group">
                         <div className="flex flex-col items-center justify-center h-full transition-transform duration-300">
                             <Image
                                 src="/images/piam.png"

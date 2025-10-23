@@ -165,7 +165,7 @@ export function CarSpecifications() {
 
     return(
 
-        <div className="w-full bg-black/50 px-2 md:px-12 lg:px-24 py-16 pt-30">
+        <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 py-16 pt-30">
             <div className="max-w-6xl mx-auto">
 
                 <div className="mb-8 flex flex-col gap-2 text-center">

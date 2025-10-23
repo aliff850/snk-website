@@ -36,18 +36,19 @@ const achievements: Achievement[] = [
 
 export function Achievements() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-2 md:px-12 lg:px-24 py-4 md:py-16 flex flex-col gap-4 md:gap-12 font-onest overflow-x-hidden">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-4 md:gap-12 font-onest overflow-x-hidden">
             
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">
                 <div className="text-center max-w-4xl mx-auto">
-                    <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Our Achievements</h1>
+                    <h1 className="text-brand text-4xl md:text-5xl font-bold">Our Achievements</h1>
                     {/* <p className="text-brand text-lg md:text-xl px-4">
                         Milestones that define our journey as a leading insurtech innovator
                     </p> */}
                 </div>
             </AnimateOnLoad>
 
+            {/* All governing bodies section */}
             <AnimateOnLoad animation="fade-in-up">
                 <AchievementCard />
             </AnimateOnLoad>
