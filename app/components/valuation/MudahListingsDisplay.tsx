@@ -37,6 +37,7 @@ interface MudahListingsDisplayProps {
         transmission?: string
         origin?: string
         mileage?: string
+        insuredPrice?: string
     }
 }
 
@@ -160,6 +161,7 @@ export default function MudahListingsDisplay({
                     transmission={userInputs.transmission}
                     origin={userInputs.origin}
                     mileage={userInputs.mileage}
+                    insuredPrice={userInputs.insuredPrice}
                 />
             )}
             

@@ -28,14 +28,14 @@ export const engineCapacityOptionsLiters: string[] = [
 ]
 
 // Given a liter option like "1.5", return an inclusive CC range that
-// captures that bucket, for example 1.5 -> 1400-1500 CC
+// captures that bucket, for example 1.5 = 1450-1549 CC
 export function getEngineCcRangeFromLiterOption(literOption: string): { min: number; max: number } | null {
     if (!literOption || literOption === 'Any') return null
     const liters = Number(literOption)
     if (!Number.isFinite(liters)) return null
     const centerCc = Math.round(liters * 1000)
-    const min = Math.max(0, centerCc - 100)
-    const max = centerCc
+    const min = Math.max(0, centerCc - 50)
+    const max = centerCc + 49
     return { min, max }
 }
 

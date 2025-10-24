@@ -2,13 +2,13 @@
 
 import { HelpModal } from "./HelpModal";
 import React, { useState, useMemo, useEffect } from "react"
-import { ArrowRight, RotateCcw, ArrowDown, Info } from 'lucide-react'
+import { ArrowRight, RotateCcw, ArrowDown, CircleQuestionMark } from 'lucide-react'
 import { FaCar } from "react-icons/fa";
 import { FaCarOn } from "react-icons/fa6"
 import { ValuationResults } from "./ValuationResults"
 import { Button } from "../ui/button"
-import { yearOptions, mileageOptions, priceOptions, MIN_VALUES, engineCapacityOptionsLiters, getEngineCcRangeFromLiterOption } from "./ranges"
-import Link from "next/link";
+import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters, getEngineCcRangeFromLiterOption } from "./ranges"
+// import Link from "next/link";
 
 export function ValuationLayout() {
     // Help modal
@@ -42,11 +42,12 @@ export function ValuationLayout() {
     // const [price, setPrice] = useState("")
     // All states for dropdown ranges
     const [yearFrom, setYearFrom] = useState<string>("")
-    const [yearTo, setYearTo] = useState<string>("")
+    // const [yearTo, setYearTo] = useState<string>("")
     const [mileageFrom, setMileageFrom] = useState<string>("")
-    const [mileageTo, setMileageTo] = useState<string>("")
+    // const [mileageTo, setMileageTo] = useState<string>("")
     const [priceFrom, setPriceFrom] = useState<string>("")
-    const [priceTo, setPriceTo] = useState<string>("")
+    // const [priceTo, setPriceTo] = useState<string>("")
+    const [insuredPrice, setInsuredPrice] = useState<string>("")
 
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
@@ -106,11 +107,12 @@ export function ValuationLayout() {
         // setMileage("")
         // setPrice("")
         setYearFrom("")
-        setYearTo("")
+        // setYearTo("")
         setMileageFrom("")
-        setMileageTo("")
+        // setMileageTo("")
         setPriceFrom("")
-        setPriceTo("")
+        // setPriceTo("")
+        setInsuredPrice("")
         setResults(null)
         setError(null)
         setEngineCapacityLiter("")
@@ -264,7 +266,8 @@ export function ValuationLayout() {
                     fuelType: fueltype,
                     transmission: transmission,
                     origin: condition,
-                    mileage: mileageFrom
+                    mileage: mileageFrom,
+                    insuredPrice: insuredPrice,
                 }
             }))
         } catch (e: any) {
@@ -363,7 +366,7 @@ export function ValuationLayout() {
                 className="fixed left-6 bottom-6 transform z-50 w-16 h-16 bg-brand border border-brand-element text-brand-white rounded-full shadow-lg hover:bg-brand/90 hover:scale-110 transition-all duration-300 flex items-center justify-center group"
                 aria-label="Help"
             >
-                <Info className="w-8 h-8" />
+                <CircleQuestionMark className="w-8 h-8" />
                 <span
                     className="
                         absolute left-[90%] 
@@ -404,10 +407,6 @@ export function ValuationLayout() {
                     <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
         
                         <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-                            
-                            {/* <div className="flex">
-                                <Link href="" onClick={() => setIsHelpOpen(true)} className="shrink flex gap-2 bg-brand/10 text-brand hover:bg-brand hover:text-brand-white hover:scale-105 transition-all duration-300 border border-brand/40 px-4 py-2 rounded-xl">Help <Info /></Link>
-                            </div> */}
                             
                             <HelpModal 
                                 isOpen={isHelpOpen} 
@@ -604,40 +603,11 @@ export function ValuationLayout() {
                                             max={9999999} 
                                             placeholder="88888" 
                                             disabled={fieldsDisabled}
+                                            value={insuredPrice}
+                                            onChange={(e) => setInsuredPrice(e.target.value)}
                                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         />
-                                    </div>
-
-                                    {/* Spacer for visual balance */}
-                                    {/* <div className="hidden lg:block lg:h-[88px]"></div> */}
-
-                                    {/* Action Buttons - Aligned at bottom on desktop */}
-                                    {/* <div className="space-y-3 pt-4 lg:pt-0">
-                                        <Button 
-                                            type="button" 
-                                            onClick={() => {
-                                                getMudahData()
-                                                clearResults()
-                                            }} 
-                                            disabled={!canSubmit || loading}
-                                            variant="secondary"
-                                            size="sm"
-                                            className="w-full text-base md:text-lg flex justify-center gap-2"
-                                        >
-                                            Get Market Value
-                                            <ArrowDown className="h-5 w-5" />
-                                        </Button>
-                                        <Button 
-                                            type="button" 
-                                            onClick={resetAll} 
-                                            variant="secondary"
-                                            size="sm"
-                                            className="w-full text-base md:text-lg flex justify-center items-center gap-2"
-                                        >
-                                            Reset
-                                            <RotateCcw className="h-5 w-5" />
-                                        </Button>
-                                    </div> */}
+                                    </div>                                   
                                 </div>
 
                                 <div className="col-span-full flex pt-4 lg:pt-0 w-full">
@@ -671,10 +641,7 @@ export function ValuationLayout() {
                                         </Button>
                                     </div>
                                 </div>
-
-
                             </div>
-
                         </form>
                     </div>
 

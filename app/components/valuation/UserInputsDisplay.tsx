@@ -1,4 +1,4 @@
-import { Car, Calendar, Gauge, Fuel, Settings, Cog, } from 'lucide-react'
+import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign } from 'lucide-react'
 
 interface UserInputsDisplayProps {
     make: string
@@ -10,6 +10,7 @@ interface UserInputsDisplayProps {
     transmission?: string
     origin?: string
     mileage?: string
+    insuredPrice?: string
 }
 
 export default function UserInputsDisplay({
@@ -21,7 +22,8 @@ export default function UserInputsDisplay({
     fuelType,
     transmission,
     origin,
-    mileage
+    mileage,
+    insuredPrice
 }: UserInputsDisplayProps) {
     
     // Format the display values
@@ -35,6 +37,13 @@ export default function UserInputsDisplay({
         const num = parseInt(value, 10)
         if (isNaN(num)) return 'Not specified'
         return `${num.toLocaleString()} km`
+    }
+
+    const formatInsuredPrice = (value: string | undefined) => {
+        if (!value) return 'Not specified'
+        const num = parseInt(value, 10)
+        if (isNaN(num)) return 'Not specified'
+        return `RM ${num.toLocaleString()}`
     }
 
     return (
@@ -52,7 +61,7 @@ export default function UserInputsDisplay({
                 <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
                     <div className="flex items-center gap-2 mb-2">
                         <Car className="w-4 h-4 text-gray-500" />
-                        <p className="text-xs font-medium text-gray-500">Vehicle Make and Model</p>
+                        <p className="text-xs font-medium text-gray-500">Make and Model</p>
                     </div>
                     <p className="text-sm md:text-base font-semibold text-gray-900">
                         {formatValue(make)} {formatValue(model)}
@@ -63,7 +72,7 @@ export default function UserInputsDisplay({
                 <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
                     <div className="flex items-center gap-2 mb-2">
                         <Calendar className="w-4 h-4 text-gray-500" />
-                        <p className="text-xs font-medium text-gray-500">Year</p>
+                        <p className="text-xs font-medium text-gray-500">Year Manufactured</p>
                     </div>
                     <p className="text-sm md:text-base font-semibold text-gray-900">
                         {year ? year : "--"}
@@ -135,6 +144,18 @@ export default function UserInputsDisplay({
                         {mileage ? formatMileage(mileage) : "--"}
                     </p>
                 </div>
+
+                {/* Insured sum */}
+                <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                    <div className="flex items-center gap-2 mb-2">
+                        <DollarSign className="w-4 h-4 text-gray-500" />
+                        <p className="text-xs font-medium text-gray-500">Previous Insured Sum (MYR)</p>
+                    </div>
+                    <p className="text-sm md:text-base font-semibold text-gray-900">
+                        {insuredPrice ? formatInsuredPrice(insuredPrice) : "--"}
+                    </p>
+                </div>
+
             </div>
         </div>
     )
