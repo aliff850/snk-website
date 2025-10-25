@@ -6,7 +6,7 @@ import Link from "next/link";
 import { signup } from "@/utils/authentication";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
@@ -14,6 +14,15 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirectTo')
+
+  const handleSignup = async (formData: FormData) => {
+    const response = await signup(formData);
+
+    if (response.ok) return;
+    throw response.message;
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +31,7 @@ export default function RegisterPage() {
 
     const formData = new FormData(e.currentTarget);
 
-    const signupPromise = signup(formData);
+    const signupPromise = handleSignup(formData);
 
     toast.promise(signupPromise, {
       pending: "Creating account...",
@@ -32,14 +41,8 @@ export default function RegisterPage() {
         },
       },
       error: {
-        render({ data }: { data: any }) {
-          const message =
-            typeof data?.message === "string"
-              ? data.message
-              : typeof data === "string"
-              ? data
-              : undefined;
-          return message || "An unexpected error occurred";
+        render({ data }: { data: string }) {
+          return data || "An unexpected error occurred";
         },
       },
     });
@@ -49,11 +52,7 @@ export default function RegisterPage() {
       const email = formData.get("email") as string;
       router.push(`/register/confirm?email=${encodeURIComponent(email)}`);
     } catch (err: any) {
-      setError(
-        typeof err === "string"
-          ? err
-          : err?.message || "An unexpected error occurred"
-      );
+      setError(err);
     } finally {
       setIsLoading(false);
     }
@@ -124,7 +123,7 @@ export default function RegisterPage() {
             <p className="w-full flex items-center justify-center">
               Already have an account?
               <Link
-                href="/login"
+                href={`/login?redirectTo=${redirectTo}`}
                 className="ml-1 hover:text-brand transition-colors duration-300 underline decoration-dotted underline-offset-2"
               >
                 Log In
