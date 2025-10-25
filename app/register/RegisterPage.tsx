@@ -123,7 +123,7 @@ export default function RegisterPage() {
             <p className="w-full flex items-center justify-center">
               Already have an account?
               <Link
-                href={`/login?redirectTo=${redirectTo}`}
+                href={`/login` + (redirectTo ? `?redirectTo=${redirectTo}` : "")}
                 className="ml-1 hover:text-brand transition-colors duration-300 underline decoration-dotted underline-offset-2"
               >
                 Log In
