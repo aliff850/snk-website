@@ -17,13 +17,6 @@ export default function RegisterPage() {
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo')
 
-  const handleSignup = async (formData: FormData) => {
-    const response = await signup(formData);
-
-    if (response.ok) return;
-    throw response.message;
-  }
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -31,28 +24,42 @@ export default function RegisterPage() {
 
     const formData = new FormData(e.currentTarget);
 
-    const signupPromise = handleSignup(formData);
-
-    toast.promise(signupPromise, {
-      pending: "Creating account...",
-      success: {
-        render() {
-          return "Successfully registered!";
-        },
-      },
-      error: {
-        render({ data }: { data: string }) {
-          return data || "An unexpected error occurred";
-        },
-      },
-    });
-
     try {
+      // Create a promise that handles the response properly
+      const signupPromise = new Promise(async (resolve, reject) => {
+        try {
+          const response = await signup(formData);
+          
+          if (response.ok) {
+            resolve(response);
+          } else {
+            reject(new Error(response.message));
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      toast.promise(signupPromise, {
+        pending: "Creating account...",
+        success: {
+          render() {
+            return "Successfully registered!";
+          },
+        },
+        error: {
+          render({ data }: { data: Error }) {
+            return data.message || "An unexpected error occurred";
+          },
+        },
+      });
+
       await signupPromise;
       const email = formData.get("email") as string;
       router.push(`/register/confirm?email=${encodeURIComponent(email)}`);
     } catch (err: any) {
-      setError(err);
+      const errorMessage = err?.message || err || "An unexpected error occurred";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

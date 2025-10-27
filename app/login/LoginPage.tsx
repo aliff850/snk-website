@@ -17,13 +17,6 @@ export default function LoginPage() {
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo')
 
-  const handleLogin = async (formData: FormData) => {
-    const response = await login(formData);
-
-    if (response.ok) return;
-    throw response.message;
-  }
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -31,27 +24,41 @@ export default function LoginPage() {
 
     const formData = new FormData(e.currentTarget);
 
-    const loginPromise = handleLogin(formData);
-
-    toast.promise(loginPromise, {
-      pending: "Logging in...",
-      success: {
-        render() {
-          return "Successfully logged in!";
-        },
-      },
-      error: {
-        render({ data }: { data: string }) {
-          return data || "An unexpected error occurred";
-        },
-      },
-    });
-
     try {
+      // Create a promise that handles the response properly
+      const loginPromise = new Promise(async (resolve, reject) => {
+        try {
+          const response = await login(formData);
+          
+          if (response.ok) {
+            resolve(response);
+          } else {
+            reject(new Error(response.message));
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      toast.promise(loginPromise, {
+        pending: "Logging in...",
+        success: {
+          render() {
+            return "Successfully logged in!";
+          },
+        },
+        error: {
+          render({ data }: { data: Error }) {
+            return data.message || "An unexpected error occurred";
+          },
+        },
+      });
+
       await loginPromise;
       router.push(redirectTo || '/');
     } catch (err: any) {
-      setError(err || "An unexpected error occurred");
+      const errorMessage = err?.message || err || "An unexpected error occurred";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
