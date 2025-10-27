@@ -2,7 +2,7 @@ import { ProductHero } from '@/app/components/services/products/hero';
 import { ProductOverview } from '@/app/components/services/products/overview';
 import { ProductFeatures } from '@/app/components/services/products/features';
 import { ProductCTA } from '@/app/components/services/products/cta';
-import { PreviewVideo } from '@/app/components/services/products/video';
+import { PreviewVideoAlternate } from '@/app/components/services/products/previewVideoAlt';
 
 export const metadata = {
     title: "Motor Vehicle Accident Estimation",
@@ -63,8 +63,9 @@ export default function EstimationPage() {
                 features={estimationFeatures}
             />
 
-            <PreviewVideo 
-                filename='https://www.youtube.com/embed/EId9-gqNMB4?si=lEyYohGOcyTMANeM'
+            <PreviewVideoAlternate 
+                filename='https://www.youtube.com/embed/2KdsA2ZIBwQ?si=uCdlBhCRBOmNDdg7'
+                filename_2='https://www.youtube.com/embed/wXrv7Y6A2js?si=nXxoh5VyDSjllRMK'
             />
             
             <ProductCTA 

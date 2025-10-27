@@ -44,14 +44,13 @@ export function Values() {
             
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">
-                <div className="flex flex-col text-center gap-4 max-w-4xl mx-auto">
+                <div className="flex flex-col text-center gap-2 md:gap-4 max-w-4xl mx-auto">
                     <h1 className="text-brand text-4xl md:text-5xl font-bold">Our Values</h1>
                     <p className="text-brand text-base md:text-lg">
-                        The principles that guide our mission to transform the insurtech industry
+                        The principles that guide our mission to bring transformation to the insurtech industry.
                     </p>
                 </div>
             </AnimateOnLoad>
-
 
             {/* VISION AND MISSION CONTAINER */}
             <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
@@ -91,24 +90,7 @@ export function Values() {
                             <p className="text-sm md:text-lg text-brand text-center leading-relaxed">
                                 Our mission is to simplify and automate insurance processes by uniting all stakeholders on a single digital platform. We are committed to delivering accurate, transparent, and accessible valuation and claims solutions powered by advanced technologies, and make insurance processes faster, smarter, and more reliable for everyone.
                             </p>
-                            {/* <ul className="text-brand leading-relaxed space-y-3 w-full">
-                                <li className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-brand-element rounded-full mt-2 flex-shrink-0"></div>
-                                    <span>To simplify and automate insurance processes for insurers, adjusters, workshops, and the public.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-brand-element rounded-full mt-2 flex-shrink-0"></div>
-                                    <span>To connect all parties in the insurance ecosystem on one seamless digital platform.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-brand-element rounded-full mt-2 flex-shrink-0"></div>
-                                    <span>To provide accurate, transparent, and accessible claims and valuation services with no vested interests.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-brand-element rounded-full mt-2 flex-shrink-0"></div>
-                                    <span>To continuously innovate using AI and advanced technology for faster, smarter, and more reliable solutions.</span>
-                                </li>
-                            </ul> */}
+                            
                         </div>
                     </div>
                 </AnimateOnLoad>
@@ -133,7 +115,7 @@ export function Values() {
                                 animation="fade-in-up" 
                                 delay={(index * 100 + 500) as 0 | 100 | 200 | 300 | 400}
                             >
-                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full">
+                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full">
                                     <div className="text-center">
                                         <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-element rounded-full mb-4 text-white">
                                             {objective.icon}

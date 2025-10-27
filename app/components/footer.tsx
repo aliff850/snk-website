@@ -85,7 +85,7 @@ export function Footer() {
             </div>
 
             {/* Bottom Section */}
-            <div className="border-t border-white/20 pt-4 md:pt-8 text-sm">
+            <div className="border-t border-white/20 py-4 md:py-8 text-sm">
                 <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                     <p className="text-brand-foreground">
                         © 2025 SNK Market Data Research. All rights reserved.
@@ -103,6 +103,10 @@ export function Footer() {
                     </div>
                 </div>
             </div>
+
+            {/* <div className="border-t border-white/20 pt-4 text-center">
+                <p className="text-xs text-brand-foreground/60">Developed by OnlySoft</p>
+            </div> */}
         </div>
     </footer>
     )

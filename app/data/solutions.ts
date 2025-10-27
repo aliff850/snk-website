@@ -22,7 +22,7 @@ export const solutions: Solution[] = [
 
     },
     {
-        title: "Motor Vehicle Accident Damage Analysis",
+        title: "Motor Vehicle Accident Damage Estimation",
         description: "Damage estimation value for a motor vehicle accident claim",
         learnMoreUrl: "/services/estimation",
         image: "/services/accident.png",

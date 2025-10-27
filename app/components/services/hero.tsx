@@ -12,7 +12,7 @@ export function ServicesHero() {
                     </AnimateOnLoad>
                     
                     <AnimateOnLoad animation="fade-in-up" delay={200}>
-                        <p className="text-background text-lg md:text-xl max-w-4xl mx-auto drop-shadow-sm leading-relaxed">
+                        <p className="text-background text-lg md:text-xl mx-auto drop-shadow-sm leading-relaxed">
                         Discover our comprehensive suite of insurtech solutions designed to transform the insurance industry
                         </p>
                     </AnimateOnLoad>
