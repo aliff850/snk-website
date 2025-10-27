@@ -8,19 +8,19 @@ import { LucideAArrowDown } from 'lucide-react'
 
 export function SolutionsGrid() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-2 md:px-24 py-4 md:py-16 flex flex-col  gap-4 md:gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-24 py-8 md:py-16 flex flex-col  gap-4 md:gap-12 font-onest">
 
             <ValuationBanner/>
 
             <div className="w-full max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     {solutions.map((solution, index) => (
                         <AnimateOnLoad 
                             key={index}
                             animation="fade-in-up" 
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl overflow-hidden border border-brand/20 hover:bg-brand-white hover:border-brand hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full flex flex-col text-center md:text-left group">
+                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl overflow-hidden border border-brand/20 hover:bg-brand-white hover:border-brand hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full flex flex-col text-center md:text-left group">
                                 
                                 {/* Image */}
                                 <div className="relative h-48 w-full">
@@ -32,26 +32,13 @@ export function SolutionsGrid() {
                                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     />
                                     {/* Overlay */}
-                                    <div className="opacity-20 group-hover:opacity-100 duration-300 transition-all absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent"></div>
+                                    <div className="opacity-20 group-hover:opacity-100 duration-500 transition-all absolute inset-0 bg-gradient-to-t from-brand/60 to-transparent"></div>
                                 </div>
 
                                 {/* Content */}
                                 <div className="p-4 md:p-6 flex-1 flex flex-col gap-2 md:gap-4">
                                     <h3 className="text-brand text-xl md:text-2xl font-bold">{solution.title}</h3>
-                                    <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{solution.description}</p>
-                                    
-                                    {/* Features
-                                    <div className="mb-4">
-                                        <h4 className="text-brand text-sm font-semibold mb-2">Key Features:</h4>
-                                        <ul className="space-y-1">
-                                            {solution.features.map((feature, featureIndex) => (
-                                                <li key={featureIndex} className="flex items-center gap-2">
-                                                    <div className="w-1.5 h-1.5 bg-brand-element rounded-full flex-shrink-0"></div>
-                                                    <span className="text-brand/70 text-xs md:text-sm">{feature}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div> */}
+                                    <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{solution.description}</p>                                
 
                                     {/* Learn More Button */}
                                     {solution.learnMoreUrl && (

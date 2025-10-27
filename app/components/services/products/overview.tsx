@@ -12,7 +12,7 @@ interface ProductOverviewProps{
 
 export function ProductOverview({ title, overview, image, alt, galleryImages }:ProductOverviewProps) {
     return(
-        <section className="w-full py-4 md:py-16 px-2 md:px-12 lg:px-24 font-onest relative overflow-hidden">
+        <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest relative overflow-hidden">
             {/* Ambient Background Elements */}
             {/* <div className="absolute inset-0 -z-10">
                 <div className="absolute top-20 right-10 w-96 h-96 bg-brand/5 rounded-full blur-3xl"></div>

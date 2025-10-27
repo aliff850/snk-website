@@ -2,6 +2,7 @@ import AnimateOnLoad from "../../ui/AnimateOnLoad"
 
 interface VideoDisplayComponents {
     filename: string,
+    filename_2: string,
 }
 
 // Helper function to convert YouTube URL to embed format
@@ -20,11 +21,12 @@ function getYouTubeEmbedUrl(url: string): string {
     return url;
 }
 
-export function PreviewVideo({ filename }: VideoDisplayComponents) {
+export function PreviewVideoAlternate({ filename, filename_2 }: VideoDisplayComponents) {
     const embedUrl = getYouTubeEmbedUrl(filename);
+    const embedUrl_2 = getYouTubeEmbedUrl(filename_2);
     
     return (
-        <section className="w-full flex flex-col justify-center items-center py-4 md:py-16 px-2 md:px-12 lg:px-24 font-onest relative overflow-hidden">
+        <section className="w-full flex flex-col justify-center items-center py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest relative overflow-hidden">
             {/* Background Elements */}
             {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand/5 to-transparent -z-10"></div> */}
             {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-element/5 rounded-full blur-3xl -z-10"></div> */}
@@ -37,7 +39,7 @@ export function PreviewVideo({ filename }: VideoDisplayComponents) {
                             VIDEO DEMO
                             <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-brand-element to-transparent"></div>
                         </div>
-                        <h2 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                        <h2 className="text-brand text-4xl md:text-5xl font-bold leading-tight">
                             See It In Action
                         </h2>
                         <p className="text-brand/70 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
@@ -51,6 +53,14 @@ export function PreviewVideo({ filename }: VideoDisplayComponents) {
                     <div className="relative">                        
                     
                         <VideoComponent url={embedUrl} />
+                        
+                    </div>
+                </AnimateOnLoad>
+
+                <AnimateOnLoad animation="fade-in-up" delay={300}>
+                    <div className="relative">                        
+                    
+                        <VideoComponent url={embedUrl_2} />
                         
                     </div>
                 </AnimateOnLoad>

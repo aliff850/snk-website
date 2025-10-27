@@ -40,31 +40,30 @@ const objectives: Objective[] = [
 
 export function Values() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-2 md:px-12 lg:px-24 py-4 md:py-16 flex flex-col gap-4 md:gap-12 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-4 md:gap-12 font-onest">
             
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">
-                <div className="flex flex-col text-center gap-4 max-w-4xl mx-auto">
-                    <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Our Values</h1>
-                    <p className="text-brand text-lg md:text-xl">
-                        The principles that guide our mission to transform the insurtech industry
+                <div className="flex flex-col text-center gap-2 md:gap-4 max-w-4xl mx-auto">
+                    <h1 className="text-brand text-4xl md:text-5xl font-bold">Our Values</h1>
+                    <p className="text-brand text-base md:text-lg">
+                        The principles that guide our mission to bring transformation to the insurtech industry.
                     </p>
                 </div>
             </AnimateOnLoad>
-
 
             {/* VISION AND MISSION CONTAINER */}
             <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 
                 <AnimateOnLoad animation="fade-in-left" delay={200}>
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
                             <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-300 rounded-full mb-4">
                                 <Eye className="h-12 w-12 text-white"/>
                             </div>
-                            <h2 className="text-brand text-3xl md:text-4xl font-bold">Vision</h2>
+                            <h2 className="text-brand text-2xl md:text-3xl font-bold">Vision</h2>
                         </div>
 
                         <div>
@@ -77,38 +76,21 @@ export function Values() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-right" delay={300}>
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-16 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
                             <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-300 rounded-full mb-4">
                                 <Crosshair className="h-12 w-12 text-white"/>
                             </div>
-                            <h2 className="text-brand text-3xl md:text-4xl font-bold">Mission</h2>
+                            <h2 className="text-brand text-2xl md:text-3xl font-bold">Mission</h2>
                         </div>
 
                         <div>
                             <p className="text-sm md:text-lg text-brand text-center leading-relaxed">
                                 Our mission is to simplify and automate insurance processes by uniting all stakeholders on a single digital platform. We are committed to delivering accurate, transparent, and accessible valuation and claims solutions powered by advanced technologies, and make insurance processes faster, smarter, and more reliable for everyone.
                             </p>
-                            {/* <ul className="text-brand leading-relaxed space-y-3 w-full">
-                                <li className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-brand-element rounded-full mt-2 flex-shrink-0"></div>
-                                    <span>To simplify and automate insurance processes for insurers, adjusters, workshops, and the public.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-brand-element rounded-full mt-2 flex-shrink-0"></div>
-                                    <span>To connect all parties in the insurance ecosystem on one seamless digital platform.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-brand-element rounded-full mt-2 flex-shrink-0"></div>
-                                    <span>To provide accurate, transparent, and accessible claims and valuation services with no vested interests.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-brand-element rounded-full mt-2 flex-shrink-0"></div>
-                                    <span>To continuously innovate using AI and advanced technology for faster, smarter, and more reliable solutions.</span>
-                                </li>
-                            </ul> */}
+                            
                         </div>
                     </div>
                 </AnimateOnLoad>
@@ -133,7 +115,7 @@ export function Values() {
                                 animation="fade-in-up" 
                                 delay={(index * 100 + 500) as 0 | 100 | 200 | 300 | 400}
                             >
-                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-300 ease-in-out shadow-lg h-full">
+                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full">
                                     <div className="text-center">
                                         <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-element rounded-full mb-4 text-white">
                                             {objective.icon}

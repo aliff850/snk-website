@@ -1,7 +1,8 @@
-import { ExternalLink, Calendar, Gauge, Fuel, Settings, Car, Trash2, ArrowUpDown, Grid3x3, List } from 'lucide-react'
-import { Button } from '../ui/button'
+import { ExternalLink, Calendar, Gauge, Fuel, Settings, Car, Trash2, ArrowUpDown, Grid3x3, List, CircleDollarSign } from 'lucide-react'
+// import { Button } from '../ui/button'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import MudahListingsListView from './ListingsListView'
+import UserInputsDisplay from './UserInputsDisplay'
 
 interface MudahListing {
     model_name: string
@@ -26,12 +27,25 @@ interface MudahListingsDisplayProps {
     listings: MudahListing[]
     listingsAscending?: MudahListing[]
     listingsDescending?: MudahListing[]
+    userInputs?: {
+        make: string
+        model: string
+        year?: string
+        bodyType?: string
+        engineCapacity?: string
+        fuelType?: string
+        transmission?: string
+        origin?: string
+        mileage?: string
+        insuredPrice?: string
+    }
 }
 
 export default function MudahListingsDisplay({ 
     listings = [], 
     listingsAscending = [],
-    listingsDescending = []
+    listingsDescending = [],
+    userInputs
 }: MudahListingsDisplayProps) {
     
     const [removedUrls, setRemovedUrls] = useState<Set<string>>(new Set())
@@ -112,6 +126,7 @@ export default function MudahListingsDisplay({
 
     // Price summary component
     const PriceSummary = ({ className = "" }: { className?: string }) => (
+           
         <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${className}`}>
             <div className="rounded-xl flex justify-between sm:items-center md:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
                 <p className="text-sm font-medium text-green-700">Lowest Price</p>
@@ -128,10 +143,27 @@ export default function MudahListingsDisplay({
                 <p className="md:text-4xl font-bold text-purple-900">{formatPrice(highestPrice)}</p>
             </div>
         </div>
+
     )
 
     return (
-        <div className="space-y-4">
+        <div className="flex flex-col gap-4">
+
+            {/* Container which displays user vehicle details */}
+            {userInputs && (
+                <UserInputsDisplay 
+                    make={userInputs.make}
+                    model={userInputs.model}
+                    year={userInputs.year}
+                    bodyType={userInputs.bodyType}
+                    engineCapacity={userInputs.engineCapacity}
+                    fuelType={userInputs.fuelType}
+                    transmission={userInputs.transmission}
+                    origin={userInputs.origin}
+                    mileage={userInputs.mileage}
+                    insuredPrice={userInputs.insuredPrice}
+                />
+            )}
             
             {/* Floating price container */}
             {shouldShowFloating && (
@@ -147,12 +179,20 @@ export default function MudahListingsDisplay({
             )}
             
             {/* Container to display all prices and average */}
-            <div ref={priceContainerRef} className="mb-6">
+            <div ref={priceContainerRef} className="rounded-xl border border-foreground/20 flex flex-col p-2 md:p-4">
+                <div className="flex items-center gap-2 mb-4">
+                    <div className="p-2 rounded-lg bg-green-100">
+                        <CircleDollarSign className="w-5 h-5 text-green-900" />
+                    </div>
+                    <h3 className="text-lg md:text-xl font-bold text-foreground">Estimated Market Value</h3>
+                </div>
                 <PriceSummary />
             </div>
 
             {/* Controls Section - Price Sorting and Display Mode Toggle */}
-            <div className="flex flex-col gap-3">
+            <div className="rounded-xl border border-foreground/20 p-2 md:p-4 flex flex-col gap-4">
+
+            <div className="flex flex-col gap-4">
                 {/* Price Sorting */}
                 {listingsAscending.length > 0 && listingsDescending.length > 0 && (
                     <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
@@ -188,6 +228,7 @@ export default function MudahListingsDisplay({
                 {/* Toggle for ascending and descending */}
                 <div className="flex items-center justify-between">
 
+                    {/* Title text for listings */}
                     <div className="flex flex-col text-center md:text-left">
                         <h6 className="font-semibold text-xl md:text-2xl">
                             {listingsAscending.length > 0 && listingsDescending.length > 0 ? (
@@ -351,6 +392,7 @@ export default function MudahListingsDisplay({
                     ))}
                 </div>
             )}
+            </div>
         </div>
     )
 }

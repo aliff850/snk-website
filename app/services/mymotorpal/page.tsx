@@ -2,7 +2,7 @@ import { ProductHero } from '@/app/components/services/products/hero';
 import { ProductOverview } from '@/app/components/services/products/overview';
 import { ProductFeatures } from '@/app/components/services/products/features';
 import { ProductCTA } from '@/app/components/services/products/cta';
-// import { PreviewVideo } from '@/app/components/services/products/video';
+import { PreviewVideo } from '@/app/components/services/products/previewVideo';
 
 export const metadata = {
     title: "MyMotorPal",
@@ -65,9 +65,9 @@ export default function MotorPalPage() {
                 features={motorPalFeatures}
             />
 
-            {/* <PreviewVideo 
+            <PreviewVideo 
                 filename='https://www.youtube.com/embed/EId9-gqNMB4?si=lEyYohGOcyTMANeM'
-            /> */}
+            />
             
             <ProductCTA 
 

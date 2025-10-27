@@ -132,12 +132,13 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                 )}
                 {results && (
                     <div className="space-y-8">
-                        <div className="rounded-2xl md:rounded-3xl lg:border lg:border-foreground/20 p-4">
+                        <div className="p-2 md:p-0">
 
                             <MudahListingsDisplay 
                                 listings={results?.listings || []}
                                 listingsAscending={results?.listingsAscending || []}
                                 listingsDescending={results?.listingsDescending || []}
+                                userInputs={results?.userInputs}
                             />
 
                         </div>

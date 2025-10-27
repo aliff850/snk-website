@@ -12,7 +12,7 @@ export function Footer() {
                 <div className="lg:col-span-2">
                     <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-6 text-center md:text-left text-white">About SNK</h3>
                     <p className="text-brand-foreground text-sm text-center md:text-justify leading-relaxed mb-6 max-w-lg">
-                        We are Malaysia&apos;s leading Insurtech provider with 25 years of experience in motor vehicle valuation and insurance claims solutions. Trusted by top insurers, we deliver innovative digital platforms that make insurance simple, fast, and accessible for everyone.
+                        We are Malaysia's leading Insurtech provider with 25 years of experience in motor vehicle valuation and insurance claims solutions. Trusted by top insurers, we deliver innovative digital platforms that make insurance simple, fast, and accessible for everyone.
                     </p>
                     <div className="w-full md:w-fit flex justify-center space-x-2 md:space-x-4">
                         <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors duration-200">
@@ -85,7 +85,7 @@ export function Footer() {
             </div>
 
             {/* Bottom Section */}
-            <div className="border-t border-white/20 pt-4 md:pt-8 text-sm">
+            <div className="border-t border-white/20 py-4 md:py-8 text-sm">
                 <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                     <p className="text-brand-foreground">
                         © 2025 SNK Market Data Research. All rights reserved.
@@ -103,6 +103,10 @@ export function Footer() {
                     </div>
                 </div>
             </div>
+
+            {/* <div className="border-t border-white/20 pt-4 text-center">
+                <p className="text-xs text-brand-foreground/60">Developed by OnlySoft</p>
+            </div> */}
         </div>
     </footer>
     )

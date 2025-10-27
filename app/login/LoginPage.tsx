@@ -6,12 +6,16 @@ import Link from "next/link";
 import { login } from "@/utils/authentication";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirectTo')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,37 +24,41 @@ export default function LoginPage() {
 
     const formData = new FormData(e.currentTarget);
 
-    const loginPromise = login(formData);
-
-    toast.promise(loginPromise, {
-      pending: "Logging in...",
-      success: {
-        render() {
-          return "Successfully logged in!";
-        },
-      },
-      error: {
-        render({ data }: { data: any }) {
-          const message =
-            typeof data?.message === "string"
-              ? data.message
-              : typeof data === "string"
-              ? data
-              : undefined;
-          return message || "An unexpected error occurred";
-        },
-      },
-    });
-
     try {
+      // Create a promise that handles the response properly
+      const loginPromise = new Promise(async (resolve, reject) => {
+        try {
+          const response = await login(formData);
+          
+          if (response.ok) {
+            resolve(response);
+          } else {
+            reject(new Error(response.message));
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      toast.promise(loginPromise, {
+        pending: "Logging in...",
+        success: {
+          render() {
+            return "Successfully logged in!";
+          },
+        },
+        error: {
+          render({ data }: { data: Error }) {
+            return data.message || "An unexpected error occurred";
+          },
+        },
+      });
+
       await loginPromise;
-      router.push("/");
+      router.push(redirectTo || '/');
     } catch (err: any) {
-      setError(
-        typeof err === "string"
-          ? err
-          : err?.message || "An unexpected error occurred"
-      );
+      const errorMessage = err?.message || err || "An unexpected error occurred";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -79,15 +87,29 @@ export default function LoginPage() {
                 required
                 disabled={isLoading}
               />
-              <input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Password"
-                className="border border-white/40 bg-white/10 placeholder:text-brand-white/60 px-4 text-brand-white py-2 transition-all duration-200 rounded-full outline-none focus:border-brand"
-                required
-                disabled={isLoading}
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  className="border border-white/40 bg-white/10 placeholder:text-brand-white/60 px-4 text-brand-white py-2 transition-all duration-200 rounded-full outline-none focus:border-brand w-full pr-12"
+                  required
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-white/60 hover:text-brand-white transition-colors duration-200"
+                  disabled={isLoading}
+                >
+                  {showPassword ? (
+                    <Eye size={20}/>
+                  ) : (
+                    <EyeOff size={20}/>
+                  )}
+                </button>
+              </div>
 
               {error && <p className="text-xs text-red-300">{error}</p>}
               <Button type="submit" variant="secondary" disabled={isLoading}>
@@ -100,7 +122,7 @@ export default function LoginPage() {
             <p className="w-full flex items-center justify-center">
               No account yet?
               <Link
-                href="/register"
+                href={`/register` + (redirectTo ? `?redirectTo=${redirectTo}` : "")}
                 className="ml-1 hover:text-brand transition-colors duration-300 underline decoration-dotted underline-offset-2"
               >
                 Register now

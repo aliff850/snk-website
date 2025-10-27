@@ -19,8 +19,8 @@ const timelineEvents: TimelineEvent[] = [
     },
     {
         year: "2008",
-        title: "Becoming SNKMDR",
-        description: "Rebranded as SNKMDR, a dedicated Insurtech provider. Accredited by the Motor Research Consortium; approved by BNM & PIAM to deliver accident estimation systems.",
+        title: "Becoming SNK MDR",
+        description: "Rebranded as SNK MDR, a dedicated Insurtech provider. Accredited by the Motor Research Consortium; approved by BNM & PIAM to deliver accident estimation systems.",
         image: "/images/timeline/snknew.png"
     },
     {
@@ -38,26 +38,38 @@ const timelineEvents: TimelineEvent[] = [
     {
         year: "2018",
         title: "Road Ranger Thailand",
-        description: "Developed and launched Road Ranger for Thailand's insurers, covering accident assistance, estimation, adjusting, and repair payments.",
+        description: "Developed and launched Road Ranger for Thailand's insurers, covering accident assistance, vehicle damage estimation, adjusting, and repair payments.",
         image: "/images/timeline/thai.jpeg"
     },
     {
-        year: "Today",
-        title: "Regional Insurtech Leader",
-        description: "Trusted by Allianz, Etiqa, MSIG, Tokio Marine, Great Eastern, Chubb, and more. Driving AI-powered claims estimation with AIT Thailand.",
-        image: "/images/timeline/leader.jpeg"
+        year: "2022",
+        title: "Online Insurance Sales and Marketing Platform",
+        description: "Launched an integrated online platform enabling insurers and agents to manage digital policy sales, marketing campaigns, and customer engagement in real time.",
+        image: "/images/snk.png"
+    },
+    {
+        year: "2024",
+        title: "Comprehensive Insurance Loss Adjuster Online System",
+        description: "Introduced a unified system for loss adjusters to streamline claims assessment, documentation, and reporting, enhancing efficiency and transparency across insurers.",
+        image: "/images/snk.png"
+    },
+    {
+        year: "2025",
+        title: "Service Tax Middleware Services",
+        description: "Deployed a specialized middleware solution for automated service tax compliance, connecting insurers’ core systems with regulatory reporting frameworks seamlessly.",
+        image: "/images/snk.png"
     },
     
 ];
 
 export function History() {
     return(
-        <section className="w-full min-h-svh justify-center items-center px-2 md:px-12 lg:px-24 py-4 md:py-16 flex flex-col gap-4 md:gap-8 font-onest">
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-4 md:gap-8 font-onest">
             
             <AnimateOnLoad animation="fade-in-up">
                 <div className="flex flex-col text-center gap-2 md:gap-4 max-w-4xl">
-                    <h1 className="text-brand text-4xl md:text-5xl lg:text-6xl font-bold">Our Journey</h1>
-                    <p className="text-brand text-base md:text-xl">
+                    <h1 className="text-brand text-4xl md:text-5xl font-bold">Our Journey</h1>
+                    <p className="text-brand text-base md:text-lg">
                         Over 25 years of innovation, growth, and transformation in the insurtech industry.
                     </p>
                 </div>
@@ -68,12 +80,10 @@ export function History() {
                 <AnimateOnLoad animation="fade-in-up" delay={200}>
                     <div className="relative">
                         {/* Timeline Line */}
-                        <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-brand rounded-full">
-                                                    
-                        </div>
+                        <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-brand rounded-full"></div>
                         
                         {/* Timeline Events */}
-                        <div className="flex flex-col gap-8 md:gap-12">
+                        <div className="flex flex-col gap-4 md:gap-8">
                             {timelineEvents.map((event, index) => (
                                 <TimelineEventComponent 
                                     key={index} 
