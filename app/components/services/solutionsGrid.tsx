@@ -55,7 +55,7 @@ export function SolutionsGrid() {
 
             <AnimateOnLoad animation="fade-in-up" delay={400}>
                 <div className="w-full mx-auto text-center">
-                    <div className="bg-brand-white/95 rounded-2xl md:rounded-3xl px-4 md:px-16 py-4 md:py-8 border border-brand/20 shadow-lg">
+                    <div className="bg-brand-white/95 rounded-2xl md:rounded-3xl px-4 md:px-16 py-4 md:py-8 border border-brand/20 hover:border-brand duration-500 transition-colors shadow-lg">
                         <h3 className="text-brand text-2xl md:text-3xl font-bold mb-4">Ready to Transform Your Insurance Operations?</h3>
                         <p className="text-brand md:text-lg mb-6">
                             Contact us today to learn how our solutions can streamline your processes and enhance customer experiences.

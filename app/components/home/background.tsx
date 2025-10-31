@@ -11,7 +11,7 @@ export function Background() {
 
                 <AnimateOnLoad animation="fade-in" className="h-full">
                     <div className="relative flex flex-col justify-end h-full flex flex-col gap-4 md:gap-6">
-                        <div className="h-full rounded-3xl border border-brand-white/40 hover:border-brand-white transition-colors duration-300 overflow-hidden group">
+                        <div className="h-full rounded-2xl md:rounded-3xl border border-brand-white/40 hover:border-brand-white transition-colors duration-300 overflow-hidden group">
                             <Image src="/images/snk.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width={1200} height={1200} alt="snk"/>
                         </div>
 

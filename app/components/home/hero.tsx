@@ -7,7 +7,7 @@ export function HeroSection() {
     return (
 
         <section className="bg-brand min-h-svh bg-[url('/images/w214.jpg')] bg-cover bg-center bg-fixed flex flex-col justify-center items-center">
-            <div className="h-svh w-full bg-black/50 flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 md:py-16 pt-32 pb-16">
+            <div className="h-svh w-full bg-black/50 flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 py-8">
 
                 <div className="mx-auto max-w-7xl font-onest">
                     <AnimateOnLoad animation="fade-in-up">

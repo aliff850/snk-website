@@ -77,7 +77,7 @@ export function Navigation() {
   }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex flex-col justify-center items-center p-4 md:p-4 font-onest">
+    <nav className="fixed top-0 left-0 right-0 z-50 flex flex-col justify-center items-center px-4 py-2 md:p-4 font-onest">
       <div
         className={`container md:py-3 md:px-8 transition-all duration-300 md:border md:border-brand-white/20 md:hover:border-brand-white/40 md:backdrop-blur-lg w-full max-w-7xl transition-colors rounded-3xl ${
           isScrolled
@@ -167,7 +167,7 @@ export function Navigation() {
                 aria-label="Toggle navigation menu"
                 aria-expanded={isMenuOpen}
                 onClick={() => setIsMenuOpen((open) => !open)}
-                className="flex items-center justify-center p-2.5 rounded-lg hover:bg-brand/10 active:bg-brand/20 transition-all duration-200"
+                className="flex items-center justify-center p-2 rounded-lg hover:bg-brand/10 active:bg-brand/20 transition-all duration-200"
               >
                 <span className="sr-only">Open menu</span>
                 <span className="relative block w-6 h-5">

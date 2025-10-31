@@ -33,31 +33,31 @@ const timelineEvents: TimelineEvent[] = [
         year: "2016",
         title: "Advanced Solutions",
         description: "Extended valuation services to six Malaysian insurers and one in Thailand. First to provide valuations for lorries (up to 10 tonnes) and motorcycles.",
-        image: "/images/timeline/lorries.jpg"
+        image: "/images/timeline/10tons.png"
     },
     {
         year: "2018",
         title: "Road Ranger Thailand",
         description: "Developed and launched Road Ranger for Thailand's insurers, covering accident assistance, vehicle damage estimation, adjusting, and repair payments.",
-        image: "/images/timeline/thai.jpeg"
+        image: "/images/timeline/roadrangerthailand.png"
     },
     {
         year: "2022",
         title: "Online Insurance Sales and Marketing Platform",
         description: "Launched an integrated online platform enabling insurers and agents to manage digital policy sales, marketing campaigns, and customer engagement in real time.",
-        image: "/images/snk.png"
+        image: "/services/insurance/digital-insurance.png"
     },
     {
         year: "2024",
         title: "Comprehensive Insurance Loss Adjuster Online System",
         description: "Introduced a unified system for loss adjusters to streamline claims assessment, documentation, and reporting, enhancing efficiency and transparency across insurers.",
-        image: "/images/snk.png"
+        image: "/images/timeline/loss.png"
     },
     {
         year: "2025",
         title: "Service Tax Middleware Services",
         description: "Deployed a specialized middleware solution for automated service tax compliance, connecting insurers’ core systems with regulatory reporting frameworks seamlessly.",
-        image: "/images/snk.png"
+        image: "/images/timeline/middleware.png"
     },
     
 ];
