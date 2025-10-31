@@ -142,9 +142,8 @@ export function ValuationLayout() {
                     sortby: sortOrder,
                     type 
                 }
-    
+
                 // building the range filters
-                
                 // Model year
                 const yearQuery = (() => {
                     const from = yearFrom || ""
@@ -157,7 +156,7 @@ export function ValuationLayout() {
 
                 if (yearQuery) searchQuery.mfg_year = yearQuery
                 if (fueltype) searchQuery.fueltype = fueltype
-                if (condition) searchQuery.condition = condition
+                // if (condition) searchQuery.condition = condition
 
                 // Engine capacity
                 const engineCapacityCcRange = (() => {
@@ -565,11 +564,11 @@ export function ValuationLayout() {
                                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         >
                                             <option value="">--</option>
-                                            <option value="new">New Local</option>
-                                            <option value="new">New Import</option>
-                                            <option value="recon">Reconditioned</option>
-                                            <option value="used">CBU</option>
-                                            <option value="used">CKD</option>
+                                            <option value="New Local">New Local</option>
+                                            <option value="New Import">New Import</option>
+                                            <option value="Recon">Reconditioned</option>
+                                            <option value="CBU">CBU</option>
+                                            <option value="CKD">CKD</option>
                                         </select>
                                     </div>
                                 </div>
@@ -591,7 +590,7 @@ export function ValuationLayout() {
                                         >
                                             <option value="">--</option>
                                             {mileageOptions.filter(v => v !== 'Any').map(m => (
-                                                <option key={m} value={m}>{Number(m).toLocaleString()}</option>
+                                                <option key={m} value={m}>{Number(m).toLocaleString()}+</option>
                                             ))}
                                         </select>
                                     </div>
@@ -661,10 +660,10 @@ export function ValuationLayout() {
                 <div className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/40 p-4 md:p-6">
                     <div className="md:p-6 w-full flex flex-col gap-4 justify-center items-center md:border md:border-dashed md:border-foreground/20 rounded-2xl">
                         <div className="p-4 rounded-2xl md:rounded-3xl bg-brand-element/10">
-                            <FaCarOn className="w-16 h-16 text-brand"/>
+                            <FaCarOn className="w-12 h-12 text-brand"/>
                         </div>
                         
-                        <h3 className="text-xl md:text-3xl font-bold text-center text-brand">Get Detailed Specifications Regarding Your Vehicle</h3>
+                        <h3 className="text-xl md:text-2xl font-bold text-center text-brand">Get Detailed Specifications Regarding Your Vehicle</h3>
 
                         <Button href="/valuation/specifications" variant="secondary" size="sm" className="flex md:text-xl gap-2">
                             Go to Vehicle Specifications <ArrowRight />

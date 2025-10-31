@@ -209,7 +209,8 @@ export default function MudahListingsDisplay({
                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                             >
-                                Price: Low to High ({listingsAscending.length})
+                                Price: Low to High 
+                                {/* ({listingsAscending.length}) */}
                             </button>
                             <button
                                 onClick={() => setViewMode('descending')}
@@ -219,7 +220,8 @@ export default function MudahListingsDisplay({
                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                             >
-                                Price: High to Low ({listingsDescending.length})
+                                Price: High to Low 
+                                {/* ({listingsDescending.length}) */}
                             </button>
                         </div>
                     </div>

@@ -48,86 +48,39 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                     </div>
                 )}
                 {loading && (
-                    <div className="space-y-8">
+                    <div className="flex flex-col items-center gap-4 py-10">
+                        
+                        <svg
+                            className="h-12 w-12 animate-spin"
+                            viewBox="0 0 48 48"
+                            fill="none"
+                            aria-hidden="true"
+                        >
+                            {/* Track */}
+                            <circle
+                                cx="24"
+                                cy="24"
+                                r="20"
+                                className="text-foreground/20"
+                                stroke="currentColor"
+                                strokeWidth="6"
+                            />
+                            {/* Active arc with gap and rounded ends */}
+                            <circle
+                                cx="24"
+                                cy="24"
+                                r="20"
+                                className="text-brand"
+                                stroke="currentColor"
+                                strokeWidth="6"
+                                strokeLinecap="round"
+                                strokeDasharray="100 200"
+                                strokeDashoffset="0"
+                                transform="rotate(-90 24 24)"
+                            />
+                        </svg>
+                        <p className="text-xs md:text-sm tracking-wide text-foreground/60">Fetching results...</p>
 
-                        <div className="rounded-3xl lg:border lg:border-foreground/20 p-4">
-
-                            <div className="space-y-6">
-
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                    <div className="rounded-xl border border-gray-300 p-4 overflow-hidden">
-                                        <div className="h-4 rounded w-20 mb-2 animate-shimmer"></div>
-                                        <div className="h-10 rounded w-32 animate-shimmer"></div>
-                                    </div>
-                                    <div className="rounded-xl border border-gray-300 p-4 overflow-hidden">
-                                        <div className="h-4 rounded w-24 mb-2 animate-shimmer"></div>
-                                        <div className="h-10 rounded w-36 animate-shimmer"></div>
-                                    </div>
-                                    <div className="rounded-xl border border-gray-300 p-4 overflow-hidden">
-                                        <div className="h-4 rounded w-22 mb-2 animate-shimmer"></div>
-                                        <div className="h-10 rounded w-32 animate-shimmer"></div>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col mb-4">
-                                    <div className="h-8 rounded-lg w-64 mb-2 animate-shimmer"></div>
-                                    <div className="h-4 rounded-lg w-96 animate-shimmer"></div>
-                                </div>
-
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-4 h-4 rounded animate-shimmer"></div>
-                                        <div className="h-5 rounded w-12 animate-shimmer"></div>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <div className="h-10 rounded-lg w-32 animate-shimmer"></div>
-                                        <div className="h-10 rounded-lg w-32 animate-shimmer"></div>
-                                    </div>
-                                </div>
-                                
-
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                    {Array.from({ length: 2 }).map((_, index) => (
-                                        <div key={index} className="rounded-xl border border-foreground/20 bg-brand-white overflow-hidden">
-                                            <div className="p-4 md:p-5">
-
-                                                <div className="flex items-start justify-between mb-3">
-                                                    <div className="flex-1">
-                                                        <div className="h-6 rounded w-48 mb-2 animate-shimmer"></div>
-                                                        <div className="h-4 rounded w-32 mb-2 animate-shimmer"></div>
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="h-6 rounded-full w-16 animate-shimmer"></div>
-                                                            <div className="h-4 rounded w-20 animate-shimmer"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        <div className="h-8 rounded w-20 animate-shimmer"></div>
-                                                        <div className="w-6 h-6 rounded animate-shimmer"></div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div className="mt-3 rounded-lg h-48 animate-shimmer"></div>
-                                                
-                                                <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
-                                                    {Array.from({ length: 4 }).map((_, specIndex) => (
-                                                        <div key={specIndex} className="flex items-center gap-2">
-                                                            <div className="w-4 h-4 rounded animate-shimmer"></div>
-                                                            <div>
-                                                                <div className="h-3 rounded w-16 mb-1 animate-shimmer"></div>
-                                                                <div className="h-4 rounded w-20 animate-shimmer"></div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                                
-                                                
-                                                <div className="mt-4 h-10 rounded-xl animate-shimmer"></div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 )}
                 {results && (
