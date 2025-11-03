@@ -15,7 +15,7 @@ export function SolutionCard({
 }:solutionCardProps) {
 
     return (
-        <div className="group relative h-80 w-full overflow-hidden rounded-2xl shadow-lg transition-all duration-500 hover:shadow-2xl hover:scale-105 border border-brand-white/20 hover:border-brand-white">
+        <div className="group relative h-80 w-full overflow-hidden rounded-2xl shadow-lg transition-all duration-500 hover:shadow-2xl hover:scale-105 ring-1 ring-brand-white/40 hover:ring-brand-white">
             {/* Background Image */}
             <div 
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-110"

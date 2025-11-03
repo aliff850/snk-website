@@ -62,11 +62,11 @@ export function PreviewVideo({ filename }: VideoDisplayComponents) {
 
 function VideoComponent({ url }: { url: string }) {
     return (
-        <div className="relative w-full aspect-video overflow-hidden rounded-3xl border-2 border-brand/20 shadow-2xl group">
+        <div className="relative w-full aspect-video overflow-hidden rounded-2xl md:rounded-3xl ring-2 ring-brand/20 shadow-2xl group">
 
             {/* Corner Accents */}
-            <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-brand rounded-tl-3xl opacity-50"></div>
-            <div className="absolute bottom-0 right-0 w-20 h-20 border-b-4 border-r-4 border-brand rounded-br-3xl opacity-50"></div>
+            {/* <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-brand rounded-tl-3xl opacity-50"></div>
+            <div className="absolute bottom-0 right-0 w-20 h-20 border-b-4 border-r-4 border-brand rounded-br-3xl opacity-50"></div> */}
 
             <iframe 
                 src={url} 

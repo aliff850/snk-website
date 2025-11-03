@@ -18,7 +18,7 @@ export function ContactMap() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-up" delay={200}>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 items-start">
                         
                         {/* Map Container */}
                         <div className="bg-white/95 backdrop-blur-sm rounded-3xl border border-white/20 shadow-lg">
@@ -39,7 +39,7 @@ export function ContactMap() {
                         </div>
 
                         {/* Location Details */}
-                        <div className="flex flex-col gap-4 md:gap-8">
+                        <div className="flex flex-col gap-4 md:gap-6">
 
                             <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-4 md:p-8 border border-white/20 shadow-lg">
                                    

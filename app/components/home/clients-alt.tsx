@@ -12,7 +12,7 @@ import { useState, useRef, useEffect } from 'react'
         { name: "Great Eastern", logo: "/clients/great-eastern.png" },
         { name: "Chubb", logo: "/clients/chubb.png" },
         { name: "Thai Pai Boon", logo: "/clients/thaipaiboon.svg" },
-        { name: "Lonpac", logo: "/clients/lonpac.png"},
+        // { name: "Lonpac", logo: "/clients/lonpac.png"},
         { name: "Amanah", logo: "/clients/amanah.png"},
         { name: "FPG", logo: "/clients/fpg.png"}
     ]
