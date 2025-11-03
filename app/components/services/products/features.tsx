@@ -39,7 +39,7 @@ export function ProductFeatures({header, caption, features}: FeatureProps) {
                             animation="fade-in-up" 
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="group relative bg-brand-white rounded-2xl md:rounded-3xl p-4 md:p-8 border border-brand/50 hover:border-brand shadow-lg transition-all duration-500 h-full overflow-hidden">                                
+                            <div className="group relative bg-brand-white rounded-2xl md:rounded-3xl p-4 md:p-8 ring-1 ring-brand/20 hover:ring-brand shadow-lg transition-all duration-500 h-full overflow-hidden">                                
                                 
                                 {/* feature number */}
                                 <div className="absolute -right-6 -top-6 text-[120px] md:text-[140px] font-black text-brand/5 group-hover:text-brand/10 transition-all duration-500 select-none pointer-events-none leading-none">

@@ -79,7 +79,7 @@ export function Navigation() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-col justify-center items-center px-4 py-2 md:p-4 font-onest">
       <div
-        className={`container md:py-3 md:px-8 transition-all duration-300 md:border md:border-brand-white/20 md:hover:border-brand-white/40 md:backdrop-blur-lg w-full max-w-7xl transition-colors rounded-3xl ${
+        className={`container md:py-3 md:px-8 transition-all duration-300 md:ring-1 md:ring-brand-white/20 md:hover:ring-brand-white/40 md:backdrop-blur-lg w-full max-w-7xl transition-ring rounded-3xl ${
           isScrolled
             ? "md:bg-brand-white md:shadow-lg text-foreground"
             : "text-brand-white"
@@ -197,7 +197,7 @@ export function Navigation() {
                   className={`flex items-center ${
                     isScrolled
                       ? "text-brand-white hover:bg-brand hover:scale-105 bg-brand/80"
-                      : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-150"
+                      : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-300"
                   } transition-all px-4 py-2 rounded-xl`}
                 >
                   Sign Out
@@ -208,7 +208,7 @@ export function Navigation() {
                   className={`flex items-center ${
                     isScrolled
                       ? "text-brand-white hover:bg-brand hover:scale-105 bg-brand/80"
-                      : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-150"
+                      : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-300"
                   } transition-all px-4 py-2 rounded-xl`}
                 >
                   Log In

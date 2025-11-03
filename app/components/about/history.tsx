@@ -119,7 +119,7 @@ function TimelineEventComponent({ event, index }: TimelineEventProps) {
                         animation={isLeft ? "fade-in-left" : "fade-in-right"} 
                         delay={animationDelay}
                     >
-                        <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-brand/20 hover:bg-brand-white hover:border-brand transition-all duration-300 ease-in-out shadow-lg flex flex-col gap-1 md:gap-2">
+                        <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 ring-1 ring-brand/20 hover:bg-brand-white hover:ring-brand transition-all duration-500 ease-in-out shadow-lg flex flex-col gap-1 md:gap-2">
                             <div className="text-brand text-4xl font-bold">{event.year}</div>
                             <h3 className="text-brand text-xl md:text-2xl font-semibold">{event.title}</h3>
                             <p className="text-brand/80 text-sm md:text-base leading-relaxed">{event.description}</p>
@@ -143,12 +143,12 @@ function TimelineEventComponent({ event, index }: TimelineEventProps) {
                         animation={isLeft ? "fade-in-left" : "fade-in-right"} 
                         delay={animationDelay}
                     >
-                        <div className="relative h-64 rounded-2xl border border-brand/20 hover:border-brand transition-all duration-300 overflow-hidden shadow-lg group">
+                        <div className="relative h-64 rounded-2xl ring-1 ring-brand/20 hover:ring-brand transition-all duration-500 overflow-hidden shadow-lg group">
                             <Image
                                 src={event.image}
                                 alt={event.title}
                                 fill
-                                className="object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                                className="object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
                             />
                             {/* Overlay for better visual appeal */}

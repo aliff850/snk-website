@@ -11,8 +11,8 @@ export function Background() {
 
                 <AnimateOnLoad animation="fade-in" className="h-full">
                     <div className="relative flex flex-col justify-end h-full flex flex-col gap-4 md:gap-6">
-                        <div className="h-full rounded-2xl md:rounded-3xl border border-brand-white/40 hover:border-brand-white transition-colors duration-300 overflow-hidden group">
-                            <Image src="/images/snk.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width={1200} height={1200} alt="snk"/>
+                        <div className="h-full rounded-2xl md:rounded-3xl ring-1 ring-brand-white/40 hover:ring-brand-white/70 transition-all duration-300 overflow-hidden group">
+                            <Image src="/images/snk.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={1200} height={1200} alt="snk"/>
                         </div>
 
                         {/* <div className="absolute grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
@@ -51,17 +51,17 @@ export function Background() {
                         <p className="w-full">We are registered with MDEC, and recognized by Bank Negara Malaysia and the Insurance Association of Malaysia (PIAM), and trusted by leading insurers in Malaysia and across Asia.</p>
 
                         <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="p-4 bg-brand-white shadow-lg rounded-2xl hover:scale-105 transition-transform duration-300">
+                            <div className="p-4 bg-brand-white shadow-lg rounded-2xl hover:scale-105 transition-transform duration-500">
                                 <div className="relative w-full h-16">
                                     <Image src="/images/bnm.png" alt="BNM" width={160} height={64} className="h-full w-auto object-contain mx-auto" />
                                 </div>
                             </div>
-                            <div className="p-4 bg-brand-white shadow-lg rounded-2xl hover:scale-105 transition-transform duration-300">
+                            <div className="p-4 bg-brand-white shadow-lg rounded-2xl hover:scale-105 transition-transform duration-500">
                                 <div className="relative w-full h-16">
                                     <Image src="/images/piam.png" alt="PIAM" width={160} height={64} className="h-full w-auto object-contain mx-auto" />
                                 </div>
                             </div>
-                            <div className="p-4 bg-brand-white shadow-lg rounded-2xl hover:scale-105 transition-transform duration-300">
+                            <div className="p-4 bg-brand-white shadow-lg rounded-2xl hover:scale-105 transition-transform duration-500">
                                 <div className="relative w-full h-16">
                                     <Image src="/images/mdec.png" alt="MDEC" width={160} height={64} className="h-full w-auto object-contain mx-auto" />
                                 </div>

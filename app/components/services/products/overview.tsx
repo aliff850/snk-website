@@ -51,7 +51,7 @@ export function ProductOverview({ title, overview, image, alt, galleryImages }:P
                         <div className="relative h-[240px] md:h-[650px]">
 
                             {/* Main Image/Gallery Container */}
-                            <div className="relative h-full rounded-2xl md:rounded-3xl overflow-hidden border border-brand shadow-lg group">
+                            <div className="relative h-full rounded-2xl md:rounded-3xl overflow-hidden ring-1 ring-brand shadow-lg group">
                                                                 
                                 {(() => {
                                     const slides = galleryImages && galleryImages.length > 0

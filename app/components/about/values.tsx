@@ -56,11 +56,11 @@ export function Values() {
             <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 
                 <AnimateOnLoad animation="fade-in-left" delay={200}>
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 ring-1 ring-brand/20 hover:ring-brand duration-500 transition-ring shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
-                            <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-300 rounded-full mb-4">
+                            <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-500 rounded-full mb-4">
                                 <Eye className="h-12 w-12 text-white"/>
                             </div>
                             <h2 className="text-brand text-2xl md:text-3xl font-bold">Vision</h2>
@@ -76,11 +76,11 @@ export function Values() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-right" delay={300}>
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 border border-brand/20 hover:border-brand duration-300 transition-colors shadow-lg h-full group">
+                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 ring-1 ring-brand/20 hover:ring-brand duration-500 transition-ring shadow-lg h-full group">
 
                         <div className="text-center p-4 w-48">
                             {/* Icon */}
-                            <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-300 rounded-full mb-4">
+                            <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-500 rounded-full mb-4">
                                 <Crosshair className="h-12 w-12 text-white"/>
                             </div>
                             <h2 className="text-brand text-2xl md:text-3xl font-bold">Mission</h2>
@@ -115,7 +115,7 @@ export function Values() {
                                 animation="fade-in-up" 
                                 delay={(index * 100 + 500) as 0 | 100 | 200 | 300 | 400}
                             >
-                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-brand/20 hover:border-brand hover:bg-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full">
+                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 ring-1 ring-brand/20 hover:ring-brand hover:bg-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full">
                                     <div className="text-center">
                                         <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-element rounded-full mb-4 text-white">
                                             {objective.icon}
