@@ -3,6 +3,7 @@ import { ProductOverview } from '@/app/components/services/products/overview';
 import { ProductFeatures } from '@/app/components/services/products/features';
 import { ProductCTA } from '@/app/components/services/products/cta';
 import { PreviewVideo } from '@/app/components/services/products/previewVideo';
+import { HowItWorks } from '@/app/components/services/products/howItWorks';
 
 export const metadata = {
     title: "Online Digital Insurance Platform",
@@ -56,6 +57,20 @@ export default function OnlineInsurancePage() {
                     { src: '/services/insurance/digital-insurance.png', alt: 'Logo' },
 
                 ]}
+            />
+
+            <HowItWorks 
+
+                title="How Does It Work?"
+                caption="Learn how this system makes policy issuance simpler and better"
+                alt="howItWorks"
+                galleryImages={[
+                    { src: '/services/insurance/workflow/17.png', alt: 'Slide1' },
+                    { src: '/services/insurance/workflow/18.png', alt: 'Slide2' },
+                    { src: '/services/insurance/workflow/19.png', alt: 'Slide3' },
+                    { src: '/services/insurance/workflow/20.png', alt: 'Slide4' },
+                ]}
+            
             />
 
             <ProductFeatures 

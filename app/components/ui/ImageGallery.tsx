@@ -14,13 +14,17 @@ interface ImageGalleryProps {
     intervalMs?: number;
     className?: string;
     roundedClassName?: string;
+    aspectClassName?: string;
+    autoPlay?: boolean;
 }
 
 export default function ImageGallery({
     images,
     intervalMs = 3500,
     className,
-    roundedClassName = "rounded-3xl",
+    // roundedClassName = "rounded-3xl",
+    aspectClassName,
+    autoPlay = true,
 }: ImageGalleryProps) {
     const [index, setIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
@@ -40,11 +44,12 @@ export default function ImageGallery({
     useEffect(() => {
         if (total <= 1) return;
         if (isPaused) return;
+        if (!autoPlay) return;
         const id = setInterval(() => {
             setIndex((i) => (i + 1) % total);
         }, intervalMs);
         return () => clearInterval(id);
-    }, [intervalMs, total, isPaused]);
+    }, [intervalMs, total, isPaused, autoPlay]);
 
     const handleTouchStart = (e: React.TouchEvent) => {
         touchStartXRef.current = e.touches[0]?.clientX ?? null;
@@ -71,7 +76,7 @@ export default function ImageGallery({
             onTouchEnd={handleTouchEnd}
             aria-roledescription="carousel"
         >
-            <div className={`relative w-full h-full`}>
+            <div className={`relative w-full ${aspectClassName ? aspectClassName : "h-full"}`}>
                 {slides.map((img, i) => (
                     <div
                         key={img.src + i}
@@ -98,17 +103,17 @@ export default function ImageGallery({
                     <button
                         aria-label="Previous image"
                         onClick={prev}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-300 hover:scale-110"
+                        className="opacity-0 hover:opacity-100 absolute inset-y-0 left-0 w-12 md:w-20 z-10 text-white flex items-center justify-start bg-gradient-to-r from-brand/60 to-transparent transition-opacity duration-500 focus:outline-none"
                     >
-                        <ArrowLeft className="w-5 h-5" />
+                        <ArrowLeft className="w-5 h-5 md:w-8 md:h-8 ml-2 md:ml-3" />
                     </button>
                     
                     <button
                         aria-label="Next image"
                         onClick={next}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-300 hover:scale-110"
+                        className="opacity-0 hover:opacity-100 absolute inset-y-0 right-0 w-12 md:w-20 z-10 text-white flex items-center justify-end bg-gradient-to-l from-brand/60 to-transparent transition-opacity duration-500 focus:outline-none"
                     >
-                        <ArrowRight className="w-5 h-5" />
+                        <ArrowRight className="w-5 h-5 md:w-8 md:h-8 mr-2 md:mr-3" />
                     </button>
 
                     {/* Navigation dots */}
