@@ -37,6 +37,7 @@ interface MudahListingsDisplayProps {
         fuelType?: string
         transmission?: string
         origin?: string
+        condition?: string
         mileage?: string
         insuredPrice?: string
     }
@@ -122,7 +123,7 @@ export default function MudahListingsDisplay({
     // Calculating all the price statistics
     // Calculate base average from listings
     const prices = displayListings.map(l => l.price)
-    const condition_name = userInputs?.origin
+    const condition_name = userInputs?.condition
     const lowPercentage = 0.1
     const highPercentage = 0.2
     const baseAveragePrice = Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length)
@@ -175,6 +176,7 @@ export default function MudahListingsDisplay({
                     fuelType={userInputs.fuelType}
                     transmission={userInputs.transmission}
                     origin={userInputs.origin}
+                    condition={userInputs.condition}
                     mileage={userInputs.mileage}
                     insuredPrice={userInputs.insuredPrice}
                 />

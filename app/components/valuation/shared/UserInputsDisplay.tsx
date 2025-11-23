@@ -1,4 +1,4 @@
-import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign } from 'lucide-react'
+import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign, MapPin } from 'lucide-react'
 
 interface UserInputsDisplayProps {
     make: string
@@ -8,6 +8,7 @@ interface UserInputsDisplayProps {
     engineCapacity?: string
     fuelType?: string
     transmission?: string
+    condition?: string
     origin?: string
     mileage?: string
     insuredPrice?: string
@@ -22,6 +23,7 @@ export default function UserInputsDisplay({
     fuelType,
     transmission,
     origin,
+    condition,
     mileage,
     insuredPrice
 }: UserInputsDisplayProps) {
@@ -123,14 +125,25 @@ export default function UserInputsDisplay({
                     </p>
                 </div>
 
-                {/* Origin */}
+                {/* Vehicle origin */}
+                <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                    <div className="flex items-center gap-2 mb-2">
+                        <MapPin className="w-4 h-4 text-gray-500" />
+                        <p className="text-xs font-medium text-gray-500">Vehicle Origin</p>
+                    </div>
+                    <p className="text-sm md:text-base font-semibold text-gray-900 capitalize">
+                        {origin ? formatValue(origin) : "--"}
+                    </p>
+                </div>
+
+                {/* Vehicle condition */}
                 <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
                     <div className="flex items-center gap-2 mb-2">
                         <Car className="w-4 h-4 text-gray-500" />
                         <p className="text-xs font-medium text-gray-500">Vehicle Condition</p>
                     </div>
                     <p className="text-sm md:text-base font-semibold text-gray-900 capitalize">
-                        {origin ? formatValue(origin) : "--"}
+                        {condition ? formatValue(condition) : "--"}
                     </p>
                 </div>
 

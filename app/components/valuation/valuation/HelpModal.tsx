@@ -117,6 +117,12 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                         <li className="flex items-start gap-2">
                             <span className="text-purple-600 font-bold mt-1">•</span>
                             <span>
+                                <strong>Condition:</strong> The condition of your vehicle (Ranges from Very Poor to Very Good)
+                            </span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                            <span className="text-purple-600 font-bold mt-1">•</span>
+                            <span>
                                 <strong>Mileage:</strong> Your vehicle's mileage in kilometers
                             </span>
                         </li>
@@ -174,7 +180,11 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                     <ul className="space-y-2 text-foreground/70">
                         <li className="flex items-start gap-2">
                             <span className="text-orange-600 font-bold mt-1">•</span>
-                            <span><strong>Switch Views:</strong> Toggle between "Low to High" and "High to Low" price sorting</span>
+                            <span><strong>Ascending and Descending view:</strong> Toggle between "Low to High" and "High to Low" price sorting</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                            <span className="text-orange-600 font-bold mt-1">•</span>
+                            <span><strong>Switch Views:</strong> Toggle between grid or list view</span>
                         </li>
                         <li className="flex items-start gap-2">
                             <span className="text-orange-600 font-bold mt-1">•</span>
