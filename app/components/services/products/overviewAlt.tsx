@@ -13,13 +13,13 @@ export function ProductOverviewAlt({ overview, image, alt, galleryImages }:Produ
     return(
         <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full h-full max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 gap-8 justify-center items-stretch h-full">
+                <div className="grid grid-cols-1 gap-4 lg:gap-8 justify-center items-stretch h-full">
                     
                     {/* Content */}
                     <AnimateOnLoad animation="fade-in-left">
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-4 lg:gap-8">
                             {/* <h2 className="text-brand text-center text-4xl md:text-5xl font-bold">{title}</h2> */}
-                            <p className="text-brand text-sm md:text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: overview }}>
+                            <p className="text-brand text-base md:text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: overview }}>
                             </p>
                         </div>
                     </AnimateOnLoad>

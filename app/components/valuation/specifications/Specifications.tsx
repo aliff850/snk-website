@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react"
 import { ArrowRight, RefreshCcw, ArrowDown } from 'lucide-react'
-import { Button } from "../ui/button"
+import { Button } from "../../ui/button"
 import { SpecResults } from "./SpecResults"
 
 export function CarSpecifications() {

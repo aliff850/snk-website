@@ -15,11 +15,11 @@ export function ProductOverview({ title, overview, image, alt, galleryImages }:P
         <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest relative overflow-hidden">
 
             <div className="w-full h-full max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 gap-4 md:gap-16 justify-center items-stretch h-full">
+                <div className="grid grid-cols-1 gap-4 lg:gap-8 justify-center items-stretch h-full">
                     
                     {/* Content Section */}
                     <AnimateOnLoad animation="fade-in-up">
-                        <div className="flex flex-col gap-4 md:gap-8 text-center max-w-5xl mx-auto">
+                        <div className="flex flex-col gap-4 lg:gap-8 text-center max-w-5xl mx-auto">
                             {/* Decorative Element */}
                             <div className="inline-flex items-center justify-center gap-2 text-brand-element font-semibold text-sm tracking-wider mx-auto">
                                 <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-brand-element to-transparent"></div>

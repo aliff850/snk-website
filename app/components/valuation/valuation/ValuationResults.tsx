@@ -1,10 +1,10 @@
 "use client"
 
 import React from "react"
-import { Button } from "../ui/button"
+import { Button } from "../../ui/button"
 import { Ban } from "lucide-react"
 // import { TiDelete } from "react-icons/ti";
-import MudahListingsDisplay from "./MudahListingsDisplay"
+import MudahListingsDisplay from "../listings/MudahListingsDisplay"
 
 interface ValuationResultsProps {
     link: string

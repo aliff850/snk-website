@@ -1,4 +1,4 @@
-import { CarSpecifications } from "@/components/valuation/Specifications";
+import { CarSpecifications } from "@/components/valuation/specifications/Specifications";
 
 export const metadata = {
     title: "Vehicle Specification",

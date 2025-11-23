@@ -115,9 +115,9 @@ export function Values() {
                                 animation="fade-in-up" 
                                 delay={(index * 100 + 500) as 0 | 100 | 200 | 300 | 400}
                             >
-                                <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 ring-1 ring-brand/20 hover:ring-brand hover:bg-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full">
+                                <div className="group bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 ring-1 ring-brand/20 hover:ring-brand hover:bg-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full">
                                     <div className="text-center">
-                                        <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-element rounded-full mb-4 text-white">
+                                        <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-element group-hover:bg-brand transition-colors duration-500 ease-in-out rounded-full mb-4 text-white">
                                             {objective.icon}
                                         </div>
                                         <h3 className="text-brand text-xl font-semibold mb-3">{objective.title}</h3>

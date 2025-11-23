@@ -127,7 +127,7 @@ export default function UserInputsDisplay({
                 <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
                     <div className="flex items-center gap-2 mb-2">
                         <Car className="w-4 h-4 text-gray-500" />
-                        <p className="text-xs font-medium text-gray-500">Origin</p>
+                        <p className="text-xs font-medium text-gray-500">Vehicle Condition</p>
                     </div>
                     <p className="text-sm md:text-base font-semibold text-gray-900 capitalize">
                         {origin ? formatValue(origin) : "--"}
