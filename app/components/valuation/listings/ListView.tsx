@@ -24,7 +24,7 @@ interface MudahListingsListViewProps {
     onRemove: (adviewUrl: string) => void
 }
 
-export default function MudahListingsListView({ 
+export default function ListView({ 
     listings,
     onRemove
 }: MudahListingsListViewProps) {

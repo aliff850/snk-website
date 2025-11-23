@@ -25,14 +25,14 @@ export function ProductCTA({title,caption,button,link,target}:ProductCTAProps) {
                             <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white rounded-full"></div>
                         </div>
                         
-                        <div className="relative z-10 flex flex-col gap-8 justify-center items-center">
+                        <div className="relative z-10 flex flex-col gap-4 lg:gap-8 justify-center items-center">
                                                         
                             {/* Main Content */}
                             <h2 className="text-white text-3xl md:text-4xl font-bold">
                                 {title}
                             </h2>
                             
-                            <p className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
+                            <p className="text-white text-base md:text-lg max-w-3xl mx-auto leading-relaxed opacity-90">
                                 {caption}
                             </p>
 

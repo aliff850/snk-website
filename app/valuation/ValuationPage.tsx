@@ -1,7 +1,7 @@
 // app/valuation/ValuationPage.tsx (client)
 "use client";
 
-import { ValuationLayout } from "../components/valuation/Valuation";
+import { ValuationLayout } from "../components/valuation/valuation/Valuation";
 
 export default function ValuationPage() {
   return (

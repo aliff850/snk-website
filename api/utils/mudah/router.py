@@ -13,19 +13,19 @@ with open(MAKE_MODEL_MAP_PATH, 'r', encoding='utf-8') as f:
 
 
 class CarSearchQuery(BaseModel):
-    make_id: str 
-    model_id: str
-    From: Annotated[int, Field(ge=0)] = 0
-    limit: Annotated[int, Field(gt=0)] = 50
-    sortby: Literal['newest', 'price_asc', 'price_desc'] = 'price_asc'
-    type: Literal['sell', 'let'] = 'sell'
-    mfg_year: Annotated[str, StringConstraints(pattern=r'^\d{4}-(\d{4})?$')] | None = None
-    fueltype: Literal['petrol', 'diesal', 'electric'] | None = None
-    condition: Literal['used', 'new', 'recon'] | None = None
-    mileage: Annotated[str, StringConstraints(pattern=r'^\d{1,6}-(\d{1,6})?$')] | None = None
-    car_type_id: Literal['other', '4_wheels', 'coupe', 'hatchback', 'mpvs', 'pick_up', 'sedan', 'sports', 'suvs'] | None= None
-    transmission_id: Literal['auto', 'manual'] | None = None
-    price: Annotated[str, StringConstraints(pattern=r'^\d{1,10}-(\d{1,10})?$')] | None = None
+    make_id:    str 
+    model_id:   str
+    From:       Annotated[int, Field(ge=0)] = 0
+    limit:      Annotated[int, Field(gt=0)] = 50
+    sortby:     Literal['newest', 'price_asc', 'price_desc'] = 'price_asc'
+    type:       Literal['sell', 'let'] = 'sell'
+    mfg_year:   Annotated[str, StringConstraints(pattern=r'^\d{4}-(\d{4})?$')] | None = None
+    fueltype:   Literal['petrol', 'diesal', 'electric'] | None = None
+    condition:  Literal['used', 'new', 'recon'] | None = None
+    mileage:    Annotated[str, StringConstraints(pattern=r'^\d{1,6}-(\d{1,6})?$')] | None = None
+    car_type_id:        Literal['other', '4_wheels', 'coupe', 'hatchback', 'mpvs', 'pick_up', 'sedan', 'sports', 'suvs'] | None= None
+    transmission_id:    Literal['auto', 'manual'] | None = None
+    price:      Annotated[str, StringConstraints(pattern=r'^\d{1,10}-(\d{1,10})?$')] | None = None
 
     @field_validator('make_id', mode='after')
     def indexMake(value: str):
@@ -81,9 +81,6 @@ def search(searchQuery: CarSearchQuery,
     # DEBUG logs
     if listings:
         print ("First listing variant field:" , listings[0].get('attributes', {}).get('listing_id'))
-    #    print ("First listing variant field:" , listings[0].get('attributes', {}).get('variant'))
-    #    print("First listing image field:", listings[0].get('attributes', {}).get('image'))
-    #    print("First listing image type:", type(listings[0].get('attributes', {}).get('image')))
 
     response = []
     if whitelist_attributes:

@@ -6,8 +6,8 @@ import { ArrowRight, RotateCcw, ArrowDown, CircleQuestionMark } from 'lucide-rea
 import { FaCar } from "react-icons/fa";
 import { FaCarOn } from "react-icons/fa6"
 import { ValuationResults } from "./ValuationResults"
-import { Button } from "../ui/button"
-import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters, getEngineCcRangeFromLiterOption } from "./ranges"
+import { Button } from "../../ui/button"
+import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters, getEngineCcRangeFromLiterOption } from "../ranges"
 // import Link from "next/link";
 
 export function ValuationLayout() {
@@ -34,6 +34,7 @@ export function ValuationLayout() {
     const [type, setType] = useState("sell")
     const [fueltype, setFueltype] = useState("")
     const [condition, setCondition] = useState("")
+    const [origin, setOrigin] = useState("")
     const [transmission, setTransmission] = useState("")
     const [carType, setCarType] = useState("")
     const [engineCapacityLiter, setEngineCapacityLiter] = useState<string>("")
@@ -101,6 +102,7 @@ export function ValuationLayout() {
         setType("sell")
         setFueltype("")
         setCondition("")
+        setOrigin("")
         setTransmission("")
         setCarType("")
         // setMfgYear("")
@@ -264,7 +266,8 @@ export function ValuationLayout() {
                     engineCapacity: engineCapacityLiter,
                     fuelType: fueltype,
                     transmission: transmission,
-                    origin: condition,
+                    origin: origin,
+                    condition: condition,
                     mileage: mileageFrom,
                     insuredPrice: insuredPrice,
                 }
@@ -558,8 +561,8 @@ export function ValuationLayout() {
                                     <div>
                                         <label className="block text-sm font-medium mb-1">*Origin</label>
                                         <select 
-                                            value={condition} 
-                                            onChange={(e) => setCondition(e.target.value)} 
+                                            value={origin} 
+                                            onChange={(e) => setOrigin(e.target.value)} 
                                             disabled={fieldsDisabled}
                                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                         >
@@ -578,6 +581,23 @@ export function ValuationLayout() {
                                     <div className="pb-3 border-b-2 border-brand/20">
                                         <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
                                         <p className="text-xs text-foreground/60 mt-1">Usage and valuation data</p>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">*Condition</label>
+                                        <select 
+                                            value={condition} 
+                                            onChange={(e) => setCondition(e.target.value)} 
+                                            disabled={fieldsDisabled}
+                                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                        >
+                                            <option value="">--</option>
+                                            <option value="Very Poor">Very Poor</option>
+                                            <option value="Poor">Poor</option>
+                                            <option value="Fair">Fair</option>
+                                            <option value="Good">Good</option>
+                                            <option value="Very Good">Very Good</option>
+                                        </select>
                                     </div>
 
                                     <div>

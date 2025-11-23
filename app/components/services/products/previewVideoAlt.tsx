@@ -31,9 +31,9 @@ export function PreviewVideoAlternate({ filename, filename_2 }: VideoDisplayComp
             {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand/5 to-transparent -z-10"></div> */}
             {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-element/5 rounded-full blur-3xl -z-10"></div> */}
 
-            <div className="w-full max-w-7xl flex flex-col gap-4 md:gap-16">
+            <div className="w-full max-w-7xl flex flex-col gap-4 lg:gap-8">
                 <AnimateOnLoad animation="fade-in-up">
-                    <div className="text-center space-y-6">
+                    <div className="text-center flex flex-col gap-4 lg:gap-8">
                         <div className="inline-flex items-center justify-center gap-2 text-brand-element font-semibold text-sm tracking-wider">
                             <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-brand-element to-transparent"></div>
                             VIDEO DEMO
@@ -42,7 +42,7 @@ export function PreviewVideoAlternate({ filename, filename_2 }: VideoDisplayComp
                         <h2 className="text-brand text-4xl md:text-5xl font-bold leading-tight">
                             See It In Action
                         </h2>
-                        <p className="text-brand/70 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-brand/70 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
                             Watch how our solution transforms your workflow in just minutes
                         </p>
                     </div>
