@@ -22,6 +22,7 @@ interface MudahListing {
 interface MudahListingsListViewProps {
     listings: MudahListing[]
     onRemove: (adviewUrl: string) => void
+    vehicleType?: 'car' | 'motorcycle'
 }
 
 export default function ListView({ 

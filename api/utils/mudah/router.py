@@ -163,14 +163,14 @@ def search(searchQuery: CarSearchQuery | MotorSearchQuery,
                  response_model=dict[str, str] | dict[str, dict[str, str]])
 def vehicle_map(make: str = None):
     # Return full map if no make specified
-    if not make: return MAKE_MODEL_MAP
+    if not make: return VEHICLE_MAP
 
     # Validate make exists
-    if make not in MAKE_MODEL_MAP:
+    if make not in VEHICLE_MAP:
         return HTTPException(404, f'Unknown make provided: {make}')
 
     # Return specific make's models
-    return MAKE_MODEL_MAP[make]
+    return VEHICLE_MAP[make]
 
 
 @mudahRouter.get('/all_motorcycles',

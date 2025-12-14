@@ -3,16 +3,16 @@
 import { useState, useMemo, useEffect } from "react"
 import { ArrowDown, RotateCcw } from 'lucide-react'
 import { Button } from "../../../ui/button"
-import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters, getEngineCcRangeFromLiterOption } from "../../ranges"
+import { yearOptions, priceOptions, MIN_VALUES } from "../../ranges"
 
-interface CarValuationFormProps {
+interface MotorValuationFormProps {
     onSearch: (searchData: any) => void
     onReset?: () => void
     loading?: boolean
     onSearchStart?: () => void
 }
 
-export function CarValuationForm({ onSearch, onReset, loading = false, onSearchStart }: CarValuationFormProps) {
+export function MotorValuationForm({ onSearch, onReset, loading = false, onSearchStart }: MotorValuationFormProps) {
     const [isLoading, setIsLoading] = useState(false)
     // Existing states
     const [make, setMake] = useState("")
@@ -26,53 +26,48 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
     // States for Mudah filters
     const [fromOffset, setFromOffset] = useState<number>(0)
     const [limit, setLimit] = useState<number>(50)
-    const [type, setType] = useState("sell")
-    const [fueltype, setFueltype] = useState("")
-    const [condition, setCondition] = useState("")
-    const [origin, setOrigin] = useState("")
-    const [transmission, setTransmission] = useState("")
-    const [carType, setCarType] = useState("")
-    const [engineCapacityLiter, setEngineCapacityLiter] = useState<string>("")
+    const [type, setType] = useState<"sell" | "buy">("sell") // Just set  listing type query to sell
     const [yearFrom, setYearFrom] = useState<string>("")
-    const [mileageFrom, setMileageFrom] = useState<string>("")
-    const [priceFrom, setPriceFrom] = useState<string>("")
+    // const [priceFrom, setPriceFrom] = useState<string>("")
     const [insuredPrice, setInsuredPrice] = useState<string>("")
+    // Sets the condition of the motorcycle
+    const [condition, setCondition] = useState("")
 
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
     const fieldsDisabled = !canSubmit
 
-    // Fetch Mudah makes
+    // Fetch Mudah motorcycle makes
     const fetchMakes = async () => {
         setLoadingMakes(true)
         try {
-            const response = await fetch('/api/mudah/all_vehicles')
+            const response = await fetch('/api/mudah/all_motorcycles')
             if (response.ok) {
                 const makes = await response.json()
                 setAvailableMakes(makes)
             }
         } catch (e) {
-            console.error('Failed to fetch makes:', e)
+            console.error('Failed to fetch motorcycle makes:', e)
         } finally {
             setLoadingMakes(false)
         }
     }
 
-    // Fetch Mudah models
+    // Fetch Mudah motorcycle models
     const fetchModels = async (makeSlug: string) => {
         try {
-            const response = await fetch(`/api/mudah/all_vehicles?make=${encodeURIComponent(makeSlug)}`)
+            const response = await fetch(`/api/mudah/all_motorcycles?make=${encodeURIComponent(makeSlug)}`)
             if (response.ok) {
                 const models = await response.json()
                 setAvailableModels(models || {})
             }
         } catch (e) {
-            console.error('Failed to fetch models:', e)
+            console.error('Failed to fetch motorcycle models:', e)
             setAvailableModels({})
         }
     }
 
-    // Fetch Mudah makes on mount
+    // Fetch Mudah motorcycle makes on mount
     useEffect(() => {
         fetchMakes()
     }, [])
@@ -84,16 +79,9 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
         setFromOffset(0)
         setLimit(50)
         setType("sell")
-        setFueltype("")
-        setCondition("")
-        setOrigin("")
-        setTransmission("")
-        setCarType("")
         setYearFrom("")
-        setMileageFrom("")
-        setPriceFrom("")
         setInsuredPrice("")
-        setEngineCapacityLiter("")
+        // setPriceFrom("")
         if (onReset) {
             onReset()
         }
@@ -115,12 +103,12 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
             // Helper function to fetch listings
             const fetchListings = async (sortOrder: 'price_asc' | 'price_desc') => {
                 const searchQuery: Record<string, any> = { 
-                    make_id: makeSlug, 
-                    model_id: modelSlug, 
+                    motorcycle_make_id: makeSlug, 
+                    motorcycle_model_id: modelSlug, 
                     From: fromOffset, 
                     limit, 
-                    sortby: sortOrder,
-                    type 
+                    sortby: sortOrder
+                    // type 
                 }
 
                 // building the range filters
@@ -133,41 +121,16 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
                 })()
 
                 if (yearQuery) searchQuery.mfg_year = yearQuery
-                if (fueltype) searchQuery.fueltype = fueltype
 
-                // Engine capacity
-                const engineCapacityCcRange = (() => {
-                    if (!engineCapacityLiter) return null
-                    const range = getEngineCcRangeFromLiterOption(engineCapacityLiter)
-                    return range ? `${range.min}-${range.max}` : null
-                })()
+                // Price
+                // const priceQuery = (() => {
+                //     const from = priceFrom || ""
+                //     if (!from) return ""
+                //     if (from) return `${from}-${from}`
+                //     return `${MIN_VALUES.price}-`
+                // })()
 
-                // Mileage
-                const mileageQuery = (() => {
-                    const from = mileageFrom || ""
-                    if (!from) return ""
-                    const fromNum = parseInt(from, 10)
-                    if (Number.isNaN(fromNum)) return ""
-
-                    // Create a 5,000 KM window
-                    const maxOption = mileageOptions.filter(v => v !== 'Any').map(Number).at(-1) ?? fromNum
-                    const toNum = Math.min(fromNum + 5000, maxOption)
-
-                    return `${from}-${toNum}`
-                })()
-
-                if (mileageQuery) searchQuery.mileage = mileageQuery
-                if (carType) searchQuery.car_type_id = carType
-
-                if (transmission) searchQuery.transmission_id = transmission
-                const priceQuery = (() => {
-                    const from = priceFrom || ""
-                    if (!from) return ""
-                    if (from) return `${from}-${from}`
-                    return `${MIN_VALUES.price}-`
-                })()
-
-                if (priceQuery) searchQuery.price = priceQuery
+                // if (priceQuery) searchQuery.price = priceQuery
 
                 const response = await fetch(`/api/mudah/search`, { 
                     method: "POST", 
@@ -226,20 +189,16 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
                 listingsDescending: uniqueDescending,
                 make: makeSlug, 
                 model: modelSlug,
-                vehicleType: 'car',
+                vehicleType: 'motorcycle',
                 source: 'Mudah',
                 userInputs: {
                     make: make,
                     model: model,
                     year: yearFrom,
-                    bodyType: carType,
-                    engineCapacity: engineCapacityLiter,
-                    fuelType: fueltype,
-                    transmission: transmission,
-                    origin: origin,
                     condition: condition,
-                    mileage: mileageFrom,
-                    insuredPrice: insuredPrice,
+                    insuredPrice: insuredPrice
+                    // price: priceFrom,
+                    //type: type,
                 }
             }
 
@@ -254,10 +213,8 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
             <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-
-                {/* Mudah Query */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                    
                     {/* Vehicle identity */}
                     <div className="space-y-4">
                         <div className="pb-3 border-b-2 border-brand/20">
@@ -298,7 +255,7 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
                             >
                                 <option value="">Select a model...</option>
                                 {Object.keys(availableModels)
-                                .filter(modelKey => modelKey !== '__id__')
+                                .filter(modelKey => modelKey !== '@id')
                                 .map(modelKey => (
                                     <option key={modelKey} value={modelKey}>{modelKey.replace(/-/g, ' ').toUpperCase()}</option>
                                 ))}
@@ -309,7 +266,7 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium mb-1">*Year</label>
+                            <label className="block text-sm font-medium mb-1">Year</label>
                             <select 
                                 value={yearFrom}
                                 onChange={(e) => setYearFrom(e.target.value)}
@@ -322,100 +279,9 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
                                 ))}
                             </select>
                         </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Body Type</label>
-                            <select 
-                                value={carType} 
-                                onChange={(e) => setCarType(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="sedan">Sedan</option>
-                                <option value="hatchback">Hatchback</option>
-                                <option value="suvs">SUV</option>
-                                <option value="mpvs">MPV</option>
-                                <option value="coupe">Coupe</option>
-                                <option value="sports">Sports</option>
-                                <option value="pick_up">Pick-up</option>
-                                <option value="4_wheels">4-Wheels</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
                     </div>
 
-                    {/* Technical specifications */}
-                    <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Technical Specifications</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Engine and performance details</p>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Engine Capacity (L)</label>
-                            <select 
-                                value={engineCapacityLiter}
-                                onChange={(e) => setEngineCapacityLiter(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {engineCapacityOptionsLiters.filter(v => v !== 'Any').map(l => (
-                                    <option key={l} value={l}>{l}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Fuel Type</label>
-                            <select 
-                                value={fueltype} 
-                                onChange={(e) => setFueltype(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="petrol">Petrol</option>
-                                <option value="hybrid">Hybrid</option>
-                                <option value="diesel">Diesel</option>
-                                <option value="electric">Electric</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Transmission</label>
-                            <select 
-                                value={transmission} 
-                                onChange={(e) => setTransmission(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="auto">Auto</option>
-                                <option value="manual">Manual</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Origin</label>
-                            <select 
-                                value={origin} 
-                                onChange={(e) => setOrigin(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="New Local">New Local</option>
-                                <option value="New Import">New Import</option>
-                                <option value="Recon">Reconditioned</option>
-                                <option value="CBU">CBU</option>
-                                <option value="CKD">CKD</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    {/* Condition */}
+                    {/* Search filters */}
                     <div className="space-y-4">
                         <div className="pb-3 border-b-2 border-brand/20">
                             <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
@@ -440,21 +306,6 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
-                            <select 
-                                value={mileageFrom}
-                                onChange={(e) => setMileageFrom(e.target.value)}
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {mileageOptions.filter(v => v !== 'Any').map(m => (
-                                    <option key={m} value={m}>{Number(m).toLocaleString()}+</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
                             <label className="block text-sm font-medium mb-1">Previous Insured Sum (MYR)</label>
                             <input 
                                 type="number" 
@@ -465,8 +316,19 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
                                 onChange={(e) => setInsuredPrice(e.target.value)}
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             />
-                        </div>                                   
+                        </div> 
+
                     </div>
+
+                    {/* <div className="space-y-4">
+                        <div className="pb-3 border-b-2 border-brand/20">
+                            <h3 className="text-lg font-bold text-brand">Additional Information</h3>
+                            <p className="text-xs text-foreground/60 mt-1">Search details</p>
+                        </div>
+                        <div className="text-sm text-foreground/60">
+                            <p>Select a make and model to begin your motorcycle valuation search. You can optionally filter by year and price range.</p>
+                        </div>
+                    </div> */}
 
                     <div className="col-span-full flex pt-4 lg:pt-0 w-full">
                         <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
@@ -497,13 +359,6 @@ export function CarValuationForm({ onSearch, onReset, loading = false, onSearchS
                             </Button>
                         </div>
                     </div>
-
-                    {/* Carlist Query goes here */}
-                    <div>
-                        
-                    </div>
-
-
                 </div>
             </form>
         </div>

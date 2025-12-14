@@ -4,7 +4,7 @@ import React from "react"
 import { Button } from "../../ui/button"
 import { Ban } from "lucide-react"
 // import { TiDelete } from "react-icons/ti";
-import MudahListingsDisplay from "../listings/MudahListingsDisplay"
+import UnifiedListingsDisplay from "../listings/UnifiedListingsDisplay"
 
 interface ValuationResultsProps {
     link: string
@@ -86,14 +86,15 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                 {results && (
                     <div className="space-y-8">
                         <div className="p-2 md:p-0">
-
-                            <MudahListingsDisplay 
+                            <UnifiedListingsDisplay 
                                 listings={results?.listings || []}
                                 listingsAscending={results?.listingsAscending || []}
                                 listingsDescending={results?.listingsDescending || []}
+                                vehicleType={results?.vehicleType || 'car'}
+                                source={results?.source || 'Unknown'}
+                                counts={results?.counts}
                                 userInputs={results?.userInputs}
                             />
-
                         </div>
                     </div>
                 )}

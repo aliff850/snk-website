@@ -1,5 +1,4 @@
 import { Car, ArrowUpDown, Grid3x3, List, CircleDollarSign } from 'lucide-react'
-// import { Button } from '../../ui/button'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import ListView from './ListView'
 import GridListView from './GridListView'
@@ -28,10 +27,14 @@ interface MudahListingsDisplayProps {
     listings: MudahListing[]
     listingsAscending?: MudahListing[]
     listingsDescending?: MudahListing[]
+    vehicleType?: 'car' | 'motorcycle'
     userInputs?: {
         make: string
         model: string
         year?: string
+        price?: string
+        type?: string
+        // Car-specific fields
         bodyType?: string
         engineCapacity?: string
         fuelType?: string
@@ -47,6 +50,7 @@ export default function MudahListingsDisplay({
     listings = [], 
     listingsAscending = [],
     listingsDescending = [],
+    vehicleType = 'car',
     userInputs
 }: MudahListingsDisplayProps) {
     
@@ -66,7 +70,6 @@ export default function MudahListingsDisplay({
         } else {
             source = listings
         }
-        // Filter out removed listings using adview_url
         return source.filter(listing => !removedUrls.has(listing.adview_url))
     }, [viewMode, listingsAscending, listingsDescending, listings, removedUrls])
 
@@ -74,7 +77,7 @@ export default function MudahListingsDisplay({
         setRemovedUrls(prev => new Set(prev).add(adviewUrl))
     }
 
-    // Scroll detection for floating price container with smooth animations
+    // Scroll detection for floating price container
     useEffect(() => {
         const handleScroll = () => {
             if (priceContainerRef.current) {
@@ -85,13 +88,11 @@ export default function MudahListingsDisplay({
                     setIsFloating(shouldFloat)
                     
                     if (shouldFloat) {
-                        // Show floating container immediately when scrolling down
                         setShouldShowFloating(true)
                     } else {
-                        // Hide floating container with delay when scrolling up
                         setTimeout(() => {
                             setShouldShowFloating(false)
-                        }, 300) // Match the duration of the exit animation
+                        }, 300)
                     }
                 }
             }
@@ -105,12 +106,6 @@ export default function MudahListingsDisplay({
         return `RM ${price.toLocaleString()}`
     }
 
-    const formatMileage = (mileage: { gte: string; lte: string }) => {
-        const gte = parseInt(mileage.gte).toLocaleString()
-        const lte = parseInt(mileage.lte).toLocaleString()
-        return `${gte} - ${lte} km`
-    }
-
     if (!displayListings || displayListings.length === 0) {
         return (
             <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center">
@@ -120,29 +115,30 @@ export default function MudahListingsDisplay({
         )
     }
 
-    // Calculating all the price statistics
-    // Calculate base average from listings
+    // Calculate price statistics
     const prices = displayListings.map(l => l.price)
-    const condition_name = userInputs?.condition
-    const lowPercentage = 0.1
-    const highPercentage = 0.2
     const baseAveragePrice = Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length)
 
-    // Apply condition adjustment to get adjusted average
     let averagePrice = baseAveragePrice
-    if (condition_name === "Very Poor") { averagePrice = Math.round(baseAveragePrice * (1 - highPercentage)) } 
-    else if (condition_name === "Poor") { averagePrice = Math.round(baseAveragePrice * (1 - lowPercentage)) }
-    else if (condition_name === "Good") { averagePrice = Math.round(baseAveragePrice * (1 + lowPercentage)) } 
-    else if (condition_name === "Very Good") { averagePrice = Math.round(baseAveragePrice * (1 + highPercentage)) }
+    
+    if (userInputs?.condition) {
+        const condition_name = userInputs.condition
+        const lowPercentage = 0.1
+        const highPercentage = 0.2
+        
+        if (condition_name === "Very Poor") { averagePrice = Math.round(baseAveragePrice * (1 - highPercentage)) } 
+        else if (condition_name === "Poor") { averagePrice = Math.round(baseAveragePrice * (1 - lowPercentage))  } 
+        else if (condition_name === "Good") { averagePrice = Math.round(baseAveragePrice * (1 + lowPercentage))  } 
+        else if (condition_name === "Very Good") { averagePrice = Math.round(baseAveragePrice * (1 + highPercentage)) }
+    }
 
-    // Calculate range based on adjusted average (maintain ±10% range)
+    // Calculate range based on adjusted average
     const rangePercentage = 0.1
     const lowestPrice = Math.round(averagePrice * (1 - rangePercentage))
     const highestPrice = Math.round(averagePrice * (1 + rangePercentage))
 
     // Price summary component
     const PriceSummary = ({ className = "" }: { className?: string }) => (
-           
         <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${className}`}>
             <div className="rounded-xl flex justify-between sm:items-center md:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
                 <p className="text-sm font-medium text-green-700">Lowest Price</p>
@@ -159,18 +155,19 @@ export default function MudahListingsDisplay({
                 <p className="md:text-4xl font-bold text-purple-900">{formatPrice(highestPrice)}</p>
             </div>
         </div>
-
     )
 
     return (
         <div className="flex flex-col gap-4">
-
-            {/* Container which displays user vehicle details */}
+            {/* User vehicle details */}
             {userInputs && (
                 <UserInputsDisplay 
                     make={userInputs.make}
                     model={userInputs.model}
                     year={userInputs.year}
+                    // price={userInputs.price}
+                    // type={userInputs.type}
+                    vehicleType={vehicleType}
                     bodyType={userInputs.bodyType}
                     engineCapacity={userInputs.engineCapacity}
                     fuelType={userInputs.fuelType}
@@ -195,7 +192,7 @@ export default function MudahListingsDisplay({
                 </div>
             )}
             
-            {/* Container to display all prices and average */}
+            {/* Price container */}
             <div ref={priceContainerRef} className="rounded-xl border border-foreground/20 flex flex-col p-2 md:p-4">
                 <div className="flex items-center gap-2 mb-4">
                     <div className="p-2 rounded-lg bg-green-100">
@@ -206,102 +203,98 @@ export default function MudahListingsDisplay({
                 <PriceSummary />
             </div>
 
-            {/* Controls Section - Price Sorting and Display Mode Toggle */}
+            {/* Controls Section */}
             <div className="rounded-xl border border-foreground/20 p-2 md:p-4 flex flex-col gap-4">
-
-            <div className="flex flex-col gap-4">
-                {/* Price Sorting */}
-                {listingsAscending.length > 0 && listingsDescending.length > 0 && (
-                    <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
-                        <div className="flex items-center gap-2">
-                            <ArrowUpDown className="w-4 h-4 text-gray-500" />
-                            <span className="font-medium text-gray-700">View:</span>
+                <div className="flex flex-col gap-4">
+                    {/* Price Sorting */}
+                    {listingsAscending.length > 0 && listingsDescending.length > 0 && (
+                        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
+                            <div className="flex items-center gap-2">
+                                <ArrowUpDown className="w-4 h-4 text-gray-500" />
+                                <span className="font-medium text-gray-700">View:</span>
+                            </div>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setViewMode('ascending')}
+                                    className={`p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${
+                                        viewMode === 'ascending'
+                                            ? 'bg-brand text-white'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    Price: Low to High
+                                </button>
+                                <button
+                                    onClick={() => setViewMode('descending')}
+                                    className={`p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${
+                                        viewMode === 'descending'
+                                            ? 'bg-brand text-white'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    Price: High to Low
+                                </button>
+                            </div>
                         </div>
-                        <div className="flex gap-2">
+                    )}
+
+                    {/* Title and display mode toggle */}
+                    <div className="flex items-center justify-between">
+                        <div className="flex flex-col text-center md:text-left">
+                            <h6 className="font-semibold text-xl md:text-2xl">
+                                {listingsAscending.length > 0 && listingsDescending.length > 0 ? (
+                                    viewMode === 'ascending' 
+                                        ? `Showing ${listingsAscending.length} Lowest Price Listings`
+                                        : `Showing ${listingsDescending.length} Highest Price Listings`
+                                ) : (
+                                    `Found ${displayListings.length} ${displayListings.length === 1 ? 'listing' : 'listings'}`
+                                )}
+                            </h6>
+                            <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
+                        </div>
+
+                        {/* Display mode toggle */}
+                        <div className="hidden md:flex gap-2 items-center">
                             <button
-                                onClick={() => setViewMode('ascending')}
-                                className={`p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${
-                                    viewMode === 'ascending'
+                                onClick={() => setDisplayMode('grid')}
+                                className={`p-2 rounded-lg transition-colors ${
+                                    displayMode === 'grid'
                                         ? 'bg-brand text-white'
                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
+                                aria-label="Grid view"
                             >
-                                Price: Low to High 
-                                {/* ({listingsAscending.length}) */}
+                                <Grid3x3 className="w-5 h-5" />
                             </button>
                             <button
-                                onClick={() => setViewMode('descending')}
-                                className={`p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${
-                                    viewMode === 'descending'
+                                onClick={() => setDisplayMode('list')}
+                                className={`p-2 rounded-lg transition-colors ${
+                                    displayMode === 'list'
                                         ? 'bg-brand text-white'
                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
+                                aria-label="List view"
                             >
-                                Price: High to Low 
-                                {/* ({listingsDescending.length}) */}
+                                <List className="w-5 h-5" />
                             </button>
                         </div>
                     </div>
-                )}
-
-                {/* Toggle for ascending and descending */}
-                <div className="flex items-center justify-between">
-
-                    {/* Title text for listings */}
-                    <div className="flex flex-col text-center md:text-left">
-                        <h6 className="font-semibold text-xl md:text-2xl">
-                            {listingsAscending.length > 0 && listingsDescending.length > 0 ? (
-                                viewMode === 'ascending' 
-                                    ? `Showing ${listingsAscending.length} Lowest Price Listings`
-                                    : `Showing ${listingsDescending.length} Highest Price Listings`
-                            ) : (
-                                `Found ${displayListings.length} ${displayListings.length === 1 ? 'listing' : 'listings'}`
-                            )}
-                        </h6>
-                        <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
-                    </div>
-
-                    {/* Toggle for display mode */}
-                    <div className="hidden md:flex gap-2 items-center">
-                        <button
-                            onClick={() => setDisplayMode('grid')}
-                            className={`p-2 rounded-lg transition-colors ${
-                                displayMode === 'grid'
-                                    ? 'bg-brand text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
-                            aria-label="Grid view"
-                        >
-                            <Grid3x3 className="w-5 h-5" />
-                        </button>
-                        <button
-                            onClick={() => setDisplayMode('list')}
-                            className={`p-2 rounded-lg transition-colors ${
-                                displayMode === 'list'
-                                    ? 'bg-brand text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
-                            aria-label="List view"
-                        >
-                            <List className="w-5 h-5" />
-                        </button>
-                    </div>
-
                 </div>
-            </div>
-            
-            {/* Listings Display - switch between grid or list */}
-            {displayMode === 'list' ? (
-                <ListView 
-                    listings={displayListings}
-                    onRemove={removeListing}
-                />
-            ) : (
-                <GridListView 
-                    listings={displayListings}
-                    onRemove={removeListing}
-                />
-            )}
+                
+                {/* Listings Display */}
+                {displayMode === 'list' ? (
+                    <ListView 
+                        listings={displayListings}
+                        onRemove={removeListing}
+                        vehicleType={vehicleType}
+                    />
+                ) : (
+                    <GridListView // DO NOT OPEN GRID VIEW WHILE QUERYING MOTORCYCLES!!!!!!!!!!1
+                        listings={displayListings}
+                        onRemove={removeListing}
+                        vehicleType={vehicleType}
+                    />
+                )}
             </div>
         </div>
     )

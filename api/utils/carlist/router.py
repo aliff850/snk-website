@@ -81,7 +81,7 @@ class SearchFilters(BaseModel):
     min_mileage:    Optional[Annotated[int, Field(ge=0)]] = None
     max_mileage:    Optional[Annotated[int, Field(ge=0)]] = None
     transmission:   Optional[Literal['Manual', 'Automatic']] = None
-    fuel_type:      Optional[Literal['Petrol', 'Hybrid', 'Diesal', 'Electric', 'Unleaded']] = None
+    fuel_type:      Optional[Literal['Petrol', 'Hybrid', 'Diesel', 'Electric', 'Unleaded']] = None
     driven_wheel:   Optional[Literal['FWD', 'AWD', 'RWD', '4WD']] = None
 
     @field_validator('sort', mode='after')
@@ -174,6 +174,7 @@ def Search(query: SearchQuery, filters: SearchFilters,
             whitelist_attributes: Optional[list[str]] = ["brand.name", "model", "itemCondition", "vehicleModelDate", "fuelType", "offers.price", "mileageFromOdometer.value", "vehicleTransmission"]):
     # print(query.model_dump())
     URL = build_url(query, filters)
+    print(f"Generated URL: {URL}")
 
     html = get(URL)
     if not html.ok and html.status_code != 200:
@@ -203,6 +204,29 @@ def Search(query: SearchQuery, filters: SearchFilters,
     
     return response
 
+
+@carlistRouter.get('/all_vehicles',
+                 summary="Returns a map of every make and model available with their corresponding IDs. Or return a list of models from a specified make with their corresponding IDs",
+                 response_model=dict[str, dict[str, str | None]] | dict[str, str | None])
+def vehicle_map(make: str = None):
+    """
+    Get all makes and models from Carlist vehicle map.
+    If make is provided, returns only models for that make.
+    Otherwise returns the complete vehicle map.
+    """
+    # Return full map if no make specified
+    if not make: 
+        return VEHICLE_MAP
+
+    # Validate and return specific make's models
+    make_lower = make.lower()
+    if make_lower not in VEHICLE_MAP:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"meta": f"Unknown make provided: {make}"}
+        )
+
+    return VEHICLE_MAP[make_lower]
 
 
 # Search(SearchQuery(

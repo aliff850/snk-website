@@ -2,17 +2,24 @@
 
 import { HelpModal } from "./HelpModal";
 import { ValuationBar } from "../../ui/ValuationBar";
-import { CarValuationForm } from "./cars/CarValuationForm";
+import { CarValuationForm } from "./cars/CarValuationForm"; // Original form
+// import { CarValuationAgg } from "./cars/CarValuationAgg"; // Consolidated form thing
+import { CarValuationMulti } from "./cars/CarValuationAgg2"; // Current form
+import { MotorValuationForm } from "./motorcycle/MotorValuationForm";
 import React, { useState } from "react"
-import { ArrowRight, CircleQuestionMark } from 'lucide-react'
+import { ArrowRight, HelpCircle } from 'lucide-react'
 import { FaCar } from "react-icons/fa";
 import { FaCarOn } from "react-icons/fa6"
 import { ValuationResults } from "./ValuationResults"
 import { Button } from "../../ui/button"
 
 export function ValuationLayout() {
+    // Active tab state
+    const [activeTab, setActiveTab] = useState("car")
+    
     // Help modal
     const [isHelpOpen, setIsHelpOpen] = useState(false)
+    
     // Results state
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -44,6 +51,12 @@ export function ValuationLayout() {
         clearResults()
     }
 
+    const handleTabChange = (tab: string) => {
+        setActiveTab(tab)
+        clearResults()
+        setError(null)
+    }
+
     return(
         <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 pb-8 md:pb-16 pt-32 relative">
             {/* Help Button */}
@@ -52,7 +65,7 @@ export function ValuationLayout() {
                 className="fixed left-6 bottom-6 transform z-50 w-16 h-16 bg-brand border border-brand-element text-brand-white rounded-full shadow-lg hover:bg-brand/90 hover:scale-110 transition-all duration-300 flex items-center justify-center group"
                 aria-label="Help"
             >
-                <CircleQuestionMark className="w-8 h-8" />
+                <HelpCircle className="w-8 h-8" />
                 <span
                     className="
                         absolute left-[90%] 
@@ -91,19 +104,42 @@ export function ValuationLayout() {
                 <div className="grid grid-cols-1 gap-8 md:gap-12">
 
                     <div className="grid grid-cols-1 gap-4">
-                        <ValuationBar/>
+                        <ValuationBar 
+                            activeTab={activeTab}
+                            onTabChange={handleTabChange}
+                        />
 
                         <HelpModal 
                             isOpen={isHelpOpen} 
                             onClose={() => setIsHelpOpen(false)} 
                         />
 
-                        <CarValuationForm 
-                            onSearch={handleSearch}
-                            onReset={handleReset}
-                            loading={loading}
-                            onSearchStart={handleSearchStart}
-                        />
+                        {/* Conditional rendering based on active tab */}
+                        {activeTab === "car" && (
+                            // <CarValuationForm 
+                            //     onSearch={handleSearch}
+                            //     onReset={handleReset}
+                            //     loading={loading}
+                            //     onSearchStart={handleSearchStart}
+                            // />
+
+                            <CarValuationMulti
+                                onSearch={handleSearch}
+                                onReset={handleReset}
+                                loading={loading}
+                                onSearchStart={handleSearchStart}
+                            />
+                            
+                        )}
+
+                        {activeTab === "motorcycle" && (
+                            <MotorValuationForm 
+                                onSearch={handleSearch}
+                                onReset={handleReset}
+                                loading={loading}
+                                onSearchStart={handleSearchStart}
+                            />
+                        )}
                     </div>
 
                     {/* Section to display all results */}
