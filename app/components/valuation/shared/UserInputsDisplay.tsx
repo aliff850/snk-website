@@ -1,4 +1,4 @@
-import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign, MapPin, TrendingUp, ShoppingCart } from 'lucide-react'
+import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign, MapPin, TrendingUp, ShoppingCart, Info } from 'lucide-react'
 import { FaMotorcycle } from 'react-icons/fa6'
 
 interface UserInputsDisplayProps {
@@ -18,6 +18,7 @@ interface UserInputsDisplayProps {
     origin?: string
     mileage?: string
     insuredPrice?: string
+    variant?: string // Carlist specific
 }
 
 export default function UserInputsDisplay({
@@ -34,9 +35,10 @@ export default function UserInputsDisplay({
     origin,
     condition,
     mileage,
-    insuredPrice
+    insuredPrice,
+    variant
 }: UserInputsDisplayProps) {
-    
+
     // Format the display values
     const formatValue = (value: string | undefined, fallback: string = 'Not specified') => {
         if (!value) return fallback
@@ -76,7 +78,7 @@ export default function UserInputsDisplay({
                     Your {vehicleType === 'motorcycle' ? 'Motorcycle' : 'Vehicle'} Details
                 </h3>
             </div>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
 
                 {/* Vehicle Identity */}
@@ -101,7 +103,6 @@ export default function UserInputsDisplay({
                     </p>
                 </div>
 
-
                 {/* Vehicle condition */}
                 <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
                     <div className="flex items-center gap-2 mb-2">
@@ -113,20 +114,20 @@ export default function UserInputsDisplay({
                     </p>
                 </div>
 
-                {/* Insured sum */}
-                <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
-                    <div className="flex items-center gap-2 mb-2">
-                        <DollarSign className="w-4 h-4 text-gray-500" />
-                        <p className="text-xs font-medium text-gray-500">Previous Insured Sum (MYR)</p>
-                    </div>
-                    <p className="text-sm md:text-base font-semibold text-gray-900">
-                        {insuredPrice ? formatInsuredPrice(insuredPrice) : "--"}
-                    </p>
-                </div>
-
                 {/* Car-specific fields */}
                 {vehicleType === 'car' && (
                     <>
+                        {/* Variant (Carlist only) */}
+                        <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Info className="w-4 h-4 text-gray-500" />
+                                <p className="text-xs font-medium text-gray-500">Variant</p>
+                            </div>
+                            <p className="text-sm md:text-base font-semibold text-gray-900">
+                                {variant ? formatValue(variant) : "--"}
+                            </p>
+                        </div>
+
                         {/* Body Type */}
                         <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
                             <div className="flex items-center gap-2 mb-2">
@@ -171,6 +172,8 @@ export default function UserInputsDisplay({
                             </p>
                         </div>
 
+
+
                         {/* Vehicle origin */}
                         <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
                             <div className="flex items-center gap-2 mb-2">
@@ -180,7 +183,7 @@ export default function UserInputsDisplay({
                             <p className="text-sm md:text-base font-semibold text-gray-900 capitalize">
                                 {origin ? formatValue(origin) : "--"}
                             </p>
-                        </div>                        
+                        </div>
 
                         {/* Mileage */}
                         <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">

@@ -14,14 +14,14 @@ interface CarValuationMultiProps {
 
 export function CarValuationMulti({ onSearch, onReset, loading = false, onSearchStart }: CarValuationMultiProps) {
     const [isLoading, setIsLoading] = useState(false)
-    
+
     // Source selection (Mudah is default) - mutually exclusive
     const [source, setSource] = useState<'mudah' | 'carlist'>('mudah')
-    
+
     // Shared states
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
-    
+
     // Mudah state
     const [availableMakes, setAvailableMakes] = useState<Record<string, any>>({})
     const [availableModels, setAvailableModels] = useState<Record<string, string>>({})
@@ -46,7 +46,7 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
     const [carlistMakes, setCarlistMakes] = useState<Record<string, any>>({})
     const [carlistModels, setCarlistModels] = useState<Record<string, string | null>>({})
     const [loadingCarlistMakes, setLoadingCarlistMakes] = useState(false)
-    
+
     // States for Carlist filters
     // const [carlistCondition, setCarlistCondition] = useState("")
     const [carlistVariant, setCarlistVariant] = useState("")
@@ -54,10 +54,10 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
     const [carlistTransmission, setCarlistTransmission] = useState("")
     const [carlistFuelType, setCarlistFuelType] = useState("")
     const [carlistDrivenWheel, setCarlistDrivenWheel] = useState("")
-    const [carlistMinPrice, setCarlistMinPrice] = useState<string>("")
-    const [carlistMaxPrice, setCarlistMaxPrice] = useState<string>("")
-    const [carlistMinMileage, setCarlistMinMileage] = useState<string>("")
-    const [carlistMaxMileage, setCarlistMaxMileage] = useState<string>("")
+    const [carlistPrice, setCarlistPrice] = useState<string>("")
+    // const [carlistMaxPrice, setCarlistMaxPrice] = useState<string>("")
+    const [carlistMileage, setCarlistMileage] = useState<string>("")
+    // const [carlistMaxMileage, setCarlistMaxMileage] = useState<string>("")
     const [carlistSort, setCarlistSort] = useState<string>("")
 
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
@@ -164,10 +164,10 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
         setCarlistTransmission("")
         setCarlistFuelType("")
         setCarlistDrivenWheel("")
-        setCarlistMinPrice("")
-        setCarlistMaxPrice("")
-        setCarlistMinMileage("")
-        setCarlistMaxMileage("")
+        setCarlistPrice("")
+        //setCarlistMaxPrice("")
+        setCarlistMileage("")
+        //setCarlistMaxMileage("")
         setCarlistSort("")
         setCarlistModels({})
         if (onReset) {
@@ -177,18 +177,18 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
 
     const getCarlistData = async () => {
         if (!canSubmit) return
-        
+
         try {
             const makeSlug = slug(make)
             const modelSlug = slug(model)
             const headers = { "Content-Type": "application/json" }
-    
+
             const query: Record<string, any> = {
                 make: makeSlug,
                 model: modelSlug,
-                condition: 'used' // Default to 'used' as shown in the schema example
+                condition: 'used' // 
             }
-            
+
             if (carlistVariant) query.variant = carlistVariant
             if (carlistBodyType) {
                 // Map form values to API expected values (API expects specific casing)
@@ -206,19 +206,17 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                 const mappedBodyType = bodyTypeMap[carlistBodyType] || carlistBodyType
                 query.body_type = mappedBodyType
             }
-    
+
             const baseFilters: Record<string, any> = {
                 page_size: 50
             }
-            
+
             if (carlistTransmission) baseFilters.transmission = carlistTransmission
             if (carlistFuelType) baseFilters.fuel_type = carlistFuelType
             if (carlistDrivenWheel) baseFilters.driven_wheel = carlistDrivenWheel
-            if (carlistMinPrice) baseFilters.min_price = parseInt(carlistMinPrice, 10)
-            if (carlistMaxPrice) baseFilters.max_price = parseInt(carlistMaxPrice, 10)
-            if (carlistMinMileage) baseFilters.min_mileage = parseInt(carlistMinMileage, 10)
-            if (carlistMaxMileage) baseFilters.max_mileage = parseInt(carlistMaxMileage, 10)
-    
+            if (carlistPrice) baseFilters.price = parseInt(carlistPrice, 10)
+            if (carlistMileage) baseFilters.mileage = parseInt(carlistMileage, 10)
+
             // Fetch ascending
             const ascFilters = { ...baseFilters, sort: 'asc' }
             const requestBody = {
@@ -235,28 +233,28 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                     "vehicleTransmission"
                 ]
             }
-            
+
             // Debug: log the request body to verify it matches the schema
             console.log('Carlist Request Body:', JSON.stringify(requestBody, null, 2))
-            
-            const ascResponse = await fetch(`/api/carlist/search`, { 
-                method: "POST", 
-                headers, 
-                body: JSON.stringify(requestBody) 
+
+            const ascResponse = await fetch(`/api/carlist/search`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(requestBody)
             })
-    
+
             if (!ascResponse.ok) {
                 const errorText = await ascResponse.text()
                 throw new Error(`Failed to fetch Carlist Listings (asc): ${ascResponse.status} - ${errorText}`)
             }
-    
+
             const ascListings = await ascResponse.json()
-    
+
             // Only fetch descending if we got 50 listings (indicating there might be more)
             let descListings: any[] = []
             let uniqueAscending: any[] = []
             let uniqueDescending: any[] = []
-    
+
             if (ascListings.length < 50) {
                 // Less than 50 results, just use ascending
                 uniqueAscending = ascListings
@@ -278,12 +276,12 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                         "vehicleTransmission"
                     ]
                 }
-                const descResponse = await fetch(`/api/carlist/search`, { 
-                    method: "POST", 
-                    headers, 
-                    body: JSON.stringify(descRequestBody) 
+                const descResponse = await fetch(`/api/carlist/search`, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify(descRequestBody)
                 })
-    
+
                 if (!descResponse.ok) {
                     // If descending fails, just use ascending
                     console.warn('Failed to fetch descending Carlist listings, using ascending only')
@@ -291,23 +289,23 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                     uniqueDescending = [...ascListings].reverse()
                 } else {
                     descListings = await descResponse.json()
-    
+
                     // Deduplicate using a combination of fields as unique identifier
                     const listingsMap: Record<string, any> = {}
-                    
+
                     // Add ascending listings
                     ascListings.forEach((listing: any) => {
                         // Create unique key from multiple fields
                         const key = `${listing['brand.name']}-${listing['model']}-${listing['offers.price']}-${listing['vehicleModelDate']}`
                         listingsMap[key] = listing
                     })
-                    
+
                     // Add descending listings
                     descListings.forEach((listing: any) => {
                         const key = `${listing['brand.name']}-${listing['model']}-${listing['offers.price']}-${listing['vehicleModelDate']}`
                         listingsMap[key] = listing
                     })
-    
+
                     // Convert map values to arrays and sort
                     const allListings = Object.values(listingsMap)
                     uniqueAscending = [...allListings].sort((a: any, b: any) => {
@@ -322,12 +320,12 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                     })
                 }
             }
-    
+
             return {
                 listings: uniqueAscending,
                 listingsAscending: uniqueAscending,
                 listingsDescending: uniqueDescending,
-                make: makeSlug, 
+                make: makeSlug,
                 model: modelSlug,
                 vehicleType: 'car',
                 source: 'Carlist',
@@ -340,10 +338,8 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                     transmission: carlistTransmission,
                     fuelType: carlistFuelType,
                     drivenWheel: carlistDrivenWheel,
-                    minPrice: carlistMinPrice,
-                    maxPrice: carlistMaxPrice,
-                    minMileage: carlistMinMileage,
-                    maxMileage: carlistMaxMileage,
+                    price: carlistPrice,
+                    mileage: carlistMileage,
                 }
             }
         } catch (e: any) {
@@ -353,21 +349,21 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
 
     const getMudahData = async () => {
         if (!canSubmit) return
-        
+
         try {
             const makeSlug = slug(make)
             const modelSlug = slug(model)
             const headers = { "Content-Type": "application/json" }
-    
+
             // Helper function to fetch listings
             const fetchListings = async (sortOrder: 'price_asc' | 'price_desc') => {
-                const searchQuery: Record<string, any> = { 
-                    make_id: makeSlug, 
-                    model_id: modelSlug, 
-                    From: fromOffset, 
-                    limit, 
+                const searchQuery: Record<string, any> = {
+                    make_id: makeSlug,
+                    model_id: modelSlug,
+                    From: fromOffset,
+                    limit,
                     sortby: sortOrder,
-                    type 
+                    type
                 }
 
                 // building the range filters
@@ -416,20 +412,20 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
 
                 if (priceQuery) searchQuery.price = priceQuery
 
-                const response = await fetch(`/api/mudah/search`, { 
-                    method: "POST", 
-                    headers, 
-                    body: JSON.stringify({ searchQuery }) 
+                const response = await fetch(`/api/mudah/search`, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify({ searchQuery })
                 })
-    
+
                 if (!response.ok) {
                     const errorText = await response.text()
                     throw new Error(`Failed to fetch Mudah Listings: ${response.status} - ${errorText}`)
                 }
-    
+
                 return await response.json()
             }
-                
+
             // Fetch all listings
             const ascendingListings = await fetchListings('price_asc')
 
@@ -447,14 +443,14 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
 
                 // create a map using adview_url as the key to deduplicate
                 const listingsMap: Record<string, any> = {}
-                
+
                 // Add ascending listings
                 ascendingListings.forEach((listing: any) => {
                     if (listing.adview_url) {
                         listingsMap[listing.adview_url] = listing
                     }
                 })
-                
+
                 // Add descending listings
                 descendingListings.forEach((listing: any) => {
                     if (listing.adview_url) {
@@ -471,7 +467,7 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                 listings: uniqueAscending,
                 listingsAscending: uniqueAscending,
                 listingsDescending: uniqueDescending,
-                make: makeSlug, 
+                make: makeSlug,
                 model: modelSlug,
                 vehicleType: 'car',
                 source: 'Mudah',
@@ -496,12 +492,12 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
 
     const handleSubmit = async () => {
         if (!canSubmit) return
-    
+
         setIsLoading(true)
         if (onSearchStart) {
             onSearchStart()
         }
-        
+
         try {
             const results: any[] = []
             const errors: string[] = []
@@ -560,22 +556,20 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                             <button
                                 type="button"
                                 onClick={() => setSource('mudah')}
-                                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                                    source === 'mudah'
-                                        ? 'bg-brand text-white'
-                                        : 'bg-foreground/10 text-foreground/70 hover:bg-foreground/20'
-                                }`}
+                                className={`px-4 py-2 rounded-lg font-medium transition-colors ${source === 'mudah'
+                                    ? 'bg-brand text-white'
+                                    : 'bg-foreground/10 text-foreground/70 hover:bg-foreground/20'
+                                    }`}
                             >
                                 Mudah
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setSource('carlist')}
-                                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                                    source === 'carlist'
-                                        ? 'bg-brand text-white'
-                                        : 'bg-foreground/10 text-foreground/70 hover:bg-foreground/20'
-                                }`}
+                                className={`px-4 py-2 rounded-lg font-medium transition-colors ${source === 'carlist'
+                                    ? 'bg-brand text-white'
+                                    : 'bg-foreground/10 text-foreground/70 hover:bg-foreground/20'
+                                    }`}
                             >
                                 Carlist
                             </button>
@@ -587,8 +581,8 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b-2 border-brand/20">
                     <div>
                         <label className="block text-brand font-medium mb-1">*Make</label>
-                        <select 
-                            value={make} 
+                        <select
+                            value={make}
                             onChange={(e) => {
                                 setMake(e.target.value)
                                 if (e.target.value) {
@@ -599,7 +593,7 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                                     setAvailableModels({})
                                     setCarlistModels({})
                                 }
-                            }} 
+                            }}
                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                             disabled={loadingMakes || loadingCarlistMakes}
                         >
@@ -624,9 +618,9 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
 
                     <div>
                         <label className="block text-brand font-medium mb-1">*Model</label>
-                        <select 
-                            value={model} 
-                            onChange={(e) => setModel(e.target.value)} 
+                        <select
+                            value={model}
+                            onChange={(e) => setModel(e.target.value)}
                             className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             disabled={!make || (Object.keys(availableModels).length === 0 && Object.keys(carlistModels).length === 0)}
                         >
@@ -656,301 +650,301 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
 
                 {/* Mudah Query */}
                 {showMudah && (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
 
-                    {/* Vehicle identity */}
-                    <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Basic vehicle information</p>
+                        {/* Vehicle identity */}
+                        <div className="space-y-4">
+                            <div className="pb-3 border-b-2 border-brand/20">
+                                <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
+                                <p className="text-xs text-foreground/60 mt-1">Basic vehicle information</p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Year</label>
+                                <select
+                                    value={yearFrom}
+                                    onChange={(e) => setYearFrom(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    {yearOptions.filter(v => v !== 'Any').map(y => (
+                                        <option key={y} value={y}>{y}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Body Type</label>
+                                <select
+                                    value={carType}
+                                    onChange={(e) => setCarType(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    <option value="sedan">Sedan</option>
+                                    <option value="hatchback">Hatchback</option>
+                                    <option value="suvs">SUV</option>
+                                    <option value="mpvs">MPV</option>
+                                    <option value="coupe">Coupe</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="pick_up">Pick-up</option>
+                                    <option value="4_wheels">4-Wheels</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Origin</label>
+                                <select
+                                    value={origin}
+                                    onChange={(e) => setOrigin(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    <option value="New Local">New Local</option>
+                                    <option value="New Import">New Import</option>
+                                    <option value="Recon">Reconditioned</option>
+                                    <option value="CBU">CBU</option>
+                                    <option value="CKD">CKD</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Year</label>
-                            <select 
-                                value={yearFrom}
-                                onChange={(e) => setYearFrom(e.target.value)}
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {yearOptions.filter(v => v !== 'Any').map(y => (
-                                    <option key={y} value={y}>{y}</option>
-                                ))}
-                            </select>
+                        {/* Technical specifications */}
+                        <div className="space-y-4">
+                            <div className="pb-3 border-b-2 border-brand/20">
+                                <h3 className="text-lg font-bold text-brand">Technical Specifications</h3>
+                                <p className="text-xs text-foreground/60 mt-1">Engine and performance details</p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Engine Capacity (L)</label>
+                                <select
+                                    value={engineCapacityLiter}
+                                    onChange={(e) => setEngineCapacityLiter(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    {engineCapacityOptionsLiters.filter(v => v !== 'Any').map(l => (
+                                        <option key={l} value={l}>{l}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Fuel Type</label>
+                                <select
+                                    value={fueltype}
+                                    onChange={(e) => setFueltype(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    <option value="petrol">Petrol</option>
+                                    <option value="hybrid">Hybrid</option>
+                                    <option value="diesel">Diesel</option>
+                                    <option value="electric">Electric</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Transmission</label>
+                                <select
+                                    value={transmission}
+                                    onChange={(e) => setTransmission(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    <option value="auto">Auto</option>
+                                    <option value="manual">Manual</option>
+                                </select>
+                            </div>
+
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Body Type</label>
-                            <select 
-                                value={carType} 
-                                onChange={(e) => setCarType(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="sedan">Sedan</option>
-                                <option value="hatchback">Hatchback</option>
-                                <option value="suvs">SUV</option>
-                                <option value="mpvs">MPV</option>
-                                <option value="coupe">Coupe</option>
-                                <option value="sports">Sports</option>
-                                <option value="pick_up">Pick-up</option>
-                                <option value="4_wheels">4-Wheels</option>
-                                <option value="other">Other</option>
-                            </select>
+                        {/* Condition */}
+                        <div className="space-y-4">
+                            <div className="pb-3 border-b-2 border-brand/20">
+                                <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
+                                <p className="text-xs text-foreground/60 mt-1">Usage and valuation data</p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Condition</label>
+                                <select
+                                    value={condition}
+                                    onChange={(e) => setCondition(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    <option value="Very Poor">Very Poor</option>
+                                    <option value="Poor">Poor</option>
+                                    <option value="Fair">Fair</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Very Good">Very Good</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
+                                <select
+                                    value={mileageFrom}
+                                    onChange={(e) => setMileageFrom(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    {mileageOptions.filter(v => v !== 'Any').map(m => (
+                                        <option key={m} value={m}>{Number(m).toLocaleString()}+</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Previous Insured Sum (MYR)</label>
+                                <input
+                                    type="number"
+                                    max={9999999}
+                                    placeholder="88888"
+                                    disabled={fieldsDisabled}
+                                    value={insuredPrice}
+                                    onChange={(e) => setInsuredPrice(e.target.value)}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                />
+                            </div>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Origin</label>
-                            <select 
-                                value={origin} 
-                                onChange={(e) => setOrigin(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="New Local">New Local</option>
-                                <option value="New Import">New Import</option>
-                                <option value="Recon">Reconditioned</option>
-                                <option value="CBU">CBU</option>
-                                <option value="CKD">CKD</option>
-                            </select>
-                        </div>
                     </div>
-
-                    {/* Technical specifications */}
-                    <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Technical Specifications</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Engine and performance details</p>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Engine Capacity (L)</label>
-                            <select 
-                                value={engineCapacityLiter}
-                                onChange={(e) => setEngineCapacityLiter(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {engineCapacityOptionsLiters.filter(v => v !== 'Any').map(l => (
-                                    <option key={l} value={l}>{l}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Fuel Type</label>
-                            <select 
-                                value={fueltype} 
-                                onChange={(e) => setFueltype(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="petrol">Petrol</option>
-                                <option value="hybrid">Hybrid</option>
-                                <option value="diesel">Diesel</option>
-                                <option value="electric">Electric</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Transmission</label>
-                            <select 
-                                value={transmission} 
-                                onChange={(e) => setTransmission(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="auto">Auto</option>
-                                <option value="manual">Manual</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                    {/* Condition */}
-                    <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Usage and valuation data</p>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Condition</label>
-                            <select 
-                                value={condition} 
-                                onChange={(e) => setCondition(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="Very Poor">Very Poor</option>
-                                <option value="Poor">Poor</option>
-                                <option value="Fair">Fair</option>
-                                <option value="Good">Good</option>
-                                <option value="Very Good">Very Good</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
-                            <select 
-                                value={mileageFrom}
-                                onChange={(e) => setMileageFrom(e.target.value)}
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {mileageOptions.filter(v => v !== 'Any').map(m => (
-                                    <option key={m} value={m}>{Number(m).toLocaleString()}+</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Previous Insured Sum (MYR)</label>
-                            <input 
-                                type="number" 
-                                max={9999999} 
-                                placeholder="88888" 
-                                disabled={fieldsDisabled}
-                                value={insuredPrice}
-                                onChange={(e) => setInsuredPrice(e.target.value)}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            />
-                        </div>                                   
-                    </div>
-
-                </div>
                 )}
 
                 {/* Carlist Query */}
                 {showCarlist && (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-                    {/* Vehicle identity */}
-                    <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Basic vehicle information</p>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                        {/* Vehicle identity */}
+                        <div className="space-y-4">
+                            <div className="pb-3 border-b-2 border-brand/20">
+                                <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
+                                <p className="text-xs text-foreground/60 mt-1">Basic vehicle information</p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Year</label>
+                                <select
+                                    value={yearFrom}
+                                    onChange={(e) => setYearFrom(e.target.value)}
+                                    disabled
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    {yearOptions.filter(v => v !== 'Any').map(y => (
+                                        <option key={y} value={y}>{y}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Variant</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g., 1.5G"
+                                    disabled
+                                    value={carlistVariant}
+                                    onChange={(e) => setCarlistVariant(e.target.value)}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Body Type</label>
+                                <select
+                                    value={carlistBodyType}
+                                    onChange={(e) => setCarlistBodyType(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    <option value="sedan">Sedan</option>
+                                    <option value="suv">SUV</option>
+                                    <option value="MPV">MPV</option>
+                                    <option value="Hatchback">Hatchback</option>
+                                    <option value="Coupe">Coupe</option>
+                                    <option value="pickup">Pickup</option>
+                                    <option value="Convertible">Convertible</option>
+                                    <option value="wagon">Wagon</option>
+                                    <option value="van">Van</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Year</label>
-                            <select 
-                                value={yearFrom}
-                                onChange={(e) => setYearFrom(e.target.value)}
-                                disabled
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {yearOptions.filter(v => v !== 'Any').map(y => (
-                                    <option key={y} value={y}>{y}</option>
-                                ))}
-                            </select>
+                        {/* Technical specifications */}
+                        <div className="space-y-4">
+                            <div className="pb-3 border-b-2 border-brand/20">
+                                <h3 className="text-lg font-bold text-brand">Technical Specifications</h3>
+                                <p className="text-xs text-foreground/60 mt-1">Engine and performance details</p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Transmission</label>
+                                <select
+                                    value={carlistTransmission}
+                                    onChange={(e) => setCarlistTransmission(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    <option value="Automatic">Automatic</option>
+                                    <option value="Manual">Manual</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Fuel Type</label>
+                                <select
+                                    value={carlistFuelType}
+                                    onChange={(e) => setCarlistFuelType(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    <option value="Petrol">Petrol</option>
+                                    <option value="Diesel">Diesel</option>
+                                    <option value="Hybrid">Hybrid</option>
+                                    <option value="Electric">Electric</option>
+                                    <option value="Unleaded">Unleaded</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Driven Wheel</label>
+                                <select
+                                    value={carlistDrivenWheel}
+                                    onChange={(e) => setCarlistDrivenWheel(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    <option value="FWD">FWD</option>
+                                    <option value="RWD">RWD</option>
+                                    <option value="AWD">AWD</option>
+                                    <option value="4WD">4WD</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Variant</label>
-                            <input 
-                                type="text" 
-                                placeholder="e.g., 1.5G" 
-                                disabled
-                                value={carlistVariant}
-                                onChange={(e) => setCarlistVariant(e.target.value)}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            />
-                        </div>
+                        {/* Filters */}
+                        <div className="space-y-4">
+                            <div className="pb-3 border-b-2 border-brand/20">
+                                <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
+                                <p className="text-xs text-foreground/60 mt-1">Usage and valuation data</p>
+                            </div>
 
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Body Type</label>
-                            <select 
-                                value={carlistBodyType} 
-                                onChange={(e) => setCarlistBodyType(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="sedan">Sedan</option>
-                                <option value="suv">SUV</option>
-                                <option value="MPV">MPV</option>
-                                <option value="Hatchback">Hatchback</option>
-                                <option value="Coupe">Coupe</option>
-                                <option value="pickup">Pickup</option>
-                                <option value="Convertible">Convertible</option>
-                                <option value="wagon">Wagon</option>
-                                <option value="van">Van</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    {/* Technical specifications */}
-                    <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Technical Specifications</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Engine and performance details</p>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Transmission</label>
-                            <select 
-                                value={carlistTransmission} 
-                                onChange={(e) => setCarlistTransmission(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="Automatic">Automatic</option>
-                                <option value="Manual">Manual</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Fuel Type</label>
-                            <select 
-                                value={carlistFuelType} 
-                                onChange={(e) => setCarlistFuelType(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="Petrol">Petrol</option>
-                                <option value="Diesel">Diesel</option>
-                                <option value="Hybrid">Hybrid</option>
-                                <option value="Electric">Electric</option>
-                                <option value="Unleaded">Unleaded</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Driven Wheel</label>
-                            <select 
-                                value={carlistDrivenWheel} 
-                                onChange={(e) => setCarlistDrivenWheel(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="FWD">FWD</option>
-                                <option value="RWD">RWD</option>
-                                <option value="AWD">AWD</option>
-                                <option value="4WD">4WD</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    {/* Filters */}
-                    <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Usage and valuation data</p>
-                        </div>
-
-                        {/* <div>
+                            {/* <div>
                             <label className="block text-sm font-medium mb-1">Min Price (MYR)</label>
                             <input 
                                 type="number" 
@@ -974,24 +968,24 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                             />
                         </div> */}
 
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Condition</label>
-                            <select 
-                                value={condition} 
-                                onChange={(e) => setCondition(e.target.value)} 
-                                disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="Very Poor">Very Poor</option>
-                                <option value="Poor">Poor</option>
-                                <option value="Fair">Fair</option>
-                                <option value="Good">Good</option>
-                                <option value="Very Good">Very Good</option>
-                            </select>
-                        </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Condition</label>
+                                <select
+                                    value={condition}
+                                    onChange={(e) => setCondition(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    <option value="Very Poor">Very Poor</option>
+                                    <option value="Poor">Poor</option>
+                                    <option value="Fair">Fair</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Very Good">Very Good</option>
+                                </select>
+                            </div>
 
-                        {/* <div>
+                            {/* <div>
                             <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
                             <input 
                                 type="number" 
@@ -1002,22 +996,22 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             />
                         </div> */}
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
-                            <select 
-                                value={mileageFrom}
-                                onChange={(e) => setMileageFrom(e.target.value)}
-                                disabled
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {mileageOptions.filter(v => v !== 'Any').map(m => (
-                                    <option key={m} value={m}>{Number(m).toLocaleString()}+</option>
-                                ))}
-                            </select>
-                        </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
+                                <select
+                                    value={mileageFrom}
+                                    onChange={(e) => setMileageFrom(e.target.value)}
+                                    disabled
+                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                                >
+                                    <option value="">--</option>
+                                    {mileageOptions.filter(v => v !== 'Any').map(m => (
+                                        <option key={m} value={m}>{Number(m).toLocaleString()}+</option>
+                                    ))}
+                                </select>
+                            </div>
 
-                        {/* <div>
+                            {/* <div>
                             <label className="block text-sm font-medium mb-1">Max Mileage (KM)</label>
                             <input 
                                 type="number" 
@@ -1029,7 +1023,7 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                             />
                         </div> */}
 
-                        {/* <div>
+                            {/* <div>
                             <label className="block text-sm font-medium mb-1">Sort By</label>
                             <select 
                                 value={carlistSort} 
@@ -1042,17 +1036,17 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                                 <option value="desc">Price: High to Low</option>
                             </select>
                         </div> */}
+                        </div>
                     </div>
-                </div>
                 )}
 
                 {/* Action Buttons */}
                 <div className="flex pt-4 w-full">
                     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
-                        <Button 
+                        <Button
                             type="button"
-                            href="#valuation" 
-                            onClick={handleSubmit} 
+                            href="#valuation"
+                            onClick={handleSubmit}
                             disabled={!canSubmit || loading || isLoading}
                             variant="secondary"
                             size="sm"
@@ -1061,10 +1055,10 @@ export function CarValuationMulti({ onSearch, onReset, loading = false, onSearch
                             Get Market Value
                             <ArrowDown className="h-5 w-5" />
                         </Button>
-                        <Button 
-                            type="button" 
+                        <Button
+                            type="button"
                             href="#main"
-                            onClick={resetAll} 
+                            onClick={resetAll}
                             variant="secondary"
                             size="sm"
                             className="w-full text-lg md:text-xl flex justify-center items-center gap-2"

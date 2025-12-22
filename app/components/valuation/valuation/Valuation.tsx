@@ -1,11 +1,12 @@
 "use client"
 
-import { HelpModal } from "./HelpModal";
-import { ValuationBar } from "../../ui/ValuationBar";
-import { CarValuationForm } from "./cars/CarValuationForm"; // Original form
+import { HelpModal } from "./HelpModal"
+import { ValuationBar } from "../../ui/ValuationBar"
+// import { CarValuationForm } from "./cars/CarValuationForm"; // Original form
 // import { CarValuationAgg } from "./cars/CarValuationAgg"; // Consolidated form thing
-import { CarValuationMulti } from "./cars/CarValuationAgg2"; // Current form
-import { MotorValuationForm } from "./motorcycle/MotorValuationForm";
+// import { CarValuationMulti } from "./cars/CarValuationAgg2"; // Current form
+import { CarValuationNew } from "./cars/CarValuationNew"
+import { MotorValuationForm } from "./motorcycle/MotorValuationForm"
 import React, { useState } from "react"
 import { ArrowRight, HelpCircle } from 'lucide-react'
 import { FaCar } from "react-icons/fa";
@@ -16,10 +17,10 @@ import { Button } from "../../ui/button"
 export function ValuationLayout() {
     // Active tab state
     const [activeTab, setActiveTab] = useState("car")
-    
+
     // Help modal
     const [isHelpOpen, setIsHelpOpen] = useState(false)
-    
+
     // Results state
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -57,7 +58,7 @@ export function ValuationLayout() {
         setError(null)
     }
 
-    return(
+    return (
         <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 pb-8 md:pb-16 pt-32 relative">
             {/* Help Button */}
             <button
@@ -86,12 +87,12 @@ export function ValuationLayout() {
                     How To Use?
                 </span>
             </button>
-            
+
             <div className="max-w-6xl mx-auto flex flex-col gap-8 md:gap-12">
 
                 <div id="main" className="flex flex-col items-center gap-4 md:gap-6">
                     <div className="p-8 rounded-full bg-brand-element w-32 h-32">
-                        <FaCar className="w-16 h-16 text-brand-white/80"/>
+                        <FaCar className="w-16 h-16 text-brand-white/80" />
                     </div>
 
                     <div className="flex flex-col gap-4 text-center">
@@ -99,19 +100,19 @@ export function ValuationLayout() {
                         <h3 className="text-2xl md:text-3xl font-bold text-brand-white">For Motor Vehicle Market Valuation</h3>
                     </div>
                 </div>
-                
+
 
                 <div className="grid grid-cols-1 gap-8 md:gap-12">
 
                     <div className="grid grid-cols-1 gap-4">
-                        <ValuationBar 
+                        <ValuationBar
                             activeTab={activeTab}
                             onTabChange={handleTabChange}
                         />
 
-                        <HelpModal 
-                            isOpen={isHelpOpen} 
-                            onClose={() => setIsHelpOpen(false)} 
+                        <HelpModal
+                            isOpen={isHelpOpen}
+                            onClose={() => setIsHelpOpen(false)}
                         />
 
                         {/* Conditional rendering based on active tab */}
@@ -123,17 +124,17 @@ export function ValuationLayout() {
                             //     onSearchStart={handleSearchStart}
                             // />
 
-                            <CarValuationMulti
+                            <CarValuationNew
                                 onSearch={handleSearch}
                                 onReset={handleReset}
                                 loading={loading}
                                 onSearchStart={handleSearchStart}
                             />
-                            
+
                         )}
 
                         {activeTab === "motorcycle" && (
-                            <MotorValuationForm 
+                            <MotorValuationForm
                                 onSearch={handleSearch}
                                 onReset={handleReset}
                                 loading={loading}
@@ -144,7 +145,7 @@ export function ValuationLayout() {
 
                     {/* Section to display all results */}
                     <div id="valuation">
-                        <ValuationResults 
+                        <ValuationResults
                             results={results}
                             error={error}
                             loading={loading}
@@ -152,22 +153,24 @@ export function ValuationLayout() {
                             link="#main"
                         />
                     </div>
-                    
+
                 </div>
 
-                <div className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/40 p-4 md:p-6">
+                {/* Section for vehicle specifications, commented out for now */}
+
+                {/* <div className="bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/40 p-4 md:p-6">
                     <div className="md:p-6 w-full flex flex-col gap-4 justify-center items-center md:border md:border-dashed md:border-foreground/20 rounded-2xl">
                         <div className="p-4 rounded-2xl md:rounded-3xl bg-brand-element/10">
-                            <FaCarOn className="w-12 h-12 text-brand"/>
+                            <FaCarOn className="w-12 h-12 text-brand" />
                         </div>
-                        
+
                         <h3 className="text-xl md:text-2xl font-bold text-center text-brand">Get Detailed Specifications Regarding Your Vehicle</h3>
 
                         <Button href="/valuation/specifications" variant="secondary" size="sm" className="flex md:text-xl gap-2">
                             Go to Vehicle Specifications <ArrowRight />
                         </Button>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )
