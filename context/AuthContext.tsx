@@ -1,12 +1,21 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { User } from "@supabase/supabase-js";
+import { createClient } from "@/utils/supabase/client";
+import { User as SupabaseUser } from "@supabase/supabase-js";
+import { login as loginAction } from "@/utils/authentication";
+import { useRouter } from "next/navigation";
+
+interface User {
+    email?: string;
+    full_name?: string;
+    role?: string;
+}
 
 interface AuthContextType {
     user: User | null;
-    login: (user: User) => void;
-    logout: () => void;
+    login: (formData: FormData) => Promise<{ ok: boolean; message?: string; user?: User }>;
+    logout: () => Promise<void>;
     isLoading: boolean;
 }
 
@@ -15,31 +24,63 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const router = useRouter();
+    const supabase = createClient();
+
+    const mapUser = (sbUser: SupabaseUser): User => {
+        return {
+            email: sbUser.email,
+            full_name: sbUser.user_metadata?.full_name,
+            role: sbUser.user_metadata?.role,
+        };
+    }
 
     useEffect(() => {
-        // Check for stored user on mount
-        const storedUser = localStorage.getItem("snk_user");
-        if (storedUser) {
+        const fetchUser = async () => {
             try {
-                setUser(JSON.parse(storedUser));
+                const { data: { user: sbUser } } = await supabase.auth.getUser();
+                if (sbUser) {
+                    setUser(mapUser(sbUser));
+                } else {
+                    setUser(null);
+                }
             } catch (error) {
-                console.error("Failed to parse stored user", error);
-                localStorage.removeItem("snk_user");
+                console.error("Error fetching user:", error);
+                setUser(null);
+            } finally {
+                setIsLoading(false);
             }
-        }
-        setIsLoading(false);
+        };
+
+        fetchUser();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (session?.user) {
+                setUser(mapUser(session.user));
+            } else {
+                setUser(null);
+            }
+            setIsLoading(false);
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        };
     }, []);
 
-    const login = (userData: User) => {
-        setUser(userData);
-        localStorage.setItem("snk_user", JSON.stringify(userData));
+    const login = async (formData: FormData) => {
+        const result = await loginAction(formData);
+        if (result.ok && result.user) {
+            setUser(result.user);
+        }
+        return result;
     };
 
-    const logout = () => {
+    const logout = async () => {
+        await supabase.auth.signOut();
         setUser(null);
-        localStorage.removeItem("snk_user");
-        // Optional: Call server action to sign out from Supabase if needed, 
-        // or handle it in the component calling logout.
+        router.push("/login");
+        router.refresh();
     };
 
     return (

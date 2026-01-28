@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { User, LayoutDashboard, LogOut, ChevronDown } from "lucide-react";
+import { User, LayoutDashboard, LogOut } from "lucide-react";
 // import AnimateOnLoad from "./ui/AnimateOnLoad"
 // import { Button } from "@/components/ui/button"
 // import { Car } from "lucide-react"
@@ -181,7 +181,7 @@ export function Navigation() {
                     <div className="bg-white rounded-xl shadow-xl overflow-hidden ring-1 ring-black/5 pb-2">
                       <div className="px-4 py-3 border-b border-gray-100 mb-1">
                         <p className="font-semibold text-gray-900 truncate">
-                          {user?.user_metadata?.full_name || "User"}
+                          {user?.full_name || "User"}
                         </p>
                         <p className="text-sm text-gray-500 truncate">
                           {user?.email}
@@ -197,14 +197,13 @@ export function Navigation() {
                           Manage Account
                         </Link>
 
-                        <Link
-                          href="/auth/signout"
+                        <button
                           onClick={() => logout()}
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full text-left"
                         >
                           <LogOut size={16} />
                           Sign Out
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -243,7 +242,7 @@ export function Navigation() {
               <>
                 <div className="">
                   <p className="font-semibold text-gray-900 truncate">
-                    {user?.user_metadata?.full_name || "User"}
+                    {user?.full_name || "User"}
                   </p>
                   <p className="text-xs text-gray-500 truncate">
                     {user?.email}
@@ -295,9 +294,8 @@ export function Navigation() {
                   Manage Account
                 </Link>
 
-                <Link
-                  href="/auth/signout"
-                  className="flex items-center gap-2 text-red-600 hover:bg-red-50 transition-colors"
+                <button
+                  className="flex items-center gap-2 text-red-600 hover:bg-red-50 transition-colors w-full text-left"
                   onClick={() => {
                     setIsMenuOpen(false);
                     logout();
@@ -305,7 +303,7 @@ export function Navigation() {
                 >
                   <LogOut size={18} />
                   Sign Out
-                </Link>
+                </button>
               </>
             ) : (
               <Link

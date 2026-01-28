@@ -35,7 +35,12 @@ export async function login(formData: FormData) {
 
   const { data, error } = await supabase.auth.signInWithPassword(auth_data);
   if (error) return { ok: false, message: toSafeMessage(error.message) }
-  return { ok: true, user: data.user };
+  const user = {
+    email: data.user.email,
+    full_name: data.user.user_metadata.full_name,
+    role: data.user.user_metadata.role
+  }
+  return { ok: true, user: user };
 }
 
 export async function signup(formData: FormData) {

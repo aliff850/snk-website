@@ -3,7 +3,6 @@
 import { Button } from "../components/ui/button";
 import AnimateOnLoad from "../components/ui/AnimateOnLoad";
 import Link from "next/link";
-import { login } from "@/utils/authentication";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -30,12 +29,9 @@ export default function LoginPage() {
       // Create a promise that handles the response properly
       const loginPromise = new Promise(async (resolve, reject) => {
         try {
-          const response = await login(formData);
+          const response = await loginCtx(formData);
 
           if (response.ok) {
-            if (response.user) {
-              loginCtx(response.user);
-            }
             resolve(response);
           } else {
             reject(new Error(response.message));
