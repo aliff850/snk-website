@@ -34,8 +34,13 @@ export async function login(formData: FormData) {
   };
 
   const { data, error } = await supabase.auth.signInWithPassword(auth_data);
-  if (error) return { ok: false, message: toSafeMessage(error.message)}
-  return { ok: true };
+  if (error) return { ok: false, message: toSafeMessage(error.message) }
+  const user = {
+    email: data.user.email,
+    full_name: data.user.user_metadata.full_name,
+    role: data.user.user_metadata.role
+  }
+  return { ok: true, user: user };
 }
 
 export async function signup(formData: FormData) {
@@ -47,13 +52,13 @@ export async function signup(formData: FormData) {
     options: {
       data: {
         full_name: formData.get("fullname") as string,
-        // not sure what user metadata to save for account creation
+        role: "user",
       },
       redirectTo: `${process.env.NODE_ENV === "development" ? "http://127.0.0.1:3000" : process.env.NEXT_PUBLIC_APP_URL}`,
     },
   };
 
   const { data, error } = await supabase.auth.signUp(auth_data);
-  if (error) return { ok: false, message: toSafeMessage(error.message)}
+  if (error) return { ok: false, message: toSafeMessage(error.message) }
   return { ok: true };
 }

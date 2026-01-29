@@ -5,6 +5,7 @@ import { Navigation } from "./components/navigation";
 import { Footer } from "./components/footer";
 import ScrollToTop from "./components/ui/ScrollToTop";
 import ScrollToTopButton from "./components/ui/ScrollToTopButton";
+import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
 const onest = Onest({
@@ -19,7 +20,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title:  { 
+  title: {
     default: "SNK Market Data Research",
     template: '%s | SNK Market Data Research'
   },
@@ -36,24 +37,26 @@ export default function RootLayout({
       <body
         className={`${onest.variable} ${poppins.variable} antialiased snap-y snap-mandatory overflow-y-scroll`}
       >
-        <ScrollToTop />
-        <Navigation />
-        {children}
-        <Footer />
-        <ScrollToTopButton />
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          transition={Bounce}
-        />
+        <AuthProvider>
+          <ScrollToTop />
+          <Navigation />
+          {children}
+          <Footer />
+          <ScrollToTopButton />
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            transition={Bounce}
+          />
+        </AuthProvider>
       </body>
     </html>
   );
