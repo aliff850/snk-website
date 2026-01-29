@@ -7,12 +7,12 @@ import { ValuationBar } from "../../ui/ValuationBar"
 // import { CarValuationMulti } from "./cars/CarValuationAgg2"; // Current form
 import { CarValuationNew } from "./cars/CarValuationNew"
 import { MotorValuationForm } from "./motorcycle/MotorValuationForm"
-import React, { useState } from "react"
-import { ArrowRight, HelpCircle } from 'lucide-react'
+import { useState } from "react"
+import { HelpCircle } from 'lucide-react'
 import { FaCar } from "react-icons/fa";
-import { FaCarOn } from "react-icons/fa6"
+// import { FaCarOn } from "react-icons/fa6"
 import { ValuationResults } from "./ValuationResults"
-import { Button } from "../../ui/button"
+// import { Button } from "../../ui/button"
 
 export function ValuationLayout() {
     // Active tab state

@@ -6,7 +6,7 @@ import { FaMotorcycle } from "react-icons/fa6"
 const navItems = [
     { label: "Car", icon: Car, value: "car" },
     { label: "Motorcycle", icon: FaMotorcycle, value: "motorcycle" },
-    { label: "Lorries", icon: Truck, value: "lorries" },
+    { label: "Commercial", icon: Truck, value: "commercial" },
 ]
 
 interface ValuationBarProps {
@@ -21,8 +21,8 @@ export function ValuationBar({ activeTab, onTabChange }: ValuationBarProps) {
                 {navItems.map((item) => {
                     const Icon = item.icon
                     const isActive = activeTab === item.value
-                    const isDisabled = item.value === "lorries"
-                    
+                    const isDisabled = item.value === "commercial"
+
                     return (
                         <button
                             key={item.label}
@@ -32,11 +32,11 @@ export function ValuationBar({ activeTab, onTabChange }: ValuationBarProps) {
                                 flex items-center justify-center gap-2 flex-1 p-2 md:px-4 md:py-2 
                                 rounded-xl md:rounded-2xl font-semibold text-sm md:text-base lg:text-lg 
                                 transition-all duration-300 ease-in-out
-                                ${isActive 
-                                    ? "text-brand-white bg-brand" 
+                                ${isActive
+                                    ? "text-brand-white bg-brand"
                                     : isDisabled
-                                    ? "text-foreground/30 cursor-not-allowed"
-                                    : "hover:text-brand-white hover:bg-brand"
+                                        ? "text-foreground/30 cursor-not-allowed"
+                                        : "hover:text-brand-white hover:bg-brand"
                                 }
                             `}
                         >

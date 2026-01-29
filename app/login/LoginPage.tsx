@@ -29,7 +29,7 @@ export default function LoginPage() {
       const loginPromise = new Promise(async (resolve, reject) => {
         try {
           const response = await login(formData);
-          
+
           if (response.ok) {
             resolve(response);
           } else {
@@ -104,12 +104,17 @@ export default function LoginPage() {
                   disabled={isLoading}
                 >
                   {showPassword ? (
-                    <Eye size={20}/>
+                    <Eye size={20} />
                   ) : (
-                    <EyeOff size={20}/>
+                    <EyeOff size={20} />
                   )}
                 </button>
               </div>
+
+              <div className="w-full flex justify-end">
+                <Link href={`/forgot-password`} className="text-sm text-brand-white/60 hover:text-brand-white transition-colors duration-200 underline decoration-dotted underline-offset-2">Forgot Password?</Link>
+              </div>
+
 
               {error && <p className="text-xs text-red-300">{error}</p>}
               <Button type="submit" variant="secondary" disabled={isLoading}>

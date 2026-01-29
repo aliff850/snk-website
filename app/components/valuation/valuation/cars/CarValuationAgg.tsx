@@ -1,5 +1,5 @@
 "use client"
-
+// THIS COMPONENT IS NOT IN USE
 import { useState, useMemo, useEffect } from "react"
 import { ArrowDown, RotateCcw } from 'lucide-react'
 import { Button } from "../../../ui/button"
@@ -14,14 +14,14 @@ interface CarValuationAggProps {
 
 export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchStart }: CarValuationAggProps) {
     const [isLoading, setIsLoading] = useState(false)
-    
+
     // Source selection state
     const [sources, setSources] = useState<('mudah' | 'carlist')[]>(['mudah', 'carlist'])
-    
+
     // Existing states
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
-    
+
     // Vehicle maps state
     const [availableMakes, setAvailableMakes] = useState<Record<string, any>>({})
     const [availableModels, setAvailableModels] = useState<Record<string, string>>({})
@@ -143,16 +143,16 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
     // Unified search function
     const getUnifiedData = async () => {
         if (!canSubmit) return
-        
+
         setIsLoading(true)
         if (onSearchStart) {
             onSearchStart()
         }
-        
+
         try {
             const makeSlug = slug(make)
             const modelSlug = slug(model)
-            
+
             // Build unified query
             const searchQuery: Record<string, any> = {
                 make: makeSlug,
@@ -167,7 +167,7 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
             if (fueltype) searchQuery.fuel_type = fueltype
             if (condition) searchQuery.condition = condition
             if (carType) searchQuery.body_type = carType
-            
+
             // Mileage range
             if (mileageFrom) {
                 const fromNum = parseInt(mileageFrom, 10)
@@ -177,25 +177,25 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
                     searchQuery.max_mileage = Math.min(fromNum + 5000, maxOption)
                 }
             }
-            
+
             // Price range
             if (minPrice) searchQuery.min_price = parseInt(minPrice, 10)
             if (maxPrice) searchQuery.max_price = parseInt(maxPrice, 10)
-            
+
             // Call unified endpoint
             const response = await fetch('/api/utils/search', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(searchQuery)
             })
-            
+
             if (!response.ok) {
                 const errorText = await response.text()
                 throw new Error(`Failed to fetch listings: ${response.status} - ${errorText}`)
             }
-            
+
             const data = await response.json()
-            
+
             // Format results to match existing structure
             const results = {
                 listings: data.listings,
@@ -221,7 +221,7 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
                     sources: sources
                 }
             }
-            
+
             onSearch(results)
         } catch (e: any) {
             onSearch({ error: e?.message || "Something went wrong" })
@@ -240,11 +240,10 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
                         <button
                             type="button"
                             onClick={() => toggleSource('mudah')}
-                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                                sources.includes('mudah')
-                                    ? 'bg-brand text-white shadow-md'
-                                    : 'bg-white text-foreground/60 border border-foreground/20 hover:border-brand/40'
-                            }`}
+                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${sources.includes('mudah')
+                                ? 'bg-brand text-white shadow-md'
+                                : 'bg-white text-foreground/60 border border-foreground/20 hover:border-brand/40'
+                                }`}
                         >
                             <span className="flex items-center gap-2">
                                 <span className={`w-2 h-2 rounded-full ${sources.includes('mudah') ? 'bg-white' : 'bg-foreground/30'}`} />
@@ -254,11 +253,10 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
                         <button
                             type="button"
                             onClick={() => toggleSource('carlist')}
-                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                                sources.includes('carlist')
-                                    ? 'bg-brand text-white shadow-md'
-                                    : 'bg-white text-foreground/60 border border-foreground/20 hover:border-brand/40'
-                            }`}
+                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${sources.includes('carlist')
+                                ? 'bg-brand text-white shadow-md'
+                                : 'bg-white text-foreground/60 border border-foreground/20 hover:border-brand/40'
+                                }`}
                         >
                             <span className="flex items-center gap-2">
                                 <span className={`w-2 h-2 rounded-full ${sources.includes('carlist') ? 'bg-white' : 'bg-foreground/30'}`} />
@@ -267,27 +265,27 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
                         </button>
                     </div>
                     <p className="text-xs text-foreground/60 mt-2">
-                        {sources.length === 2 
-                            ? "Searching both platforms for comprehensive results" 
-                            : sources.length === 1 
-                            ? `Searching ${sources[0].charAt(0).toUpperCase() + sources[0].slice(1)}.my only`
-                            : "Select at least one source"}
+                        {sources.length === 2
+                            ? "Searching both platforms for comprehensive results"
+                            : sources.length === 1
+                                ? `Searching ${sources[0].charAt(0).toUpperCase() + sources[0].slice(1)}.my only`
+                                : "Select at least one source"}
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-                    
+
                     {/* Vehicle identity */}
                     <div className="space-y-4">
                         <div className="pb-3 border-b-2 border-brand/20">
                             <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
                             <p className="text-xs text-foreground/60 mt-1">Basic vehicle information</p>
                         </div>
-                        
+
                         <div>
                             <label className="block text-sm font-medium mb-1">*Make</label>
-                            <select 
-                                value={make} 
+                            <select
+                                value={make}
                                 onChange={(e) => {
                                     setMake(e.target.value)
                                     if (e.target.value) {
@@ -295,7 +293,7 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
                                     } else {
                                         setAvailableModels({})
                                     }
-                                }} 
+                                }}
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
                                 disabled={loadingMakes}
                             >
@@ -309,18 +307,18 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Model</label>
-                            <select 
-                                value={model} 
-                                onChange={(e) => setModel(e.target.value)} 
+                            <select
+                                value={model}
+                                onChange={(e) => setModel(e.target.value)}
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                 disabled={!make || Object.keys(availableModels).length === 0}
                             >
                                 <option value="">Select a model...</option>
                                 {Object.keys(availableModels)
-                                .filter(modelKey => modelKey !== '__id__')
-                                .map(modelKey => (
-                                    <option key={modelKey} value={modelKey}>{modelKey.replace(/-/g, ' ').toUpperCase()}</option>
-                                ))}
+                                    .filter(modelKey => modelKey !== '__id__')
+                                    .map(modelKey => (
+                                        <option key={modelKey} value={modelKey}>{modelKey.replace(/-/g, ' ').toUpperCase()}</option>
+                                    ))}
                             </select>
                             {make && Object.keys(availableModels).length === 0 && !loadingMakes && (
                                 <p className="mt-1 text-xs text-foreground/60">No models found for this make</p>
@@ -329,7 +327,7 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Year</label>
-                            <select 
+                            <select
                                 value={yearFrom}
                                 onChange={(e) => setYearFrom(e.target.value)}
                                 disabled={fieldsDisabled}
@@ -344,9 +342,9 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Body Type</label>
-                            <select 
-                                value={carType} 
-                                onChange={(e) => setCarType(e.target.value)} 
+                            <select
+                                value={carType}
+                                onChange={(e) => setCarType(e.target.value)}
                                 disabled={fieldsDisabled}
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             >
@@ -373,9 +371,9 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Engine Capacity (L)</label>
-                            <select 
+                            <select
                                 value={engineCapacityLiter}
-                                onChange={(e) => setEngineCapacityLiter(e.target.value)} 
+                                onChange={(e) => setEngineCapacityLiter(e.target.value)}
                                 disabled={fieldsDisabled}
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             >
@@ -388,9 +386,9 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Fuel Type</label>
-                            <select 
-                                value={fueltype} 
-                                onChange={(e) => setFueltype(e.target.value)} 
+                            <select
+                                value={fueltype}
+                                onChange={(e) => setFueltype(e.target.value)}
                                 disabled={fieldsDisabled}
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             >
@@ -404,9 +402,9 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Transmission</label>
-                            <select 
-                                value={transmission} 
-                                onChange={(e) => setTransmission(e.target.value)} 
+                            <select
+                                value={transmission}
+                                onChange={(e) => setTransmission(e.target.value)}
                                 disabled={fieldsDisabled}
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             >
@@ -418,9 +416,9 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Condition</label>
-                            <select 
-                                value={condition} 
-                                onChange={(e) => setCondition(e.target.value)} 
+                            <select
+                                value={condition}
+                                onChange={(e) => setCondition(e.target.value)}
                                 disabled={fieldsDisabled}
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             >
@@ -441,7 +439,7 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
-                            <select 
+                            <select
                                 value={mileageFrom}
                                 onChange={(e) => setMileageFrom(e.target.value)}
                                 disabled={fieldsDisabled}
@@ -456,10 +454,10 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Min Price (MYR)</label>
-                            <input 
-                                type="number" 
-                                max={9999999} 
-                                placeholder="30000" 
+                            <input
+                                type="number"
+                                max={9999999}
+                                placeholder="30000"
                                 disabled={fieldsDisabled}
                                 value={minPrice}
                                 onChange={(e) => setMinPrice(e.target.value)}
@@ -469,10 +467,10 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Max Price (MYR)</label>
-                            <input 
-                                type="number" 
-                                max={9999999} 
-                                placeholder="100000" 
+                            <input
+                                type="number"
+                                max={9999999}
+                                placeholder="100000"
                                 disabled={fieldsDisabled}
                                 value={maxPrice}
                                 onChange={(e) => setMaxPrice(e.target.value)}
@@ -482,24 +480,24 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Previous Insured Sum (MYR)</label>
-                            <input 
-                                type="number" 
-                                max={9999999} 
-                                placeholder="88888" 
+                            <input
+                                type="number"
+                                max={9999999}
+                                placeholder="88888"
                                 disabled={fieldsDisabled}
                                 value={insuredPrice}
                                 onChange={(e) => setInsuredPrice(e.target.value)}
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             />
-                        </div>                                   
+                        </div>
                     </div>
 
                     <div className="col-span-full flex pt-4 lg:pt-0 w-full">
                         <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
-                            <Button 
+                            <Button
                                 type="button"
-                                href="#valuation" 
-                                onClick={getUnifiedData} 
+                                href="#valuation"
+                                onClick={getUnifiedData}
                                 disabled={!canSubmit || loading || isLoading}
                                 variant="secondary"
                                 size="sm"
@@ -508,10 +506,10 @@ export function CarValuationAgg({ onSearch, onReset, loading = false, onSearchSt
                                 Get Market Value
                                 <ArrowDown className="h-5 w-5" />
                             </Button>
-                            <Button 
-                                type="button" 
+                            <Button
+                                type="button"
                                 href="#main"
-                                onClick={resetAll} 
+                                onClick={resetAll}
                                 variant="secondary"
                                 size="sm"
                                 className="w-full text-lg md:text-xl flex justify-center items-center gap-2"

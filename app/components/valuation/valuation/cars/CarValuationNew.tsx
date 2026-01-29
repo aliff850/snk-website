@@ -15,9 +15,6 @@ interface CarValuationNewProps {
 export function CarValuationNew({ onSearch, onReset, loading = false, onSearchStart }: CarValuationNewProps) {
     const [isLoading, setIsLoading] = useState(false)
 
-    // Source selection (Mudah is default) - multiple selection
-    const [sources, setSources] = useState<string[]>(['mudah'])
-
     // Shared states
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
@@ -55,20 +52,10 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     // const [carlistMileage, setCarlistMileage] = useState<string>("") // Use mileageFrom
 
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
-    const canSubmit = useMemo(() => make.trim() && model.trim() && sources.length > 0, [make, model, sources])
+    const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
     const fieldsDisabled = !canSubmit
 
-    // Helper to toggle sources
-    const toggleSource = (source: string) => {
-        setSources(prev => {
-            if (prev.includes(source)) {
-                // Prevent deselecting the only source
-                if (prev.length === 1) return prev
-                return prev.filter(s => s !== source)
-            }
-            return [...prev, source]
-        })
-    }
+
 
     // Fetch Mudah makes
     const fetchMakes = async () => {
@@ -150,28 +137,20 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     // Merged all makes
     const unifiedMakes = useMemo(() => {
         const makes = new Set<string>()
-        if (sources.includes('mudah')) {
-            Object.keys(availableMakes).forEach(m => makes.add(m))
-        }
-        if (sources.includes('carlist')) {
-            Object.keys(carlistMakes).forEach(m => makes.add(m))
-        }
+        Object.keys(availableMakes).forEach(m => makes.add(m))
+        Object.keys(carlistMakes).forEach(m => makes.add(m))
 
         // Basically merge all available makes and models
         return Array.from(makes).sort()
-    }, [availableMakes, carlistMakes, sources])
+    }, [availableMakes, carlistMakes])
 
     // Merged all Models
     const unifiedModels = useMemo(() => {
         const models = new Set<string>()
-        if (sources.includes('mudah')) {
-            Object.keys(availableModels).filter(k => k !== '__id__').forEach(m => models.add(m))
-        }
-        if (sources.includes('carlist')) {
-            Object.keys(carlistModels).forEach(m => models.add(m))
-        }
+        Object.keys(availableModels).filter(k => k !== '__id__').forEach(m => models.add(m))
+        Object.keys(carlistModels).forEach(m => models.add(m))
         return Array.from(models).sort()
-    }, [availableModels, carlistModels, sources])
+    }, [availableModels, carlistModels])
 
     // resets all
     const resetAll = () => {
@@ -220,7 +199,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
             // Map body type
             if (bodyType) {
-                // Unified: "sedan", "hatchback", "suv", "mpv", "coupe", "pickup", "convertible", "wagon", "van"
+                // Unified body types: "sedan", "hatchback", "suv", "mpv", "coupe", "pickup", "convertible", "wagon", "van"
                 const bodyTypeMap: Record<string, string> = {
                     'sedan': 'sedan',
                     'hatchback': 'Hatchback',
@@ -566,23 +545,19 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             const results: any[] = []
             const errors: string[] = []
 
-            // Fetch from selected source
-            if (sources.includes('mudah')) {
-                try {
-                    const mudahResult = await getMudahData()
-                    results.push(mudahResult)
-                } catch (e: any) {
-                    errors.push(`Mudah: ${e?.message || "Unknown error"}`)
-                }
+            // Fetch from all sources
+            try {
+                const mudahResult = await getMudahData()
+                results.push(mudahResult)
+            } catch (e: any) {
+                errors.push(`Mudah: ${e?.message || "Unknown error"}`)
             }
 
-            if (sources.includes('carlist')) {
-                try {
-                    const carlistResult = await getCarlistData()
-                    results.push(carlistResult)
-                } catch (e: any) {
-                    errors.push(`Carlist: ${e?.message || "Unknown error"}`)
-                }
+            try {
+                const carlistResult = await getCarlistData()
+                results.push(carlistResult)
+            } catch (e: any) {
+                errors.push(`Carlist: ${e?.message || "Unknown error"}`)
             }
 
             // Construct user inputs object from state to ensure consistency
@@ -652,40 +627,14 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         }
     }
 
-    const showMudah = sources.includes('mudah')
-    const showCarlist = sources.includes('carlist')
+    // const showMudah = sources.includes('mudah')
+    // const showCarlist = sources.includes('carlist')
 
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
             <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
                 {/* Source Toggle */}
-                <div className="p-4 outline-1 outline-foreground/40 rounded-xl md:rounded-2xl bg-foreground/5">
-                    <div className="flex flex-col gap-3">
-                        <label className="font-medium text-brand font-bold">Data Sources</label>
-                        <div className="flex flex-wrap gap-3">
-                            <button
-                                type="button"
-                                onClick={() => toggleSource('mudah')}
-                                className={`px-4 py-2 rounded-lg font-medium transition-colors border ${sources.includes('mudah')
-                                    ? 'bg-brand text-white border-brand'
-                                    : 'bg-transparent text-foreground/70 border-foreground/20 hover:bg-foreground/10'
-                                    }`}
-                            >
-                                Mudah
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => toggleSource('carlist')}
-                                className={`px-4 py-2 rounded-lg font-medium transition-colors border ${sources.includes('carlist')
-                                    ? 'bg-brand text-white border-brand'
-                                    : 'bg-transparent text-foreground/70 border-foreground/20 hover:bg-foreground/10'
-                                    }`}
-                            >
-                                Carlist
-                            </button>
-                        </div>
-                    </div>
-                </div>
+
 
                 {/* Make/Model Selection */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b-2 border-brand/20">
@@ -737,7 +686,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                     </div>
                 </div>
 
-                {/* Unified Query */}
+                {/* Vehicle Listing Query */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                     {/* Vehicle identity */}
                     <div className="space-y-4">
@@ -782,23 +731,22 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             </select>
                         </div>
 
-                        {/* Carlist Only: Variant */}
-                        <div className={!sources.includes('carlist') ? 'opacity-50' : ''}>
+                        {/* Variant */}
+                        <div>
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">*Variant</label>
-                                {!sources.includes('carlist') && <span className="text-[10px] bg-foreground/10 px-1 rounded text-foreground/50">Carlist Only</span>}
                             </div>
                             <input
                                 type="text"
                                 placeholder="e.g., 1.5G"
-                                disabled={fieldsDisabled || !sources.includes('carlist')}
+                                disabled={fieldsDisabled}
                                 value={carlistVariant}
                                 onChange={(e) => setCarlistVariant(e.target.value)}
                                 className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             />
                         </div>
 
-                        {/* Origin - Available for both */}
+                        {/* Origin */}
                         <div>
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">*Origin</label>
@@ -856,7 +804,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             </select>
                         </div>
 
-                        {/* Engine Capacity - Available for both */}
+                        {/* Engine Capacity */}
                         <div>
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">*Engine Capacity (L)</label>

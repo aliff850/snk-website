@@ -21,7 +21,7 @@ const baseClasses = "inline-flex items-center justify-center font-semibold round
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary: "bg-brand-white text-brand hover:bg-brand-white/90 active:bg-brand-element",
-  secondary: "bg-brand text-white hover:bg-brand/90 ring-1 ring-brand-white/20 hover:ring-brand-white/50 active:bg-brand-element",
+  secondary: "bg-brand text-white hover:bg-brand/90 active:bg-brand-element",
 }
 
 const sizes: Record<ButtonSize, string> = {
@@ -35,7 +35,7 @@ const sizes: Record<ButtonSize, string> = {
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", href, target, children, ...props }, ref) => {
     const buttonClasses = cn(baseClasses, variantClasses[variant], sizes[size], className)
-    
+
     if (href) {
       return (
         <Link
@@ -48,7 +48,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         </Link>
       )
     }
-    
+
     return (
       <button
         ref={ref}
