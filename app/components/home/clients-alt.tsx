@@ -35,7 +35,7 @@ const ClientCarousel = () => {
                 </p>
             </div>
 
-            <div className="relative w-full overflow-hidden">
+            <div className="relative w-full max-w-7xl mx-auto overflow-hidden">
                 {/* Adjust the scrolling speed by decreasing or increasing animationDuration value */}
                 {/* This uses CSS animation for the scrolling effect */}
 

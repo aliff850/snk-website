@@ -2,11 +2,8 @@
 
 import { HelpModal } from "./HelpModal"
 import { ValuationBar } from "../../ui/ValuationBar"
-// import { CarValuationForm } from "./cars/CarValuationForm"; // Original form
-// import { CarValuationAgg } from "./cars/CarValuationAgg"; // Consolidated form thing
-// import { CarValuationMulti } from "./cars/CarValuationAgg2"; // Current form
-import { CarValuationNew } from "./cars/CarValuationNew"
-import { MotorValuationForm } from "./motorcycle/MotorValuationForm"
+import { CarValuationNew } from "./cars/CarValuationNew" // Car valuation form component
+import { MotorValuationForm } from "./motorcycle/MotorValuationForm" // Motorcycle valuation form component
 import { useState } from "react"
 import { HelpCircle } from 'lucide-react'
 import { FaCar } from "react-icons/fa";
@@ -116,23 +113,15 @@ export function ValuationLayout() {
                         />
 
                         {/* Conditional rendering based on active tab */}
+                        {/* Display valuation form based on active tab */}
                         {activeTab === "car" && (
-                            // <CarValuationForm 
-                            //     onSearch={handleSearch}
-                            //     onReset={handleReset}
-                            //     loading={loading}
-                            //     onSearchStart={handleSearchStart}
-                            // />
-
                             <CarValuationNew
                                 onSearch={handleSearch}
                                 onReset={handleReset}
                                 loading={loading}
                                 onSearchStart={handleSearchStart}
                             />
-
                         )}
-
                         {activeTab === "motorcycle" && (
                             <MotorValuationForm
                                 onSearch={handleSearch}
@@ -143,7 +132,7 @@ export function ValuationLayout() {
                         )}
                     </div>
 
-                    {/* Section to display all results */}
+                    {/* Section to display all valuation results */}
                     <div id="valuation">
                         <ValuationResults
                             results={results}

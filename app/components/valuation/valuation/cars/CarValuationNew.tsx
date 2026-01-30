@@ -55,8 +55,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
     const fieldsDisabled = !canSubmit
 
-
-
     // Fetch Mudah makes
     const fetchMakes = async () => {
         setLoadingMakes(true)
@@ -131,10 +129,10 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             fetchModels(makeSlug)
             fetchCarlistModels(makeSlug)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [make]) // Changed dependency to make - we want to fetch once when make is selected
 
-    // Merged all makes
+    // Merging all makes
     const unifiedMakes = useMemo(() => {
         const makes = new Set<string>()
         Object.keys(availableMakes).forEach(m => makes.add(m))
@@ -144,7 +142,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         return Array.from(makes).sort()
     }, [availableMakes, carlistMakes])
 
-    // Merged all Models
+    // Merging all Models
     const unifiedModels = useMemo(() => {
         const models = new Set<string>()
         Object.keys(availableModels).filter(k => k !== '__id__').forEach(m => models.add(m))
@@ -880,11 +878,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             />
                         </div>
 
-                        {/* Carlist/Mudah Price - actually shared logic now */}
-                        {/* We use priceFrom for both if available. But Carlist has specific query logic.
-                            Since user didn't ask to *add* min price filter if it wasn't there before for Carlist, I'll rely on common 'priceFrom' which mapped to `price` in `baseFilters` for Carlist.
-                            Mudah uses `priceFrom` -> `MIN_VALUES.price`.
-                        */}
                     </div>
                 </div>
 

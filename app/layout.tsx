@@ -33,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" data-scroll-behavior="smooth">
       <body
         className={`${onest.variable} ${poppins.variable} antialiased snap-y snap-mandatory overflow-y-scroll`}
       >

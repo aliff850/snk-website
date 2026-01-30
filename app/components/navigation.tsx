@@ -138,7 +138,7 @@ export function Navigation() {
                 className="flex items-center justify-center p-2 rounded-lg transition-all duration-200"
               >
                 <span className="sr-only">Open menu</span>
-                <span className="relative block w-6 h-5">
+                <span className="relative block w-6 h-[18px]">
                   <span
                     className={`absolute left-0 top-0 h-0.5 w-6 bg-foreground transition-all duration-300 ease-in-out rounded-full ${isMenuOpen ? "translate-y-2 rotate-45" : ""
                       }`}

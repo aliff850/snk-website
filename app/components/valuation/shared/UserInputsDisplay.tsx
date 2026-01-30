@@ -1,4 +1,7 @@
-import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign, MapPin, TrendingUp, ShoppingCart, Info } from 'lucide-react'
+// UserInputsDisplay
+// Displays all the user inputs for the valuation
+
+import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign, MapPin, Info } from 'lucide-react'
 import { FaMotorcycle } from 'react-icons/fa6'
 
 interface UserInputsDisplayProps {
@@ -59,12 +62,12 @@ export default function UserInputsDisplay({
         return `RM ${num.toLocaleString()}`
     }
 
-    const formatPrice = (value: string | undefined) => {
-        if (!value) return 'Any'
-        const num = parseInt(value, 10)
-        if (isNaN(num)) return 'Any'
-        return `RM ${num.toLocaleString()}+`
-    }
+    // const formatPrice = (value: string | undefined) => {
+    //     if (!value) return 'Any'
+    //     const num = parseInt(value, 10)
+    //     if (isNaN(num)) return 'Any'
+    //     return `RM ${num.toLocaleString()}+`
+    // }
 
     const VehicleIcon = vehicleType === 'motorcycle' ? FaMotorcycle : Car
 
@@ -171,8 +174,6 @@ export default function UserInputsDisplay({
                                 {transmission ? formatValue(transmission) : "--"}
                             </p>
                         </div>
-
-
 
                         {/* Vehicle origin */}
                         <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">

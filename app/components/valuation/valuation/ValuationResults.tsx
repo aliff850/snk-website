@@ -1,9 +1,7 @@
 "use client"
 
-import React from "react"
 import { Button } from "../../ui/button"
-import { Ban } from "lucide-react"
-// import { TiDelete } from "react-icons/ti";
+import { Ban, Download } from "lucide-react"
 import UnifiedListingsDisplay from "../listings/UnifiedListingsDisplay"
 
 interface ValuationResultsProps {
@@ -22,9 +20,10 @@ export function ValuationResults({ link, results, error, loading, onClearResults
             <div className="p-4 md:p-6 border-b border-foreground/20 flex items-center justify-between">
                 <h4 className="text-2xl md:text-3xl text-brand font-bold">Valuation Results</h4>
 
+                {/* Buttons for clearing results and downloading */}
                 <div className="flex gap-3">
-                    <Button 
-                        onClick={onClearResults} 
+                    <Button
+                        onClick={onClearResults}
                         variant="secondary"
                         size="sm2"
                         className="md:text-xl flex gap-2"
@@ -34,22 +33,37 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                         <Ban className="h-6 w-6" />
 
                     </Button>
+
+                    <Button
+                        variant="secondary"
+                        size="sm2"
+                        className="md:text-xl flex gap-2"
+                        href={link}
+                    >
+                        <span className="hidden md:block">Download</span>
+                        <Download className="h-6 w-6" />
+                    </Button>
                 </div>
             </div>
+
+            {/* Display valuation results */}
             <div className="md:p-6">
+                {/* Display error message if any */}
                 {error && (
                     <div className="mb-4 rounded-lg lg:border lg:border-red-200 bg-red-50 p-3 text-red-700 text-sm">
                         {error}
                     </div>
                 )}
+                {/* Display message when no results and not loading */}
                 {!results && !loading && (
                     <div className="rounded-xl lg:border lg:border-dashed lg:border-foreground/20 p-6 text-center text-gray-500">
                         <p className="text-sm">Market listings and pricing information will appear here.</p>
                     </div>
                 )}
+                {/* Display loading state when loading */}
                 {loading && (
                     <div className="flex flex-col items-center gap-4 py-10">
-                        
+
                         <svg
                             className="h-12 w-12 animate-spin"
                             viewBox="0 0 48 48"
@@ -83,10 +97,13 @@ export function ValuationResults({ link, results, error, loading, onClearResults
 
                     </div>
                 )}
+                {/* Display results when available */}
                 {results && (
                     <div className="space-y-8">
                         <div className="p-2 md:p-0">
-                            <UnifiedListingsDisplay 
+                            {/* Display unified listings through UnifiedListingsDisplay component */}
+
+                            <UnifiedListingsDisplay
                                 listings={results?.listings || []}
                                 listingsAscending={results?.listingsAscending || []}
                                 listingsDescending={results?.listingsDescending || []}
@@ -95,6 +112,7 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                                 counts={results?.counts}
                                 userInputs={results?.userInputs}
                             />
+
                         </div>
                     </div>
                 )}

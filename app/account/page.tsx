@@ -20,11 +20,11 @@ export default function AccountPage() {
 
                 <div className="py-8"></div>
 
-                <div className="w-full h-full flex flex-col gap-2 md:gap-8 bg-brand-white/10 backdrop-blur-sm border border-brand-white/30 px-8 md:px-12 py-8 rounded-3xl text-brand-white shadow-lg">
+                <div className="w-full max-w-7xl h-full flex flex-col gap-2 md:gap-8 bg-brand-white/10 backdrop-blur-sm border border-brand-white/30 px-8 md:px-12 py-8 rounded-3xl text-brand-white shadow-lg">
 
                     <div className="flex items-center gap-2">
-                        <User className="w-6 h-6" />
-                        <h1 className="text-3xl font-bold text-brand-white">Manage Your Account</h1>
+                        <User className="w-6 h-6 md:w-8 md:h-8" />
+                        <h1 className="text-xl md:text-3xl font-bold text-brand-white">Manage Your Account</h1>
                     </div>
 
                     <UnderConstruction />

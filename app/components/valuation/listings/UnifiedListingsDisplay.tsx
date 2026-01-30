@@ -1,6 +1,7 @@
 // UnifiedListingsDisplay
 // Supposed to use to display both Mudah and Carlist in one consolidated container
-import { Car, ArrowUpDown, Grid3x3, List, CircleDollarSign } from 'lucide-react'
+
+import { Car, ArrowUpDown, CircleDollarSign } from 'lucide-react'
 import { useState, useMemo, useEffect, useRef } from 'react'
 // import UnifiedListView from './UnifiedListView'
 import UnifiedGridView from './UnifiedGridView'
@@ -212,6 +213,7 @@ export default function UnifiedListingsDisplay({
 
     let averagePrice = baseAveragePrice
 
+    // Adjust average price based on condition
     if (userInputs?.condition) {
         const condition_name = userInputs.condition
         const lowPercentage = 0.1
@@ -423,19 +425,7 @@ export default function UnifiedListingsDisplay({
                     onRemove={removeListing}
                     vehicleType={vehicleType}
                 />
-                {/* {displayMode === 'list' ? (
-                    <UnifiedListView
-                        listings={displayListings}
-                        onRemove={removeListing}
-                        vehicleType={vehicleType}
-                    />
-                ) : (
-                    <UnifiedGridView
-                        listings={displayListings}
-                        onRemove={removeListing}
-                        vehicleType={vehicleType}
-                    />
-                )} */}
+
             </div>
         </div>
     )
