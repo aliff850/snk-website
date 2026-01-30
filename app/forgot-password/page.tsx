@@ -1,11 +1,34 @@
 "use client"
 
-import AnimateOnLoad from "../components/ui/AnimateOnLoad"
+import AnimateOnLoad from "@/components/ui/AnimateOnLoad"
 // import Link from "next/link"
-import { Button } from "../components/ui/button"
+import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import { forgotPassword } from "@/utils/authentication"
+import { useState } from "react"
+import { toast } from "react-toastify"
 
 export default function ForgotPassword() {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
+        const formData = new FormData(e.currentTarget);
+        try {
+            const result = await forgotPassword(formData);
+            if (result.ok) {
+                toast.success(result.message);
+            } else {
+                toast.error(result.message);
+            }
+        } catch (error) {
+            toast.error("An error occurred. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     return (
         <section className="w-full min-h-svh bg-[url('/images/w214.jpg')] bg-cover bg-center font-onest">
             <div className="w-full h-svh bg-black/50 px-4 md:px-12 lg:px-24 py-16 flex flex-col justify-center items-center">
@@ -18,7 +41,7 @@ export default function ForgotPassword() {
 
                         <form
                             className="w-full flex flex-col gap-4"
-                        // onSubmit={}
+                            onSubmit={handleSubmit}
                         >
                             <input
                                 id="email"
@@ -27,10 +50,10 @@ export default function ForgotPassword() {
                                 placeholder="Email"
                                 className="border border-white/40 bg-white/10 placeholder:text-brand-white/60 px-4 text-brand-white py-2 transition-all duration-200 rounded-full outline-none focus:border-brand"
                                 required
-                            //disabled={isLoading}
+                                disabled={isLoading}
                             />
-                            <Button type="submit" variant="secondary">
-                                Send Reset Link <ArrowRight className="ml-2" />
+                            <Button type="submit" variant="secondary" disabled={isLoading}>
+                                {isLoading ? "Sending..." : <>Send Reset Link <ArrowRight className="ml-2" /></>}
                             </Button>
                         </form>
                     </AnimateOnLoad>

@@ -1,8 +1,8 @@
 "use client"
 
 import { ArrowRight, CircleCheck } from "lucide-react"
-import AnimateOnLoad from "../../components/ui/AnimateOnLoad"
-import { Button } from "../../components/ui/button"
+import AnimateOnLoad from "@/components/ui/AnimateOnLoad"
+import { Button } from "@/components/ui/button"
 
 export default function ResetSuccessPage() {
     return (

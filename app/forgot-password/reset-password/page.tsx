@@ -1,15 +1,39 @@
 "use client"
 
-import AnimateOnLoad from "../../components/ui/AnimateOnLoad"
+import AnimateOnLoad from "@/components/ui/AnimateOnLoad"
 // import Link from "next/link"
-import { Button } from "../../components/ui/button"
+import { Button } from "@/components/ui/button"
 import { ArrowRight, CircleAlert, Eye, EyeOff } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { resetPassword } from "@/utils/authentication"
+import { toast } from "react-toastify"
+import { useRouter } from "next/navigation"
 
 export default function ResetPasswordPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        // Check hash for specific error params (from previous step)
+        const hash = window.location.hash;
+        if (hash && hash.includes("error=")) {
+            const params = new URLSearchParams(hash.substring(1)); // Remove the #
+            const errorDescription = params.get("error_description");
+            const errorCode = params.get("error_code");
+
+            if (errorDescription) {
+                // Decode + as space if needed, though URLSearchParams usually handles it
+                toast.error(errorDescription.replace(/\+/g, " "));
+
+                // If token expired, redirect back to forgot password to try again
+                if (errorCode === "otp_expired") {
+                    router.push("/forgot-password");
+                }
+            }
+        }
+    }, [router]);
 
     // Function to check whether both password fields match
     const checkPasswordMatch = () => {
@@ -18,10 +42,40 @@ export default function ResetPasswordPage() {
         const passwordMatchError = document.getElementById("password-match-error") as HTMLParagraphElement;
         if (password.value !== confirmPassword.value) {
             passwordMatchError.classList.remove("hidden");
+            passwordMatchError.classList.add("flex");
         } else {
             passwordMatchError.classList.add("hidden");
+            passwordMatchError.classList.remove("flex");
         }
     }
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const password = (e.currentTarget.elements.namedItem('password') as HTMLInputElement).value;
+        const confirmPassword = (e.currentTarget.elements.namedItem('confirm-password') as HTMLInputElement).value;
+
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match");
+            return;
+        }
+
+        setIsLoading(true);
+        const formData = new FormData(e.currentTarget);
+        try {
+            const result = await resetPassword(formData);
+            if (result.ok) {
+                toast.success(result.message);
+                router.push('/forgot-password/reset-success');
+            } else {
+                toast.error(result.message);
+            }
+        } catch (error) {
+            toast.error("An error occurred. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <section className="w-full min-h-svh bg-[url('/images/w214.jpg')] bg-cover bg-center font-onest">
@@ -35,6 +89,7 @@ export default function ResetPasswordPage() {
 
                         <form
                             className="w-full flex flex-col gap-4"
+                            onSubmit={handleSubmit}
                         >
                             <div className="relative">
                                 <input
@@ -44,6 +99,7 @@ export default function ResetPasswordPage() {
                                     placeholder="Password"
                                     className="border border-white/40 bg-white/10 placeholder:text-brand-white/60 px-4 text-brand-white py-2 transition-all duration-200 rounded-full outline-none focus:border-brand w-full pr-12"
                                     required
+                                    disabled={isLoading}
                                 />
                                 <button
                                     type="button"
@@ -68,6 +124,7 @@ export default function ResetPasswordPage() {
                                     className="border border-white/40 bg-white/10 placeholder:text-brand-white/60 px-4 text-brand-white py-2 transition-all duration-200 rounded-full outline-none focus:border-brand w-full pr-12"
                                     required
                                     onChange={checkPasswordMatch}
+                                    disabled={isLoading}
                                 />
                                 <button
                                     type="button"
@@ -82,9 +139,9 @@ export default function ResetPasswordPage() {
                                     )}
                                 </button>
                             </div>
-                            <p id="password-match-error" className="hidden text-xs text-red-300 flex items-center gap-2"><CircleAlert className="w-4 h-4" />Passwords do not match</p>
-                            <Button type="submit" variant="secondary">
-                                Reset Password <ArrowRight className="ml-2" />
+                            <p id="password-match-error" className="hidden text-xs text-red-300 items-center gap-2"><CircleAlert className="w-4 h-4" />Passwords do not match</p>
+                            <Button type="submit" variant="secondary" disabled={isLoading}>
+                                {isLoading ? "Updating..." : <>Reset Password <ArrowRight className="ml-2" /></>}
                             </Button>
                         </form>
                     </AnimateOnLoad>
