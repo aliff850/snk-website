@@ -6,8 +6,8 @@ export const metadata = {
 };
 
 export default function Services() {
-    return(
-        <div className="min-h-svh bg-brand-element/10">
+    return (
+        <div className="min-h-svh bg-brand-bg">
             <ServicesHero />
             <SolutionsGrid />
         </div>

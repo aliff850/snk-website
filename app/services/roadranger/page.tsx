@@ -36,8 +36,8 @@ const roadRangerFeatures = [
 ];
 
 export default function RoadRangerPage() {
-    return(
-        <div className="min-h-svh bg-brand-element/10">
+    return (
+        <div className="min-h-svh bg-brand-bg">
             <ProductHero
                 title="SNK Road Ranger"
                 caption="A Call Center CRM System That Connects Accident Incident To Call Centre"
@@ -58,24 +58,24 @@ export default function RoadRangerPage() {
                 ]}
             />
 
-            <ProductFeatures 
+            <ProductFeatures
                 header="Key Features in Road Ranger"
                 caption="The all-in-one CRM solution that keeps the motor claims ecosystem moving."
                 features={roadRangerFeatures}
             />
 
-            <PreviewVideo 
+            <PreviewVideo
                 filename='https://www.youtube.com/embed/dkQbyEnM8cg?si=YApSJVnBNzMcoq9E'
             />
-            
-            <ProductCTA 
+
+            <ProductCTA
 
                 title="Experience the Power of Road Ranger"
                 caption="Transform how your organization manages motor claims and roadside incidents with SNK Road Ranger."
                 button="Contact Us For A Free Demo"
                 target=""
                 link="/contact"
-            
+
             />
         </div>
     )

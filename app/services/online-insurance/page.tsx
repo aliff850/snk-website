@@ -37,8 +37,8 @@ const motorPalFeatures = [
 ];
 
 export default function OnlineInsurancePage() {
-    return(
-        <div className="min-h-svh bg-brand-element/10">
+    return (
+        <div className="min-h-svh bg-brand-bg">
             <ProductHero
                 title="Online Digital Insurance Platform"
                 caption="Smart. Secure. Seamless. The Future of Digital Insurance Distribution."
@@ -59,7 +59,7 @@ export default function OnlineInsurancePage() {
                 ]}
             />
 
-            <HowItWorks 
+            <HowItWorks
 
                 title="How Does It Work?"
                 caption="Learn how this system makes policy issuance simpler and better"
@@ -70,27 +70,27 @@ export default function OnlineInsurancePage() {
                     { src: '/services/insurance/workflow/19.png', alt: 'Slide3' },
                     { src: '/services/insurance/workflow/20.png', alt: 'Slide4' },
                 ]}
-            
+
             />
 
-            <ProductFeatures 
+            <ProductFeatures
                 header="Explore its Features"
                 caption="Built to make buying insurance simpler, faster, and better."
                 features={motorPalFeatures}
             />
 
-            <PreviewVideo 
+            <PreviewVideo
                 filename='https://www.youtube.com/embed/dmpKydJSLh8?si=Dafhp02b1n5tFba0'
             />
-            
-            <ProductCTA 
+
+            <ProductCTA
 
                 title="Experience Digital Insurance, Redefined"
                 caption="SNK Online Digital Insurance Platform — built by SNK to deliver a faster, smarter, and more seamless way to buy and manage insurance online"
                 button="Contact Us For A Free Demo"
                 target=""
                 link="/contact"
-            
+
             />
         </div>
     )

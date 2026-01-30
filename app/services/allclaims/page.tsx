@@ -36,8 +36,8 @@ const allClaimsFeatures = [
 ];
 
 export default function AllClaimsPage() {
-    return(
-        <div className="min-h-svh bg-brand-element/10">
+    return (
+        <div className="min-h-svh bg-brand-bg">
             <ProductHero
                 title="COLS Investigation System"
                 caption="End-to-end online system for motor vehicle accident investigation designed for insurance companies and adjusters."
@@ -52,32 +52,32 @@ export default function AllClaimsPage() {
                 "
                 alt="AllClaims Landing Page"
                 galleryImages={[
-                    { src: '/services/cols/cols2.png', alt: 'Logo'},
+                    { src: '/services/cols/cols2.png', alt: 'Logo' },
                     { src: '/services/cols/allclaims.png', alt: 'AllClaims dashboard' },
                     { src: '/services/cols/allclaims2.png', alt: 'Accident intake' },
                     { src: '/services/cols/allclaims3.png', alt: 'Accident intake 2' },
-                    
+
                 ]}
             />
 
-            <ProductFeatures 
+            <ProductFeatures
                 header="Key Features in COLS"
                 caption="The COLS Investigation System comes with a variety of features designed to streamline the estimation process."
                 features={allClaimsFeatures}
             />
 
-            <PreviewVideo 
+            <PreviewVideo
                 filename='https://www.youtube.com/embed/wXlRf90vHIw?si=Q-ExL2lnoVaEUGzj'
             />
-            
-            <ProductCTA 
+
+            <ProductCTA
 
                 title="Ready to Transform Your Claims Process?"
                 caption="Join leading insurance companies who have already revolutionized their damage assessment process with AllClaims."
                 button="Contact Us For A Free Demo"
                 target=""
                 link="/contact"
-            
+
             />
         </div>
     )

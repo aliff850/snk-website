@@ -12,16 +12,16 @@ export default function ResetPasswordPage() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     // Function to check whether both password fields match
-    const checkPasswordMatch = () => {
-        const password = document.getElementById("password") as HTMLInputElement;
-        const confirmPassword = document.getElementById("confirm-password") as HTMLInputElement;
-        const passwordMatchError = document.getElementById("password-match-error") as HTMLParagraphElement;
-        if (password.value !== confirmPassword.value) {
-            passwordMatchError.classList.remove("hidden");
-        } else {
-            passwordMatchError.classList.add("hidden");
-        }
-    }
+    // const checkPasswordMatch = () => {
+    //     const password = document.getElementById("password") as HTMLInputElement;
+    //     const confirmPassword = document.getElementById("confirm-password") as HTMLInputElement;
+    //     const passwordMatchError = document.getElementById("password-match-error") as HTMLParagraphElement;
+    //     if (password.value !== confirmPassword.value) {
+    //         passwordMatchError.classList.remove("hidden");
+    //     } else {
+    //         passwordMatchError.classList.add("hidden");
+    //     }
+    // }
 
     return (
         <section className="w-full min-h-svh bg-[url('/images/w214.jpg')] bg-cover bg-center font-onest">
@@ -67,7 +67,7 @@ export default function ResetPasswordPage() {
                                     placeholder="Confirm Password"
                                     className="border border-white/40 bg-white/10 placeholder:text-brand-white/60 px-4 text-brand-white py-2 transition-all duration-200 rounded-full outline-none focus:border-brand w-full pr-12"
                                     required
-                                    onChange={checkPasswordMatch}
+                                // onChange={checkPasswordMatch}
                                 />
                                 <button
                                     type="button"
@@ -82,7 +82,7 @@ export default function ResetPasswordPage() {
                                     )}
                                 </button>
                             </div>
-                            <p id="password-match-error" className="hidden text-xs text-red-300 flex items-center gap-2"><CircleAlert className="w-4 h-4" />Passwords do not match</p>
+                            {/* <p id="password-match-error" className="hidden text-xs text-red-300 flex items-center gap-2"><CircleAlert className="w-4 h-4" />Passwords do not match</p> */}
                             <Button type="submit" variant="secondary">
                                 Reset Password <ArrowRight className="ml-2" />
                             </Button>
