@@ -36,8 +36,8 @@ const estimationFeatures = [
 ];
 
 export default function EstimationPage() {
-    return(
-        <div className="min-h-svh bg-brand-element/10">
+    return (
+        <div className="min-h-svh bg-brand-bg">
             <ProductHero
                 title="Motor Vehicle Accident Estimation"
                 caption="Comprehensive damage estimation value for a motor vehicle accident claim"
@@ -57,25 +57,25 @@ export default function EstimationPage() {
                 ]}
             />
 
-            <ProductFeatures 
+            <ProductFeatures
                 header="Key Features"
                 caption="Smart technology built for speed, precision, and trust."
                 features={estimationFeatures}
             />
 
-            <PreviewVideoAlternate 
+            <PreviewVideoAlternate
                 filename='https://www.youtube.com/embed/2KdsA2ZIBwQ?si=uCdlBhCRBOmNDdg7'
                 filename_2='https://www.youtube.com/embed/wXrv7Y6A2js?si=nXxoh5VyDSjllRMK'
             />
-            
-            <ProductCTA 
+
+            <ProductCTA
 
                 title="Empowering insurers, repairers, and adjusters with AI precision."
                 caption="Revolutionize your claims process with Motor Vehicle Accident Estimation — the intelligent solution for faster, fairer, and more efficient vehicle damage assessments."
                 button="Contact Us For A Free Demo"
                 target=""
                 link="/contact"
-            
+
             />
         </div>
     )

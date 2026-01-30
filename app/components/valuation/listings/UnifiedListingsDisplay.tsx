@@ -2,7 +2,7 @@
 // Supposed to use to display both Mudah and Carlist in one consolidated container
 import { Car, ArrowUpDown, Grid3x3, List, CircleDollarSign } from 'lucide-react'
 import { useState, useMemo, useEffect, useRef } from 'react'
-import UnifiedListView from './UnifiedListView'
+// import UnifiedListView from './UnifiedListView'
 import UnifiedGridView from './UnifiedGridView'
 import UserInputsDisplay from '../shared/UserInputsDisplay'
 
@@ -111,7 +111,7 @@ export default function UnifiedListingsDisplay({
 
     const [removedUrls, setRemovedUrls] = useState<Set<string>>(new Set())
     const [viewMode, setViewMode] = useState<'ascending' | 'descending'>('ascending')
-    const [displayMode, setDisplayMode] = useState<'grid' | 'list'>('grid')
+    // const [displayMode, setDisplayMode] = useState<'grid' | 'list'>('grid')
     const [sourceFilter, setSourceFilter] = useState<'all' | 'mudah' | 'carlist'>('all')
     const [isFloating, setIsFloating] = useState(false)
     const [shouldShowFloating, setShouldShowFloating] = useState(false)
@@ -417,7 +417,7 @@ export default function UnifiedListingsDisplay({
                     </div>
                 </div>
 
-                {/* Listings Display */}
+                {/* All listings display */}
                 <UnifiedGridView
                     listings={displayListings}
                     onRemove={removeListing}

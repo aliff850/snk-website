@@ -1,4 +1,5 @@
 // For displaying all Mudah and Carlist listings
+import { useAuth } from '@/context/AuthContext'
 import { ExternalLink, Calendar, Gauge, Fuel, Settings, Trash2 } from 'lucide-react'
 
 interface UnifiedListing {
@@ -30,21 +31,24 @@ const formatPrice = (price: number) => {
 
 const formatMileage = (mileage: string | { gte: string; lte: string } | undefined) => {
     if (!mileage) return 'N/A'
-    
+
     if (typeof mileage === 'string') {
         return mileage
     }
-    
+
     const gte = parseInt(mileage.gte).toLocaleString()
     const lte = parseInt(mileage.lte).toLocaleString()
     return `${gte} - ${lte} km`
 }
 
 export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car' }: UnifiedGridViewProps) {
+
+    const { user } = useAuth()
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {listings.map((listing, index) => (
-                <div 
+                <div
                     key={`${listing.url}-${index}`}
                     className="rounded-xl border border-foreground/20 bg-brand-white hover:shadow-md transition-shadow duration-200"
                 >
@@ -57,11 +61,10 @@ export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car
                                         {listing.make} {listing.model}
                                     </h3>
                                     {/* Source badge */}
-                                    <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-bold ${
-                                        listing.source === 'Mudah'
-                                            ? 'bg-blue-100 text-blue-800 border border-blue-200'
-                                            : 'bg-purple-100 text-purple-800 border border-purple-200'
-                                    }`}>
+                                    <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-bold ${listing.source === 'Mudah'
+                                        ? 'bg-blue-100 text-blue-800 border border-blue-200'
+                                        : 'bg-purple-100 text-purple-800 border border-purple-200'
+                                        }`}>
                                         {listing.source}
                                     </span>
                                 </div>
@@ -74,13 +77,12 @@ export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car
 
                                 <div className="flex items-center gap-2 mt-1">
                                     {listing.condition && (
-                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                            listing.condition === 'New' 
-                                                ? 'bg-green-100 text-green-800' 
-                                                : listing.condition === 'Used'
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${listing.condition === 'New'
+                                            ? 'bg-green-100 text-green-800'
+                                            : listing.condition === 'Used'
                                                 ? 'bg-blue-100 text-blue-800'
                                                 : 'bg-purple-100 text-purple-800'
-                                        }`}>
+                                            }`}>
                                             {listing.condition}
                                         </span>
                                     )}
@@ -95,20 +97,24 @@ export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car
                                     {formatPrice(listing.price)}
                                 </div>
 
-                                <button 
-                                    onClick={() => onRemove(listing.url)} 
+                                <button
+                                    onClick={() => onRemove(listing.url)}
                                     className="hover:text-red-500 transition-colors"
                                     aria-label="Remove listing"
+                                    onMouseEnter={(e) => e.currentTarget.title = "Remove listing"}
+                                    onMouseLeave={(e) => e.currentTarget.title = ""}
                                 >
                                     <Trash2 className="w-6 h-6" />
                                 </button>
                             </div>
                         </div>
-                        
-                        {listing.image && (
+
+                        {/* Only show listing image for registered users with 'admin' role */}
+                        {/* And also if the image exists */}
+                        {user?.role === 'admin' && listing.image && (
                             <div className="mt-3 rounded-lg overflow-hidden bg-gray-100">
-                                <img 
-                                    src={listing.image} 
+                                <img
+                                    src={listing.image}
                                     alt={`${listing.make} ${listing.model}`}
                                     className="w-full h-48 object-cover"
                                     onError={(e) => {
@@ -156,7 +162,7 @@ export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car
                                             {vehicleType === 'motorcycle' ? 'Engine' : 'Fuel / Engine'}
                                         </p>
                                         <p className="text-sm font-medium text-gray-900 capitalize">
-                                            {vehicleType === 'motorcycle' 
+                                            {vehicleType === 'motorcycle'
                                                 ? listing.engineCapacity ? `${listing.engineCapacity}cc` : 'N/A'
                                                 : listing.fuelType && listing.engineCapacity
                                                     ? `${listing.fuelType} / ${listing.engineCapacity}cc`
@@ -169,15 +175,18 @@ export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car
                         </div>
 
                         {/* View Listing Button */}
-                        <a
-                            href={listing.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-brand/90 hover:bg-brand text-white font-medium rounded-xl transition-colors duration-200"
-                        >
-                            View Listing
-                            <ExternalLink className="w-4 h-4" />
-                        </a>
+                        {/* Only show this for admins */}
+                        {user?.role === 'admin' && (
+                            <a
+                                href={listing.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-brand/90 hover:bg-brand text-white font-medium rounded-xl transition-colors duration-200"
+                            >
+                                View Listing
+                                <ExternalLink className="w-4 h-4" />
+                            </a>
+                        )}
                     </div>
                 </div>
             ))}
