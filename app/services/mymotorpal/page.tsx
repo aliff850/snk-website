@@ -36,8 +36,8 @@ const motorPalFeatures = [
 ];
 
 export default function MotorPalPage() {
-    return(
-        <div className="min-h-svh bg-brand-element/10">
+    return (
+        <div className="min-h-svh bg-brand-bg">
             <ProductHero
                 title="SNK MyMotorPal"
                 caption="A one stop solution app for motor vehicle services, information and products"
@@ -52,31 +52,31 @@ export default function MotorPalPage() {
                 "
                 alt="AllClaims Landing Page"
                 galleryImages={[
-                    { src: '/services/motorpal/motorpal3.png', alt: 'Logo'},
+                    { src: '/services/motorpal/motorpal3.png', alt: 'Logo' },
                     { src: '/services/motorpal/motorpal1.png', alt: 'UI' },
                     { src: '/services/motorpal/motorpal2.png', alt: 'UI 2' },
-                    
+
                 ]}
             />
 
-            <ProductFeatures 
+            <ProductFeatures
                 header="Key Features in MyMotorPal"
                 caption="Stay connected, protected, and in control with smart tools designed to make every drive worry-free."
                 features={motorPalFeatures}
             />
 
-            <PreviewVideo 
+            <PreviewVideo
                 filename='https://www.youtube.com/embed/EId9-gqNMB4?si=lEyYohGOcyTMANeM'
             />
-            
-            <ProductCTA 
+
+            <ProductCTA
 
                 title="Drive smarter. Stay protected. Be in control."
                 caption="Download the SNK MyMotorPal and experience the future of motor services in one powerful app."
                 button="Contact Us For A Free Demo"
                 target=""
                 link="/contact"
-            
+
             />
         </div>
     )

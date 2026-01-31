@@ -3,11 +3,11 @@
 import { Button } from "../components/ui/button";
 import AnimateOnLoad from "../components/ui/AnimateOnLoad";
 import Link from "next/link";
-import { login } from "@/utils/authentication";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +16,7 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo')
+  const { login: loginCtx } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,8 +29,8 @@ export default function LoginPage() {
       // Create a promise that handles the response properly
       const loginPromise = new Promise(async (resolve, reject) => {
         try {
-          const response = await login(formData);
-          
+          const response = await loginCtx(formData);
+
           if (response.ok) {
             resolve(response);
           } else {
@@ -104,12 +105,17 @@ export default function LoginPage() {
                   disabled={isLoading}
                 >
                   {showPassword ? (
-                    <Eye size={20}/>
+                    <Eye size={20} />
                   ) : (
-                    <EyeOff size={20}/>
+                    <EyeOff size={20} />
                   )}
                 </button>
               </div>
+
+              <div className="w-full flex justify-end">
+                <Link href={`/forgot-password`} className="text-sm text-brand-white/60 hover:text-brand-white transition-colors duration-200 underline decoration-dotted underline-offset-2">Forgot Password?</Link>
+              </div>
+
 
               {error && <p className="text-xs text-red-300">{error}</p>}
               <Button type="submit" variant="secondary" disabled={isLoading}>

@@ -1,37 +1,40 @@
 from requests import get
 from json import load
-from typing import Literal, Annotated
+from typing import Literal, Annotated, Optional
 
 from fastapi import APIRouter, Response, HTTPException
 from pydantic import BaseModel, Field, StringConstraints, field_validator
 from os import path
 
 mudahRouter = APIRouter(prefix='/mudah')
-MAKE_MODEL_MAP_PATH = path.join(path.dirname(__file__), 'mudah_map.json')
-with open(MAKE_MODEL_MAP_PATH, 'r', encoding='utf-8') as f:
-    MAKE_MODEL_MAP = load(f)
+VEHICLE_MAP_PATH = path.join(path.dirname(__file__), 'vehicle_map.json')
+MOTORCYCLE_MAP_PATH = path.join(path.dirname(__file__), 'motorcycle_map.json')
+with open(VEHICLE_MAP_PATH, 'r', encoding='utf-8') as f:
+    VEHICLE_MAP = load(f)
+with open(MOTORCYCLE_MAP_PATH, 'r', encoding='utf-8') as f:
+    MOTORCYCLE_MAP = load(f)
 
 
 class CarSearchQuery(BaseModel):
     make_id:    str 
     model_id:   str
-    From:       Annotated[int, Field(ge=0)] = 0
-    limit:      Annotated[int, Field(gt=0)] = 50
-    sortby:     Literal['newest', 'price_asc', 'price_desc'] = 'price_asc'
-    type:       Literal['sell', 'let'] = 'sell'
-    mfg_year:   Annotated[str, StringConstraints(pattern=r'^\d{4}-(\d{4})?$')] | None = None
-    fueltype:   Literal['petrol', 'diesal', 'electric'] | None = None
-    condition:  Literal['used', 'new', 'recon'] | None = None
-    mileage:    Annotated[str, StringConstraints(pattern=r'^\d{1,6}-(\d{1,6})?$')] | None = None
-    car_type_id:        Literal['other', '4_wheels', 'coupe', 'hatchback', 'mpvs', 'pick_up', 'sedan', 'sports', 'suvs'] | None= None
-    transmission_id:    Literal['auto', 'manual'] | None = None
-    price:      Annotated[str, StringConstraints(pattern=r'^\d{1,10}-(\d{1,10})?$')] | None = None
+    From:       Optional[Annotated[int, Field(ge=0)]] = 0
+    limit:      Optional[Annotated[int, Field(gt=0)]] = 50
+    sortby:     Optional[Literal['newest', 'price_asc', 'price_desc']] = 'price_asc'
+    type:       Optional[Literal['sell', 'let']] = 'sell'
+    mfg_year:   Optional[Annotated[str, StringConstraints(pattern=r'^\d{4}-(\d{4})?$')]] = None
+    fueltype:   Optional[Literal['petrol', 'diesal', 'electric']] = None
+    condition:  Optional[Literal['used', 'new', 'recon']] = None
+    mileage:    Optional[Annotated[str, StringConstraints(pattern=r'^\d{1,6}-(\d{1,6})?$')]] = None
+    car_type_id:        Optional[Literal['other', '4_wheels', 'coupe', 'hatchback', 'mpvs', 'pick_up', 'sedan', 'sports', 'suvs']] = None
+    transmission_id:    Optional[Literal['auto', 'manual']] = None
+    price:      Optional[Annotated[str, StringConstraints(pattern=r'^\d{1,10}-(\d{1,10})?$')]] = None
 
     @field_validator('make_id', mode='after')
     def indexMake(value: str):
-        if value not in MAKE_MODEL_MAP: raise ValueError(f'Unknown make: {value}')
+        if value not in VEHICLE_MAP: raise ValueError(f'Unknown make: {value}')
 
-        make_id = MAKE_MODEL_MAP.get(value.replace(' ', '-').lower())
+        make_id = VEHICLE_MAP.get(value.replace(' ', '-').lower())
         if not make_id: raise ValueError(f'Unknown make: {value}')
         
         return f"{make_id['__id__']},{value}"
@@ -41,7 +44,7 @@ class CarSearchQuery(BaseModel):
         make_name = prev.data.get('make_id')
         if not make_name: raise ValueError('Valid make must be provided before selecting model')
 
-        _model_id = MAKE_MODEL_MAP[make_name.split(',')[1]].get(value.replace(' ', '-').lower())
+        _model_id = VEHICLE_MAP[make_name.split(',')[1]].get(value.replace(' ', '-').lower())
         if not _model_id: raise ValueError(f'Unknown model: {value}')
 
         return f"{_model_id},{value}"
@@ -56,9 +59,38 @@ class CarSearchQuery(BaseModel):
             raise ValueError(f"Unknown {info.field_name}: {value}")
         return options.index(value) + 1
 
+class MotorSearchQuery(BaseModel):
+    motorcycle_make_id:    str 
+    motorcycle_model_id:   str
+    From:       Optional[Annotated[int, Field(ge=0)]] = 0
+    limit:      Optional[Annotated[int, Field(gt=0)]] = 50
+    sortby:     Optional[Literal['price_asc', 'price_desc']] = 'price_asc'
+    mfg_year:   Optional[Annotated[str, StringConstraints(pattern=r'^\d{4}-(\d{4})?$')]] = None
+    price:      Optional[Annotated[str, StringConstraints(pattern=r'^\d{1,10}-(\d{1,10})?$')]] = None
+    type:       Optional[Literal['sell', 'buy']] = 'sell'
 
-def build_url(query_model: dict) -> str:
-    url = 'https://search.mudah.my/v1/search?category=1020&'
+    @field_validator('motorcycle_make_id', mode='after')
+    def indexMake(value: str):
+        if value not in MOTORCYCLE_MAP: raise ValueError(f'Unknown make: {value}')
+
+        make_id = MOTORCYCLE_MAP.get(value.replace(' ', '-').lower())
+        if not make_id: raise ValueError(f'Unknown make: {value}')
+        
+        return f"{make_id['@id']},{value}"
+
+    @field_validator('motorcycle_model_id', mode='after')
+    def indexModel(value: str, prev):
+        make_name = prev.data.get('motorcycle_make_id')
+        if not make_name: raise ValueError('Valid make must be provided before selecting model')
+
+        _model_id = MOTORCYCLE_MAP[make_name.split(',')[1]].get(value.replace(' ', '-').lower())
+        if not _model_id: raise ValueError(f'Unknown model: {value}')
+
+        return f"{_model_id},{value}"
+
+
+def build_url(query_model: dict, type: int) -> str:
+    url = f'https://search.mudah.my/v1/search?category={type}&'
     for parameter, value in query_model:
         if not value: continue
         url += f'{parameter}={str(value).split(",")[0]}&'
@@ -67,10 +99,10 @@ def build_url(query_model: dict) -> str:
 
 
 @mudahRouter.post('/search', summary="Query the Mudah api for available listings based on the make and model", response_model=list[dict])
-def search(searchQuery: CarSearchQuery,
+def search(searchQuery: CarSearchQuery | MotorSearchQuery,
            whitelist_attributes: list[str | None] | None = ['model_name', 'make_name', 'condition_name', 'manufactured_year', 'fueltype', 'price', 'mileage', 'transmission_name', 'engine_capacity', 'car_type_name', 'adview_url','image', 'variant']):
-    URL = build_url(searchQuery.model_dump().items())
-    
+    URL = build_url(searchQuery.model_dump().items(), type=1020 if isinstance(searchQuery, CarSearchQuery) else 1040)
+    print(URL)
     html = get(URL)
     if not html.ok and html.status_code != 200:
         return Response(status_code=400, content={
@@ -124,19 +156,33 @@ def search(searchQuery: CarSearchQuery,
     return response
 
 
+
+
 @mudahRouter.get('/all_vehicles',
                  summary="Returns a map of every make and model available with their corresponding IDs. Or return a list of models from a specified make with their corresponding IDs",
                  response_model=dict[str, str] | dict[str, dict[str, str]])
 def vehicle_map(make: str = None):
     # Return full map if no make specified
-    if not make: return MAKE_MODEL_MAP
-
-    # Normalize make name
-    normalized_make = make.replace(' ', '-')
+    if not make: return VEHICLE_MAP
 
     # Validate make exists
-    if normalized_make not in MAKE_MODEL_MAP:
+    if make not in VEHICLE_MAP:
         return HTTPException(404, f'Unknown make provided: {make}')
 
     # Return specific make's models
-    return MAKE_MODEL_MAP[normalized_make]
+    return VEHICLE_MAP[make]
+
+
+@mudahRouter.get('/all_motorcycles',
+                 summary="Returns a map of every motorcycle make and model available with their corresponding IDs. Or return a list of models from a specified make with their corresponding IDs",
+                 response_model=dict[str, str] | dict[str, dict[str, str]])
+def motorcycle_map(make: str = None):
+    # Return full map if no make specified
+    if not make: return MOTORCYCLE_MAP
+
+    # Validate make exists
+    if make not in MOTORCYCLE_MAP:
+        return HTTPException(404, f'Unknown make provided: {make}')
+
+    # Return specific make's models
+    return MOTORCYCLE_MAP[make]

@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/client";
+import { useAuth } from "@/context/AuthContext";
+import { User, LayoutDashboard, LogOut } from "lucide-react";
 // import AnimateOnLoad from "./ui/AnimateOnLoad"
 // import { Button } from "@/components/ui/button"
 // import { Car } from "lucide-react"
@@ -11,7 +12,9 @@ import { createClient } from "@/utils/supabase/client";
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const isLoggedIn = !!user;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,46 +47,13 @@ export function Navigation() {
     };
   }, []);
 
-  // const scrollToSection = (sectionId: string) => {
-  //   const element = document.getElementById(sectionId)
-  //   if (element) {
-  //     element.scrollIntoView({ behavior: "smooth" })
-  //   }
-  // }
-
-  // Determine auth state on client
-  useEffect(() => {
-    const supabase = createClient();
-    let isMounted = true;
-
-    // initial check
-    supabase.auth.getUser().then(({ data }) => {
-      if (!isMounted) return;
-      setIsLoggedIn(!!data.user);
-    });
-
-    // subscribe to changes
-    const { data: subscription } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setIsLoggedIn(!!session?.user);
-      }
-    );
-
-    console.log("loggedin", isLoggedIn);
-    return () => {
-      isMounted = false;
-      subscription.subscription.unsubscribe();
-    };
-  }, []);
-
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-col justify-center items-center px-4 py-2 md:p-4 font-onest">
       <div
-        className={`container md:py-3 md:px-8 transition-all duration-300 md:ring-1 md:ring-brand-white/20 md:hover:ring-brand-white/40 md:backdrop-blur-lg w-full max-w-7xl transition-ring rounded-3xl ${
-          isScrolled
-            ? "md:bg-brand-white md:shadow-lg text-foreground"
-            : "text-brand-white"
-        }`}
+        className={`container md:py-3 md:px-8 transition-all duration-300 md:ring-1 md:ring-brand-white/20 md:hover:ring-brand-white/40 md:backdrop-blur-lg w-full max-w-7xl transition-ring rounded-3xl ${isScrolled
+          ? "md:bg-brand-white md:shadow-lg text-foreground"
+          : "text-brand-white"
+          }`}
       >
         <div className="flex md:grid md:grid-cols-3 items-center">
           <Link href="/" className="hidden md:flex items-center gap-2 group relative">
@@ -92,9 +62,8 @@ export function Navigation() {
             <Image
               src="/placeholder_4.svg"
               alt="Site logo"
-              className={`group-hover:scale-105 transition-all duration-300 absolute ${
-                isScrolled ? "opacity-0 scale-95" : "opacity-100 scale-100"
-              }`}
+              className={`group-hover:scale-105 transition-all duration-300 absolute ${isScrolled ? "opacity-0 scale-95" : "opacity-100 scale-100"
+                }`}
               width={130}
               height={0}
             />
@@ -102,9 +71,8 @@ export function Navigation() {
             <Image
               src="/placeholder_3.svg"
               alt="Site logo"
-              className={`group-hover:scale-105 transition-all duration-300 absolute ${
-                isScrolled ? "opacity-100 scale-100" : "opacity-0 scale-95"
-              }`}
+              className={`group-hover:scale-105 transition-all duration-300 absolute ${isScrolled ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                }`}
               width={130}
               height={0}
             />
@@ -167,24 +135,21 @@ export function Navigation() {
                 aria-label="Toggle navigation menu"
                 aria-expanded={isMenuOpen}
                 onClick={() => setIsMenuOpen((open) => !open)}
-                className="flex items-center justify-center p-2 rounded-lg hover:bg-brand/10 active:bg-brand/20 transition-all duration-200"
+                className="flex items-center justify-center p-2 rounded-lg transition-all duration-200"
               >
                 <span className="sr-only">Open menu</span>
-                <span className="relative block w-6 h-5">
+                <span className="relative block w-6 h-[18px]">
                   <span
-                    className={`absolute left-0 top-0 h-0.5 w-6 bg-foreground transition-all duration-300 ease-in-out rounded-full ${
-                      isMenuOpen ? "translate-y-2 rotate-45" : ""
-                    }`}
+                    className={`absolute left-0 top-0 h-0.5 w-6 bg-foreground transition-all duration-300 ease-in-out rounded-full ${isMenuOpen ? "translate-y-2 rotate-45" : ""
+                      }`}
                   ></span>
                   <span
-                    className={`absolute left-0 top-2 h-0.5 w-6 bg-foreground transition-all duration-300 ease-in-out rounded-full ${
-                      isMenuOpen ? "opacity-0 scale-75" : "opacity-100 scale-100"
-                    }`}
+                    className={`absolute left-0 top-2 h-0.5 w-6 bg-foreground transition-all duration-300 ease-in-out rounded-full ${isMenuOpen ? "opacity-0 scale-75" : "opacity-100 scale-100"
+                      }`}
                   ></span>
                   <span
-                    className={`absolute left-0 bottom-0 h-0.5 w-6 bg-foreground transition-all duration-300 ease-in-out rounded-full ${
-                      isMenuOpen ? "-translate-y-2 -rotate-45" : ""
-                    }`}
+                    className={`absolute left-0 bottom-0 h-0.5 w-6 bg-foreground transition-all duration-300 ease-in-out rounded-full ${isMenuOpen ? "-translate-y-2 -rotate-45" : ""
+                      }`}
                   ></span>
                 </span>
               </button>
@@ -192,24 +157,64 @@ export function Navigation() {
 
             <div className="hidden md:block">
               {isLoggedIn ? (
-                <Link
-                  href="/auth/signout"
-                  className={`flex items-center ${
-                    isScrolled
-                      ? "text-brand-white hover:bg-brand hover:scale-105 bg-brand/80"
-                      : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-300"
-                  } transition-all px-4 py-2 rounded-xl`}
+                <div
+                  className="relative"
+                  onMouseEnter={() => setIsProfileOpen(true)}
+                  onMouseLeave={() => setIsProfileOpen(false)}
                 >
-                  Sign Out
-                </Link>
+                  <button
+                    className={`flex items-center gap-2 ${isScrolled
+                      ? "text-brand-white hover:bg-brand bg-brand/80"
+                      : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:ring-brand-white/40"
+                      } transition-all p-2 rounded-xl`}
+                  >
+                    <User size={18} />
+                  </button>
+
+                  {/* Profile Dropdown */}
+                  <div
+                    className={`absolute right-0 top-full pt-4 w-64 transition-all duration-200 ${isProfileOpen
+                      ? "opacity-100 translate-y-0 pointer-events-auto"
+                      : "opacity-0 translate-y-2 pointer-events-none"
+                      }`}
+                  >
+                    <div className="bg-white rounded-xl shadow-xl overflow-hidden ring-1 ring-black/5 pb-2">
+                      <div className="px-4 py-3 border-b border-gray-100 mb-1">
+                        <p className="font-semibold text-gray-900 truncate">
+                          {user?.full_name || "User"}
+                        </p>
+                        <p className="text-sm text-gray-500 truncate">
+                          {user?.email}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        <Link
+                          href="/account"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                        >
+                          <LayoutDashboard size={16} />
+                          Manage Account
+                        </Link>
+
+                        <button
+                          onClick={() => logout()}
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full text-left"
+                        >
+                          <LogOut size={16} />
+                          Sign Out
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ) : (
                 <Link
                   href="/login"
-                  className={`flex items-center ${
-                    isScrolled
-                      ? "text-brand-white hover:bg-brand hover:scale-105 bg-brand/80"
-                      : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-300"
-                  } transition-all px-4 py-2 rounded-xl`}
+                  className={`flex items-center ${isScrolled
+                    ? "text-brand-white hover:bg-brand hover:scale-105 bg-brand/80"
+                    : "text-brand-white backdrop-blur-xl shadow-lg ring-1 ring-brand-white/20 hover:scale-105 hover:ring-brand-white/40 transition-all duration-300"
+                    } transition-all px-4 py-2 rounded-xl`}
                 >
                   Log In
                 </Link>
@@ -220,20 +225,32 @@ export function Navigation() {
 
         {/* Mobile menu */}
         <div
-          className={`md:hidden overflow-hidden rounded-xl border border-brand-white/30 bg-white shadow-md transition-all duration-300 ${
-            isMenuOpen
-              ? "mt-3 opacity-100 scale-100 max-h-96"
-              : "mt-0 opacity-0 scale-95 max-h-0"
-          }`}
+          className={`md:hidden overflow-hidden rounded-xl border border-brand-white/30 bg-white shadow-md transition-all duration-300 ${isMenuOpen
+            ? "mt-3 opacity-100 scale-100 max-h-[600px]"
+            : "mt-0 opacity-0 scale-95 max-h-0"
+            }`}
         >
           <div
-            className={`flex flex-col gap-4 p-4 ${
-              isMenuOpen ? "py-4" : "py-4"
-            }`}
+            className={`flex flex-col gap-4 p-4 ${isMenuOpen ? "py-4" : "py-4"
+              }`}
           >
             {/* <Link href="/" className="flex items-center justify-center md:hidden">
               <Image src="/placeholder.svg" alt="Site logo" width={90} height={0} />
             </Link> */}
+
+            {isLoggedIn ? (
+              <>
+                <div className="">
+                  <p className="font-semibold text-gray-900 truncate">
+                    {user?.full_name || "User"}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {user?.email}
+                  </p>
+                </div>
+                {/* <hr className="border border-brand/20 w-full" /> */}
+              </>
+            ) : ""}
 
             <Link
               href="/about"
@@ -267,13 +284,27 @@ export function Navigation() {
             <hr className="border border-brand/20 w-full" />
 
             {isLoggedIn ? (
-              <Link
-                href="/auth/signout"
-                className="flex items-center text-foreground hover:bg-brand-white/60 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sign Out
-              </Link>
+              <>
+                <Link
+                  href="/account"
+                  className="flex items-center gap-2 text-foreground hover:bg-brand-white/60 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <LayoutDashboard size={18} />
+                  Manage Account
+                </Link>
+
+                <button
+                  className="flex items-center gap-2 text-red-600 hover:bg-red-50 transition-colors w-full text-left"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    logout();
+                  }}
+                >
+                  <LogOut size={18} />
+                  Sign Out
+                </button>
+              </>
             ) : (
               <Link
                 href="/login"

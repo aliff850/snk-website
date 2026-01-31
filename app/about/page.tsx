@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function About() {
     return (
-        <div className="min-h-svh bg-brand-element/10">
+        <div className="min-h-svh bg-brand-bg">
             <AboutHero />
             <History />
             <Values />

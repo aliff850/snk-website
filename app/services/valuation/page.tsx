@@ -35,14 +35,14 @@ const valuationFeatures = [
     description: "Simple and intuitive platform for quick valuation enquiries.",
   },
   {
-    title:"Condition-Based Valuation",
+    title: "Condition-Based Valuation",
     description: "Adjust your vehicle’s value based on its origin, mileage, and previous insured sum for a more accurate estimate."
   }
 ];
 
 export default function ValuationPage() {
   return (
-    <div className="min-h-svh bg-brand-element/10">
+    <div className="min-h-svh bg-brand-bg">
       <ProductHero
         title="SNK Real-Time Valuation Inquiry"
         caption="Online real-time enquiry for motor vehicle valuation"
@@ -63,7 +63,7 @@ export default function ValuationPage() {
           { src: "/services/valuation/val2.jpg", alt: "valuation2" },
           { src: "/services/valuation/val3.png", alt: "valuation3" },
           { src: "/services/valuation/val5.png", alt: "valuation5" },
-          
+
         ]}
       />
 

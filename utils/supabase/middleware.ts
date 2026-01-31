@@ -38,8 +38,8 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   console.log(request.nextUrl.pathname)
-  
-  const require_auth = ['/valuation']
+
+  const require_auth = ['/valuation', '/account']
   if (
     !user &&
     require_auth.includes(request.nextUrl.pathname)
