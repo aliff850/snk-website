@@ -1,6 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
-import { Target } from "lucide-react"
+// import { Target } from "lucide-react"
 
 type ButtonVariant = "primary" | "secondary"
 type ButtonSize = "sm2" | "sm" | "base" | "md" | "lg"
