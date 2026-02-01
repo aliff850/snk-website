@@ -35,14 +35,14 @@ const achievements: Achievement[] = [
 ];
 
 export function Achievements() {
-    return(
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-16 flex flex-col gap-4 md:gap-12 font-onest overflow-x-hidden">
-            
+    return (
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-12 flex flex-col gap-4 md:gap-6 font-onest overflow-x-hidden">
+
             {/* Section Header */}
             <AnimateOnLoad animation="fade-in-up">
                 <div className="text-center max-w-4xl mx-auto flex flex-col gap-2 md:gap-4">
-                    <h1 className="text-brand text-4xl md:text-5xl font-bold">Our Achievements</h1>
-                    <p className="text-brand text-lg md:text-xl px-4">
+                    <h1 className="text-brand text-3xl md:text-4xl font-bold">Our Achievements</h1>
+                    <p className="text-brand text-base px-4">
                         Milestones that define our journey as a leading insurtech innovator
                     </p>
                 </div>
@@ -57,13 +57,13 @@ export function Achievements() {
             <div className="mt-4 md:mt-0 w-full max-w-7xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     {achievements.map((achievement, index) => (
-                        <AnimateOnLoad 
+                        <AnimateOnLoad
                             key={index}
-                            animation="fade-in-up" 
+                            animation="fade-in-up"
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
-                            <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl overflow-hidden ring-1 ring-brand/20 hover:ring-brand hover:bg-brand-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full flex flex-col group">
-                                
+                            <div className="bg-brand-white/95 rounded-2xl md:rounded-3xl overflow-hidden ring-1 ring-brand/20 hover:ring-brand hover:bg-brand-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full flex flex-col group">
+
                                 <div className="relative h-48 w-full">
                                     <Image
                                         src={achievement.image}
@@ -74,7 +74,7 @@ export function Achievements() {
                                     />
 
                                     <div className="absolute opacity-0 group-hover:opacity-100 duration-500 inset-0 bg-gradient-to-t from-brand/30 to-transparent"></div>
-                                    
+
 
                                     {achievement.stat && (
                                         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-3xl px-4 py-2">
@@ -84,7 +84,7 @@ export function Achievements() {
                                     )}
                                 </div>
 
-                                <div className="p-4 md:p-8 flex-1 flex flex-col gap-2">
+                                <div className="p-4 md:p-6 flex-1 flex flex-col gap-2">
                                     <h3 className="text-brand text-xl md:text-2xl font-bold">{achievement.title}</h3>
                                     <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{achievement.description}</p>
                                 </div>

@@ -5,10 +5,10 @@ import { solutions } from "@/app/data/solutions"
 
 export function SolutionsSection() {
 
-    return(
-        <section className="bg-brand flex flex-col justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest text-white">
+    return (
+        <section className="bg-brand flex flex-col justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-12 font-onest text-white">
 
-            <div className="w-full max-w-7xl flex flex-col justify-center items-center gap-4 md:gap-8">
+            <div className="w-full max-w-7xl flex flex-col justify-center items-center gap-4 md:gap-6">
 
                 <div className="flex flex-col text-center gap-4">
                     <h1 className="text-4xl lg:text-5xl font-bold text-background">Our Solutions</h1>
@@ -16,12 +16,12 @@ export function SolutionsSection() {
                 </div>
 
                 <div className="w-full max-w-7xl grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    
+
                     {solutions.map((solution, index) => (
-                        
-                        <AnimateOnLoad 
+
+                        <AnimateOnLoad
                             key={index}
-                            animation="fade-in-up" 
+                            animation="fade-in-up"
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
 
@@ -29,7 +29,7 @@ export function SolutionsSection() {
                                 title={solution.title}
                                 description={solution.description}
                                 learnMoreUrl={solution.learnMoreUrl}
-                                image={solution.image}                            
+                                image={solution.image}
                             />
 
 
@@ -40,16 +40,16 @@ export function SolutionsSection() {
 
                 </div>
 
-                <Button 
+                <Button
                     href="/services"
                     variant="primary"
                     size="md"
                     className="text-xl">
                     Explore All Our Solutions
-                    <svg 
-                        className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" 
-                        fill="none" 
-                        stroke="currentColor" 
+                    <svg
+                        className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
                         viewBox="0 0 24 24"
                     >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -57,10 +57,10 @@ export function SolutionsSection() {
                 </Button>
 
             </div>
-            
+
         </section>
 
-    
+
     )
 
 }

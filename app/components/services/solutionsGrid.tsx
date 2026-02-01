@@ -7,21 +7,21 @@ import { ValuationBanner } from './valuationSection'
 import { LucideAArrowDown } from 'lucide-react'
 
 export function SolutionsGrid() {
-    return(
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-24 py-8 md:py-16 flex flex-col  gap-4 md:gap-12 font-onest">
+    return (
+        <section className="w-full min-h-svh justify-center items-center px-4 md:px-24 py-8 md:py-12 flex flex-col gap-4 md:gap-6 font-onest">
 
-            <ValuationBanner/>
+            <ValuationBanner />
 
             <div className="w-full max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     {solutions.map((solution, index) => (
-                        <AnimateOnLoad 
+                        <AnimateOnLoad
                             key={index}
-                            animation="fade-in-up" 
+                            animation="fade-in-up"
                             delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
                         >
                             <div className="bg-brand-white/95 backdrop-blur-sm rounded-2xl md:rounded-3xl overflow-hidden ring-1 ring-brand/20 hover:bg-brand-white hover:ring-brand hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full flex flex-col text-center md:text-left group">
-                                
+
                                 {/* Image */}
                                 <div className="relative h-48 w-full">
                                     <Image
@@ -38,7 +38,7 @@ export function SolutionsGrid() {
                                 {/* Content */}
                                 <div className="p-4 md:p-6 flex-1 flex flex-col gap-2 md:gap-4">
                                     <h3 className="text-brand text-xl md:text-2xl font-bold">{solution.title}</h3>
-                                    <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{solution.description}</p>                                
+                                    <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{solution.description}</p>
 
                                     {/* Learn More Button */}
                                     {solution.learnMoreUrl && (
@@ -62,7 +62,7 @@ export function SolutionsGrid() {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Button size="md" variant="secondary" href="/contact" className="flex md:text-xl gap-2">
-                                Get Started <ArrowRight/>
+                                Get Started <ArrowRight />
                             </Button>
                         </div>
                     </div>

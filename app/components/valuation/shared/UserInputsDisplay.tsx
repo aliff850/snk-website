@@ -1,7 +1,7 @@
 // UserInputsDisplay
 // Displays all the user inputs for the valuation
 
-import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign, MapPin, Info } from 'lucide-react'
+import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign, MapPin, Info, Bolt } from 'lucide-react'
 import { FaMotorcycle } from 'react-icons/fa6'
 
 interface UserInputsDisplayProps {
@@ -9,6 +9,7 @@ interface UserInputsDisplayProps {
     model: string
     vehicleType?: 'car' | 'motorcycle'
     year?: string
+    region?: string
     // Motorcycle-specific fields
     // price?: string
     // type?: string
@@ -29,6 +30,7 @@ export default function UserInputsDisplay({
     model,
     vehicleType = 'car',
     year,
+    region,
     // price,
     // type,
     bodyType,
@@ -62,6 +64,11 @@ export default function UserInputsDisplay({
         return `RM ${num.toLocaleString()}`
     }
 
+    const formatRegion = (value: string | undefined) => {
+        if (!value) return 'Not specified'
+        return value.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+    }
+
     // const formatPrice = (value: string | undefined) => {
     //     if (!value) return 'Any'
     //     const num = parseInt(value, 10)
@@ -72,7 +79,7 @@ export default function UserInputsDisplay({
     const VehicleIcon = vehicleType === 'motorcycle' ? FaMotorcycle : Car
 
     return (
-        <div className="rounded-xl border border-foreground/20 bg-brand/5 p-2 md:p-4">
+        <div className="rounded-xl border border-foreground/20 bg-brand/5 p-2 md:p-4 print:p-4">
             <div className="flex items-center gap-2 mb-4">
                 <div className="p-2 rounded-lg bg-brand/10">
                     <VehicleIcon className="w-5 h-5 text-brand" />
@@ -82,7 +89,7 @@ export default function UserInputsDisplay({
                 </h3>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-3 gap-3 md:gap-4">
 
                 {/* Vehicle Identity */}
                 <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
@@ -102,7 +109,18 @@ export default function UserInputsDisplay({
                         <p className="text-xs font-medium text-gray-500">Year Manufactured</p>
                     </div>
                     <p className="text-sm md:text-base font-semibold text-gray-900">
-                        {year || "Any"}
+                        {year || "--"}
+                    </p>
+                </div>
+
+                {/* Region */}
+                <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                    <div className="flex items-center gap-2 mb-2">
+                        <MapPin className="w-4 h-4 text-gray-500" />
+                        <p className="text-xs font-medium text-gray-500">Region</p>
+                    </div>
+                    <p className="text-sm md:text-base font-semibold text-gray-900">
+                        {formatRegion(region) || "--"} Malaysia
                     </p>
                 </div>
 
@@ -178,7 +196,7 @@ export default function UserInputsDisplay({
                         {/* Vehicle origin */}
                         <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
                             <div className="flex items-center gap-2 mb-2">
-                                <MapPin className="w-4 h-4 text-gray-500" />
+                                <Bolt className="w-4 h-4 text-gray-500" />
                                 <p className="text-xs font-medium text-gray-500">Vehicle Origin</p>
                             </div>
                             <p className="text-sm md:text-base font-semibold text-gray-900 capitalize">

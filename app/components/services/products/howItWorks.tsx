@@ -1,22 +1,22 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 import ImageGallery from '../../ui/ImageGallery';
 
-interface ProductOverviewProps{
-    title:string,
-    caption:string,
-    image?:string
-    alt:string,
+interface ProductOverviewProps {
+    title: string,
+    caption: string,
+    image?: string
+    alt: string,
     galleryImages?: { src: string; alt?: string }[]
 }
 
-export function HowItWorks({ title, caption, image, alt, galleryImages }:ProductOverviewProps) {
-    return(
-        <section className="w-full py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest relative overflow-hidden">
-            <div className="w-full max-w-7xl mx-auto flex flex-col gap-4 lg:gap-8">
+export function HowItWorks({ title, caption, image, alt, galleryImages }: ProductOverviewProps) {
+    return (
+        <section className="w-full py-8 md:py-12 px-4 md:px-12 lg:px-24 font-onest relative overflow-hidden">
+            <div className="w-full max-w-7xl mx-auto flex flex-col gap-4 lg:gap-6">
 
                 {/* Content Section */}
                 <AnimateOnLoad animation="fade-in-up">
-                    <div className="text-center max-w-4xl mx-auto flex flex-col gap-4 lg:gap-8">
+                    <div className="text-center max-w-4xl mx-auto flex flex-col gap-4 lg:gap-6">
                         {/* Title Element */}
                         <div className="inline-flex items-center justify-center gap-2 text-brand-element font-semibold text-sm tracking-wider mx-auto">
                             <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-brand-element to-transparent"></div>
@@ -24,20 +24,20 @@ export function HowItWorks({ title, caption, image, alt, galleryImages }:Product
                             <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-brand-element to-transparent"></div>
                         </div>
 
-                        <h2 className="text-brand text-4xl md:text-5xl font-bold leading-tight">{title}</h2>
-                        <p className="text-brand/70 text-base md:text-lg leading-relaxed">
+                        <h2 className="text-brand text-3xl md:text-4xl font-bold leading-tight">{title}</h2>
+                        <p className="text-brand text-base leading-relaxed">
                             {caption}
                         </p>
                     </div>
                 </AnimateOnLoad>
-                
+
                 {/* Visual Section */}
                 <AnimateOnLoad animation="fade-in-up" delay={200}>
                     <div className="relative">
 
                         {/* Main Image/Gallery Container */}
                         <div className="relative rounded-2xl md:rounded-3xl overflow-hidden ring-1 ring-brand shadow-lg group">
-                                                            
+
                             {(() => {
                                 const slides = galleryImages && galleryImages.length > 0
                                     ? galleryImages

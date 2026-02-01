@@ -23,10 +23,10 @@ const ClientCarousel = () => {
     return (
         <section
             id="clients"
-            className="w-full bg-brand-bg px-4 py-8 md:px-12 lg:px-24 md:py-16 font-onest overflow-hidden"
+            className="w-full bg-brand-bg px-4 py-8 md:px-12 lg:px-24 md:py-12 font-onest overflow-hidden"
         >
 
-            <div className="flex flex-col justify-center items-center gap-2 md:gap-4 max-w-7xl mx-auto text-center mb-8 md:mb-12">
+            <div className="flex flex-col justify-center items-center gap-2 md:gap-6 max-w-7xl mx-auto text-center mb-8 md:mb-12">
                 <h1 className="text-brand text-4xl md:text-5xl font-bold leading-tight">
                     We Are Trusted by Industry Leaders
                 </h1>

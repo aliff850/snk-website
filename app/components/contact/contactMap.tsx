@@ -4,14 +4,14 @@ import { MdOutlineSmartphone } from "react-icons/md";
 
 
 export function ContactMap() {
-    return(
-        <section className="w-full bg-brand py-8 md:py-16 px-4 md:px-12 lg:px-24 font-onest">
+    return (
+        <section className="w-full bg-brand py-8 md:py-12 px-4 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl mx-auto flex flex-col gap-4 md:gap-8">
-                
+
                 <AnimateOnLoad animation="fade-in-up">
                     <div className="text-center flex flex-col gap-2 md:gap-4">
-                        <h2 className="text-white text-4xl md:text-5xl font-bold">Contact Information</h2>
-                        <p className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
+                        <h2 className="text-white text-3xl md:text-4xl font-bold">Contact Information</h2>
+                        <p className="text-white max-w-3xl mx-auto leading-relaxed opacity-90">
                             Get in touch with our team through any of the channels below, or visit our office.
                         </p>
                     </div>
@@ -19,9 +19,9 @@ export function ContactMap() {
 
                 <AnimateOnLoad animation="fade-in-up" delay={200}>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 items-start">
-                        
+
                         {/* Map Container */}
-                        <div className="bg-white/95 backdrop-blur-sm rounded-3xl border border-white/20 shadow-lg">
+                        <div className="bg-white rounded-3xl border border-white/20 shadow-lg">
                             <div className="relative h-96 rounded-2xl overflow-hidden">
                                 {/* Embedded Google Map */}
                                 <iframe
@@ -41,15 +41,15 @@ export function ContactMap() {
                         {/* Location Details */}
                         <div className="flex flex-col gap-4 md:gap-6">
 
-                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-4 md:p-8 border border-white/20 shadow-lg">
-                                   
+                            <div className="bg-white rounded-3xl p-4 md:p-6 border border-white/20 shadow-lg">
+
                                 <div className="flex flex-col gap-4">
 
                                     <div className="text-2xl flex items-center space-x-3 text-brand">
                                         <MdOutlineSmartphone />
                                         <h3 className="font-bold">Contact Details</h3>
-                                    </div>                                   
-                                   
+                                    </div>
+
                                     <div className="flex flex-col gap-2 text-brand">
                                         <div className="flex items-center space-x-3 text-brand">
 
@@ -65,20 +65,20 @@ export function ContactMap() {
                                             </svg>
                                             <span>information@snkmdr.com</span>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
 
                             </div>
 
-                            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-4 md:p-8 border border-white/20 shadow-lg">
-                                    
+                            <div className="bg-white rounded-3xl p-4 md:p-6 border border-white/20 shadow-lg">
+
                                 <div className="flex flex-col gap-4">
                                     <div className="text-2xl flex items-center space-x-3 text-brand">
                                         <FaLocationDot />
                                         <h3 className="font-bold">Office Address</h3>
                                     </div>
-                                    
+
                                     <div className="space-y-2 text-brand">
                                         <p>SNK Market Data Research SB, 11A-2, Jalan USJ1/1A, Regalia Business Center</p>
                                         <p>47620 Subang Jaya, Selangor</p>

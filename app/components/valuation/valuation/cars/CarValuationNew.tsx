@@ -18,6 +18,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     // Shared states
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
+    const [region, setRegion] = useState("west")
 
     // Mudah state
     const [availableMakes, setAvailableMakes] = useState<Record<string, any>>({})
@@ -48,8 +49,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
     // Carlist specific
     const [carlistVariant, setCarlistVariant] = useState("")
-    // const [carlistPrice, setCarlistPrice] = useState<string>("") // Use priceFrom
-    // const [carlistMileage, setCarlistMileage] = useState<string>("") // Use mileageFrom
 
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
@@ -125,7 +124,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     useEffect(() => {
         if (make) {
             const makeSlug = slug(make)
-            // Always try to fetch both if we have a make, so the models are ready if user toggles source
+            // Fetch both models if we have a make
             fetchModels(makeSlug)
             fetchCarlistModels(makeSlug)
         }
@@ -444,7 +443,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 })()
 
                 if (mileageQuery) searchQuery.mileage = mileageQuery
-                // if (carType) searchQuery.car_type_id = carType // handled above with bodyType
 
                 if (transmission) searchQuery.transmission_id = transmission
                 const priceQuery = (() => {
@@ -562,6 +560,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             const currentUserInputs = {
                 make,
                 model,
+                region,
                 year: yearFrom,
                 bodyType,
                 engineCapacity: engineCapacityLiter,
@@ -631,11 +630,8 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
             <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-                {/* Source Toggle */}
-
-
                 {/* Make/Model Selection */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b-2 border-brand/20">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-brand font-medium mb-1">*Make</label>
                         <select
@@ -681,6 +677,38 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                         {make && unifiedModels.length === 0 && !loadingMakes && !loadingCarlistMakes && (
                             <p className="mt-1 text-xs text-foreground/60">No models found for this make</p>
                         )}
+                    </div>
+                </div>
+                {/* Option to change between East and West Malaysia */}
+                <div className="flex flex-col gap-2 border-b-2 border-brand/20 pb-4">
+                    <p className="text-brand font-medium">*Region</p>
+                    <div className="flex gap-2">
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="radio"
+                                id="west"
+                                name="region"
+                                value="west"
+                                checked={region === 'west'}
+                                onChange={(e) => setRegion(e.target.value)}
+                                className="w-4 h-4 accent-brand"
+                            />
+                            <label htmlFor="west">West Malaysia</label>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="radio"
+                                id="east"
+                                name="region"
+                                value="east"
+                                checked={region === 'east'}
+                                onChange={(e) => setRegion(e.target.value)}
+                                className="w-4 h-4 accent-brand"
+                            />
+                            <label htmlFor="east">East Malaysia</label>
+                        </div>
+
                     </div>
                 </div>
 

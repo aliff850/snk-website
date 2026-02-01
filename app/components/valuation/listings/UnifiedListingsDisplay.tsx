@@ -1,18 +1,19 @@
 // UnifiedListingsDisplay
-// Supposed to use to display both Mudah and Carlist in one consolidated container
+// To display both Mudah and Carlist in one consolidated container
 
 import { Car, ArrowUpDown, CircleDollarSign } from 'lucide-react'
 import { useState, useMemo, useEffect, useRef } from 'react'
-// import UnifiedListView from './UnifiedListView'
 import UnifiedGridView from './UnifiedGridView'
 import UserInputsDisplay from '../shared/UserInputsDisplay'
+import { useAuth } from '@/context/AuthContext'
 
 // Unified listing type that works for both Mudah and Carlist
 interface UnifiedListing {
-    // Common fields (normalized)
+    // Common fields
     source: 'Mudah' | 'Carlist'
     make: string
     model: string
+    region?: string
     variant?: string
     year: string | number
     price: number
@@ -44,6 +45,7 @@ interface UnifiedListingsDisplayProps {
     userInputs?: {
         make: string
         model: string
+        region?: string
         year?: string
         bodyType?: string
         engineCapacity?: string
@@ -59,6 +61,7 @@ interface UnifiedListingsDisplayProps {
 
 // Normalize listing from either source
 const normalizeListing = (listing: any): UnifiedListing => {
+    // Might rewrite this later to handle both Mudah and Carlist
     // Check if it's a Mudah listing (has adview_url)
     if (listing.adview_url || listing.make_name) {
         return {
@@ -105,8 +108,8 @@ export default function UnifiedListingsDisplay({
     listingsAscending = [],
     listingsDescending = [],
     vehicleType = 'car',
-    source = 'Unknown',
-    counts,
+    //source = 'Unknown',
+    //counts,
     userInputs
 }: UnifiedListingsDisplayProps) {
 
@@ -213,16 +216,23 @@ export default function UnifiedListingsDisplay({
 
     let averagePrice = baseAveragePrice
 
+    // Adjust average price based on region
+    // If East Malaysia, add 5% to the average price
+    // If West Malaysia price is same
+    if (userInputs?.region === "east") {
+        averagePrice = Math.round(baseAveragePrice * 1.05)
+    }
+
     // Adjust average price based on condition
     if (userInputs?.condition) {
         const condition_name = userInputs.condition
         const lowPercentage = 0.1
         const highPercentage = 0.2
 
-        if (condition_name === "Very Poor") { averagePrice = Math.round(baseAveragePrice * (1 - highPercentage)) }
-        else if (condition_name === "Poor") { averagePrice = Math.round(baseAveragePrice * (1 - lowPercentage)) }
-        else if (condition_name === "Good") { averagePrice = Math.round(baseAveragePrice * (1 + lowPercentage)) }
-        else if (condition_name === "Very Good") { averagePrice = Math.round(baseAveragePrice * (1 + highPercentage)) }
+        if (condition_name === "Very Poor") { averagePrice = Math.round(averagePrice * (1 - highPercentage)) }
+        else if (condition_name === "Poor") { averagePrice = Math.round(averagePrice * (1 - lowPercentage)) }
+        else if (condition_name === "Good") { averagePrice = Math.round(averagePrice * (1 + lowPercentage)) }
+        else if (condition_name === "Very Good") { averagePrice = Math.round(averagePrice * (1 + highPercentage)) }
     }
 
     // Calculate range based on adjusted average
@@ -232,23 +242,25 @@ export default function UnifiedListingsDisplay({
 
     // Price summary component
     const PriceSummary = ({ className = "" }: { className?: string }) => (
-        <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${className}`}>
-            <div className="rounded-xl flex justify-between sm:items-center md:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
+        <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-4 ${className}`}>
+            <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
                 <p className="text-sm font-medium text-green-700">Lowest Price</p>
-                <p className="md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
+                <p className="print:text-4xl md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
             </div>
 
-            <div className="rounded-xl flex justify-between sm:items-center md:flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-2 md:p-4">
+            <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-2 md:p-4">
                 <p className="text-sm font-medium text-blue-700">Average Price</p>
-                <p className="md:text-4xl font-bold text-blue-900">{formatPrice(averagePrice)}</p>
+                <p className="print:text-4xl md:text-4xl font-bold text-blue-900">{formatPrice(averagePrice)}</p>
             </div>
 
-            <div className="rounded-xl flex justify-between sm:items-center md:flex-col bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-2 md:p-4">
+            <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-2 md:p-4">
                 <p className="text-sm font-medium text-purple-700">Highest Price</p>
-                <p className="md:text-4xl font-bold text-purple-900">{formatPrice(highestPrice)}</p>
+                <p className="print:text-4xl md:text-4xl font-bold text-purple-900">{formatPrice(highestPrice)}</p>
             </div>
         </div>
     )
+
+    const { user } = useAuth();
 
     return (
         <div className="flex flex-col gap-4">
@@ -258,6 +270,7 @@ export default function UnifiedListingsDisplay({
                     make={userInputs.make}
                     model={userInputs.model}
                     year={userInputs.year}
+                    region={userInputs.region}
                     vehicleType={vehicleType}
                     bodyType={userInputs.bodyType}
                     engineCapacity={userInputs.engineCapacity}
@@ -273,7 +286,7 @@ export default function UnifiedListingsDisplay({
 
             {/* Floating price container */}
             {shouldShowFloating && (
-                <div className={`hidden md:block fixed top-24 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-6xl px-4 transition-all duration-300 ease-out ${isFloating
+                <div className={`hidden md:block print:hidden fixed top-22 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-6xl px-4 transition-all duration-300 ease-out ${isFloating
                     ? 'animate-in slide-in-from-top-4 fade-in'
                     : 'animate-out slide-out-to-top-4 fade-out'
                     }`}>
@@ -284,7 +297,7 @@ export default function UnifiedListingsDisplay({
             )}
 
             {/* Price container */}
-            <div ref={priceContainerRef} className="rounded-xl border border-foreground/20 flex flex-col p-2 md:p-4">
+            <div ref={priceContainerRef} className="rounded-xl border border-foreground/20 flex flex-col p-2 print:p-4 md:p-4">
                 <div className="flex items-center gap-2 mb-4">
                     <div className="p-2 rounded-lg bg-green-100">
                         <CircleDollarSign className="w-5 h-5 text-green-900" />
@@ -292,30 +305,10 @@ export default function UnifiedListingsDisplay({
                     <h3 className="text-lg md:text-xl font-bold text-foreground">Estimated Market Value</h3>
                 </div>
                 <PriceSummary />
-
-                {/* Source breakdown */}
-                {/* {(sourceCounts.mudah > 0 && sourceCounts.carlist > 0) && (
-                    <div className="mt-4 pt-4 border-t border-gray-200 flex flex-wrap gap-2 text-sm text-gray-600">
-                        <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full font-medium">
-                            Mudah: {sourceCounts.mudah}
-                        </span>
-                        <span className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full font-medium">
-                            Carlist: {sourceCounts.carlist}
-                        </span>
-                        <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full font-medium">
-                            Total: {sourceCounts.total}
-                        </span>
-                        {counts?.duplicatesRemoved && counts.duplicatesRemoved > 0 && (
-                            <span className="px-3 py-1 bg-orange-50 text-orange-700 rounded-full font-medium">
-                                Duplicates Removed: {counts.duplicatesRemoved}
-                            </span>
-                        )}
-                    </div>
-                )} */}
             </div>
 
             {/* Controls Section */}
-            <div className="rounded-xl border border-foreground/20 p-2 md:p-4 flex flex-col gap-4">
+            <div className="rounded-xl border border-foreground/20 p-2 md:p-4 flex flex-col gap-4 print:hidden">
                 <div className="flex flex-col gap-4">
                     {/* Price Sorting */}
                     {normalizedAscending.length > 0 && normalizedDescending.length > 0 && (
@@ -348,7 +341,9 @@ export default function UnifiedListingsDisplay({
                     )}
 
                     {/* Source filter (only show if we have both sources) */}
-                    {sourceCounts.mudah > 0 && sourceCounts.carlist > 0 && (
+                    {/* Only show filter if user is admin and we have both sources */}
+                    {/* Defaults to all sources */}
+                    {user?.role === 'admin' && sourceCounts.mudah > 0 && sourceCounts.carlist > 0 && (
                         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
                             <span className="font-medium text-gray-700">Filter by Source:</span>
                             <div className="flex gap-2">

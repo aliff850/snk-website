@@ -3,22 +3,22 @@ import Image from "next/image";
 
 export function AchievementCard() {
 
-    return(
+    return (
 
-        <div className="flex flex-col gap-4 md:gap-8">
+        <div className="flex flex-col gap-4 md:gap-6">
 
             {/* MDEC certification section */}
-            <div className="text-center w-full flex flex-col gap-4 md:gap-8 items-center">
-                
+            <div className="text-center w-full flex flex-col gap-4 md:gap-6 items-center">
+
                 <AnimateOnLoad animation="fade-in" className="w-full flex justify-center">
                     <div className="bg-brand-white rounded-2xl md:rounded-3xl w-full md:w-fit p-8 md:p-10 h-48 ring-1 ring-brand/20 shadow-lg hover:ring-brand transition-all duration-500">
                         <div className="flex flex-col items-center justify-center h-full">
-                            <Image 
-                                src="/images/mdec.png" 
-                                alt="MDEC" 
-                                width={300} 
-                                height={120} 
-                                className="object-contain" 
+                            <Image
+                                src="/images/mdec.png"
+                                alt="MDEC"
+                                width={300}
+                                height={120}
+                                className="object-contain"
                             />
                         </div>
                     </div>
@@ -26,14 +26,14 @@ export function AchievementCard() {
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in">
-                    <h3 className="text-brand text-xl md:text-2xl font-bold">Registered with MDEC.</h3>
+                    <h3 className="text-brand text-lg md:text-xl font-bold">Registered with MDEC.</h3>
                 </AnimateOnLoad>
 
 
             </div>
-            
+
             {/* BNM and PIAM approval */}
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
 
                 <AnimateOnLoad animation="fade-in-left" delay={100} className="w-full flex justify-end">
                     <div className="bg-brand-white rounded-2xl md:rounded-3xl w-full md:max-w-sm p-8 md:p-10 h-48 ring-1 ring-brand/20 hover:ring-brand shadow-lg transition-all duration-500 group">
@@ -67,10 +67,10 @@ export function AchievementCard() {
 
             </div>
 
-            <p className="text-brand text-center text-base md:text-xl font-bold">
+            <p className="text-brand text-center text-base md:text-lg font-bold">
                 Recognized by Bank Negara Malaysia and the Insurance Association of Malaysia to provide accident vehicle damage estimation.
             </p>
-            
+
         </div>
 
     )
