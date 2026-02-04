@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import SectionContainer from "../ui/SectionContainer"
 
 const clients = [
     { name: "Allianz", logo: "/clients/allianz.svg" },
@@ -21,10 +22,7 @@ const duplicatedClients = [...clients, ...clients, ...clients, ...clients]
 
 const ClientCarousel = () => {
     return (
-        <section
-            id="clients"
-            className="w-full bg-brand-bg px-4 py-8 md:px-12 lg:px-24 md:py-12 font-onest overflow-hidden"
-        >
+        <SectionContainer variant="brand-bg">
 
             <div className="flex flex-col justify-center items-center gap-2 md:gap-6 max-w-7xl mx-auto text-center mb-8 md:mb-12">
                 <h1 className="text-brand text-4xl md:text-5xl font-bold leading-tight">
@@ -77,7 +75,7 @@ const ClientCarousel = () => {
                 </div>
             </div> */}
 
-        </section>
+        </SectionContainer>
     )
 }
 

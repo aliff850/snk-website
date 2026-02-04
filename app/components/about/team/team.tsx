@@ -1,5 +1,6 @@
-import Image from "next/image";
-import AnimateOnLoad from "../../ui/AnimateOnLoad";
+import Image from "next/image"
+import AnimateOnLoad from "../../ui/AnimateOnLoad"
+import SectionContainer from "@/components/ui/SectionContainer"
 
 type TeamMember = {
     name: string;
@@ -79,9 +80,10 @@ function TeamCard({ member }: { member: TeamMember }) {
 
 export function TeamChart() {
 
-    return(
+    return (
 
-        <section className="w-full min-h-screen justify-center items-center px-4 md:px-12 lg:px-24 py-16 flex flex-col gap-12 font-onest">
+        <SectionContainer variant="brand-bg">
+
             <div className="w-full max-w-7xl mx-auto flex flex-col gap-10">
                 <AnimateOnLoad animation="fade-in-up">
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand text-center">Leadership</h2>
@@ -103,7 +105,7 @@ export function TeamChart() {
                     </div>
                 </AnimateOnLoad>
             </div>
-        </section>
+        </SectionContainer>
 
     )
 

@@ -38,7 +38,7 @@ export function SolutionsGrid() {
                                 {/* Content */}
                                 <div className="p-4 md:p-6 flex-1 flex flex-col gap-2 md:gap-4">
                                     <h3 className="text-brand text-xl md:text-2xl font-bold">{solution.title}</h3>
-                                    <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{solution.description}</p>
+                                    <p className="text-brand text-sm md:text-base leading-relaxed flex-1">{solution.description}</p>
 
                                     {/* Learn More Button */}
                                     {solution.learnMoreUrl && (

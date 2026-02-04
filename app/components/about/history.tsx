@@ -1,5 +1,6 @@
-import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
-import Image from 'next/image';
+import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
+import Image from 'next/image'
+import SectionContainer from '@/components/ui/SectionContainer'
 
 // Timeline data structure
 interface TimelineEvent {
@@ -64,39 +65,40 @@ const timelineEvents: TimelineEvent[] = [
 
 export function History() {
     return (
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-12 flex flex-col gap-4 md:gap-6 font-onest">
+        <SectionContainer variant="brand-bg">
+            <div className="flex flex-col items-center justify-center gap-4 md:gap-6">
 
-            <AnimateOnLoad animation="fade-in-up">
-                <div className="flex flex-col text-center gap-2 md:gap-4 max-w-4xl">
-                    <h1 className="text-brand text-3xl md:text-4xl font-bold">Our Journey</h1>
-                    <p className="text-brand text-base">
-                        Over 25 years of innovation, growth, and transformation in the insurtech industry.
-                    </p>
-                </div>
-            </AnimateOnLoad>
-
-            {/* Timeline Container */}
-            <div className="w-full max-w-7xl mx-auto">
-                <AnimateOnLoad animation="fade-in-up" delay={200}>
-                    <div className="relative">
-                        {/* Timeline Line */}
-                        <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-brand rounded-full"></div>
-
-                        {/* Timeline Events */}
-                        <div className="flex flex-col gap-4 md:gap-8">
-                            {timelineEvents.map((event, index) => (
-                                <TimelineEventComponent
-                                    key={index}
-                                    event={event}
-                                    index={index}
-                                />
-                            ))}
-                        </div>
+                <AnimateOnLoad animation="fade-in-up">
+                    <div className="flex flex-col text-center gap-2 md:gap-4 max-w-4xl">
+                        <h1 className="text-brand text-3xl md:text-4xl font-bold">Our Journey</h1>
+                        <p className="text-brand text-base">
+                            Over 25 years of innovation, growth, and transformation in the insurtech industry.
+                        </p>
                     </div>
                 </AnimateOnLoad>
-            </div>
 
-        </section>
+                {/* Timeline Container */}
+                <div className="w-full max-w-7xl mx-auto">
+                    <AnimateOnLoad animation="fade-in-up" delay={200}>
+                        <div className="relative">
+                            {/* Timeline Line */}
+                            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-brand rounded-full"></div>
+
+                            {/* Timeline Events */}
+                            <div className="flex flex-col gap-4 md:gap-8">
+                                {timelineEvents.map((event, index) => (
+                                    <TimelineEventComponent
+                                        key={index}
+                                        event={event}
+                                        index={index}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </AnimateOnLoad>
+                </div>
+            </div>
+        </SectionContainer>
     )
 }
 

@@ -1,4 +1,5 @@
 import AnimateOnLoad from "../../ui/AnimateOnLoad"
+import SectionContainer from "../../ui/SectionContainer"
 
 interface VideoDisplayComponents {
     filename: string,
@@ -26,7 +27,7 @@ export function PreviewVideoAlternate({ filename, filename_2 }: VideoDisplayComp
     const embedUrl_2 = getYouTubeEmbedUrl(filename_2);
 
     return (
-        <section className="w-full flex flex-col justify-center items-center py-8 md:py-12 px-4 md:px-12 lg:px-24 font-onest relative overflow-hidden">
+        <SectionContainer variant="brand-bg">
             {/* Background Elements */}
             {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand/5 to-transparent -z-10"></div> */}
             {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-element/5 rounded-full blur-3xl -z-10"></div> */}
@@ -66,7 +67,7 @@ export function PreviewVideoAlternate({ filename, filename_2 }: VideoDisplayComp
                 </AnimateOnLoad>
 
             </div>
-        </section>
+        </SectionContainer>
     )
 }
 

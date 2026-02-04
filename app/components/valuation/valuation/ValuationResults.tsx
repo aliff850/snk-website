@@ -1,10 +1,10 @@
 "use client"
 
 import { Button } from "../../ui/button"
-import { Ban, Download, X } from "lucide-react"
+import { Ban, Download, X, CarFront } from "lucide-react"
 import UnifiedListingsDisplay from "../listings/UnifiedListingsDisplay"
 import { useState, useRef } from "react"
-import Image from "next/image"
+// import Image from "next/image"
 import { useReactToPrint } from "react-to-print"
 
 interface ValuationResultsProps {
@@ -37,7 +37,8 @@ function ValuationDownloadPopup({ isOpen, onClose }: { isOpen: boolean; onClose:
                     </button>
                 </div>
 
-                <div className="py-2">
+                <div className="py-2 flex flex-col items-center gap-2 text-brand-white">
+                    <CarFront className="h-12 w-12" />
                     <p className="text-center text-brand-white text-lg font-medium">No valuation results to download</p>
                 </div>
 

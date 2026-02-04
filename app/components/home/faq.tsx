@@ -1,8 +1,9 @@
-import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
-import { Accordion, AccordionItemWithContext, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
+import { Accordion, AccordionItemWithContext, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
+import SectionContainer from '@/components/ui/SectionContainer'
 // import Link from 'next/link';
-import { Button } from '../ui/button';
-import { Phone } from 'lucide-react';
+import { Button } from '../ui/button'
+import { Phone } from 'lucide-react'
 
 export function FAQSection() {
     const faqs = [
@@ -35,7 +36,7 @@ export function FAQSection() {
     ]
 
     return (
-        <section className="bg-brand justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-12 font-onest">
+        <SectionContainer variant="brand">
             <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
                 <AnimateOnLoad animation="fade-in-up">
                     <div className="text-center text-brand-foreground flex flex-col">
@@ -85,6 +86,6 @@ export function FAQSection() {
                     </Button>
                 </div>
             </div>
-        </section>
+        </SectionContainer>
     )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import AnimateOnLoad from "@/components/ui/AnimateOnLoad"
+import LoginContainer from "@/components/ui/LoginContainer"
 // import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CircleAlert, Eye, EyeOff } from "lucide-react"
@@ -80,10 +81,10 @@ export default function ResetPasswordPage() {
     return (
         <section className="w-full min-h-svh bg-[url('/images/w214.jpg')] bg-cover bg-center font-onest">
             <div className="w-full h-svh bg-black/50 px-4 md:px-12 lg:px-24 py-16 flex flex-col justify-center items-center">
-                <div className="w-full max-w-xl flex flex-col justify-center items-center bg-brand-white/10 backdrop-blur-sm border border-brand-white/30 px-8 md:px-24 py-8 rounded-3xl text-brand-white shadow-lg">
-                    <AnimateOnLoad className="w-full flex flex-col gap-8">
-                        <div className="flex flex-col gap-4 justify-center items-center">
-                            <h1 className="text-3xl font-bold text-brand-white">Reset Password</h1>
+                <LoginContainer>
+                    <AnimateOnLoad className="w-full flex flex-col gap-4 md:gap-8">
+                        <div className="flex flex-col gap-2 md:gap-4 justify-center items-center">
+                            <h1 className="text-2xl md:text-3xl font-bold text-brand-white">Reset Password</h1>
                             <p className="text-center">Enter your new password.</p>
                         </div>
 
@@ -145,7 +146,7 @@ export default function ResetPasswordPage() {
                             </Button>
                         </form>
                     </AnimateOnLoad>
-                </div>
+                </LoginContainer>
             </div>
         </section>
     )

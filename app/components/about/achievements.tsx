@@ -1,5 +1,6 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
 import Image from 'next/image'
+import SectionContainer from '@/components/ui/SectionContainer'
 import { AchievementCard } from './ui/achievementCard'
 
 interface Achievement {
@@ -36,65 +37,66 @@ const achievements: Achievement[] = [
 
 export function Achievements() {
     return (
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-12 flex flex-col gap-4 md:gap-6 font-onest overflow-x-hidden">
+        <SectionContainer variant="brand-bg">
+            <div className="flex flex-col items-center justify-center gap-4 md:gap-6">
 
-            {/* Section Header */}
-            <AnimateOnLoad animation="fade-in-up">
-                <div className="text-center max-w-4xl mx-auto flex flex-col gap-2 md:gap-4">
-                    <h1 className="text-brand text-3xl md:text-4xl font-bold">Our Achievements</h1>
-                    <p className="text-brand text-base px-4">
-                        Milestones that define our journey as a leading insurtech innovator
-                    </p>
-                </div>
-            </AnimateOnLoad>
+                {/* Section Header */}
+                <AnimateOnLoad animation="fade-in-up">
+                    <div className="text-center max-w-4xl mx-auto flex flex-col gap-2 md:gap-4">
+                        <h1 className="text-brand text-3xl md:text-4xl font-bold">Our Achievements</h1>
+                        <p className="text-brand text-base px-4">
+                            Milestones that define our journey as a leading insurtech innovator
+                        </p>
+                    </div>
+                </AnimateOnLoad>
 
-            {/* All governing bodies section */}
-            <AnimateOnLoad animation="fade-in-up">
-                <AchievementCard />
-            </AnimateOnLoad>
+                {/* All governing bodies section */}
+                <AnimateOnLoad animation="fade-in-up">
+                    <AchievementCard />
+                </AnimateOnLoad>
 
-            {/* Achievements Grid */}
-            <div className="mt-4 md:mt-0 w-full max-w-7xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    {achievements.map((achievement, index) => (
-                        <AnimateOnLoad
-                            key={index}
-                            animation="fade-in-up"
-                            delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
-                        >
-                            <div className="bg-brand-white/95 rounded-2xl md:rounded-3xl overflow-hidden ring-1 ring-brand/20 hover:ring-brand hover:bg-brand-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full flex flex-col group">
+                {/* Achievements Grid */}
+                <div className="mt-4 md:mt-0 w-full max-w-7xl">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                        {achievements.map((achievement, index) => (
+                            <AnimateOnLoad
+                                key={index}
+                                animation="fade-in-up"
+                                delay={(index * 100 + 200) as 0 | 100 | 200 | 300 | 400}
+                            >
+                                <div className="bg-brand-white/95 rounded-2xl md:rounded-3xl overflow-hidden ring-1 ring-brand/20 hover:ring-brand hover:bg-brand-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full flex flex-col group">
 
-                                <div className="relative h-48 w-full">
-                                    <Image
-                                        src={achievement.image}
-                                        alt={achievement.title}
-                                        fill
-                                        className="object-cover"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                    />
+                                    <div className="relative h-48 w-full">
+                                        <Image
+                                            src={achievement.image}
+                                            alt={achievement.title}
+                                            fill
+                                            className="object-cover"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                        />
 
-                                    <div className="absolute opacity-0 group-hover:opacity-100 duration-500 inset-0 bg-gradient-to-t from-brand/30 to-transparent"></div>
+                                        <div className="absolute opacity-0 group-hover:opacity-100 duration-500 inset-0 bg-gradient-to-t from-brand/30 to-transparent"></div>
 
 
-                                    {achievement.stat && (
-                                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-3xl px-4 py-2">
-                                            <div className="text-brand text-2xl font-bold">{achievement.stat}</div>
-                                            <div className="text-brand text-xs font-medium">{achievement.statLabel}</div>
-                                        </div>
-                                    )}
+                                        {achievement.stat && (
+                                            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-3xl px-4 py-2">
+                                                <div className="text-brand text-2xl font-bold">{achievement.stat}</div>
+                                                <div className="text-brand text-xs font-medium">{achievement.statLabel}</div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="p-4 md:p-6 flex-1 flex flex-col gap-2">
+                                        <h3 className="text-brand text-xl md:text-2xl font-bold">{achievement.title}</h3>
+                                        <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{achievement.description}</p>
+                                    </div>
                                 </div>
-
-                                <div className="p-4 md:p-6 flex-1 flex flex-col gap-2">
-                                    <h3 className="text-brand text-xl md:text-2xl font-bold">{achievement.title}</h3>
-                                    <p className="text-brand/80 text-sm md:text-base leading-relaxed flex-1">{achievement.description}</p>
-                                </div>
-                            </div>
-                        </AnimateOnLoad>
-                    ))}
+                            </AnimateOnLoad>
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            {/* <AnimateOnLoad animation="fade-in-up" delay={400}>
+                {/* <AnimateOnLoad animation="fade-in-up" delay={400}>
                 <div className="w-full max-w-5xl mx-auto">
                     <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-brand/20 shadow-lg">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -114,7 +116,7 @@ export function Achievements() {
                     </div>
                 </div>
             </AnimateOnLoad> */}
-
-        </section>
+            </div>
+        </SectionContainer>
     )
 }

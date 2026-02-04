@@ -1,6 +1,7 @@
-import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
-import Image from 'next/image';
-import ImageGallery from '@/components/ui/ImageGallery';
+import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
+// import Image from 'next/image';
+import SectionContainer from '../../ui/SectionContainer'
+import ImageGallery from '@/components/ui/ImageGallery'
 
 interface ProductOverviewAltProps {
     overview: string,
@@ -11,13 +12,13 @@ interface ProductOverviewAltProps {
 
 export function ProductOverviewAlt({ overview, image, alt, galleryImages }: ProductOverviewAltProps) {
     return (
-        <section className="w-full py-8 md:py-12 px-4 md:px-12 lg:px-24 font-onest">
+        <SectionContainer variant="brand-bg">
             <div className="w-full h-full max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 gap-4 lg:gap-6 justify-center items-stretch h-full">
 
                     {/* Content */}
                     <AnimateOnLoad animation="fade-in-left">
-                        <div className="flex flex-col gap-4 lg:gap-6">
+                        <div className="flex flex-col gap-4 md:gap-6">
                             {/* <h2 className="text-brand text-center text-4xl md:text-5xl font-bold">{title}</h2> */}
                             <p className="text-brand text-base  leading-relaxed" dangerouslySetInnerHTML={{ __html: overview }}>
                             </p>
@@ -42,10 +43,8 @@ export function ProductOverviewAlt({ overview, image, alt, galleryImages }: Prod
                             })()}
                         </div>
                     </AnimateOnLoad>
-
-
                 </div>
             </div>
-        </section>
+        </SectionContainer>
     )
 }

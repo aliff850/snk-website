@@ -1,4 +1,5 @@
-import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
+import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
+import SectionContainer from '../../ui/SectionContainer'
 
 interface Feature {
     title: string;
@@ -13,7 +14,7 @@ interface FeatureProps {
 
 export function ProductFeatures({ header, caption, features }: FeatureProps) {
     return (
-        <section className="w-full py-8 md:py-12 px-4 md:px-12 lg:px-24 font-onest relative">
+        <SectionContainer variant="brand-bg">
 
             <div className="w-full max-w-7xl mx-auto flex flex-col gap-4 lg:gap-6">
                 {/* Section Header */}
@@ -70,6 +71,6 @@ export function ProductFeatures({ header, caption, features }: FeatureProps) {
                     ))}
                 </div>
             </div>
-        </section>
+        </SectionContainer>
     )
 }

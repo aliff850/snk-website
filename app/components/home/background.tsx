@@ -1,11 +1,12 @@
 import Image from "next/image"
 import AnimateOnLoad from "../ui/AnimateOnLoad"
 import { Button } from "../ui/button"
+import SectionContainer from "../ui/SectionContainer"
 
 export function Background() {
     return (
 
-        <section id="background" className="w-full bg-brand flex flex-col justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-12 font-onest text-white snap-proximity">
+        <SectionContainer variant="brand">
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-7xl">
 
@@ -76,7 +77,7 @@ export function Background() {
 
             </div>
 
-        </section>
+        </SectionContainer>
 
     )
 }

@@ -1,5 +1,6 @@
-import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
-import { Crosshair, Eye } from 'lucide-react';
+import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
+import { Crosshair, Eye } from 'lucide-react'
+import SectionContainer from '@/components/ui/SectionContainer'
 
 interface Objective {
     title: string;
@@ -40,96 +41,93 @@ const objectives: Objective[] = [
 
 export function Values() {
     return (
-        <section className="w-full min-h-svh justify-center items-center px-4 md:px-12 lg:px-24 py-8 md:py-12 flex flex-col gap-4 md:gap-6 font-onest">
+        <SectionContainer variant="brand-bg">
+            <div className="flex flex-col items-center justify-center gap-4 md:gap-6">
 
-            {/* Section Header */}
-            <AnimateOnLoad animation="fade-in-up">
-                <div className="flex flex-col text-center gap-2 md:gap-4 max-w-4xl mx-auto">
-                    <h1 className="text-brand text-3xl md:text-4xl font-bold">Our Values</h1>
-                    <p className="text-brand text-base">
-                        The principles that guide our mission to bring transformation to the insurtech industry.
-                    </p>
-                </div>
-            </AnimateOnLoad>
-
-            {/* VISION AND MISSION CONTAINER */}
-            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-
-                <AnimateOnLoad animation="fade-in-left" delay={200}>
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 ring-1 ring-brand/20 hover:ring-brand duration-500 transition-ring shadow-lg h-full group">
-
-                        <div className="text-center p-4 w-48">
-                            {/* Icon */}
-                            <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-500 rounded-full mb-4">
-                                <Eye className="h-12 w-12 text-white" />
-                            </div>
-                            <h2 className="text-brand text-2xl md:text-3xl font-bold">Vision</h2>
-                        </div>
-
-                        <div>
-                            <p className="text-sm md:text-base text-brand text-center leading-relaxed">
-                                To be the leading Insurtech provider in the region, transforming the insurance ecosystem through innovation, automation, and trust. We envision a seamless digital environment where insurers, adjusters, workshops, and the public are connected through transparent, efficient, and technology-driven claims and assistance services.
-                            </p>
-                        </div>
-
-                    </div>
-                </AnimateOnLoad>
-
-                <AnimateOnLoad animation="fade-in-right" delay={300}>
-                    <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 ring-1 ring-brand/20 hover:ring-brand duration-500 transition-ring shadow-lg h-full group">
-
-                        <div className="text-center p-4 w-48">
-                            {/* Icon */}
-                            <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-500 rounded-full mb-4">
-                                <Crosshair className="h-12 w-12 text-white" />
-                            </div>
-                            <h2 className="text-brand text-2xl md:text-3xl font-bold">Mission</h2>
-                        </div>
-
-                        <div>
-                            <p className="text-sm md:text-base text-brand text-center leading-relaxed">
-                                Our mission is to simplify and automate insurance processes by uniting all stakeholders on a single digital platform. We are committed to delivering accurate, transparent, and accessible valuation and claims solutions powered by advanced technologies, and make insurance processes faster, smarter, and more reliable for everyone.
-                            </p>
-
-                        </div>
-                    </div>
-                </AnimateOnLoad>
-
-            </div>
-
-
-            {/* Objectives Container */}
-            <AnimateOnLoad animation="fade-in-up" delay={400}>
-                <div className="w-full max-w-7xl mx-auto">
-                    <div className="text-center py-4 md:py-6 flex flex-col gap-2">
-                        <h2 className="text-brand text-3xl md:text-4xl font-bold">Our Objectives</h2>
+                {/* Section Header */}
+                <AnimateOnLoad animation="fade-in-up">
+                    <div className="flex flex-col text-center gap-2 md:gap-4 max-w-4xl mx-auto">
+                        <h1 className="text-brand text-3xl md:text-4xl font-bold">Our Values</h1>
                         <p className="text-brand text-base">
-                            Strategic goals that drive our commitment to excellence
+                            The principles that guide our mission to bring transformation to the insurtech industry.
                         </p>
                     </div>
+                </AnimateOnLoad>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                        {objectives.map((objective, index) => (
-                            <AnimateOnLoad
-                                key={index}
-                                animation="fade-in-up"
-                                delay={(index * 100 + 500) as 0 | 100 | 200 | 300 | 400}
-                            >
-                                <div className="group bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 ring-1 ring-brand/20 hover:ring-brand hover:bg-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full">
-                                    <div className="text-center">
-                                        <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-element group-hover:bg-brand transition-colors duration-500 ease-in-out rounded-full mb-4 text-white">
-                                            {objective.icon}
-                                        </div>
-                                        <h3 className="text-brand text-xl font-semibold mb-3">{objective.title}</h3>
-                                        <p className="text-brand text-sm md:text-base leading-relaxed">{objective.description}</p>
-                                    </div>
+                {/* VISION AND MISSION CONTAINER */}
+                <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+
+                    <AnimateOnLoad animation="fade-in-left" delay={200}>
+                        <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 ring-1 ring-brand/20 hover:ring-brand duration-500 transition-ring shadow-lg h-full group">
+
+                            <div className="text-center p-4 w-48">
+                                {/* Icon */}
+                                <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-500 rounded-full mb-4">
+                                    <Eye className="h-12 w-12 text-white" />
                                 </div>
-                            </AnimateOnLoad>
-                        ))}
-                    </div>
-                </div>
-            </AnimateOnLoad>
+                                <h2 className="text-brand text-2xl md:text-3xl font-bold">Vision</h2>
+                            </div>
 
-        </section>
+                            <div>
+                                <p className="text-sm md:text-base text-brand text-center leading-relaxed">
+                                    To be the leading Insurtech provider in the region, transforming the insurance ecosystem through innovation, automation, and trust. We envision a seamless digital environment where insurers, adjusters, workshops, and the public are connected through transparent, efficient, and technology-driven claims and assistance services.
+                                </p>
+                            </div>
+                        </div>
+                    </AnimateOnLoad>
+
+                    <AnimateOnLoad animation="fade-in-right" delay={300}>
+                        <div className="bg-brand-white rounded-2xl md:rounded-3xl p-6 md:p-12 flex flex-col justify-center items-center md:gap-4 ring-1 ring-brand/20 hover:ring-brand duration-500 transition-ring shadow-lg h-full group">
+
+                            <div className="text-center p-4 w-48">
+                                {/* Icon */}
+                                <div className="inline-flex items-center justify-center w-24 h-24 bg-brand-element group-hover:bg-brand transition-colors duration-500 rounded-full mb-4">
+                                    <Crosshair className="h-12 w-12 text-white" />
+                                </div>
+                                <h2 className="text-brand text-2xl md:text-3xl font-bold">Mission</h2>
+                            </div>
+
+                            <div>
+                                <p className="text-sm md:text-base text-brand text-center leading-relaxed">
+                                    Our mission is to simplify and automate insurance processes by uniting all stakeholders on a single digital platform. We are committed to delivering accurate, transparent, and accessible valuation and claims solutions powered by advanced technologies, and make insurance processes faster, smarter, and more reliable for everyone.
+                                </p>
+                            </div>
+                        </div>
+                    </AnimateOnLoad>
+                </div>
+
+                {/* Objectives Container */}
+                <AnimateOnLoad animation="fade-in-up" delay={400}>
+                    <div className="w-full max-w-7xl mx-auto">
+                        <div className="text-center py-4 md:py-6 flex flex-col gap-2">
+                            <h2 className="text-brand text-3xl md:text-4xl font-bold">Our Objectives</h2>
+                            <p className="text-brand text-base">
+                                Strategic goals that drive our commitment to excellence
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                            {objectives.map((objective, index) => (
+                                <AnimateOnLoad
+                                    key={index}
+                                    animation="fade-in-up"
+                                    delay={(index * 100 + 500) as 0 | 100 | 200 | 300 | 400}
+                                >
+                                    <div className="group bg-brand-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 ring-1 ring-brand/20 hover:ring-brand hover:bg-white hover:scale-105 transition-all duration-500 ease-in-out shadow-lg h-full">
+                                        <div className="text-center">
+                                            <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-element group-hover:bg-brand transition-colors duration-500 ease-in-out rounded-full mb-4 text-white">
+                                                {objective.icon}
+                                            </div>
+                                            <h3 className="text-brand text-xl font-semibold mb-3">{objective.title}</h3>
+                                            <p className="text-brand text-sm md:text-base leading-relaxed">{objective.description}</p>
+                                        </div>
+                                    </div>
+                                </AnimateOnLoad>
+                            ))}
+                        </div>
+                    </div>
+                </AnimateOnLoad>
+            </div>
+        </SectionContainer>
     )
 }

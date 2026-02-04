@@ -1,6 +1,7 @@
-import { ReasonCard } from "../ui/reasonCard"
+// import { ReasonCard } from "../ui/reasonCard"
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 import Image from 'next/image';
+import SectionContainer from '@/components/ui/SectionContainer'
 
 interface Achievement {
     title: string;
@@ -37,7 +38,7 @@ export function ReasonSection() {
     ];
 
     return (
-        <section className="w-full bg-brand-bg flex flex-col gap-4 md:gap-8 justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-12 font-onest text-white snap-start">
+        <SectionContainer variant="brand-bg">
 
             <div className="flex flex-col justify-center items-center text-center gap-4 mx-auto">
                 <h1 className="text-brand text-4xl md:text-5xl font-bold">Why Choose SNK?</h1>
@@ -86,7 +87,7 @@ export function ReasonSection() {
                     ))}
                 </div>
             </div>
-        </section>
+        </SectionContainer>
     )
 
 }

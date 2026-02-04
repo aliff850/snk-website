@@ -2,11 +2,12 @@ import { SolutionCard } from "../ui/solutionCard"
 import { Button } from "../ui/button"
 import AnimateOnLoad from "../ui/AnimateOnLoad"
 import { solutions } from "@/app/data/solutions"
+import SectionContainer from "@/components/ui/SectionContainer"
 
 export function SolutionsSection() {
 
     return (
-        <section className="bg-brand flex flex-col justify-center items-center px-4 py-8 md:px-12 lg:px-24 md:py-12 font-onest text-white">
+        <SectionContainer variant="brand">
 
             <div className="w-full max-w-7xl flex flex-col justify-center items-center gap-4 md:gap-6">
 
@@ -55,12 +56,7 @@ export function SolutionsSection() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                 </Button>
-
             </div>
-
-        </section>
-
-
+        </SectionContainer>
     )
-
 }
