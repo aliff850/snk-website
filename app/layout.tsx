@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ToastContainer, Bounce } from "react-toastify";
-import { Onest, Poppins } from "next/font/google";
+import { Onest, Poppins, Audiowide } from "next/font/google";
 import { Navigation } from "./components/navigation";
 import { Footer } from "./components/footer";
 import ScrollToTop from "./components/ui/ScrollToTop";
@@ -16,6 +16,12 @@ const onest = Onest({
 const poppins = Poppins({
   variable: "--font-poppins",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+});
+
+const audiowide = Audiowide({
+  variable: "--font-audiowide",
+  weight: ["400"],
   subsets: ["latin"],
 });
 
@@ -35,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body
-        className={`${onest.variable} ${poppins.variable} antialiased snap-y snap-mandatory overflow-y-scroll`}
+        className={`${onest.variable} ${poppins.variable} ${audiowide.variable} antialiased snap-y snap-mandatory overflow-y-scroll`}
       >
         <AuthProvider>
           <ScrollToTop />

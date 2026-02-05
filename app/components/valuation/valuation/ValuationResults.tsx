@@ -65,6 +65,7 @@ export function ValuationResults({ link, results, error, loading, onClearResults
     return (
         <>
             <ValuationDownloadPopup isOpen={showPopup} onClose={() => setShowPopup(false)} />
+
             <div ref={componentRef} className="rounded-2xl md:rounded-3xl border print:border-0 print:shadow-none print:p-4 border-foreground/20 shadow-sm bg-brand-white">
 
                 <div id="valuation-results-header" className="print:px-0 print:py-2 p-4 md:p-6 border-b border-foreground/20 flex items-center justify-between">
@@ -78,6 +79,7 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                             size="sm2"
                             className="md:text-xl flex gap-2"
                             href={link}
+                            title="Clears valuation results"
                         >
                             <span className="hidden md:block">Clear</span>
                             <Ban className="h-6 w-6" />
@@ -97,6 +99,7 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                                     reactToPrintFn()
                                 }
                             }}
+                            title="Downloads valuation results"
                         >
                             <span className="hidden md:block">Download</span>
                             <Download className="h-6 w-6" />

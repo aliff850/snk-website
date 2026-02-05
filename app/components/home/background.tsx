@@ -7,7 +7,6 @@ export function Background() {
     return (
 
         <SectionContainer variant="brand">
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-7xl">
 
                 <AnimateOnLoad animation="fade-in" className="h-full">
@@ -16,33 +15,15 @@ export function Background() {
                             <Image src="/images/snk.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={1200} height={1200} alt="snk" />
                         </div>
 
-                        {/* <div className="absolute grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-                            <div className="p-4 bg-brand-white/90 shadow-lg rounded-2xl hover:scale-105 transition-transform duration-300">
-                                <div className="relative w-full h-16">
-                                    <Image src="/images/bnm.png" alt="BNM" width={160} height={64} className="h-full w-auto object-contain mx-auto" />
-                                </div>
-                            </div>
-                            <div className="p-4 bg-brand-white/90 shadow-lg rounded-2xl hover:scale-105 transition-transform duration-300">
-                                <div className="relative w-full h-16">
-                                    <Image src="/images/piam.png" alt="PIAM" width={160} height={64} className="h-full w-auto object-contain mx-auto" />
-                                </div>
-                            </div>
-                            <div className="p-4 bg-brand-white/90 shadow-lg rounded-2xl hover:scale-105 transition-transform duration-300">
-                                <div className="relative w-full h-16">
-                                    <Image src="/images/mdec.png" alt="MDEC" width={160} height={64} className="h-full w-auto object-contain mx-auto" />
-                                </div>
-                            </div>
-
-                        </div> */}
-
                     </div>
                 </AnimateOnLoad>
 
                 <AnimateOnLoad animation="fade-in-left" className="h-full">
-                    <div className="w-full h-full flex flex-col gap-4 md:gap-6 justify-center text-center md:text-left">
-                        <h1 className="text-4xl lg:text-5xl font-bold">Who Are We?</h1>
+                    <div className="w-full h-full flex flex-col gap-4 md:gap-6 text-center md:text-left">
+                        <h1 className="text-4xl md:text-5xl font-bold">Who Are We?</h1>
 
                         {/* <p className="w-full">We are a pioneer in Malaysia’s Insurtech industry, with over 20 years of experience delivering innovative solutions for motor vehicle valuation and insurance claims. Since 2002, we have grown from providing valuation services to developing advanced digital platforms that connect insurers, adjusters, workshops, and customers in one seamless ecosystem. Our mission is to simplify and automate insurance processes through technology—making claims faster, valuations more accurate, and assistance more accessible to the public.</p> */}
+
                         <p className="w-full">SNK Market Data Research are a pioneer in Malaysia’s Insurtech industry, with over 25 years of experience. Our focus is to automate and innovate the motor claims ecosystem by improving the efficiency, accessibility and functionality of the end to end claims process, in order to better serve key stakeholders and meet the guidelines set by the regulators</p>
 
                         {/* <hr className="w-full border border-background" /> */}

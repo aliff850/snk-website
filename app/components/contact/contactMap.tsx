@@ -1,11 +1,12 @@
-import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
-import { FaLocationDot } from "react-icons/fa6";
-import { MdOutlineSmartphone } from "react-icons/md";
+import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
+import { FaLocationDot } from "react-icons/fa6"
+import { MdOutlineSmartphone } from "react-icons/md"
+import SectionContainer from '../ui/SectionContainer'
 
 
 export function ContactMap() {
     return (
-        <section className="w-full bg-brand py-8 md:py-12 px-4 md:px-12 lg:px-24 font-onest">
+        <SectionContainer variant="brand">
             <div className="w-full max-w-7xl mx-auto flex flex-col gap-4 md:gap-8">
 
                 <AnimateOnLoad animation="fade-in-up">
@@ -92,6 +93,6 @@ export function ContactMap() {
                 </AnimateOnLoad>
 
             </div>
-        </section>
+        </SectionContainer>
     )
 }

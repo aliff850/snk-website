@@ -931,6 +931,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             variant="secondary"
                             size="sm"
                             className="w-full text-lg md:text-xl flex justify-center items-center gap-2"
+                            title="Clears all fields and valuation results"
                         >
                             Reset
                             <RotateCcw className="h-5 w-5" />
