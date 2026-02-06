@@ -4,6 +4,7 @@ import { HelpModal } from "./HelpModal"
 import { ValuationBar } from "../../ui/ValuationBar"
 import { CarValuationNew } from "./cars/CarValuationNew" // Car valuation form component
 import { MotorValuationForm } from "./motorcycle/MotorValuationForm" // Motorcycle valuation form component
+import { CommercialValuation } from "./commercial/CommercialValuation" // Commercial valuation form component
 import { useState } from "react"
 import { HelpCircle } from 'lucide-react'
 import { FaCar } from "react-icons/fa";
@@ -13,6 +14,7 @@ import { ValuationResults } from "./ValuationResults"
 
 export function ValuationLayout() {
     // Active tab state
+    // Set default to car valuation
     const [activeTab, setActiveTab] = useState("car")
 
     // Help modal
@@ -56,7 +58,7 @@ export function ValuationLayout() {
     }
 
     return (
-        <div className="w-full bg-black/50 px-4 md:px-12 lg:px-24 pb-8 md:pb-16 pt-24 relative">
+        <div id="main" className="w-full bg-black/50 px-4 md:px-12 lg:px-24 pb-8 md:pb-16 pt-24 relative">
             {/* Help Button */}
             <button
                 onClick={() => setIsHelpOpen(true)}
@@ -98,19 +100,19 @@ export function ValuationLayout() {
                     </div>
                 </div> */}
 
-            <div className="max-w-6xl mx-auto grid grid-cols-1 gap-4">
+            <div className="max-w-6xl mx-auto grid grid-cols-1 gap-4 md:gap-6">
+
+                <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+                    <FaCar className="w-10 h-10 text-brand-element" />
+                    <h1 className="text-xl text-center md:text-3xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
+                </div>
+
+                <ValuationBar
+                    activeTab={activeTab}
+                    onTabChange={handleTabChange}
+                />
 
                 <div className="grid grid-cols-1 gap-4">
-
-                    <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-                        <FaCar className="w-10 h-10 text-brand-element" />
-                        <h1 className="text-xl text-center md:text-3xl font-bold text-brand-element">SNK Real-Time Online Inquiry Platform</h1>
-                    </div>
-
-                    <ValuationBar
-                        activeTab={activeTab}
-                        onTabChange={handleTabChange}
-                    />
 
                     <HelpModal
                         isOpen={isHelpOpen}
@@ -129,6 +131,14 @@ export function ValuationLayout() {
                     )}
                     {activeTab === "motorcycle" && (
                         <MotorValuationForm
+                            onSearch={handleSearch}
+                            onReset={handleReset}
+                            loading={loading}
+                            onSearchStart={handleSearchStart}
+                        />
+                    )}
+                    {activeTab === "commercial" && (
+                        <CommercialValuation
                             onSearch={handleSearch}
                             onReset={handleReset}
                             loading={loading}

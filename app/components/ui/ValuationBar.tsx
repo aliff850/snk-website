@@ -21,22 +21,20 @@ export function ValuationBar({ activeTab, onTabChange }: ValuationBarProps) {
                 {navItems.map((item) => {
                     const Icon = item.icon
                     const isActive = activeTab === item.value
-                    const isDisabled = item.value === "commercial"
+                    // const isDisabled = item.value !== "car"
 
                     return (
                         <button
                             key={item.label}
-                            onClick={() => !isDisabled && onTabChange(item.value)}
-                            disabled={isDisabled}
+                            onClick={() => onTabChange(item.value)}
+                            //disabled={isDisabled}
                             className={`
                                 flex items-center justify-center gap-2 flex-1 p-2 md:px-4 md:py-2 
                                 rounded-xl md:rounded-2xl font-semibold text-sm md:text-base lg:text-lg 
                                 transition-all duration-300 ease-in-out
                                 ${isActive
                                     ? "text-brand-white bg-brand"
-                                    : isDisabled
-                                        ? "text-foreground/30 cursor-not-allowed"
-                                        : "hover:text-brand-white hover:bg-brand"
+                                    : "hover:text-brand-white hover:bg-brand"
                                 }
                             `}
                         >

@@ -62,6 +62,18 @@ export function ValuationResults({ link, results, error, loading, onClearResults
         documentTitle: documentTitle,
     })
 
+    const scrollToElement = (selector: string) => {
+        const elementId = selector.startsWith('#') ? selector.substring(1) : selector
+        const element = document.getElementById(elementId)
+        if (element) {
+            const elementPosition = element.getBoundingClientRect().top + window.scrollY
+            window.scrollTo({
+                top: elementPosition - 100, // Offset for header/padding
+                behavior: "smooth"
+            })
+        }
+    }
+
     return (
         <>
             <ValuationDownloadPopup isOpen={showPopup} onClose={() => setShowPopup(false)} />
@@ -74,11 +86,14 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                     {/* Buttons for clearing results and downloading */}
                     <div className="flex gap-3 print:hidden">
                         <Button
-                            onClick={onClearResults}
+                            onClick={() => {
+                                onClearResults()
+                                scrollToElement(link)
+                            }}
                             variant="secondary"
                             size="sm2"
                             className="md:text-xl flex gap-2"
-                            href={link}
+                            // href={link}
                             title="Clears valuation results"
                         >
                             <span className="hidden md:block">Clear</span>
@@ -109,22 +124,22 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                 </div>
 
                 {/* Display valuation results */}
-                <div className="md:p-6 print:p-0 print:mt-8">
+                <div className="min-h-svh md:p-6 print:p-0 print:mt-4">
                     {/* Display error message if any */}
                     {error && (
-                        <div className="mb-4 rounded-lg lg:border lg:border-red-200 bg-red-50 p-3 text-red-700 text-sm">
+                        <div className="h-svh flex flex-col items-center justify-center mb-4 rounded-lg lg:border lg:border-red-200 bg-red-50 p-3 text-red-700 text-sm">
                             {error}
                         </div>
                     )}
                     {/* Display message when no results and not loading */}
                     {!results && !loading && (
-                        <div className="rounded-xl lg:border lg:border-dashed lg:border-foreground/20 p-6 text-center text-gray-500">
+                        <div className="h-svh flex flex-col items-center justify-center rounded-xl lg:border lg:border-dashed lg:border-foreground/20 p-6 text-center text-gray-500">
                             <p className="text-sm">Market listings and pricing information will appear here.</p>
                         </div>
                     )}
                     {/* Display loading state when loading */}
                     {loading && (
-                        <div className="flex flex-col items-center gap-4 py-10">
+                        <div className="h-svh flex flex-col items-center justify-center gap-4 py-10">
 
                             <svg
                                 className="h-12 w-12 animate-spin"
@@ -161,21 +176,19 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                     )}
                     {/* Display results when available */}
                     {results && (
-                        <div className="space-y-8">
-                            <div className="p-2 md:p-0 print:p-0">
-                                {/* Display unified listings through UnifiedListingsDisplay component */}
+                        <div className="p-2 md:p-0 print:p-0">
+                            {/* Display unified listings through UnifiedListingsDisplay component */}
 
-                                <UnifiedListingsDisplay
-                                    listings={results?.listings || []}
-                                    listingsAscending={results?.listingsAscending || []}
-                                    listingsDescending={results?.listingsDescending || []}
-                                    vehicleType={results?.vehicleType || 'car'}
-                                    source={results?.source || 'Unknown'}
-                                    counts={results?.counts}
-                                    userInputs={results?.userInputs}
-                                />
+                            <UnifiedListingsDisplay
+                                listings={results?.listings || []}
+                                listingsAscending={results?.listingsAscending || []}
+                                listingsDescending={results?.listingsDescending || []}
+                                vehicleType={results?.vehicleType || 'car'}
+                                source={results?.source || 'Unknown'}
+                                counts={results?.counts}
+                                userInputs={results?.userInputs}
+                            />
 
-                            </div>
                         </div>
                     )}
                 </div>
@@ -187,7 +200,7 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                     <p className="font-bold text-lg">from online sources.</p>
                 </div>
 
-                <div className="hidden print:block mt-8 pt-4 border-t border-gray-200">
+                <div className="hidden print:block mt-4 pt-4 border-t border-gray-200">
                     <div className="flex flex-col gap-2 items-center">
                         <p className="text-center text-sm text-brand font-bold">Valuation produced by SNK Real Time Online Inquiry Platform</p>
                         <p className="text-center text-sm text-brand">© 2026 SNK Market Data. All rights reserved.</p>

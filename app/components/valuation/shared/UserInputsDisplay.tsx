@@ -79,8 +79,8 @@ export default function UserInputsDisplay({
     const VehicleIcon = vehicleType === 'motorcycle' ? FaMotorcycle : Car
 
     return (
-        <div className="rounded-xl border border-foreground/20 bg-brand/5 p-2 md:p-4 print:p-4">
-            <div className="flex items-center gap-2 mb-4">
+        <div className="rounded-xl border border-foreground/20 bg-brand/5 p-2 md:p-4 print:p-4 flex flex-col gap-4 print:gap-2">
+            <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg bg-brand/10">
                     <VehicleIcon className="w-5 h-5 text-brand" />
                 </div>
@@ -92,7 +92,7 @@ export default function UserInputsDisplay({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-3 gap-3 md:gap-4">
 
                 {/* Vehicle Identity */}
-                <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                     <div className="flex items-center gap-2 mb-2">
                         <VehicleIcon className="w-4 h-4 text-gray-500" />
                         <p className="text-xs font-medium text-gray-500">Make and Model</p>
@@ -103,7 +103,7 @@ export default function UserInputsDisplay({
                 </div>
 
                 {/* Year */}
-                <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                     <div className="flex items-center gap-2 mb-2">
                         <Calendar className="w-4 h-4 text-gray-500" />
                         <p className="text-xs font-medium text-gray-500">Year Manufactured</p>
@@ -114,7 +114,7 @@ export default function UserInputsDisplay({
                 </div>
 
                 {/* Region */}
-                <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                     <div className="flex items-center gap-2 mb-2">
                         <MapPin className="w-4 h-4 text-gray-500" />
                         <p className="text-xs font-medium text-gray-500">Region</p>
@@ -125,7 +125,7 @@ export default function UserInputsDisplay({
                 </div>
 
                 {/* Vehicle condition */}
-                <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                     <div className="flex items-center gap-2 mb-2">
                         <Car className="w-4 h-4 text-gray-500" />
                         <p className="text-xs font-medium text-gray-500">Vehicle Condition</p>
@@ -139,7 +139,7 @@ export default function UserInputsDisplay({
                 {vehicleType === 'car' && (
                     <>
                         {/* Variant (Carlist only) */}
-                        <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                             <div className="flex items-center gap-2 mb-2">
                                 <Info className="w-4 h-4 text-gray-500" />
                                 <p className="text-xs font-medium text-gray-500">Variant</p>
@@ -150,7 +150,7 @@ export default function UserInputsDisplay({
                         </div>
 
                         {/* Body Type */}
-                        <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                             <div className="flex items-center gap-2 mb-2">
                                 <Car className="w-4 h-4 text-gray-500" />
                                 <p className="text-xs font-medium text-gray-500">Body Type</p>
@@ -161,7 +161,7 @@ export default function UserInputsDisplay({
                         </div>
 
                         {/* Engine Capacity */}
-                        <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                             <div className="flex items-center gap-2 mb-2">
                                 <Cog className="w-4 h-4 text-gray-500" />
                                 <p className="text-xs font-medium text-gray-500">Engine Capacity</p>
@@ -172,7 +172,7 @@ export default function UserInputsDisplay({
                         </div>
 
                         {/* Fuel Type */}
-                        <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                             <div className="flex items-center gap-2 mb-2">
                                 <Fuel className="w-4 h-4 text-gray-500" />
                                 <p className="text-xs font-medium text-gray-500">Fuel Type</p>
@@ -183,7 +183,7 @@ export default function UserInputsDisplay({
                         </div>
 
                         {/* Transmission */}
-                        <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                             <div className="flex items-center gap-2 mb-2">
                                 <Settings className="w-4 h-4 text-gray-500" />
                                 <p className="text-xs font-medium text-gray-500">Transmission</p>
@@ -194,7 +194,7 @@ export default function UserInputsDisplay({
                         </div>
 
                         {/* Vehicle origin */}
-                        <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                             <div className="flex items-center gap-2 mb-2">
                                 <Bolt className="w-4 h-4 text-gray-500" />
                                 <p className="text-xs font-medium text-gray-500">Vehicle Origin</p>
@@ -205,7 +205,7 @@ export default function UserInputsDisplay({
                         </div>
 
                         {/* Mileage */}
-                        <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
+                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
                             <div className="flex items-center gap-2 mb-2">
                                 <Gauge className="w-4 h-4 text-gray-500" />
                                 <p className="text-xs font-medium text-gray-500">Mileage (KM)</p>
@@ -214,19 +214,19 @@ export default function UserInputsDisplay({
                                 {mileage ? formatMileage(mileage) : "--"}
                             </p>
                         </div>
-
-                        {/* Insured sum */}
-                        <div className="bg-brand-white rounded-lg p-3 border border-foreground/20">
-                            <div className="flex items-center gap-2 mb-2">
-                                <DollarSign className="w-4 h-4 text-gray-500" />
-                                <p className="text-xs font-medium text-gray-500">Previous Insured Sum (MYR)</p>
-                            </div>
-                            <p className="text-sm md:text-base font-semibold text-gray-900">
-                                {insuredPrice ? formatInsuredPrice(insuredPrice) : "--"}
-                            </p>
-                        </div>
                     </>
                 )}
+
+                {/* Insured sum */}
+                <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
+                    <div className="flex items-center gap-2 mb-2">
+                        <DollarSign className="w-4 h-4 text-gray-500" />
+                        <p className="text-xs font-medium text-gray-500">Previous Insured Sum (MYR)</p>
+                    </div>
+                    <p className="text-sm md:text-base font-semibold text-gray-900">
+                        {insuredPrice ? formatInsuredPrice(insuredPrice) : "--"}
+                    </p>
+                </div>
             </div>
         </div>
     )

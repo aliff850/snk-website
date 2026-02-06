@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { ArrowDown, RotateCcw } from 'lucide-react'
+import SearchableSelect from '@/app/components/ui/SearchableSelect'
 import { Button } from "../../../ui/button"
 import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters, getEngineCcRangeFromLiterOption } from "../../ranges"
 
@@ -25,7 +26,8 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     const [availableModels, setAvailableModels] = useState<Record<string, string>>({})
     const [loadingMakes, setLoadingMakes] = useState(false)
 
-    // States for Unified filters
+    // States for all filters (both mudah and carlist)
+    // Any that is unified are stated below
     const [fromOffset, setFromOffset] = useState<number>(0)
     const [limit, setLimit] = useState<number>(50)
     const [type, setType] = useState("sell")
@@ -131,22 +133,28 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
     }, [make]) // Changed dependency to make - we want to fetch once when make is selected
 
-    // Merging all makes
+    // Function which merges all makes from both sources (carlist and mudah)
     const unifiedMakes = useMemo(() => {
         const makes = new Set<string>()
+        // For each make in availableMakes (mudah), add it to the set
         Object.keys(availableMakes).forEach(m => makes.add(m))
+        // For each make in carlistMakes (carlist), add it to the set
         Object.keys(carlistMakes).forEach(m => makes.add(m))
 
         // Basically merge all available makes and models
         return Array.from(makes).sort()
+        // Any make that is in both sources will only appear once
     }, [availableMakes, carlistMakes])
 
-    // Merging all Models
+    // Function which merges all models from both sources (carlist and mudah)
     const unifiedModels = useMemo(() => {
         const models = new Set<string>()
+        // For each model in availableModels (mudah), add it to the set
         Object.keys(availableModels).filter(k => k !== '__id__').forEach(m => models.add(m))
+        // For each model in carlistModels (carlist), add it to the set
         Object.keys(carlistModels).forEach(m => models.add(m))
         return Array.from(models).sort()
+        // Any model that is in both sources will only appear once
     }, [availableModels, carlistModels])
 
     // resets all
@@ -175,6 +183,17 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
         if (onReset) {
             onReset()
+        }
+    }
+
+    const scrollToElement = (id: string) => {
+        const element = document.getElementById(id)
+        if (element) {
+            const elementPosition = element.getBoundingClientRect().top + window.scrollY
+            window.scrollTo({
+                top: elementPosition - 100, // Offset for header/padding
+                behavior: "smooth"
+            })
         }
     }
 
@@ -401,9 +420,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 if (yearQuery) searchQuery.mfg_year = yearQuery
                 if (fuelType) searchQuery.fueltype = fuelType
 
-                // Map body type to car_type_id if needed, or pass as is if it matches
-                // Unified: "sedan", "hatchback", "suv", "mpv", "coupe", "pickup", "convertible", "wagon", "van"
-                // Mudah expects: "sedan", "hatchback", "suvs", "mpvs", "coupe", "sports", "pick_up", "4_wheels", "other"
                 // Some filters have been mapped as "other" as that is the closest match
                 if (bodyType) {
                     const mudahBodyMap: Record<string, string> = {
@@ -630,59 +646,55 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
             <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+                <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
+                    <h3 className="text-lg font-bold text-brand">Car Make/Model</h3>
+                    <p className="text-xs text-foreground">Select the make and model of the vehicle and also the region</p>
+                </div>
                 {/* Make/Model Selection */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-brand font-medium mb-1">*Make</label>
-                        <select
+                        <label className="block text-brand font-medium">*Make</label>
+                        <SearchableSelect
                             value={make}
-                            onChange={(e) => {
-                                setMake(e.target.value)
+                            onChange={(val) => {
+                                setMake(val)
                                 // Models are fetched via effect when make changes
-                                if (!e.target.value) {
+                                if (!val) {
                                     setAvailableModels({})
                                     setCarlistModels({})
                                 }
                             }}
-                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
+                            options={unifiedMakes.map(makeKey => ({
+                                value: makeKey,
+                                label: makeKey.replace(/-/g, ' ').toUpperCase()
+                            }))}
+                            placeholder="Select a make..."
                             disabled={loadingMakes || loadingCarlistMakes}
-                        >
-                            <option value="">Select a make...</option>
-                            {unifiedMakes.map(makeKey => (
-                                <option key={makeKey} value={makeKey}>
-                                    {makeKey.replace(/-/g, ' ').toUpperCase()}
-                                </option>
-                            ))}
-                        </select>
-                        {(loadingMakes || loadingCarlistMakes) && (
-                            <p className="mt-1 text-xs text-foreground/60">Loading makes...</p>
-                        )}
+                            isLoading={loadingMakes || loadingCarlistMakes}
+                            emptyMessage="No makes found"
+                        />
                     </div>
 
                     <div>
-                        <label className="block text-brand font-medium mb-1">*Model</label>
-                        <select
+                        <label className="block text-brand font-medium">*Model</label>
+
+                        <SearchableSelect
                             value={model}
-                            onChange={(e) => setModel(e.target.value)}
-                            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+                            onChange={(val) => setModel(val)}
+                            options={unifiedModels.map(modelKey => ({
+                                value: modelKey,
+                                label: modelKey.replace(/-/g, ' ').toUpperCase()
+                            }))}
+                            placeholder="Select a model..."
                             disabled={!make || (unifiedModels.length === 0)}
-                        >
-                            <option value="">Select a model...</option>
-                            {unifiedModels.map(modelKey => (
-                                <option key={modelKey} value={modelKey}>
-                                    {modelKey.replace(/-/g, ' ').toUpperCase()}
-                                </option>
-                            ))}
-                        </select>
-                        {make && unifiedModels.length === 0 && !loadingMakes && !loadingCarlistMakes && (
-                            <p className="mt-1 text-xs text-foreground/60">No models found for this make</p>
-                        )}
+                            emptyMessage={make ? "No models found for this make" : "Select a make first"}
+                        />
                     </div>
                 </div>
                 {/* Option to change between East and West Malaysia */}
                 <div className="flex flex-col gap-2 border-b-2 border-brand/20 pb-4">
                     <p className="text-brand font-medium">*Region</p>
-                    <div className="flex gap-2">
+                    <div className="flex gap-4">
                         <div className="flex items-center gap-2">
                             <input
                                 type="radio"
@@ -713,12 +725,12 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 </div>
 
                 {/* Vehicle Listing Query */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     {/* Vehicle identity */}
                     <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
+                        <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
                             <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Basic vehicle information</p>
+                            <p className="text-xs">Basic vehicle information</p>
                         </div>
 
                         <div>
@@ -795,9 +807,9 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
                     {/* Technical specifications */}
                     <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
+                        <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
                             <h3 className="text-lg font-bold text-brand">Technical Specifications</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Engine and performance details</p>
+                            <p className="text-xs">Engine and performance details</p>
                         </div>
 
                         <div>
@@ -847,15 +859,13 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                                 ))}
                             </select>
                         </div>
-
-
                     </div>
 
                     {/* Condition & Value */}
                     <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
+                        <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
                             <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Usage and valuation data</p>
+                            <p className="text-xs">Usage and valuation data</p>
                         </div>
 
                         <div>
@@ -898,7 +908,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             <input
                                 type="number"
                                 max={9999999}
-                                placeholder="88888"
+                                placeholder="E.g. 123456"
                                 disabled={fieldsDisabled}
                                 value={insuredPrice}
                                 onChange={(e) => setInsuredPrice(e.target.value)}
@@ -914,8 +924,12 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
                         <Button
                             type="button"
-                            href="#valuation"
-                            onClick={handleSubmit}
+                            // href="#valuation"
+                            onClick={() => {
+                                handleSubmit()
+                                // Small delay to allow react to render the results wrapper or start loading
+                                setTimeout(() => scrollToElement("valuation"), 100)
+                            }}
                             disabled={!canSubmit || loading || isLoading}
                             variant="secondary"
                             size="sm"
@@ -926,8 +940,11 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                         </Button>
                         <Button
                             type="button"
-                            href="#main"
-                            onClick={resetAll}
+                            // href="#main"
+                            onClick={() => {
+                                resetAll()
+                                scrollToElement("main")
+                            }}
                             variant="secondary"
                             size="sm"
                             className="w-full text-lg md:text-xl flex justify-center items-center gap-2"

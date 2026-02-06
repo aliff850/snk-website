@@ -3,7 +3,8 @@
 import { useState, useMemo, useEffect } from "react"
 import { ArrowDown, RotateCcw } from 'lucide-react'
 import { Button } from "../../../ui/button"
-import { yearOptions, priceOptions, MIN_VALUES } from "../../ranges"
+import { yearOptions, MIN_VALUES } from "../../ranges"
+import SearchableSelect from '@/app/components/ui/SearchableSelect'
 
 interface MotorValuationFormProps {
     onSearch: (searchData: any) => void
@@ -210,21 +211,71 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
         }
     }
 
+    const makeOptions = useMemo(() =>
+        Object.keys(availableMakes).map(makeKey => ({
+            value: makeKey,
+            label: makeKey.replace(/-/g, ' ').toUpperCase()
+        })),
+        [availableMakes])
+
+    const modelOptions = useMemo(() =>
+        Object.keys(availableModels)
+            .filter(modelKey => modelKey !== '@id')
+            .map(modelKey => ({
+                value: modelKey,
+                label: modelKey.replace(/-/g, ' ').toUpperCase()
+            })),
+        [availableModels])
+
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
             <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-                    {/* Vehicle identity */}
-                    <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Basic vehicle information</p>
+                    {/* Make model and region */}
+                    <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div className="col-span-2 flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
+                            <h3 className="text-lg font-bold text-brand">Motorcycle Make/Model</h3>
+                            <p className="text-xs text-foreground">Select the make and model of the vehicle and also the region</p>
+                        </div>
+
+                        <div>
+                            <label className="block font-medium text-brand">*Make</label>
+                            <SearchableSelect
+                                value={make}
+                                onChange={(value) => {
+                                    setMake(value)
+                                    if (value) {
+                                        fetchModels(slug(value))
+                                    } else {
+                                        setAvailableModels({})
+                                    }
+                                }}
+                                options={makeOptions}
+                                placeholder="Select a make..."
+                                disabled={loadingMakes}
+                            />
+                            {loadingMakes && <p className="mt-1 text-xs text-foreground/60">Loading makes...</p>}
+                        </div>
+
+                        <div>
+                            <label className="block font-medium text-brand">*Model</label>
+                            <SearchableSelect
+                                value={model}
+                                onChange={(value) => setModel(value)}
+                                options={modelOptions}
+                                placeholder="Select a model..."
+                                disabled={!make || Object.keys(availableModels).length === 0}
+                            />
+                            {make && Object.keys(availableModels).length === 0 && !loadingMakes && (
+                                <p className="mt-1 text-xs text-foreground/60">No models found for this make</p>
+                            )}
                         </div>
 
                         {/* Option to change between East and West Malaysia */}
-                        <div className="flex flex-col gap-2">
-                            <p className="text-sm font-medium">*Region</p>
+                        <div className="col-span-2 flex flex-col gap-2 border-b-2 border-brand/20 pb-4">
+                            <label className="font-medium text-brand">*Region</label>
                             <div className="flex gap-2">
                                 <div className="flex items-center gap-2">
                                     <input
@@ -253,52 +304,17 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Make</label>
-                            <select
-                                value={make}
-                                onChange={(e) => {
-                                    setMake(e.target.value)
-                                    if (e.target.value) {
-                                        fetchModels(slug(e.target.value))
-                                    } else {
-                                        setAvailableModels({})
-                                    }
-                                }}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150"
-                                disabled={loadingMakes}
-                            >
-                                <option value="">Select a make...</option>
-                                {Object.keys(availableMakes).map(makeKey => (
-                                    <option key={makeKey} value={makeKey}>{makeKey.replace(/-/g, ' ').toUpperCase()}</option>
-                                ))}
-                            </select>
-                            {loadingMakes && <p className="mt-1 text-xs text-foreground/60">Loading makes...</p>}
+                    {/* Vehicle identity */}
+                    <div className="space-y-4">
+                        <div className="pb-3 border-b-2 border-brand/20 flex flex-col gap-1">
+                            <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
+                            <p className="text-xs">Basic vehicle information</p>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium mb-1">*Model</label>
-                            <select
-                                value={model}
-                                onChange={(e) => setModel(e.target.value)}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                                disabled={!make || Object.keys(availableModels).length === 0}
-                            >
-                                <option value="">Select a model...</option>
-                                {Object.keys(availableModels)
-                                    .filter(modelKey => modelKey !== '@id')
-                                    .map(modelKey => (
-                                        <option key={modelKey} value={modelKey}>{modelKey.replace(/-/g, ' ').toUpperCase()}</option>
-                                    ))}
-                            </select>
-                            {make && Object.keys(availableModels).length === 0 && !loadingMakes && (
-                                <p className="mt-1 text-xs text-foreground/60">No models found for this make</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Year</label>
+                            <label className="block text-sm font-medium">*Year</label>
                             <select
                                 value={yearFrom}
                                 onChange={(e) => setYearFrom(e.target.value)}
@@ -317,13 +333,13 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
 
                     {/* Search filters */}
                     <div className="space-y-4">
-                        <div className="pb-3 border-b-2 border-brand/20">
+                        <div className="pb-3 border-b-2 border-brand/20 flex flex-col gap-1">
                             <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
-                            <p className="text-xs text-foreground/60 mt-1">Usage and valuation data</p>
+                            <p className="text-xs">Usage and valuation data</p>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium mb-1">*Condition</label>
+                            <label className="block text-sm font-medium">*Condition</label>
                             <select
                                 value={condition}
                                 onChange={(e) => setCondition(e.target.value)}
@@ -340,11 +356,11 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium mb-1">Previous Insured Sum (MYR)</label>
+                            <label className="block text-sm font-medium">Previous Insured Sum (MYR)</label>
                             <input
                                 type="number"
                                 max={9999999}
-                                placeholder="88888"
+                                placeholder="E.g. 123456"
                                 disabled={fieldsDisabled}
                                 value={insuredPrice}
                                 onChange={(e) => setInsuredPrice(e.target.value)}

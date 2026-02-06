@@ -1,7 +1,7 @@
 // UnifiedListingsDisplay
 // To display both Mudah and Carlist in one consolidated container
 
-import { Car, ArrowUpDown, CircleDollarSign } from 'lucide-react'
+import { Car, ArrowUpDown, CircleDollarSign, HandCoins } from 'lucide-react'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import UnifiedGridView from './UnifiedGridView'
 import UserInputsDisplay from '../shared/UserInputsDisplay'
@@ -203,7 +203,7 @@ export default function UnifiedListingsDisplay({
 
     if (!displayListings || displayListings.length === 0) {
         return (
-            <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center">
+            <div className="h-svh flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 p-8 text-center">
                 <Car className="w-12 h-12 mx-auto text-gray-400 mb-3" />
                 <p className="text-gray-500">No listings found</p>
             </div>
@@ -260,6 +260,29 @@ export default function UnifiedListingsDisplay({
         </div>
     )
 
+    // Insurable values component (right now the values are placeholders)
+    const InsurableValue = ({ className = "" }: { className?: string }) => {
+        return (
+            <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-4 ${className}`}>
+                <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 p-2 md:p-4">
+                    <p className="text-sm font-medium text-orange-900">Lowest Insurable Value</p>
+                    <p className="print:text-4xl md:text-4xl font-bold text-orange-950">{formatPrice(lowestPrice)}</p>
+                </div>
+
+                <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-fuchsia-50 to-fuchsia-100 border border-fuchsia-200 p-2 md:p-4">
+                    <p className="text-sm font-medium text-fuchsia-900">Average Insurable Value</p>
+                    <p className="print:text-4xl md:text-4xl font-bold text-fuchsia-950">{formatPrice(averagePrice)}</p>
+                </div>
+
+                <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 p-2 md:p-4">
+                    <p className="text-sm font-medium text-teal-900">Highest Insurable Value</p>
+                    <p className="print:text-4xl md:text-4xl font-bold text-teal-950">{formatPrice(highestPrice)}</p>
+                </div>
+            </div>
+        )
+    }
+
+
     const { user } = useAuth();
 
     return (
@@ -296,9 +319,21 @@ export default function UnifiedListingsDisplay({
                 </div>
             )}
 
-            {/* Price container */}
-            <div ref={priceContainerRef} className="rounded-xl border border-foreground/20 flex flex-col p-2 print:p-4 md:p-4">
-                <div className="flex items-center gap-2 mb-4">
+            {/* Insurable values container */}
+            <div className="rounded-xl border border-foreground/20 flex flex-col gap-4 print:gap-2 p-2 print:p-4 md:p-4">
+                <div className="flex items-center gap-2">
+                    <div className="p-2 rounded-lg bg-orange-100">
+                        <HandCoins className="w-5 h-5 text-orange-900" />
+                    </div>
+                    <h3 className="text-lg md:text-xl font-bold text-foreground">Insurable Value</h3>
+                </div>
+                <InsurableValue />
+                <p className="text-xs">Vehicle insurable value is based on SNK's master database.</p>
+            </div>
+
+            {/* Market value container */}
+            <div ref={priceContainerRef} className="rounded-xl border border-foreground/20 flex flex-col gap-4 print:gap-2 p-2 print:p-4 md:p-4">
+                <div className="flex items-center gap-2">
                     <div className="p-2 rounded-lg bg-green-100">
                         <CircleDollarSign className="w-5 h-5 text-green-900" />
                     </div>
