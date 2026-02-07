@@ -134,7 +134,6 @@ export default function SearchableSelect({
                             <X className="h-4 w-4" />
                         </button>
                     )}
-                    <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
                 </div>
             </div>
 
