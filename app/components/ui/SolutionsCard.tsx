@@ -1,4 +1,5 @@
 import { Button } from "./button"
+import { ArrowRight } from "lucide-react"
 
 interface solutionCardProps {
     image: string,
@@ -34,12 +35,12 @@ export function SolutionCard({
             {/* bg-gradient-to-br from-brand/95 via-brand-element/90 to-brand/95 */}
 
             {/* Sliding Overlay */}
-            <div className="absolute inset-0 bg-brand/85 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                <div className="flex flex-col justify-center items-center h-full p-8 text-center">
-                    <h3 className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
+            <div className="absolute inset-0 bg-brand/85 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out">
+                <div className="flex flex-col gap-4 justify-center items-center h-full p-6 text-center">
+                    <h3 className="text-3xl font-bold text-white drop-shadow-lg">
                         {title}
                     </h3>
-                    <p className="text-white/90 mb-8 leading-relaxed max-w-sm">
+                    <p className="text-white leading-relaxed max-w-sm">
                         {description}
                     </p>
                     <Button
@@ -48,14 +49,7 @@ export function SolutionCard({
                         size="sm"
                     >
                         Learn More
-                        <svg
-                            className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                     </Button>
                 </div>
             </div>

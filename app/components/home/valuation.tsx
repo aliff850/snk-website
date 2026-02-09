@@ -4,32 +4,32 @@ import AnimateOnLoad from "../ui/AnimateOnLoad"
 
 export function ValuationCTA() {
 
-    return(
+    return (
         <section className="bg-[url('/images/g20_2.jpg')] bg-cover bg-center bg-fixed font-onest text-brand-white">
-            <div className="bg-black/70 w-full h-full px-4 md:px-12 lg:px-24 py-8 md:py-24">
+            <div className="bg-black/70 w-full h-full px-4 md:px-12 lg:px-24 py-8 md:py-16">
 
-                <div className="w-full mx-auto flex flex-col gap-8 items-center max-w-7xl">
+                <div className="w-full mx-auto flex flex-col gap-6 items-center max-w-7xl">
                     <AnimateOnLoad animation="fade-in-up">
                         <div className="flex flex-col gap-4">
                             <h1 className="text-4xl md:text-5xl text-center text-brand-element font-bold">Looking To Get The Latest Market Value For Your Car?</h1>
                             <p className="text-xl md:text-2xl text-center text-brand-white font-bold">Try Our Online Vehicle Market Valuation Today</p>
                         </div>
                     </AnimateOnLoad>
-                    
+
                     <AnimateOnLoad animation="fade-in-up" className="w-full flex justify-center">
-                        <Button 
-                            variant="primary" 
-                            size="md" 
-                            href="/valuation" 
+                        <Button
+                            variant="primary"
+                            size="md"
+                            href="/valuation"
                             target="_blank"
                             className="text-lg md:text-xl flex gap-2"
                         >
                             Get Value <ArrowUpRight />
                         </Button>
                     </AnimateOnLoad>
-                                       
+
                 </div>
-            </div>           
+            </div>
         </section>
     )
 

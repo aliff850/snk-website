@@ -11,9 +11,11 @@
   --color-foreground: var(--foreground);
   --font-onest: var(--font-onest);
   --font-poppins: var(--font-poppins);
+  --font-audiowide: var(--font-audiowide);
   /* --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono); */
 
+  --color-brand-black: #171717;
   --color-brand-white: #FFFFFF;
   --color-brand-bg: #FFF0F0;
   --color-brand: #B2252B;
@@ -156,4 +158,76 @@ body {
 
   /* color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif; */
+}
+
+/* Print-specific styles to ensure single-page layout */
+@media print {
+
+  /* Remove default page margins and set custom ones */
+  @page {
+    margin: 0.5cm;
+    size: A4;
+  }
+
+  /* Prevent page breaks inside important elements */
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Custom utility class for preventing page breaks */
+  .print\:page-break-inside-avoid {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Prevent page breaks inside these elements */
+  .print\:avoid-break,
+  [class*="print:block"],
+  [class*="rounded-xl"],
+  [class*="border"] {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Keep footer with content */
+  .print\:block {
+    page-break-before: avoid;
+    break-before: avoid;
+  }
+
+  /* Prevent orphans and widows */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Ensure the main content container doesn't create page breaks */
+  .min-h-svh {
+    min-height: auto !important;
+    page-break-inside: auto;
+  }
+
+  /* Remove excessive spacing in print */
+  .print\:mt-2 {
+    margin-top: 0.25rem !important;
+  }
+
+  .print\:mt-4 {
+    margin-top: 0.5rem !important;
+  }
+
+  /* Ensure footer stays with content */
+  div.hidden.print\:block {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
 }

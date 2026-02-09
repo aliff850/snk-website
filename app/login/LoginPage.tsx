@@ -1,13 +1,14 @@
 "use client";
 
-import { Button } from "../components/ui/button";
-import AnimateOnLoad from "../components/ui/AnimateOnLoad";
-import Link from "next/link";
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Eye, EyeOff } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { Button } from "../components/ui/button"
+import AnimateOnLoad from "../components/ui/AnimateOnLoad"
+import LoginContainer from "../components/ui/LoginContainer"
+import Link from "next/link"
+import { useState } from "react"
+import { toast } from "react-toastify"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Eye, EyeOff } from "lucide-react"
+import { useAuth } from "@/context/AuthContext"
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -68,10 +69,10 @@ export default function LoginPage() {
   return (
     <section className="w-full min-h-svh bg-[url('/images/w214.jpg')] bg-cover bg-center font-onest">
       <div className="w-full h-svh bg-black/50 px-4 md:px-12 lg:px-24 py-16 flex flex-col justify-center items-center">
-        <div className="w-full max-w-xl flex flex-col justify-center items-center bg-brand-white/10 backdrop-blur-sm border border-brand-white/30 px-8 md:px-24 py-8 rounded-3xl text-brand-white shadow-lg">
-          <AnimateOnLoad className="w-full flex flex-col gap-8">
-            <div className="flex flex-col gap-4 justify-center items-center">
-              <h1 className="text-3xl font-bold text-brand-white">Log In</h1>
+        <LoginContainer>
+          <AnimateOnLoad className="w-full flex flex-col gap-4 md:gap-8">
+            <div className="flex flex-col gap-2 md:gap-4 justify-center items-center">
+              <h1 className="text-2xl md:text-3xl font-bold text-brand-white">Log In</h1>
               <p>Log into your SNK account</p>
             </div>
 
@@ -113,7 +114,7 @@ export default function LoginPage() {
               </div>
 
               <div className="w-full flex justify-end">
-                <Link href={`/forgot-password`} className="text-sm text-brand-white/60 hover:text-brand-white transition-colors duration-200 underline decoration-dotted underline-offset-2">Forgot Password?</Link>
+                <Link href={`/forgot-password`} className="text-sm text-brand-white hover:text-brand transition-colors duration-200 underline decoration-dotted underline-offset-2">Forgot Password?</Link>
               </div>
 
 
@@ -135,7 +136,7 @@ export default function LoginPage() {
               </Link>
             </p>
           </AnimateOnLoad>
-        </div>
+        </LoginContainer>
       </div>
     </section>
   );

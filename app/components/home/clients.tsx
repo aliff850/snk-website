@@ -12,7 +12,7 @@ export function ClientSection() {
         { name: "Thai Pai Boon", logo: "/clients/thaipaiboon.svg" },
     ]
 
-    return(
+    return (
 
         <section className="w-full bg-gradient-to-br from-brand-element/40 via-background to-brand-element/40 min-h-svh justify-center items-center px-24 py-16 grid grid-cols-2 gap-8 font-onest text-white">
 
@@ -24,25 +24,20 @@ export function ClientSection() {
             <div className="grid grid-cols-3 gap-4 w-full h-full">
 
                 {clients.map((client, index) => (
-                <div
-                    key={index}
-                    className="hover:scale-105 transition-all duration-300 opacity-60 hover:opacity-100 shadow-lg hover:shadow-2xl rounded-xl p-4 bg-background flex flex-col items-center"
-                >
-                    <Image
-                    src={client.logo || "/placeholder.svg"}
-                    alt={`${client.name} logo`}
-                    width={120}
-                    height={120}
-                    className="object-center w-full"
-                    />
-                </div>
+                    <div
+                        key={index}
+                        className="hover:scale-105 transition-all duration-300 opacity-60 hover:opacity-100 shadow-lg hover:shadow-2xl rounded-xl p-4 bg-background flex flex-col items-center"
+                    >
+                        <Image
+                            src={client.logo || "/placeholder.svg"}
+                            alt={`${client.name} logo`}
+                            width={120}
+                            height={120}
+                            className="object-center w-full"
+                        />
+                    </div>
                 ))}
-
             </div>
-
-
         </section>
-
     )
-
 }

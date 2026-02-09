@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel, Field, field_validator, model_validator
 from cloudscraper import create_scraper
+import re
 
 from typing import Literal, Optional, Annotated
 from json import load, loads
@@ -31,6 +32,8 @@ with open(vehicle_map_path, "r") as f:
 # page_number=1&
 # sort=price.{order}&
 # &_pjax=#classified-listings-result&
+# min_year={min_year}&
+# max_year={max_year}&
 # min_price={min_price}&
 # max_price={max_price}&
 # min_mileage={min_mileage}&
@@ -76,6 +79,8 @@ class SearchQuery(BaseModel):
 class SearchFilters(BaseModel):
     page_size:      Optional[Annotated[int, Field(gt=1)]] = 50
     sort:           Optional[Literal['asc', 'desc']] = None
+    min_year:       Optional[Annotated[int, Field(ge=1900, le=2100)]] = None
+    max_year:       Optional[Annotated[int, Field(ge=1900, le=2100)]] = None
     min_price:      Optional[Annotated[int, Field(ge=0)]] = None
     max_price:      Optional[Annotated[int, Field(ge=0)]] = None
     min_mileage:    Optional[Annotated[int, Field(ge=0)]] = None
@@ -98,6 +103,7 @@ def build_url(query: SearchQuery, filters: SearchFilters) -> str:
     
     Args:
         query: SearchQuery object containing search parameters
+        filters: SearchFilters object containing search filters
         
     Returns:
         str: Formatted URL string
@@ -118,13 +124,13 @@ def build_url(query: SearchQuery, filters: SearchFilters) -> str:
             path_parts.append(f"{group}/{query.model}/")
         else:
             path_parts.append(f"{query.model}/")
-    
+
     if query.variant:
         path_parts.append(f"{query.variant}/")
     
     if query.body_type:
         path_parts.append(f"body-{query.body_type}/")
-    
+
     # Add malaysia base query
     path_parts.append("malaysia")
     
@@ -135,17 +141,15 @@ def build_url(query: SearchQuery, filters: SearchFilters) -> str:
     query_params = ["page_number=1"]
     filter_items = filters.model_dump().items()
 
+    # APPEND ALL FILTERS TO QUERY PARAMETERS
     for parameter, value in filter_items:
         if not value: continue
         query_params.append(f'{parameter}={str(value).split(",")[0]}')
 
-
     # Add query parameters to URL
     url += "?" + "&".join(query_params)
-
     
     return url
-
     
 # def temp_map_vehicles():
 #     from json import load, dump
@@ -168,10 +172,10 @@ def build_url(query: SearchQuery, filters: SearchFilters) -> str:
 
 # temp_map_vehicles()
 
-
+# Function to search Carlist
 @carlistRouter.post('/search')
 def Search(query: SearchQuery, filters: SearchFilters,
-            whitelist_attributes: Optional[list[str]] = ["brand.name", "model", "itemCondition", "vehicleModelDate", "fuelType", "offers.price", "mileageFromOdometer.value", "vehicleTransmission"]):
+            whitelist_attributes: Optional[list[str]] = ["brand.name", "model", "itemCondition", "vehicleModelDate", "fuelType", "offers.price", "mileageFromOdometer.value", "vehicleTransmission", "image[0].url", "mainEntityOfPage"]):
     # print(query.model_dump())
     URL = build_url(query, filters)
     print(f"Generated URL: {URL}")
@@ -194,11 +198,26 @@ def Search(query: SearchQuery, filters: SearchFilters,
     # Filter for selected attributes
     response = []
     if not whitelist_attributes: return listings
-    for item in range(len(listings)):
+    for item in listings:
         filtered_item = {}
         for attribute in whitelist_attributes:
-            keys = attribute.split('.')
-            filtered_item[attribute] = reduce(lambda acc, key: acc[key], keys, listings[item])
+            # keys = attribute.split('.')
+            # Changed this to handle square brackets (due to the image attribute)
+            keys = []
+            for part in attribute.split('.'):
+                matches = re.findall(r'([^\[\]]+)', part)
+                keys.extend(matches)
+            value = item
+
+            try:
+                for key in keys:
+                    if isinstance(value, list) and key.isdigit():
+                        value = value[int(key)]
+                    else:
+                        value = value[key]
+                filtered_item[attribute] = value
+            except (KeyError, IndexError, TypeError):
+                filtered_item[attribute] = None
 
         response.append(filtered_item)
     
@@ -238,6 +257,8 @@ def vehicle_map(make: str = None):
 # ), SearchFilters(
 #     page_size=5,
 #     sort="asc",
+#     min_year=2022,
+#     max_year=2024,
 #     # min_price=10_000,
 #     # max_price=1_000_000,
 #     # min_mileage=5000,

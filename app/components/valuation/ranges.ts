@@ -22,9 +22,11 @@ export const MIN_VALUES = {
 }
 
 // Engine capacity (liters) options and helpers
+// Range: 0.6L (kei cars) to 8.5L (supercars/hypercars)
+// Covers: Kei cars, city cars, sedans, SUVs, trucks, muscle cars, supercars
 export const engineCapacityOptionsLiters: string[] = [
     'Any',
-    ...Array.from({ length: Math.round(((5.0 - 1.0) / 0.1) + 1) }, (_, i) => (1.0 + i * 0.1).toFixed(1))
+    ...Array.from({ length: Math.round(((8.5 - 0.6) / 0.1) + 1) }, (_, i) => (0.6 + i * 0.1).toFixed(1))
 ]
 
 // Given a liter option like "1.5", return an inclusive CC range that

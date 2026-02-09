@@ -131,7 +131,7 @@ export default function ImageGallery({
             onTouchEnd={handleTouchEnd}
             aria-roledescription="carousel"
         >
-            <div className={`relative w-full ${aspectClassName ? aspectClassName : "h-full"}`}>
+            <div className={`relative w-full ${aspectClassName || "aspect-video"}`}>
                 {slides.map((img, i) => (
                     <div
                         key={img.src + i}
@@ -163,7 +163,7 @@ export default function ImageGallery({
                     >
                         <ArrowLeft className="w-5 h-5 md:w-8 md:h-8 ml-2 md:ml-3" />
                     </button>
-                    
+
                     <button
                         aria-label="Next image"
                         onClick={next}
@@ -203,7 +203,7 @@ export default function ImageGallery({
                     >
                         <X className="w-6 h-6" />
                     </button>
-                    
+
                     <div
                         className="relative w-[92vw] h-[80vh]"
                         onClick={closeModal}
