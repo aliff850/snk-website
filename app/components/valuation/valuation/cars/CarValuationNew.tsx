@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react"
 import { ArrowDown, RotateCcw } from 'lucide-react'
 import SearchableSelect from '@/app/components/ui/SearchableSelect'
 import { Button } from "../../../ui/button"
-import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters, getEngineCcRangeFromLiterOption } from "../../ranges"
+import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters } from "../../ranges"
 
 interface CarValuationNewProps {
     onSearch: (searchData: any) => void
@@ -14,57 +14,92 @@ interface CarValuationNewProps {
 }
 
 export function CarValuationNew({ onSearch, onReset, loading = false, onSearchStart }: CarValuationNewProps) {
-    const [isLoading, setIsLoading] = useState(false)
+    // Helper function to assist with smooth scrolling
+    const scrollToElement = (id: string) => {
+        const element = document.getElementById(id)
+        if (element) {
+            const elementPosition = element.getBoundingClientRect().top + window.scrollY
+            window.scrollTo({
+                top: elementPosition - 100, // Offset for header/padding
+                behavior: "smooth"
+            })
+        }
+    }
 
-    // Shared states
+    const [isLoading, setIsLoading] = useState(false)
+    // States for make, model, and region
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
     const [region, setRegion] = useState("west")
 
-    // Mudah state
+    // States for make and model
     const [availableMakes, setAvailableMakes] = useState<Record<string, any>>({})
     const [availableModels, setAvailableModels] = useState<Record<string, string>>({})
     const [loadingMakes, setLoadingMakes] = useState(false)
+    const [loadingModels, setLoadingModels] = useState(false)
 
-    // States for all filters (both mudah and carlist)
-    // Any that is unified are stated below
+    // States for all filters (for both mudah and carlist)
     const [fromOffset, setFromOffset] = useState<number>(0)
     const [limit, setLimit] = useState<number>(50)
     const [type, setType] = useState("sell")
-    const [fuelType, setFuelType] = useState("") // Unified fuel type
-    const [condition, setCondition] = useState("") // Unified condition
-    const [transmission, setTransmission] = useState("") // Unified transmission
-    const [bodyType, setBodyType] = useState("") // Unified body type (was carType / carlistBodyType)
+    const [fuelType, setFuelType] = useState("")
+    const [condition, setCondition] = useState("")
+    const [transmission, setTransmission] = useState("")
+    const [bodyType, setBodyType] = useState("")
 
-    // Mudah specific
+    // Mudah specific states
     const [origin, setOrigin] = useState("")
     const [engineCapacityLiter, setEngineCapacityLiter] = useState<string>("")
     const [yearFrom, setYearFrom] = useState<string>("")
     const [mileageFrom, setMileageFrom] = useState<string>("")
-    const [priceFrom, setPriceFrom] = useState<string>("")
+    // const [priceFrom, setPriceFrom] = useState<string>("")
     const [insuredPrice, setInsuredPrice] = useState<string>("")
 
-    // Carlist state
+    // Carlist states
     const [carlistMakes, setCarlistMakes] = useState<Record<string, any>>({})
     const [carlistModels, setCarlistModels] = useState<Record<string, string | null>>({})
     const [loadingCarlistMakes, setLoadingCarlistMakes] = useState(false)
 
-    // Carlist specific
+    // Carlist specific field for vehicle variants
     const [carlistVariant, setCarlistVariant] = useState("")
 
+    // Helper function to slugify strings
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
+
+    // Helper function to determine if the form can be submitted
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
     const fieldsDisabled = !canSubmit
 
-    // Fetch Mudah makes
-    const fetchMakes = async () => {
+    // Function to fetch both Mudah and Carlist make and models
+    // Instead of fetching one by one, we can fetch both at the same time
+    // Uses Promise.allSettled to handle errors
+    const fetchAllMakes = async () => {
         setLoadingMakes(true)
         try {
-            const response = await fetch('/api/mudah/all_vehicles')
-            if (response.ok) {
-                const makes = await response.json()
-                setAvailableMakes(makes)
+            // Fetch both Mudah and Carlist at the same time
+            const [mudahResult, carlistResult] = await Promise.allSettled([
+                fetch('/api/mudah/all_vehicles'),
+                fetch('/api/carlist/all_vehicles')
+            ])
+
+            // Process Mudah
+            if (mudahResult.status === 'fulfilled' && mudahResult.value.ok) {
+                const data = await mudahResult.value.json()
+                setAvailableMakes(data)
+            } else {
+                console.error("Mudah makes fetch failed")
+                setAvailableMakes({})
             }
+
+            // Process Carlist
+            if (carlistResult.status === 'fulfilled' && carlistResult.value.ok) {
+                const data = await carlistResult.value.json()
+                setCarlistMakes(data)
+            } else {
+                console.error("Carlist makes fetch failed")
+                setCarlistMakes({})
+            }
+
         } catch (e) {
             console.error('Failed to fetch makes:', e)
         } finally {
@@ -72,65 +107,52 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         }
     }
 
-    // Fetch Mudah models
-    const fetchModels = async (makeSlug: string) => {
+    const fetchAllModels = async (makeSlug: string) => {
         try {
-            const response = await fetch(`/api/mudah/all_vehicles?make=${encodeURIComponent(makeSlug)}`)
-            if (response.ok) {
-                const models = await response.json()
-                setAvailableModels(models || {})
+            setLoadingModels(true)
+            // Fetch both Mudah and Carlist at the same time
+            const [mudahResult, carlistResult] = await Promise.allSettled([
+                fetch(`/api/mudah/all_vehicles?make=${encodeURIComponent(makeSlug)}`),
+                fetch(`/api/carlist/all_vehicles?make=${encodeURIComponent(makeSlug)}`)
+            ])
+
+            // Process Mudah models
+            // If status is fulfilled and response is ok, set the available models
+            if (mudahResult.status === 'fulfilled' && mudahResult.value.ok) {
+                const data = await mudahResult.value.json()
+                setAvailableModels(data)
+            } else {
+                console.error("Mudah models fetch failed")
+                setAvailableModels({})
             }
+
+            // Process Carlist models
+            if (carlistResult.status === 'fulfilled' && carlistResult.value.ok) {
+                const data = await carlistResult.value.json()
+                setCarlistModels(data)
+            } else {
+                console.error("Carlist models fetch failed")
+                setCarlistModels({})
+            }
+
         } catch (e) {
             console.error('Failed to fetch models:', e)
-            setAvailableModels({})
-        }
-    }
-
-    // Fetch Carlist makes
-    const fetchCarlistMakes = async () => {
-        setLoadingCarlistMakes(true)
-        try {
-            const response = await fetch('/api/carlist/all_vehicles')
-            if (response.ok) {
-                const makes = await response.json()
-                setCarlistMakes(makes)
-            }
-        } catch (e) {
-            console.error('Failed to fetch Carlist makes:', e)
         } finally {
-            setLoadingCarlistMakes(false)
-        }
-    }
-
-    // Fetch Carlist models
-    const fetchCarlistModels = async (makeSlug: string) => {
-        try {
-            const response = await fetch(`/api/carlist/all_vehicles?make=${encodeURIComponent(makeSlug)}`)
-            if (response.ok) {
-                const models = await response.json()
-                setCarlistModels(models || {})
-            }
-        } catch (e) {
-            console.error('Failed to fetch Carlist models:', e)
-            setCarlistModels({})
+            setLoadingModels(false)
         }
     }
 
     // Fetch makes on mount
     useEffect(() => {
-        fetchMakes()
-        fetchCarlistMakes()
+        fetchAllMakes()
     }, [])
 
     // Refetch models when source changes if make is already selected
     useEffect(() => {
         if (make) {
             const makeSlug = slug(make)
-            // Fetch both models if we have a make
-            fetchModels(makeSlug)
-            fetchCarlistModels(makeSlug)
+            fetchAllModels(makeSlug)
         }
-
     }, [make]) // Changed dependency to make - we want to fetch once when make is selected
 
     // Function which merges all makes from both sources (carlist and mudah)
@@ -157,12 +179,12 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         // Any model that is in both sources will only appear once
     }, [availableModels, carlistModels])
 
-    // resets all
+    // Function which resets all fields
     const resetAll = () => {
         setMake("")
         setModel("")
         setFromOffset(0)
-        setLimit(50)
+        setLimit(50) // Always returns 50 results
         setType("sell")
         setFuelType("")
         setCondition("")
@@ -171,13 +193,13 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         setBodyType("")
         setYearFrom("")
         setMileageFrom("")
-        setPriceFrom("")
         setInsuredPrice("")
         setEngineCapacityLiter("")
 
         // Reset Carlist specific
         setCarlistVariant("")
 
+        // Resets all models
         setCarlistModels({})
         setAvailableModels({})
 
@@ -186,170 +208,151 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         }
     }
 
-    const scrollToElement = (id: string) => {
-        const element = document.getElementById(id)
-        if (element) {
-            const elementPosition = element.getBoundingClientRect().top + window.scrollY
-            window.scrollTo({
-                top: elementPosition - 100, // Offset for header/padding
-                behavior: "smooth"
-            })
-        }
-    }
-
+    // All fetch functions
+    // Function to retrieve Carlist listings
     const getCarlistData = async () => {
         if (!canSubmit) return
 
         try {
+            // Get the make and model slugs
             const makeSlug = slug(make)
             const modelSlug = slug(model)
             const headers = { "Content-Type": "application/json" }
 
-            const query: Record<string, any> = {
-                make: makeSlug,
-                model: modelSlug,
-                condition: 'used'
-            }
-
-            if (carlistVariant) query.variant = carlistVariant
-
-            // Map body type
-            if (bodyType) {
-                // Unified body types: "sedan", "hatchback", "suv", "mpv", "coupe", "pickup", "convertible", "wagon", "van"
-                const bodyTypeMap: Record<string, string> = {
-                    'sedan': 'sedan',
-                    'hatchback': 'Hatchback',
-                    'suv': 'suv',
-                    'mpv': 'MPV',
-                    'coupe': 'Coupe',
-                    'pickup': 'pickup',
-                    'convertible': 'Convertible',
-                    'wagon': 'wagon',
-                    'van': 'van'
+            // Helper function to fetch listings
+            const fetchCarlistData = async (sortOrder: 'asc' | 'desc') => {
+                const query: Record<string, any> = {
+                    make: makeSlug,
+                    model: modelSlug,
+                    condition: 'used'
                 }
-                const mappedBodyType = bodyTypeMap[bodyType] || bodyType
-                query.body_type = mappedBodyType
-            }
 
-            const baseFilters: Record<string, any> = {
-                page_size: 50
-            }
+                if (carlistVariant) query.variant = carlistVariant
 
-            // Map transmission
-            if (transmission) {
-                // Unified: "auto", "manual"
-                const transMap: Record<string, string> = {
-                    'auto': 'Automatic',
-                    'manual': 'Manual'
+                // Map body type
+                if (bodyType) {
+                    // Setting the body type to fit Carlist's API
+                    const bodyTypeMap: Record<string, string> = {
+                        'sedan': 'sedan',
+                        'hatchback': 'Hatchback',
+                        'suv': 'suv',
+                        'mpv': 'MPV',
+                        'coupe': 'Coupe',
+                        'pickup': 'pickup',
+                        'convertible': 'Convertible',
+                        'wagon': 'wagon',
+                        'van': 'van'
+                    }
+                    const mappedBodyType = bodyTypeMap[bodyType] || bodyType
+                    query.body_type = mappedBodyType
                 }
-                baseFilters.transmission = transMap[transmission] || transmission
-            }
 
-            // Map fuel type
-            if (fuelType) {
-                // Unified: "petrol", "hybrid", "diesel", "electric"
-                const fuelMap: Record<string, string> = {
-                    'petrol': 'Petrol',
-                    'diesel': 'Diesel',
-                    'hybrid': 'Hybrid',
-                    'electric': 'Electric'
+                // Set page size
+                const baseFilters: Record<string, any> = {
+                    page_size: 50,
+                    sort: sortOrder
                 }
-                baseFilters.fuel_type = fuelMap[fuelType] || fuelType
-            }
 
-            if (fuelType) {
-                // Unified: "petrol", "hybrid", "diesel", "electric"
-                const fuelMap: Record<string, string> = {
-                    'petrol': 'Petrol',
-                    'diesel': 'Diesel',
-                    'hybrid': 'Hybrid',
-                    'electric': 'Electric'
+                // Map manufactured year range
+                if (yearFrom) {
+                    const y = parseInt(yearFrom, 10)
+                    baseFilters.min_year = y
+                    baseFilters.max_year = y
                 }
-                baseFilters.fuel_type = fuelMap[fuelType] || fuelType
+
+                // Map transmission
+                if (transmission) {
+                    // Making sure auto/manual is sent as Automatic/Manual
+                    const transMap: Record<string, string> = {
+                        'auto': 'Automatic',
+                        'manual': 'Manual'
+                    }
+                    baseFilters.transmission = transMap[transmission] || transmission
+                }
+
+                // Map fuel type
+                if (fuelType) {
+                    // Making sure petrol/diesel/hybrid/electric is sent as Petrol/Diesel/Hybrid/Electric
+                    const fuelMap: Record<string, string> = {
+                        'petrol': 'Petrol',
+                        'diesel': 'Diesel',
+                        'hybrid': 'Hybrid',
+                        'electric': 'Electric'
+                    }
+                    baseFilters.fuel_type = fuelMap[fuelType] || fuelType
+                }
+
+                // Use mileage with 5000 KM window
+                if (mileageFrom) {
+                    const m = parseInt(mileageFrom, 10)
+                    baseFilters.min_mileage = m
+                    baseFilters.max_mileage = m + 5000
+                }
+
+                // After all filters are set, fetch the data
+                const res = await fetch("/api/carlist/search", {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify({
+                        query,
+                        filters: baseFilters,
+                        whitelist_attributes: [
+                            "brand.name",
+                            "model",
+                            "itemCondition",
+                            "vehicleModelDate",
+                            "fuelType",
+                            "offers.price",
+                            "mileageFromOdometer.value",
+                            "vehicleTransmission",
+                            "image[0].url",
+                            "mainEntityOfPage"
+                        ]
+                    })
+                })
+
+                // If response is not ok, throw error
+                if (!res.ok) {
+                    console.error('Failed to fetch Carlist Listings:', res.status)
+                    // throw new Error(`Failed to fetch Carlist Listings: ${res.status}`)
+                }
+                return res.json()
             }
 
-            // Use unified price/mileage
-            if (priceFrom) baseFilters.price = parseInt(priceFrom, 10)
-            if (mileageFrom) baseFilters.mileage = parseInt(mileageFrom, 10)
-
-            // Fetch ascending
-            const ascFilters = { ...baseFilters, sort: 'asc' }
-            const ascRequestBody = {
-                query,
-                filters: ascFilters,
-                whitelist_attributes: [
-                    "brand.name",
-                    "model",
-                    "itemCondition",
-                    "vehicleModelDate",
-                    "fuelType",
-                    "offers.price",
-                    "mileageFromOdometer.value",
-                    "vehicleTransmission"
-                ]
-            }
-
-            // Fetch descending
-            const descFilters = { ...baseFilters, sort: 'desc' }
-            const descRequestBody = {
-                query,
-                filters: descFilters,
-                whitelist_attributes: [
-                    "brand.name",
-                    "model",
-                    "itemCondition",
-                    "vehicleModelDate",
-                    "fuelType",
-                    "offers.price",
-                    "mileageFromOdometer.value",
-                    "vehicleTransmission"
-                ]
-            }
-
-            // Execute both fetch requests
+            // Execute both fetch requests for ascending and descending lists
+            // Use Promise.all to fetch both lists in parallel
             const [ascResponse, descResponse] = await Promise.all([
-                fetch(`/api/carlist/search`, {
-                    method: "POST",
-                    headers,
-                    body: JSON.stringify(ascRequestBody)
+                fetchCarlistData('asc').catch(e => {
+                    console.error('Carlist Ascending Error:', e)
+                    return []
                 }),
-                fetch(`/api/carlist/search`, {
-                    method: "POST",
-                    headers,
-                    body: JSON.stringify(descRequestBody)
+                fetchCarlistData('desc').catch(e => {
+                    console.error('Carlist Descending Error:', e)
+                    return []
                 })
             ])
 
-            if (!ascResponse.ok) {
-                const errorText = await ascResponse.text()
-                throw new Error(`Failed to fetch Carlist Listings (asc): ${ascResponse.status} - ${errorText}`)
-            }
-
-            const ascListings = await ascResponse.json()
-            let descListings: any[] = []
-
-            if (descResponse.ok) {
-                descListings = await descResponse.json()
-            } else {
-                console.warn('Failed to fetch descending Carlist listings, using ascending only')
-                descListings = [...ascListings].reverse()
-            }
-
             // Deduplicate using a combination of fields as unique identifier
+            // listingsMap will store the unique listings
             const listingsMap: Record<string, any> = {}
 
-            // Add ascending listings
-            ascListings.forEach((listing: any) => {
-                // Create unique key from multiple fields
-                const key = `${listing['brand.name']}-${listing['model']}-${listing['offers.price']}-${listing['vehicleModelDate']}`
-                listingsMap[key] = listing
-            })
+            // Helper function to help normalize listing data
+            const processListing = (listing: any) => {
+                const normalized = {
+                    ...listing,
+                    price: listing['offers.price'] || listing.price,
+                    image: listing['image[0].url'] || listing.image,
+                    url: listing['mainEntityOfPage'] || listing.url
+                }
+                // Create a unique key for each listing
+                const key = `${normalized['brand.name']}-${normalized['model']}-${normalized.price}-${normalized['vehicleModelDate']}`
+                listingsMap[key] = normalized
+            }
 
+            // Add ascending listings
+            ascResponse.forEach(processListing)
             // Add descending listings
-            descListings.forEach((listing: any) => {
-                const key = `${listing['brand.name']}-${listing['model']}-${listing['offers.price']}-${listing['vehicleModelDate']}`
-                listingsMap[key] = listing
-            })
+            descResponse.forEach(processListing)
 
             // Convert map values to arrays and sort
             const allListings = Object.values(listingsMap)
@@ -368,37 +371,33 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 listings: uniqueAscending,
                 listingsAscending: uniqueAscending,
                 listingsDescending: uniqueDescending,
-                make: makeSlug,
-                model: modelSlug,
+                make: make,
+                model: model,
                 vehicleType: 'car',
-                source: 'Carlist',
-                userInputs: {
-                    make: make,
-                    model: model,
-                    // condition: carlistCondition,
-                    variant: carlistVariant,
-                    bodyType: bodyType,
-                    transmission: transmission,
-                    fuelType: fuelType,
-                    price: priceFrom,
-                    mileage: mileageFrom,
-                }
+                source: 'Carlist'
             }
+
         } catch (e: any) {
-            throw new Error(e?.message || "Something went wrong with Carlist")
+            // Log the error
+            console.error('Error fetching Carlist data:', e)
+            // Don't throw the error for now
+            // throw new Error(e?.message || "Something went wrong with Carlist")
         }
     }
 
+    // Function to retrieve Mudah listings
     const getMudahData = async () => {
         if (!canSubmit) return
 
         try {
+            // Get the make and model slugs
             const makeSlug = slug(make)
             const modelSlug = slug(model)
             const headers = { "Content-Type": "application/json" }
 
-            // Helper function to fetch listings
+            // Helper function used to fetch listings
             const fetchListings = async (sortOrder: 'price_asc' | 'price_desc') => {
+
                 const searchQuery: Record<string, any> = {
                     make_id: makeSlug,
                     model_id: modelSlug,
@@ -408,19 +407,19 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                     type
                 }
 
-                // building the range filters
-                // Model year
+                // Model year filter
                 const yearQuery = (() => {
                     const from = yearFrom || ""
                     if (!from) return ""
                     if (from) return `${from}-${from}`
                     return `${MIN_VALUES.year}-`
                 })()
-
                 if (yearQuery) searchQuery.mfg_year = yearQuery
+
+                // Fuel type
                 if (fuelType) searchQuery.fueltype = fuelType
 
-                // Some filters have been mapped as "other" as that is the closest match
+                // Body type
                 if (bodyType) {
                     const mudahBodyMap: Record<string, string> = {
                         'sedan': 'sedan',
@@ -429,63 +428,46 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                         'mpv': 'mpvs',
                         'coupe': 'coupe',
                         'pickup': 'pick_up',
-                        'convertible': 'sports', // Closest match
-                        'wagon': 'other', // Closest match
+                        'convertible': 'sports',
+                        'wagon': 'other',
                         'van': 'other'
                     }
                     const mapped = mudahBodyMap[bodyType]
                     if (mapped) searchQuery.car_type_id = mapped
                 }
 
-                // Engine capacity
-                const engineCapacityCcRange = (() => {
-                    if (!engineCapacityLiter) return null
-                    const range = getEngineCcRangeFromLiterOption(engineCapacityLiter)
-                    return range ? `${range.min}-${range.max}` : null
-                })()
-
-                // Mileage
+                // Mileage query with 5000 KM window
                 const mileageQuery = (() => {
                     const from = mileageFrom || ""
                     if (!from) return ""
+
                     const fromNum = parseInt(from, 10)
                     if (Number.isNaN(fromNum)) return ""
 
-                    // Create a 5,000 KM window
-                    const maxOption = mileageOptions.filter(v => v !== 'Any').map(Number).at(-1) ?? fromNum
-                    const toNum = Math.min(fromNum + 5000, maxOption)
-
+                    const toNum = fromNum + 5000
                     return `${from}-${toNum}`
                 })()
-
                 if (mileageQuery) searchQuery.mileage = mileageQuery
 
+                // Transmission
                 if (transmission) searchQuery.transmission_id = transmission
-                const priceQuery = (() => {
-                    const from = priceFrom || ""
-                    if (!from) return ""
-                    if (from) return `${from}-${from}`
-                    return `${MIN_VALUES.price}-`
-                })()
 
-                if (priceQuery) searchQuery.price = priceQuery
-
+                // After query is built, fetch listings 
                 const response = await fetch(`/api/mudah/search`, {
                     method: "POST",
                     headers,
                     body: JSON.stringify({ searchQuery })
                 })
 
+                // If response is not ok, throw error
                 if (!response.ok) {
                     const errorText = await response.text()
                     throw new Error(`Failed to fetch Mudah Listings: ${response.status} - ${errorText}`)
                 }
-
                 return await response.json()
             }
 
-            // Fetch all listings
-            // Always fetch both ascending and descending
+            // Now fetch both ascending and descending order listings
             const [ascendingListings, descendingListings] = await Promise.all([
                 fetchListings('price_asc').catch(e => {
                     console.error('Mudah Ascending Error:', e)
@@ -497,7 +479,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 })
             ])
 
-            // create a map using adview_url as the key to deduplicate
+            // Create a map using adview_url as the key to deduplicate
             const listingsMap: Record<string, any> = {}
 
             // Add ascending listings
@@ -525,20 +507,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 make: makeSlug,
                 model: modelSlug,
                 vehicleType: 'car',
-                source: 'Mudah',
-                userInputs: {
-                    make: make,
-                    model: model,
-                    year: yearFrom,
-                    bodyType: bodyType,
-                    engineCapacity: engineCapacityLiter,
-                    fuelType: fuelType,
-                    transmission: transmission,
-                    origin: origin,
-                    condition: condition,
-                    mileage: mileageFrom,
-                    insuredPrice: insuredPrice,
-                }
+                source: 'Mudah'
             }
         } catch (e: any) {
             throw new Error(e?.message || "Something went wrong with Mudah")
@@ -572,7 +541,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 errors.push(`Carlist: ${e?.message || "Unknown error"}`)
             }
 
-            // Construct user inputs object from state to ensure consistency
+            // Construct all of the user inputs object from state
             const currentUserInputs = {
                 make,
                 model,
@@ -586,8 +555,8 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 condition,
                 mileage: mileageFrom,
                 insuredPrice,
-
                 variant: carlistVariant,
+
             }
 
             if (results.length === 0) {
@@ -639,9 +608,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             setIsLoading(false)
         }
     }
-
-    // const showMudah = sources.includes('mudah')
-    // const showCarlist = sources.includes('carlist')
 
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
@@ -704,6 +670,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                                 checked={region === 'west'}
                                 onChange={(e) => setRegion(e.target.value)}
                                 className="w-4 h-4 accent-brand"
+                                disabled={fieldsDisabled}
                             />
                             <label htmlFor="west">West Malaysia</label>
                         </div>
@@ -717,6 +684,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                                 checked={region === 'east'}
                                 onChange={(e) => setRegion(e.target.value)}
                                 className="w-4 h-4 accent-brand"
+                                disabled={fieldsDisabled}
                             />
                             <label htmlFor="east">East Malaysia</label>
                         </div>

@@ -2,9 +2,8 @@
 
 import { Button } from "../../ui/button"
 import { Ban, Download, X, CarFront } from "lucide-react"
-import UnifiedListingsDisplay from "../listings/UnifiedListingsDisplay"
+import UnifiedListingsDisplay from "../listings/MainValuationContainer"
 import { useState, useRef } from "react"
-// import Image from "next/image"
 import { useReactToPrint } from "react-to-print"
 
 interface ValuationResultsProps {
