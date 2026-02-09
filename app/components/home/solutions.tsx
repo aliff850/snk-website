@@ -1,4 +1,4 @@
-import { SolutionCard } from "../ui/solutionCard"
+import { SolutionCard } from "../ui/SolutionsCard"
 import { Button } from "../ui/button"
 import AnimateOnLoad from "../ui/AnimateOnLoad"
 import { solutions } from "@/app/data/solutions"

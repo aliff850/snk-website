@@ -59,8 +59,16 @@ interface UnifiedListingsDisplayProps {
 }
 
 // Normalize listing from either source
-const normalizeListing = (listing: any): UnifiedListing => {
+const normalizeListing = (listing: any): UnifiedListing | null => {
     // Might rewrite this later to handle both Mudah and Carlist
+
+    // Safety check to see if listing is valid
+    // If listing is not an object, return null
+    if (!listing || typeof listing !== 'object') {
+        console.warn("Invalid listing object:", listing)
+        return null
+    }
+
     // Check if it's a Mudah listing (has adview_url)
     if (listing.adview_url || listing.make_name) {
         return {
@@ -120,15 +128,15 @@ export default function UnifiedListingsDisplay({
 
     // Normalize all listings
     const normalizedListings = useMemo(() => {
-        return listings.map(normalizeListing)
+        return listings.map(normalizeListing).filter((listing): listing is UnifiedListing => listing !== null)
     }, [listings])
 
     const normalizedAscending = useMemo(() => {
-        return listingsAscending.map(normalizeListing)
+        return listingsAscending.map(normalizeListing).filter((listing): listing is UnifiedListing => listing !== null)
     }, [listingsAscending])
 
     const normalizedDescending = useMemo(() => {
-        return listingsDescending.map(normalizeListing)
+        return listingsDescending.map(normalizeListing).filter((listing): listing is UnifiedListing => listing !== null)
     }, [listingsDescending])
 
     // Update filtered listings when view mode or source filter changes
@@ -239,20 +247,20 @@ export default function UnifiedListingsDisplay({
 
     // Price summary component
     const PriceSummary = ({ className = "" }: { className?: string }) => (
-        <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-4 ${className}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 print:gap-2 gap-4 ${className}`}>
             <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
                 <p className="text-sm font-medium text-green-700">Lowest Price</p>
-                <p className="print:text-4xl md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
+                <p className="print:text-3xl md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
             </div>
 
             <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-2 md:p-4">
                 <p className="text-sm font-medium text-purple-700">Average Price</p>
-                <p className="print:text-4xl md:text-4xl font-bold text-purple-900">{formatPrice(averagePrice)}</p>
+                <p className="print:text-3xl md:text-4xl font-bold text-purple-900">{formatPrice(averagePrice)}</p>
             </div>
 
             <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-2 md:p-4">
                 <p className="text-sm font-medium text-blue-700">Highest Price</p>
-                <p className="print:text-4xl md:text-4xl font-bold text-blue-900">{formatPrice(highestPrice)}</p>
+                <p className="print:text-3xl md:text-4xl font-bold text-blue-900">{formatPrice(highestPrice)}</p>
             </div>
         </div>
     )
@@ -260,20 +268,20 @@ export default function UnifiedListingsDisplay({
     // Insurable values component (right now the values are placeholders)
     const InsurableValue = ({ className = "" }: { className?: string }) => {
         return (
-            <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-4 ${className}`}>
+            <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 print:gap-2 gap-4 ${className}`}>
                 <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
                     <p className="text-sm font-medium text-green-900">Lowest Insurable Value</p>
-                    <p className="print:text-4xl md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
+                    <p className="print:text-3xl md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
                 </div>
 
                 <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-2 md:p-4">
                     <p className="text-sm font-medium text-purple-700">Average Insurable Value</p>
-                    <p className="print:text-4xl md:text-4xl font-bold text-purple-900">{formatPrice(averagePrice)}</p>
+                    <p className="print:text-3xl md:text-4xl font-bold text-purple-900">{formatPrice(averagePrice)}</p>
                 </div>
 
                 <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-2 md:p-4">
                     <p className="text-sm font-medium text-blue-700">Highest Insurable Value</p>
-                    <p className="print:text-4xl md:text-4xl font-bold text-blue-900">{formatPrice(highestPrice)}</p>
+                    <p className="print:text-3xl md:text-4xl font-bold text-blue-900">{formatPrice(highestPrice)}</p>
                 </div>
             </div>
         )
@@ -283,7 +291,7 @@ export default function UnifiedListingsDisplay({
     const { user } = useAuth();
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col print:gap-2 gap-4">
             {/* User vehicle details */}
             {userInputs && (
                 <UserInputsDisplay
@@ -317,7 +325,7 @@ export default function UnifiedListingsDisplay({
             )}
 
             {/* Insurable values container */}
-            <div className="rounded-xl border border-foreground/20 flex flex-col gap-4 print:gap-2 p-2 print:p-4 md:p-4">
+            <div className="rounded-xl border border-foreground/20 flex flex-col gap-4 print:gap-2 p-2 print:p-2 md:p-4">
                 <div className="flex items-center gap-2">
                     <div className="p-2 rounded-lg bg-purple-100">
                         <HandCoins className="w-5 h-5 text-purple-900" />
@@ -329,7 +337,7 @@ export default function UnifiedListingsDisplay({
             </div>
 
             {/* Market value container */}
-            <div ref={priceContainerRef} className="rounded-xl border border-foreground/20 flex flex-col gap-4 print:gap-2 p-2 print:p-4 md:p-4">
+            <div ref={priceContainerRef} className="rounded-xl border border-foreground/20 flex flex-col gap-4 print:gap-2 p-2 print:p-2 md:p-4">
                 <div className="flex items-center gap-2">
                     <div className="p-2 rounded-lg bg-purple-100">
                         <CircleDollarSign className="w-5 h-5 text-purple-900" />

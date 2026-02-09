@@ -13,6 +13,46 @@ interface CarValuationNewProps {
     onSearchStart?: () => void
 }
 
+export function FormSelect({
+    value,
+    onChange,
+    disabled,
+    options,
+    labelFormatter
+}: {
+    value: string
+    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
+    disabled: boolean
+    options: string[] | { value: string; label: string }[]
+    labelFormatter?: (value: string) => string
+}) {
+    // Normalize options to always be { value, label } format
+    const normalizedOptions = options.map(option => {
+        if (typeof option === 'string') {
+            // Apply custom formatter if provided, otherwise use the value as-is
+            const label = labelFormatter ? labelFormatter(option) : option
+            return { value: option, label }
+        }
+        return option
+    }).filter(option => option.value !== 'Any') // Filter out 'Any' option
+
+    return (
+        <select
+            value={value}
+            onChange={onChange}
+            disabled={disabled}
+            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+        >
+            <option value="">--</option>
+            {normalizedOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                    {option.label}
+                </option>
+            ))}
+        </select>
+    )
+}
+
 export function CarValuationNew({ onSearch, onReset, loading = false, onSearchStart }: CarValuationNewProps) {
     // Helper function to assist with smooth scrolling
     const scrollToElement = (id: string) => {
@@ -25,6 +65,9 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             })
         }
     }
+    // Label formatters for FormSelect components
+    const formatMileage = (value: string) => `${Number(value).toLocaleString()}+`
+    const formatEngineCapacity = (value: string) => `${value}L`
 
     const [isLoading, setIsLoading] = useState(false)
     // States for make, model, and region
@@ -107,32 +150,88 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         }
     }
 
+    // Helper function to check if make exists in Mudah
+    const makeExistsInMudah = useMemo(() => {
+        if (!make) return false
+        // checks in the availableMakes object if the make exists and returns true if it does
+        return Object.keys(availableMakes).includes(make.toLowerCase())
+    }, [availableMakes, make])
+
+    // Same for Carlist
+    const makeExistsInCarlist = useMemo(() => {
+        if (!make) return false
+        // checks in the carlistMakes object if the make exists and returns true if it does
+        return Object.keys(carlistMakes).includes(make.toLowerCase())
+    }, [carlistMakes, make])
+
+    // Helper function to fetch both Mudah and Carlist models
+    // This is dependent on the make being selected
     const fetchAllModels = async (makeSlug: string) => {
+
         try {
             setLoadingModels(true)
-            // Fetch both Mudah and Carlist at the same time
-            const [mudahResult, carlistResult] = await Promise.allSettled([
-                fetch(`/api/mudah/all_vehicles?make=${encodeURIComponent(makeSlug)}`),
-                fetch(`/api/carlist/all_vehicles?make=${encodeURIComponent(makeSlug)}`)
-            ])
+            // Try to fetch both Mudah and Carlist at once
+
+            // Build fetch promises only for platforms that have the make
+            // Fetch promises are basically just the fetch calls to the API
+            const fetchPromises: Promise<Response>[] = []
+            // Flags to track which platforms have the make
+            const platformFlags = { mudah: false, carlist: false }
+
+            // If make exists in Mudah, add the fetch promise for Mudah
+            if (makeExistsInMudah) {
+                fetchPromises.push(fetch(`/api/mudah/all_vehicles?make=${encodeURIComponent(makeSlug)}`))
+                platformFlags.mudah = true
+            }
+            // If make exists in Carlist, add the fetch promise for Carlist
+            if (makeExistsInCarlist) {
+                fetchPromises.push(fetch(`/api/carlist/all_vehicles?make=${encodeURIComponent(makeSlug)}`))
+                platformFlags.carlist = true
+            }
+
+            // If no fetch promises were built, it means the make does not exist in any platform
+            // Not a likely scenario but good to handle regardless
+            if (fetchPromises.length === 0) {
+                console.log(`Make ${make} does not exist in any platform`)
+                setAvailableModels({})
+                setCarlistModels({})
+                return
+            }
+
+            // Fetch only from available platforms
+            const results = await Promise.allSettled(fetchPromises)
+            let resultsIndex = 0
 
             // Process Mudah models
             // If status is fulfilled and response is ok, set the available models
-            if (mudahResult.status === 'fulfilled' && mudahResult.value.ok) {
-                const data = await mudahResult.value.json()
-                setAvailableModels(data)
-            } else {
-                console.error("Mudah models fetch failed")
-                setAvailableModels({})
+            // If status is rejected or response is not ok, set the available models to empty object
+
+            if (platformFlags.mudah) {
+                // If Mudah flag is true, then we need to process the Mudah models
+                // mudahResult is the result of the fetch call to the Mudah API
+                const mudahResult = results[resultsIndex++] as PromiseSettledResult<Response>
+
+                if (mudahResult.status === 'fulfilled' && mudahResult.value.ok) {
+                    const data = await mudahResult.value.json()
+                    setAvailableModels(data)
+                } else {
+                    console.error("Mudah models fetch failed for make", make)
+                    setAvailableModels({})
+                }
             }
 
             // Process Carlist models
-            if (carlistResult.status === 'fulfilled' && carlistResult.value.ok) {
-                const data = await carlistResult.value.json()
-                setCarlistModels(data)
-            } else {
-                console.error("Carlist models fetch failed")
-                setCarlistModels({})
+            if (platformFlags.carlist) {
+                // If Carlist flag is true, then we need to process the Carlist models
+                const carlistResult = results[resultsIndex++] as PromiseSettledResult<Response>
+
+                if (carlistResult.status === 'fulfilled' && carlistResult.value.ok) {
+                    const data = await carlistResult.value.json()
+                    setCarlistModels(data)
+                } else {
+                    console.error("Carlist models fetch failed for make", make)
+                    setCarlistModels({})
+                }
             }
 
         } catch (e) {
@@ -141,6 +240,20 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             setLoadingModels(false)
         }
     }
+
+    // Helper function to check if model exists in Mudah
+    const modelExistsInMudah = useMemo(() => {
+        if (!model) return false
+        // Checks availableModels object if the model exists and returns true if it does
+        return Object.keys(availableModels).includes(model.toLowerCase())
+    }, [availableModels, model])
+
+    // Helper function to check if model exists in Carlist
+    const modelExistsInCarlist = useMemo(() => {
+        if (!model) return false
+        // Checks carlistModels object as well
+        return Object.keys(carlistModels).includes(model.toLowerCase())
+    }, [carlistModels, model])
 
     // Fetch makes on mount
     useEffect(() => {
@@ -155,7 +268,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         }
     }, [make]) // Changed dependency to make - we want to fetch once when make is selected
 
-    // Function which merges all makes from both sources (carlist and mudah)
+    // Function which merges all makes from both sources so that we can display them in the dropdown
     const unifiedMakes = useMemo(() => {
         const makes = new Set<string>()
         // For each make in availableMakes (mudah), add it to the set
@@ -168,7 +281,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         // Any make that is in both sources will only appear once
     }, [availableMakes, carlistMakes])
 
-    // Function which merges all models from both sources (carlist and mudah)
+    // Function which merges all models from both sources so that we can display them in the dropdown
     const unifiedModels = useMemo(() => {
         const models = new Set<string>()
         // For each model in availableModels (mudah), add it to the set
@@ -195,14 +308,9 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         setMileageFrom("")
         setInsuredPrice("")
         setEngineCapacityLiter("")
-
-        // Reset Carlist specific
         setCarlistVariant("")
-
-        // Resets all models
         setCarlistModels({})
         setAvailableModels({})
-
         if (onReset) {
             onReset()
         }
@@ -213,10 +321,41 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     const getCarlistData = async () => {
         if (!canSubmit) return
 
-        try {
+        // Validate if make exists in Carlist
+        if (!makeExistsInCarlist) {
+            console.log("Make does not exist in Carlist")
+            return {
+                // Returns empty listings to match the expected return type of getCarlistData
+                listings: [],
+                listingsAscending: [],
+                listingsDescending: [],
+                make: make,
+                model: model,
+                vehicleType: 'car',
+                source: 'Carlist',
+                unavailable: true  // Optional flag to indicate platform doesn't support this make
+            }
+        }
 
+        // Validate if model exists in Carlist
+        if (!modelExistsInCarlist) {
+            console.log("Model does not exist in Carlist")
+            return {
+                listings: [],
+                listingsAscending: [],
+                listingsDescending: [],
+                make: make,
+                model: model,
+                vehicleType: 'car',
+                source: 'Carlist',
+                unavailable: true  // Optional flag to indicate platform doesn't support this model
+            }
+        }
+
+        try {
             // Helper function to fetch listings
             const fetchCarlistData = async (sortOrder: 'asc' | 'desc') => {
+                console.log("Make exists for Carlist. Make: ", make)
                 console.log('Fetching Carlist data', sortOrder)
                 // Get the make and model slugs
                 const makeSlug = slug(make)
@@ -384,7 +523,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
         } catch (e: any) {
             // Log the error
-            // Gracefully log the error
             // console.error('Error fetching Carlist data:', e)
             console.log('Error fetching Carlist data:', e)
             return {
@@ -404,6 +542,36 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     const getMudahData = async () => {
         if (!canSubmit) return
 
+        // Validate if make exists in Mudah
+        if (!makeExistsInMudah) {
+            console.log("Make does not exist in Mudah")
+            return {
+                listings: [],
+                listingsAscending: [],
+                listingsDescending: [],
+                make: make,
+                model: model,
+                vehicleType: 'car',
+                source: 'Mudah',
+                unavailable: true
+            }
+        }
+
+        // Validate if model exists in Mudah
+        if (!modelExistsInMudah) {
+            console.log("Model does not exist in Mudah")
+            return {
+                listings: [],
+                listingsAscending: [],
+                listingsDescending: [],
+                make: make,
+                model: model,
+                vehicleType: 'car',
+                source: 'Mudah',
+                unavailable: true  // Optional flag to indicate platform doesn't support this model
+            }
+        }
+
         try {
             // Get the make and model slugs
             const makeSlug = slug(make)
@@ -412,8 +580,8 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
             // Helper function used to fetch listings
             const fetchListings = async (sortOrder: 'price_asc' | 'price_desc') => {
+                console.log("Make exists for Mudah. Make: ", make)
                 console.log('Fetching Mudah data', sortOrder)
-
                 // Base search query
                 const searchQuery: Record<string, any> = {
                     make_id: makeSlug,
@@ -528,6 +696,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 vehicleType: 'car',
                 source: 'Mudah'
             }
+
         } catch (e: any) {
             console.log('Error fetching Mudah data:', e)
             // throw new Error(e?.message || "Something went wrong with Mudah")
@@ -558,18 +727,27 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             const errors: string[] = []
 
             // Fetch from all sources
+            // Try to fetch from Mudah
             try {
                 const mudahResult = await getMudahData()
-                results.push(mudahResult)
+                // Validate if listings is not undefined
+                if (mudahResult && mudahResult.listings !== undefined) {
+                    results.push(mudahResult)
+                }
             } catch (e: any) {
-                errors.push(`Mudah: ${e?.message || "Unknown error"}`)
+                // errors.push(`Mudah: ${e?.message || "Unknown error"}`)
+                console.log('Error fetching Mudah data:', e)
             }
 
+            // Try to fetch from Carlist
             try {
                 const carlistResult = await getCarlistData()
-                results.push(carlistResult)
+                if (carlistResult && carlistResult.listings !== undefined) {
+                    results.push(carlistResult)
+                }
             } catch (e: any) {
-                errors.push(`Carlist: ${e?.message || "Unknown error"}`)
+                // errors.push(`Carlist: ${e?.message || "Unknown error"}`)
+                console.log('Error fetching Carlist data:', e)
             }
 
             // Construct all of the user inputs object from state
@@ -737,38 +915,32 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Year</label>
-                            <select
+                            <FormSelect
                                 value={yearFrom}
                                 onChange={(e) => setYearFrom(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {yearOptions.filter(v => v !== 'Any').map(y => (
-                                    <option key={y} value={y}>{y}</option>
-                                ))}
-                            </select>
+                                options={yearOptions}
+                            />
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Body Type</label>
-                            <select
+                            <FormSelect
                                 value={bodyType}
                                 onChange={(e) => setBodyType(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="sedan">Sedan</option>
-                                <option value="hatchback">Hatchback</option>
-                                <option value="suv">SUV</option>
-                                <option value="mpv">MPV</option>
-                                <option value="coupe">Coupe</option>
-                                <option value="pickup">Pick-up</option>
-                                <option value="convertible">Convertible</option>
-                                <option value="wagon">Wagon</option>
-                                <option value="van">Van</option>
-                            </select>
+                                options={[
+                                    { value: "sedan", label: "Sedan" },
+                                    { value: "hatchback", label: "Hatchback" },
+                                    { value: "suv", label: "SUV" },
+                                    { value: "mpv", label: "MPV" },
+                                    { value: "coupe", label: "Coupe" },
+                                    { value: "pickup", label: "Pick-up" },
+                                    { value: "convertible", label: "Convertible" },
+                                    { value: "wagon", label: "Wagon" },
+                                    { value: "van", label: "Van" },
+                                ]}
+                            />
                         </div>
 
                         {/* Variant */}
@@ -791,19 +963,17 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">*Origin</label>
                             </div>
-                            <select
+                            <FormSelect
                                 value={origin}
                                 onChange={(e) => setOrigin(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="New Local">New Local</option>
-                                <option value="New Import">New Import</option>
-                                <option value="Recon">Reconditioned</option>
-                                <option value="CBU">CBU</option>
-                                <option value="CKD">CKD</option>
-                            </select>
+                                options={[
+                                    { value: "New Local", label: "New Local" },
+                                    { value: "New Import", label: "New Import" },
+                                    { value: "Used Local", label: "Used Local" },
+                                    { value: "Used Import", label: "Used Import" },
+                                ]}
+                            />
                         </div>
                     </div>
 
@@ -816,32 +986,30 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Transmission</label>
-                            <select
+                            <FormSelect
                                 value={transmission}
                                 onChange={(e) => setTransmission(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="auto">Auto</option>
-                                <option value="manual">Manual</option>
-                            </select>
+                                options={[
+                                    { value: "auto", label: "Automatic" },
+                                    { value: "manual", label: "Manual" },
+                                ]}
+                            />
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Fuel Type</label>
-                            <select
+                            <FormSelect
                                 value={fuelType}
                                 onChange={(e) => setFuelType(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="petrol">Petrol</option>
-                                <option value="hybrid">Hybrid</option>
-                                <option value="diesel">Diesel</option>
-                                <option value="electric">Electric</option>
-                            </select>
+                                options={[
+                                    { value: "petrol", label: "Petrol" },
+                                    { value: "diesel", label: "Diesel" },
+                                    { value: "hybrid", label: "Hybrid" },
+                                    { value: "electric", label: "Electric" },
+                                ]}
+                            />
                         </div>
 
                         {/* Engine Capacity */}
@@ -849,17 +1017,13 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">*Engine Capacity (L)</label>
                             </div>
-                            <select
+                            <FormSelect
                                 value={engineCapacityLiter}
                                 onChange={(e) => setEngineCapacityLiter(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {engineCapacityOptionsLiters.filter(v => v !== 'Any').map(l => (
-                                    <option key={l} value={l}>{l}</option>
-                                ))}
-                            </select>
+                                options={engineCapacityOptionsLiters}
+                                labelFormatter={formatEngineCapacity}
+                            />
                         </div>
                     </div>
 
@@ -872,34 +1036,29 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Condition</label>
-                            <select
+                            <FormSelect
                                 value={condition}
                                 onChange={(e) => setCondition(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="Very Poor">Very Poor</option>
-                                <option value="Poor">Poor</option>
-                                <option value="Fair">Fair</option>
-                                <option value="Good">Good</option>
-                                <option value="Very Good">Very Good</option>
-                            </select>
+                                options={[
+                                    { value: "Very Poor", label: "Very Poor" },
+                                    { value: "Poor", label: "Poor" },
+                                    { value: "Fair", label: "Fair" },
+                                    { value: "Good", label: "Good" },
+                                    { value: "Very Good", label: "Very Good" },
+                                ]}
+                            />
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
-                            <select
+                            <FormSelect
                                 value={mileageFrom}
                                 onChange={(e) => setMileageFrom(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {mileageOptions.filter(v => v !== 'Any').map(m => (
-                                    <option key={m} value={m}>{Number(m).toLocaleString()}+</option>
-                                ))}
-                            </select>
+                                options={mileageOptions}
+                                labelFormatter={formatMileage}
+                            />
                         </div>
 
                         {/* Insured Price - Available for both */}

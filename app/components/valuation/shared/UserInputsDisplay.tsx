@@ -4,16 +4,35 @@
 import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign, MapPin, Info, Bolt } from 'lucide-react'
 import { FaMotorcycle } from 'react-icons/fa6'
 
+// Reusable user inputs box component
+export function UserInputsBox({
+    icon,
+    title,
+    value
+}: {
+    icon: React.ReactNode
+    title: string
+    value: string
+}) {
+    return (
+        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
+            <div className="flex items-center gap-2 mb-2">
+                {icon}
+                <p className="text-xs font-medium text-gray-500">{title}</p>
+            </div>
+            <p className="text-sm md:text-base font-semibold text-gray-900">
+                {value}
+            </p>
+        </div>
+    )
+}
+
 interface UserInputsDisplayProps {
     make: string
     model: string
     vehicleType?: 'car' | 'motorcycle'
     year?: string
     region?: string
-    // Motorcycle-specific fields
-    // price?: string
-    // type?: string
-    // Car-specific fields
     bodyType?: string
     engineCapacity?: string
     fuelType?: string
@@ -79,7 +98,7 @@ export default function UserInputsDisplay({
     const VehicleIcon = vehicleType === 'motorcycle' ? FaMotorcycle : Car
 
     return (
-        <div className="rounded-xl border border-foreground/20 bg-brand/5 p-2 md:p-4 print:p-4 flex flex-col gap-4 print:gap-2">
+        <div className="rounded-xl border border-foreground/20 bg-brand/5 p-2 md:p-4 print:p-2 flex flex-col gap-4 print:gap-2">
             <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg bg-brand/10">
                     <VehicleIcon className="w-5 h-5 text-brand" />
@@ -89,144 +108,96 @@ export default function UserInputsDisplay({
                 </h3>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-3 gap-3 md:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-3 print:gap-2 gap-3 md:gap-4">
 
                 {/* Vehicle Identity */}
-                <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                    <div className="flex items-center gap-2 mb-2">
-                        <VehicleIcon className="w-4 h-4 text-gray-500" />
-                        <p className="text-xs font-medium text-gray-500">Make and Model</p>
-                    </div>
-                    <p className="text-sm md:text-base font-semibold text-gray-900">
-                        {formatValue(make)} {formatValue(model)}
-                    </p>
-                </div>
+                <UserInputsBox
+                    icon={<VehicleIcon className="w-4 h-4 text-gray-500" />}
+                    title="Make and Model"
+                    value={`${formatValue(make)} ${formatValue(model)}`}
+                />
 
                 {/* Year */}
-                <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                    <div className="flex items-center gap-2 mb-2">
-                        <Calendar className="w-4 h-4 text-gray-500" />
-                        <p className="text-xs font-medium text-gray-500">Year Manufactured</p>
-                    </div>
-                    <p className="text-sm md:text-base font-semibold text-gray-900">
-                        {year || "--"}
-                    </p>
-                </div>
+                <UserInputsBox
+                    icon={<Calendar className="w-4 h-4 text-gray-500" />}
+                    title="Year Manufactured"
+                    value={year || "--"}
+                />
 
                 {/* Region */}
-                <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                    <div className="flex items-center gap-2 mb-2">
-                        <MapPin className="w-4 h-4 text-gray-500" />
-                        <p className="text-xs font-medium text-gray-500">Region</p>
-                    </div>
-                    <p className="text-sm md:text-base font-semibold text-gray-900">
-                        {formatRegion(region) || "--"} Malaysia
-                    </p>
-                </div>
+                <UserInputsBox
+                    icon={<MapPin className="w-4 h-4 text-gray-500" />}
+                    title="Region"
+                    value={`${formatRegion(region) || "--"} Malaysia`}
+                />
 
                 {/* Vehicle condition */}
-                <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                    <div className="flex items-center gap-2 mb-2">
-                        <Car className="w-4 h-4 text-gray-500" />
-                        <p className="text-xs font-medium text-gray-500">Vehicle Condition</p>
-                    </div>
-                    <p className="text-sm md:text-base font-semibold text-gray-900 capitalize">
-                        {condition ? formatValue(condition) : "--"}
-                    </p>
-                </div>
+                <UserInputsBox
+                    icon={<Car className="w-4 h-4 text-gray-500" />}
+                    title="Vehicle Condition"
+                    value={condition ? formatValue(condition) : "--"}
+                />
 
                 {/* Car-specific fields */}
                 {vehicleType === 'car' && (
                     <>
                         {/* Variant (Carlist only) */}
-                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Info className="w-4 h-4 text-gray-500" />
-                                <p className="text-xs font-medium text-gray-500">Variant</p>
-                            </div>
-                            <p className="text-sm md:text-base font-semibold text-gray-900">
-                                {variant ? formatValue(variant) : "--"}
-                            </p>
-                        </div>
+                        <UserInputsBox
+                            icon={<Info className="w-4 h-4 text-gray-500" />}
+                            title="Variant"
+                            value={variant ? formatValue(variant) : "--"}
+                        />
 
                         {/* Body Type */}
-                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Car className="w-4 h-4 text-gray-500" />
-                                <p className="text-xs font-medium text-gray-500">Body Type</p>
-                            </div>
-                            <p className="text-sm md:text-base font-semibold text-gray-900">
-                                {bodyType ? formatValue(bodyType) : "--"}
-                            </p>
-                        </div>
+                        <UserInputsBox
+                            icon={<Car className="w-4 h-4 text-gray-500" />}
+                            title="Body Type"
+                            value={bodyType ? formatValue(bodyType) : "--"}
+                        />
 
                         {/* Engine Capacity */}
-                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Cog className="w-4 h-4 text-gray-500" />
-                                <p className="text-xs font-medium text-gray-500">Engine Capacity</p>
-                            </div>
-                            <p className="text-sm md:text-base font-semibold text-gray-900">
-                                {engineCapacity ? `${engineCapacity}L` : "--"}
-                            </p>
-                        </div>
+                        <UserInputsBox
+                            icon={<Cog className="w-4 h-4 text-gray-500" />}
+                            title="Engine Capacity"
+                            value={engineCapacity ? `${engineCapacity}L` : "--"}
+                        />
 
                         {/* Fuel Type */}
-                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Fuel className="w-4 h-4 text-gray-500" />
-                                <p className="text-xs font-medium text-gray-500">Fuel Type</p>
-                            </div>
-                            <p className="text-sm md:text-base font-semibold text-gray-900 capitalize">
-                                {fuelType ? formatValue(fuelType) : "--"}
-                            </p>
-                        </div>
+                        <UserInputsBox
+                            icon={<Fuel className="w-4 h-4 text-gray-500" />}
+                            title="Fuel Type"
+                            value={fuelType ? formatValue(fuelType) : "--"}
+                        />
 
                         {/* Transmission */}
-                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Settings className="w-4 h-4 text-gray-500" />
-                                <p className="text-xs font-medium text-gray-500">Transmission</p>
-                            </div>
-                            <p className="text-sm md:text-base font-semibold text-gray-900 capitalize">
-                                {transmission ? formatValue(transmission) : "--"}
-                            </p>
-                        </div>
+                        <UserInputsBox
+                            icon={<Settings className="w-4 h-4 text-gray-500" />}
+                            title="Transmission"
+                            value={transmission ? formatValue(transmission) : "--"}
+                        />
 
                         {/* Vehicle origin */}
-                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Bolt className="w-4 h-4 text-gray-500" />
-                                <p className="text-xs font-medium text-gray-500">Vehicle Origin</p>
-                            </div>
-                            <p className="text-sm md:text-base font-semibold text-gray-900 capitalize">
-                                {origin ? formatValue(origin) : "--"}
-                            </p>
-                        </div>
+                        <UserInputsBox
+                            icon={<Bolt className="w-4 h-4 text-gray-500" />}
+                            title="Vehicle Origin"
+                            value={origin ? formatValue(origin) : "--"}
+                        />
 
                         {/* Mileage */}
-                        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Gauge className="w-4 h-4 text-gray-500" />
-                                <p className="text-xs font-medium text-gray-500">Mileage (KM)</p>
-                            </div>
-                            <p className="text-sm md:text-base font-semibold text-gray-900">
-                                {mileage ? formatMileage(mileage) : "--"}
-                            </p>
-                        </div>
+                        <UserInputsBox
+                            icon={<Gauge className="w-4 h-4 text-gray-500" />}
+                            title="Mileage (KM)"
+                            value={mileage ? formatMileage(mileage) : "--"}
+                        />
                     </>
                 )}
 
                 {/* Insured sum */}
-                <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-                    <div className="flex items-center gap-2 mb-2">
-                        <DollarSign className="w-4 h-4 text-gray-500" />
-                        <p className="text-xs font-medium text-gray-500">Previous Insured Sum (MYR)</p>
-                    </div>
-                    <p className="text-sm md:text-base font-semibold text-gray-900">
-                        {insuredPrice ? formatInsuredPrice(insuredPrice) : "--"}
-                    </p>
-                </div>
+                <UserInputsBox
+                    icon={<DollarSign className="w-4 h-4 text-gray-500" />}
+                    title="Previous Insured Sum (MYR)"
+                    value={insuredPrice ? formatInsuredPrice(insuredPrice) : "--"}
+                />
             </div>
         </div>
     )

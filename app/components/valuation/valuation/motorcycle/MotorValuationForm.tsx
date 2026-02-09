@@ -30,9 +30,7 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
     const [limit, setLimit] = useState<number>(50)
     const [type, setType] = useState<"sell" | "buy">("sell") // Just set  listing type query to sell
     const [yearFrom, setYearFrom] = useState<string>("")
-    // const [priceFrom, setPriceFrom] = useState<string>("")
     const [insuredPrice, setInsuredPrice] = useState<string>("")
-    // Sets the condition of the motorcycle
     const [condition, setCondition] = useState("")
 
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
@@ -74,7 +72,7 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
         fetchMakes()
     }, [])
 
-    // resets all
+    // Resets all fields
     const resetAll = () => {
         setMake("")
         setModel("")
@@ -83,7 +81,6 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
         setType("sell")
         setYearFrom("")
         setInsuredPrice("")
-        // setPriceFrom("")
         if (onReset) {
             onReset()
         }
@@ -123,16 +120,6 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
                 })()
 
                 if (yearQuery) searchQuery.mfg_year = yearQuery
-
-                // Price
-                // const priceQuery = (() => {
-                //     const from = priceFrom || ""
-                //     if (!from) return ""
-                //     if (from) return `${from}-${from}`
-                //     return `${MIN_VALUES.price}-`
-                // })()
-
-                // if (priceQuery) searchQuery.price = priceQuery
 
                 const response = await fetch(`/api/mudah/search`, {
                     method: "POST",
