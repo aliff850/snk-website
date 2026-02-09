@@ -251,8 +251,8 @@ export default function UnifiedListingsDisplay({
             </div>
 
             <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-2 md:p-4">
-                <p className="text-sm font-medium text-purple-700">Highest Price</p>
-                <p className="print:text-4xl md:text-4xl font-bold text-purple-900">{formatPrice(highestPrice)}</p>
+                <p className="text-sm font-medium text-blue-700">Highest Price</p>
+                <p className="print:text-4xl md:text-4xl font-bold text-blue-900">{formatPrice(highestPrice)}</p>
             </div>
         </div>
     )
@@ -263,17 +263,17 @@ export default function UnifiedListingsDisplay({
             <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-4 ${className}`}>
                 <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
                     <p className="text-sm font-medium text-green-900">Lowest Insurable Value</p>
-                    <p className="print:text-4xl md:text-4xl font-bold text-green-950">{formatPrice(lowestPrice)}</p>
+                    <p className="print:text-4xl md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
                 </div>
 
                 <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-2 md:p-4">
-                    <p className="text-sm font-medium text-fuchsia-900">Average Insurable Value</p>
-                    <p className="print:text-4xl md:text-4xl font-bold text-fuchsia-950">{formatPrice(averagePrice)}</p>
+                    <p className="text-sm font-medium text-purple-700">Average Insurable Value</p>
+                    <p className="print:text-4xl md:text-4xl font-bold text-purple-900">{formatPrice(averagePrice)}</p>
                 </div>
 
                 <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-2 md:p-4">
-                    <p className="text-sm font-medium text-blue-900">Highest Insurable Value</p>
-                    <p className="print:text-4xl md:text-4xl font-bold text-blue-950">{formatPrice(highestPrice)}</p>
+                    <p className="text-sm font-medium text-blue-700">Highest Insurable Value</p>
+                    <p className="print:text-4xl md:text-4xl font-bold text-blue-900">{formatPrice(highestPrice)}</p>
                 </div>
             </div>
         )

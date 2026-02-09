@@ -214,24 +214,28 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         if (!canSubmit) return
 
         try {
-            // Get the make and model slugs
-            const makeSlug = slug(make)
-            const modelSlug = slug(model)
-            const headers = { "Content-Type": "application/json" }
 
             // Helper function to fetch listings
             const fetchCarlistData = async (sortOrder: 'asc' | 'desc') => {
+                console.log('Fetching Carlist data', sortOrder)
+                // Get the make and model slugs
+                const makeSlug = slug(make)
+                const modelSlug = slug(model)
+                const headers = { "Content-Type": "application/json" } // Headers for the request
+
+                // Base Carlist search query
                 const query: Record<string, any> = {
                     make: makeSlug,
                     model: modelSlug,
                     condition: 'used'
                 }
 
+                // Variant (if specified)
                 if (carlistVariant) query.variant = carlistVariant
 
                 // Map body type
                 if (bodyType) {
-                    // Setting the body type to fit Carlist's API
+                    // Setting the body type to fit Carlist's API requirements
                     const bodyTypeMap: Record<string, string> = {
                         'sedan': 'sedan',
                         'hatchback': 'Hatchback',
@@ -247,7 +251,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                     query.body_type = mappedBodyType
                 }
 
-                // Set page size
+                // Set page size and sort order
                 const baseFilters: Record<string, any> = {
                     page_size: 50,
                     sort: sortOrder
@@ -313,8 +317,9 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
                 // If response is not ok, throw error
                 if (!res.ok) {
-                    console.error('Failed to fetch Carlist Listings:', res.status)
-                    // throw new Error(`Failed to fetch Carlist Listings: ${res.status}`)
+                    console.log('Failed to fetch Carlist Listings:', res.status)
+                    // console.error('Failed to fetch Carlist Listings:', res.status)
+                    return []
                 }
                 return res.json()
             }
@@ -379,9 +384,19 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
         } catch (e: any) {
             // Log the error
-            console.error('Error fetching Carlist data:', e)
-            // Don't throw the error for now
-            // throw new Error(e?.message || "Something went wrong with Carlist")
+            // Gracefully log the error
+            // console.error('Error fetching Carlist data:', e)
+            console.log('Error fetching Carlist data:', e)
+            return {
+                // Return empty arrays to prevent the app from crashing
+                listings: [],
+                listingsAscending: [],
+                listingsDescending: [],
+                make: make,
+                model: model,
+                vehicleType: 'car',
+                source: 'Carlist'
+            }
         }
     }
 
@@ -397,7 +412,9 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
             // Helper function used to fetch listings
             const fetchListings = async (sortOrder: 'price_asc' | 'price_desc') => {
+                console.log('Fetching Mudah data', sortOrder)
 
+                // Base search query
                 const searchQuery: Record<string, any> = {
                     make_id: makeSlug,
                     model_id: modelSlug,
@@ -407,7 +424,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                     type
                 }
 
-                // Model year filter
+                // Model year (with range)
                 const yearQuery = (() => {
                     const from = yearFrom || ""
                     if (!from) return ""
@@ -462,7 +479,9 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 // If response is not ok, throw error
                 if (!response.ok) {
                     const errorText = await response.text()
-                    throw new Error(`Failed to fetch Mudah Listings: ${response.status} - ${errorText}`)
+                    console.log('Failed to fetch Mudah Listings:', response.status, errorText)
+                    return []
+                    // throw new Error(`Failed to fetch Mudah Listings: ${response.status} - ${errorText}`)
                 }
                 return await response.json()
             }
@@ -510,7 +529,18 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 source: 'Mudah'
             }
         } catch (e: any) {
-            throw new Error(e?.message || "Something went wrong with Mudah")
+            console.log('Error fetching Mudah data:', e)
+            // throw new Error(e?.message || "Something went wrong with Mudah")
+            // Return empty arrays to prevent the app from crashing
+            return {
+                listings: [],
+                listingsAscending: [],
+                listingsDescending: [],
+                make: make,
+                model: model,
+                vehicleType: 'car',
+                source: 'Mudah'
+            }
         }
     }
 
@@ -523,6 +553,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         }
 
         try {
+            // Initialize results and errors arrays
             const results: any[] = []
             const errors: string[] = []
 
@@ -559,24 +590,26 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
             }
 
+            // If no results from any source, return error
             if (results.length === 0) {
                 onSearch({ error: errors.join('; ') || "No results from source" })
                 return
             }
 
-            // Combine results if multiple
+            // Combine and return results
             if (results.length === 1) {
+                // if only one source is available, return the result from that source
                 const result = results[0]
                 onSearch({
                     ...result,
-                    userInputs: currentUserInputs, // Ensure consistent inputs
+                    userInputs: currentUserInputs,
                     counts: {
                         [result.source.toLowerCase()]: result.listings.length,
                         total: result.listings.length
                     }
                 })
             } else {
-                // Combine
+                // Else, combine results from both sources
                 const combinedListings = results.flatMap(r => r.listings)
 
                 // Helper to get price for sorting
@@ -603,7 +636,8 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 })
             }
         } catch (e: any) {
-            onSearch({ error: e?.message || "Something went wrong" })
+            // onSearch({ error: e?.message || "Something went wrong" })
+            console.log(e)
         } finally {
             setIsLoading(false)
         }
