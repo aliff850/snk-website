@@ -1,10 +1,11 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { ArrowDown, RotateCcw } from 'lucide-react'
+import { ArrowDown, RotateCcw, Truck } from 'lucide-react'
 import SearchableSelect from '@/app/components/ui/SearchableSelect'
 import { Button } from "../../../ui/button"
-import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters, getEngineCcRangeFromLiterOption } from "../../ranges"
+import { yearOptions, mileageOptions, engineCapacityOptionsLiters } from "../../ranges"
+import { FormSelect } from "../cars/CarValuationNew"
 
 interface CommercialValuationProps {
     onSearch: (searchData: any) => void
@@ -185,8 +186,6 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
         setBtm("")
         setSeatCapacity("")
         setSeatCapacity("")
-        setDrivenWheel("")
-        setWeightClass("")
 
         // Reset Carlist specific
         setCarlistVariant("")
@@ -202,41 +201,35 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
             <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+                <div className="flex flex-col gap-4 pb-4 border-b-2 border-brand/20">
 
-                {/* Commercial vehicle weight class selection */}
-                {/* Radio buttons to select between below 10 ton and above 10 ton commercial vehicles */}
-                {/* Placeholders for now */}
-                <div className="flex flex-col gap-2 pb-3 border-b-2 border-brand/20">
-                    <div className="flex flex-col">
-                        <h3 className="text-lg font-bold text-brand">Vehicle Weight Class</h3>
-                        <p className="text-xs">Select the weight class of the vehicle</p>
-                    </div>
-
-                    <div className="flex gap-4">
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="below10ton"
-                                name="weightClass"
-                                value="below10ton"
-                                checked={weightClass === 'below10ton'}
-                                onChange={(e) => setWeightClass(e.target.value)}
-                                className="w-4 h-4 accent-brand"
-                            />
-                            <label htmlFor="below10ton" className="">Below 10 Ton</label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="above10ton"
-                                name="weightClass"
-                                value="above10ton"
-                                checked={weightClass === 'above10ton'}
-                                onChange={(e) => setWeightClass(e.target.value)}
-                                className="w-4 h-4 accent-brand"
-                            />
-                            <label htmlFor="above10ton" className="">Above 10 Ton</label>
-                        </div>
+                    {/* Weight class selection */}
+                    <div className="grid grid-cols-2 gap-2 md:gap-4">
+                        {[
+                            { id: 'below10ton', label: 'Below 10 Ton', icon: Truck },
+                            { id: 'above10ton', label: 'Above 10 Ton', icon: Truck }
+                        ].map((item) => {
+                            const Icon = item.icon
+                            const isActive = weightClass === item.id
+                            return (
+                                <button
+                                    key={item.id}
+                                    type="button"
+                                    onClick={() => setWeightClass(item.id)}
+                                    className={`
+                                        flex items-center justify-center gap-2 p-2 md:py-2 md:px-4 
+                                        rounded-xl md:rounded-2xl ring transition-all duration-300 font-bold
+                                        ${isActive
+                                            ? "bg-brand text-brand-white ring-brand shadow-md scale-[1.02]"
+                                            : "bg-white text-brand ring-foreground/10 hover:ring-brand/50 hover:bg-brand/5"
+                                        }
+                                    `}
+                                >
+                                    <Icon className={`w-5 h-5 md:w-6 md:h-6 ${isActive ? "text-brand-white" : "text-brand"}`} />
+                                    <span className="text-sm md:text-base">{item.label}</span>
+                                </button>
+                            )
+                        })}
                     </div>
                 </div>
 
@@ -486,36 +479,6 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
                                     className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                 />
                                 {/* <p className="text-[10px] text-foreground/60 mt-0.5">Weight without load</p> */}
-                            </div>
-                        </div>
-
-                        {/* Driven Wheel & Seat Capacity */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">*Driven Wheel</label>
-                                <select
-                                    value={drivenWheel}
-                                    onChange={(e) => setDrivenWheel(e.target.value)}
-                                    disabled={fieldsDisabled}
-                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                                >
-                                    <option value="">--</option>
-                                    <option value="2wd">2WD</option>
-                                    <option value="4wd">4WD</option>
-                                    <option value="6wd">6WD</option>
-                                    <option value="awd">AWD</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">*Seat Capacity</label>
-                                <input
-                                    type="number"
-                                    placeholder="e.g. 2"
-                                    value={seatCapacity}
-                                    onChange={(e) => setSeatCapacity(e.target.value)}
-                                    disabled={fieldsDisabled}
-                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                                />
                             </div>
                         </div>
                     </div>

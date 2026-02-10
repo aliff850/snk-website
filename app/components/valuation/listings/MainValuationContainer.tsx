@@ -271,17 +271,17 @@ export default function UnifiedListingsDisplay({
             <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 print:gap-2 gap-4 ${className}`}>
                 <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
                     <p className="text-sm font-medium text-green-900">Lowest Insurable Value</p>
-                    <p className="print:text-3xl md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
+                    <p className="print:text-3xl md:text-4xl font-bold text-green-900">RM 0</p>
                 </div>
 
                 <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-2 md:p-4">
                     <p className="text-sm font-medium text-purple-700">Average Insurable Value</p>
-                    <p className="print:text-3xl md:text-4xl font-bold text-purple-900">{formatPrice(averagePrice)}</p>
+                    <p className="print:text-3xl md:text-4xl font-bold text-purple-900">RM 0</p>
                 </div>
 
                 <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-2 md:p-4">
                     <p className="text-sm font-medium text-blue-700">Highest Insurable Value</p>
-                    <p className="print:text-3xl md:text-4xl font-bold text-blue-900">{formatPrice(highestPrice)}</p>
+                    <p className="print:text-3xl md:text-4xl font-bold text-blue-900">RM 0</p>
                 </div>
             </div>
         )
@@ -429,30 +429,6 @@ export default function UnifiedListingsDisplay({
                             </h6>
                             <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
                         </div>
-
-                        {/* Display mode toggle. hidden for now */}
-                        {/* <div className="hidden md:flex gap-2 items-center">
-                            <button
-                                onClick={() => setDisplayMode('grid')}
-                                className={`p-2 rounded-lg transition-colors ${displayMode === 'grid'
-                                        ? 'bg-brand text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                                aria-label="Grid view"
-                            >
-                                <Grid3x3 className="w-5 h-5" />
-                            </button>
-                            <button
-                                onClick={() => setDisplayMode('list')}
-                                className={`p-2 rounded-lg transition-colors ${displayMode === 'list'
-                                        ? 'bg-brand text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                                aria-label="List view"
-                            >
-                                <List className="w-5 h-5" />
-                            </button>
-                        </div> */}
                     </div>
                 </div>
 

@@ -321,25 +321,15 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     const getCarlistData = async () => {
         if (!canSubmit) return
 
-        // Validate if make exists in Carlist
-        if (!makeExistsInCarlist) {
-            console.log("Make does not exist in Carlist")
-            return {
-                // Returns empty listings to match the expected return type of getCarlistData
-                listings: [],
-                listingsAscending: [],
-                listingsDescending: [],
-                make: make,
-                model: model,
-                vehicleType: 'car',
-                source: 'Carlist',
-                unavailable: true  // Optional flag to indicate platform doesn't support this make
-            }
-        }
+        // Validate make and models in Carlist by pushing Make and Model to missingFields array if they do not exist
+        let missingFields = []
 
-        // Validate if model exists in Carlist
-        if (!modelExistsInCarlist) {
-            console.log("Model does not exist in Carlist")
+        if (!makeExistsInCarlist) missingFields.push("Make")
+        if (!modelExistsInCarlist) missingFields.push("Model")
+
+        // If make or model does not exist, return empty arrays and log missing fields
+        if (missingFields.length > 0) {
+            console.log(`Missing fields for Carlist: ${missingFields.join(", ")}`)
             return {
                 listings: [],
                 listingsAscending: [],
@@ -348,7 +338,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 model: model,
                 vehicleType: 'car',
                 source: 'Carlist',
-                unavailable: true  // Optional flag to indicate platform doesn't support this model
+                unavailable: true
             }
         }
 
@@ -542,9 +532,15 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     const getMudahData = async () => {
         if (!canSubmit) return
 
-        // Validate if make exists in Mudah
-        if (!makeExistsInMudah) {
-            console.log("Make does not exist in Mudah")
+        // Validate if make and model exists in Mudah by pushing Make and Model to missingFields array if they do not exist
+        let missingFields = []
+
+        if (!makeExistsInMudah) missingFields.push("Make")
+        if (!modelExistsInMudah) missingFields.push("Model")
+
+        if (missingFields.length > 0) {
+            // If make or model does not exist, return empty arrays and log missing fields
+            console.log(`Missing fields for Mudah: ${missingFields.join(", ")}`)
             return {
                 listings: [],
                 listingsAscending: [],
@@ -554,21 +550,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 vehicleType: 'car',
                 source: 'Mudah',
                 unavailable: true
-            }
-        }
-
-        // Validate if model exists in Mudah
-        if (!modelExistsInMudah) {
-            console.log("Model does not exist in Mudah")
-            return {
-                listings: [],
-                listingsAscending: [],
-                listingsDescending: [],
-                make: make,
-                model: model,
-                vehicleType: 'car',
-                source: 'Mudah',
-                unavailable: true  // Optional flag to indicate platform doesn't support this model
             }
         }
 
