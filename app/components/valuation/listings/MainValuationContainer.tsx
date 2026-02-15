@@ -272,7 +272,9 @@ export default function UnifiedListingsDisplay({
     if (userInputs?.region === "east") {
         averagePrice = Math.round(baseAveragePrice * 1.05)
     } else if (userInputs?.region === "langkawi") {
-        averagePrice = Math.round(baseAveragePrice * 1.1)
+        // averagePrice = Math.round(baseAveragePrice * 1.1)
+        // Comment this out for now since we do not yet have actual percentage for Langkawi
+        averagePrice = baseAveragePrice
     }
 
     // Adjust average price based on condition
