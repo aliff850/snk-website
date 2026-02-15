@@ -1,4 +1,4 @@
-import { Button } from "./button"
+import { Button } from "./ButtonComponent"
 import { ArrowRight } from "lucide-react"
 
 interface solutionCardProps {

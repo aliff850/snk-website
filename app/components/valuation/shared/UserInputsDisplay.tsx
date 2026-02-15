@@ -15,12 +15,12 @@ export function UserInputsBox({
     value: string
 }) {
     return (
-        <div className="bg-brand-white rounded-lg p-3 print:p-2 border border-foreground/20">
-            <div className="flex items-center gap-2 mb-2">
+        <div className="bg-brand-white rounded-2xl p-3 print:p-2 ring-1 ring-brand/20">
+            <div className="flex items-center text-brand-light-grey gap-2 mb-2">
                 {icon}
-                <p className="text-xs font-medium text-gray-500">{title}</p>
+                <p className="text-xs font-medium text-brand-black">{title}</p>
             </div>
-            <p className="text-sm md:text-base font-semibold text-gray-900">
+            <p className="text-sm md:text-base font-semibold text-brand-black">
                 {value}
             </p>
         </div>
@@ -50,8 +50,6 @@ export default function UserInputsDisplay({
     vehicleType = 'car',
     year,
     region,
-    // price,
-    // type,
     bodyType,
     engineCapacity,
     fuelType,
@@ -85,7 +83,10 @@ export default function UserInputsDisplay({
 
     const formatRegion = (value: string | undefined) => {
         if (!value) return 'Not specified'
-        return value.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+        if (value === 'west') return 'West Malaysia'
+        if (value === 'east') return 'East Malaysia'
+        if (value === 'langkawi') return 'Langkawi'
+        // return value.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + " Malaysia"
     }
 
     // const formatPrice = (value: string | undefined) => {
@@ -98,7 +99,7 @@ export default function UserInputsDisplay({
     const VehicleIcon = vehicleType === 'motorcycle' ? FaMotorcycle : Car
 
     return (
-        <div className="rounded-xl border border-foreground/20 bg-brand/5 p-2 md:p-4 print:p-2 flex flex-col gap-4 print:gap-2">
+        <div className="rounded-xl border border-brand-light-grey bg-brand/5 p-2 md:p-4 print:p-2 flex flex-col gap-4 print:gap-2">
             <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg bg-brand/10">
                     <VehicleIcon className="w-5 h-5 text-brand" />
@@ -128,7 +129,7 @@ export default function UserInputsDisplay({
                 <UserInputsBox
                     icon={<MapPin className="w-4 h-4 text-gray-500" />}
                     title="Region"
-                    value={`${formatRegion(region) || "--"} Malaysia`}
+                    value={`${formatRegion(region) || "--"}`}
                 />
 
                 {/* Vehicle condition */}

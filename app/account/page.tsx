@@ -1,10 +1,18 @@
 "use client"
 
 import { useAuth } from "../../context/AuthContext"
-import { Button } from "../components/ui/button"
+import { Button } from "../components/ui/ButtonComponent"
 import { User, Check, CircleAlert, Eye, EyeOff, Cog, Trash, ArrowRight, ChartColumnIncreasing } from "lucide-react"
 import { useState } from "react"
 // import { UnderConstruction } from "../components/utility/underconstruction"
+
+export function DetailContainer({ children }: { children: React.ReactNode }) {
+    return (
+        <div className="flex flex-col gap-2 md:gap-4 rounded-2xl md:rounded-3xl border border-brand-white/30 bg-brand-white/10 text-brand-white p-4 md:p-6">
+            {children}
+        </div>
+    )
+}
 
 export default function AccountPage() {
 
@@ -28,7 +36,7 @@ export default function AccountPage() {
 
                     {/* Account details and subscription section */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                        <div className="flex flex-col gap-2 md:gap-4 rounded-2xl md:rounded-3xl border border-brand-white/30 bg-brand-white/10 text-brand-white p-4 md:p-6">
+                        <DetailContainer>
                             <div className="flex items-center gap-2">
                                 <User className="w-4 h-4 md:w-6 md:h-6" />
                                 <h2 className="text-lg md:text-xl font-bold text-brand-white">Account Details</h2>
@@ -38,10 +46,10 @@ export default function AccountPage() {
                                 <p className="font-bold">Email: <span className="font-normal">{user?.email}</span></p>
                                 <p className="font-bold">Role: <span className="font-normal">{user?.role}</span></p>
                             </div>
-                        </div>
+                        </DetailContainer>
 
                         {/* The subscription things are placeholders for now */}
-                        <div className="flex flex-col gap-2 md:gap-4 rounded-2xl md:rounded-3xl border border-brand-white/30 bg-brand-white/10 text-brand-white p-4 md:p-6">
+                        <DetailContainer>
                             <div className="flex flex-col gap-2 md:gap-0 md:flex-row items-start md:items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <ChartColumnIncreasing className="w-4 h-4 md:w-6 md:h-6" />
@@ -54,13 +62,13 @@ export default function AccountPage() {
                                 <p className="font-bold text-4xl">0</p>
                                 <p>remaining Valuation Tokens.</p>
                             </div>
-                        </div>
+                        </DetailContainer>
 
 
                     </div>
 
                     {/* Account detail update section */}
-                    <div className="flex flex-col gap-2 md:gap-4 rounded-2xl md:rounded-3xl border border-brand-white/30 bg-brand-white/10 text-brand-white p-4 md:p-6">
+                    <DetailContainer>
                         <div className="flex items-center gap-2">
                             <User className="w-4 h-4 md:w-6 md:h-6" />
                             <h2 className="text-lg md:text-xl font-bold text-brand-white">Update Account Details</h2>
@@ -162,10 +170,10 @@ export default function AccountPage() {
                                 </Button>
                             </div>
                         </form>
-                    </div>
+                    </DetailContainer>
 
                     {/* Section to request account deletion */}
-                    <div className="flex flex-col gap-4 rounded-2xl md:rounded-3xl border border-brand-white/30 bg-brand-white/10 text-brand-white p-4 md:p-6">
+                    <DetailContainer>
                         <div className="flex items-center gap-2">
                             <Trash className="w-6 h-6" />
                             <h2 className="text-2xl font-bold">Delete Account</h2>
@@ -177,8 +185,7 @@ export default function AccountPage() {
                                 Delete Account <Trash className="ml-2" />
                             </Button>
                         </div>
-                    </div>
-
+                    </DetailContainer>
                 </div>
             </div>
         </section>

@@ -3,7 +3,7 @@
 import AnimateOnLoad from "@/components/ui/AnimateOnLoad"
 import LoginContainer from "@/components/ui/LoginContainer"
 // import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/app/components/ui/ButtonComponent"
 import { ArrowRight, CircleAlert, Eye, EyeOff } from "lucide-react"
 import { useState, useEffect } from "react"
 import { resetPassword } from "@/utils/authentication"

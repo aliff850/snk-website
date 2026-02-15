@@ -2,7 +2,7 @@ import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
 import { Accordion, AccordionItemWithContext, AccordionTrigger, AccordionContent } from '@/components/ui/FaqAccordion'
 import SectionContainer from '@/components/ui/SectionContainer'
 // import Link from 'next/link';
-import { Button } from '../ui/button'
+import { Button } from '../ui/ButtonComponent'
 import { Phone } from 'lucide-react'
 
 export function FAQSection() {

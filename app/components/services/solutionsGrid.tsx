@@ -1,7 +1,7 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad'
 import Image from 'next/image'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
-import { Button } from '../ui/button'
+import { Button } from '../ui/ButtonComponent'
 import { solutions } from '@/app/data/solutions'
 import { ValuationBanner } from './valuationSection'
 import { LucideAArrowDown } from 'lucide-react'

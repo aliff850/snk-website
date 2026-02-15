@@ -2,9 +2,13 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { ArrowDown, RotateCcw } from 'lucide-react'
-import { Button } from "../../../ui/button"
+import { Button } from "../../../ui/ButtonComponent"
 import { yearOptions, MIN_VALUES } from "../../ranges"
+import { RegionSelection } from "../../shared/RegionSelection"
 import SearchableSelect from '@/app/components/ui/SearchableSelect'
+import { FormTextInput, FormSelect } from "../cars/CarValuationNew"
+import { MakeModelPopup } from "../../shared/MakeModelPopup"
+import { scrollToElement } from "@/app/components/ui/SmoothScroll"
 
 interface MotorValuationFormProps {
     onSearch: (searchData: any) => void
@@ -36,6 +40,7 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
     const fieldsDisabled = !canSubmit
+    const [showPopup, setShowPopup] = useState(false)
 
     // Fetch Mudah motorcycle makes
     const fetchMakes = async () => {
@@ -87,7 +92,10 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
     }
 
     const getMudahData = async () => {
-        if (!canSubmit) return
+        if (!canSubmit) {
+            setShowPopup(true)
+            return
+        }
 
         setIsLoading(true)
         if (onSearchStart) {
@@ -107,10 +115,8 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
                     From: fromOffset,
                     limit,
                     sortby: sortOrder
-                    // type 
                 }
 
-                // building the range filters
                 // Model year
                 const yearQuery = (() => {
                     const from = yearFrom || ""
@@ -216,17 +222,25 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
 
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
-            <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <form id="motorcycle-form" className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+                <label htmlFor="motorcycle-form" className="sr-only">Motorcycle Valuation Form</label>
+                {/* Region options */}
+                <div className="col-span-2">
+                    <RegionSelection
+                        value={region}
+                        onChange={setRegion}
+                    />
+                </div>
 
-                    {/* Make model and region */}
-                    <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Make model and region */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                        <div className="col-span-2 flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Motorcycle Make/Model</h3>
-                            <p className="text-xs text-foreground">Select the make and model of the vehicle and also the region</p>
-                        </div>
+                    <div className="col-span-2 flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
+                        <h3 className="text-lg font-bold text-brand">Motorcycle Make/Model</h3>
+                        <p className="text-xs text-foreground">Select the make and model of the vehicle</p>
+                    </div>
 
+                    <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
                         <div>
                             <label className="block font-medium text-brand">*Make</label>
                             <SearchableSelect
@@ -259,67 +273,29 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
                                 <p className="mt-1 text-xs text-foreground/60">No models found for this make</p>
                             )}
                         </div>
-
-                        {/* Option to change between East and West Malaysia */}
-                        <div className="col-span-2 flex flex-col gap-2 border-b-2 border-brand/20 pb-4">
-                            <label className="font-medium text-brand">*Region</label>
-                            <div className="flex gap-2">
-                                <div className="flex items-center gap-2">
-                                    <input
-                                        type="radio"
-                                        id="west"
-                                        name="region"
-                                        value="west"
-                                        checked={region === 'west'}
-                                        onChange={(e) => setRegion(e.target.value)}
-                                        className="w-4 h-4 accent-brand"
-                                    />
-                                    <label htmlFor="west">West Malaysia</label>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    <input
-                                        type="radio"
-                                        id="east"
-                                        name="region"
-                                        value="east"
-                                        checked={region === 'east'}
-                                        onChange={(e) => setRegion(e.target.value)}
-                                        className="w-4 h-4 accent-brand"
-                                    />
-                                    <label htmlFor="east">East Malaysia</label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+                </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
                     {/* Vehicle identity */}
-                    <div className="space-y-4">
+                    <div className="flex flex-col gap-4">
                         <div className="pb-3 border-b-2 border-brand/20 flex flex-col gap-1">
                             <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
                             <p className="text-xs">Basic vehicle information</p>
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium">*Year</label>
-                            <select
+                            <FormSelect
                                 value={yearFrom}
                                 onChange={(e) => setYearFrom(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {yearOptions.filter(v => v !== 'Any').map(y => (
-                                    <option key={y} value={y}>{y}</option>
-                                ))}
-                            </select>
+                                options={yearOptions}
+                            />
                         </div>
-
-
                     </div>
 
                     {/* Search filters */}
-                    <div className="space-y-4">
+                    <div className="flex flex-col gap-4">
                         <div className="pb-3 border-b-2 border-brand/20 flex flex-col gap-1">
                             <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
                             <p className="text-xs">Usage and valuation data</p>
@@ -327,67 +303,68 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
 
                         <div>
                             <label className="block text-sm font-medium">*Condition</label>
-                            <select
+                            <FormSelect
                                 value={condition}
                                 onChange={(e) => setCondition(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="Very Poor">Very Poor</option>
-                                <option value="Poor">Poor</option>
-                                <option value="Fair">Fair</option>
-                                <option value="Good">Good</option>
-                                <option value="Very Good">Very Good</option>
-                            </select>
+                                options={[
+                                    { value: "Very Poor", label: "Very Poor" },
+                                    { value: "Poor", label: "Poor" },
+                                    { value: "Fair", label: "Fair" },
+                                    { value: "Good", label: "Good" },
+                                    { value: "Very Good", label: "Very Good" }
+                                ]}
+                            />
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium">Previous Insured Sum (MYR)</label>
-                            <input
+                            <FormTextInput
                                 type="number"
                                 max={9999999}
                                 placeholder="E.g. 123456"
                                 disabled={fieldsDisabled}
                                 value={insuredPrice}
                                 onChange={(e) => setInsuredPrice(e.target.value)}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             />
-                        </div>
-
-                    </div>
-
-                    <div className="col-span-full flex pt-4 lg:pt-0 w-full">
-                        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
-                            <Button
-                                type="button"
-                                href="#valuation"
-                                onClick={() => {
-                                    getMudahData()
-                                }}
-                                disabled={!canSubmit || loading || isLoading}
-                                variant="secondary"
-                                size="sm"
-                                className="w-full text-lg md:text-xl flex justify-center gap-2"
-                            >
-                                Get Market Value
-                                <ArrowDown className="h-5 w-5" />
-                            </Button>
-                            <Button
-                                type="button"
-                                href="#main"
-                                onClick={resetAll}
-                                variant="secondary"
-                                size="sm"
-                                className="w-full text-lg md:text-xl flex justify-center items-center gap-2"
-                            >
-                                Reset
-                                <RotateCcw className="h-5 w-5" />
-                            </Button>
                         </div>
                     </div>
                 </div>
+
+                <div className="flex w-full">
+                    <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
+                        <Button
+                            type="button"
+                            href="#valuation"
+                            onClick={() => {
+                                getMudahData()
+                                if (canSubmit) {
+                                    setTimeout(() => scrollToElement("valuation"), 100)
+                                }
+                            }}
+                            disabled={loading || isLoading}
+                            variant="secondary"
+                            size="sm"
+                            className="w-full text-lg md:text-xl flex justify-center gap-2"
+                        >
+                            Get Market Value
+                            <ArrowDown className="h-5 w-5" />
+                        </Button>
+                        <Button
+                            type="button"
+                            href="#main"
+                            onClick={resetAll}
+                            variant="secondary"
+                            size="sm"
+                            className="w-full text-lg md:text-xl flex justify-center items-center gap-2"
+                        >
+                            Reset
+                            <RotateCcw className="h-5 w-5" />
+                        </Button>
+                    </div>
+                </div>
             </form>
+            <MakeModelPopup isOpen={showPopup} onClose={() => setShowPopup(false)} />
         </div>
     )
 }

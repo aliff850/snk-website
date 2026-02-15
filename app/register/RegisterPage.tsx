@@ -1,7 +1,7 @@
 "use client";
 
 import AnimateOnLoad from "../components/ui/AnimateOnLoad";
-import { Button } from "../components/ui/button";
+import { Button } from "../components/ui/ButtonComponent";
 import LoginContainer from "../components/ui/LoginContainer";
 import Link from "next/link";
 import { signup } from "@/utils/authentication";

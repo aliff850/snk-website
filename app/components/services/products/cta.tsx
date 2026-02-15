@@ -1,5 +1,5 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
-import { Button } from '../../ui/button';
+import { Button } from '../../ui/ButtonComponent';
 import { ArrowUpRight } from "lucide-react"
 
 interface ProductCTAProps {
