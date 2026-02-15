@@ -1,5 +1,5 @@
 import { SolutionCard } from "../ui/SolutionsCard"
-import { Button } from "../ui/button"
+import { Button } from "../ui/ButtonComponent"
 import AnimateOnLoad from "../ui/AnimateOnLoad"
 import { solutions } from "@/app/data/solutions"
 import SectionContainer from "@/components/ui/SectionContainer"

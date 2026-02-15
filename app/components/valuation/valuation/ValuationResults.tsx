@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "../../ui/button"
+import { Button } from "../../ui/ButtonComponent"
 import { Ban, Download, X, CarFront } from "lucide-react"
 import UnifiedListingsDisplay from "../listings/MainValuationContainer"
 import { useState, useRef } from "react"
@@ -79,11 +79,10 @@ export function ValuationResults({ link, results, error, loading, onClearResults
 
             <div ref={componentRef} className="rounded-2xl md:rounded-3xl border print:border-0 print:shadow-none print:p-4 border-foreground/20 shadow-sm bg-brand-white print:page-break-inside-avoid">
 
-                <div id="valuation-results-header" className="print:px-0 print:py-2 p-4 md:p-6 border-b border-foreground/20 flex items-center justify-between">
+                <div id="valuation-results-header" className="print:px-0 print:py-2 p-4 md:p-6 flex items-center justify-between">
                     <h4 className="text-2xl md:text-3xl text-brand font-bold">Valuation Result</h4>
-
                     {/* Buttons for clearing results and downloading */}
-                    <div className="flex gap-3 print:hidden">
+                    <div className="flex gap-4 print:hidden">
                         <Button
                             onClick={() => {
                                 onClearResults()
@@ -118,7 +117,6 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                             <span className="hidden md:block">Download</span>
                             <Download className="h-6 w-6" />
                         </Button>
-
                     </div>
                 </div>
 

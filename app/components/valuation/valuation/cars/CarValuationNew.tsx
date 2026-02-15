@@ -3,8 +3,11 @@
 import { useState, useMemo, useEffect } from "react"
 import { ArrowDown, RotateCcw } from 'lucide-react'
 import SearchableSelect from '@/app/components/ui/SearchableSelect'
-import { Button } from "../../../ui/button"
+import { Button } from "../../../ui/ButtonComponent"
 import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters } from "../../ranges"
+import { RegionSelection } from "../../shared/RegionSelection"
+import { MakeModelPopup } from "../../shared/MakeModelPopup"
+import { scrollToElement } from "@/app/components/ui/SmoothScroll"
 
 interface CarValuationNewProps {
     onSearch: (searchData: any) => void
@@ -41,7 +44,7 @@ export function FormSelect({
             value={value}
             onChange={onChange}
             disabled={disabled}
-            className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
+            className="w-full rounded-full border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
         >
             <option value="">--</option>
             {normalizedOptions.map((option) => (
@@ -53,18 +56,42 @@ export function FormSelect({
     )
 }
 
+interface FormBaseProps {
+    value: string
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    disabled: boolean
+    placeholder: string
+    className?: string
+}
+
+type FormTextInputProps = FormBaseProps & (
+    | { type: "text" }
+    | { type: "number"; max?: number; min?: number; step?: number }
+)
+
+export function FormTextInput({
+    value,
+    onChange,
+    disabled,
+    type,
+    placeholder,
+    className,
+    ...rest
+}: FormTextInputProps) {
+    return (
+        <input
+            value={value}
+            onChange={onChange}
+            disabled={disabled}
+            type={type}
+            placeholder={placeholder}
+            className={`w-full rounded-full border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20 ${className}`}
+            {...rest}
+        />
+    )
+}
+
 export function CarValuationNew({ onSearch, onReset, loading = false, onSearchStart }: CarValuationNewProps) {
-    // Helper function to assist with smooth scrolling
-    const scrollToElement = (id: string) => {
-        const element = document.getElementById(id)
-        if (element) {
-            const elementPosition = element.getBoundingClientRect().top + window.scrollY
-            window.scrollTo({
-                top: elementPosition - 100, // Offset for header/padding
-                behavior: "smooth"
-            })
-        }
-    }
     // Label formatters for FormSelect components
     const formatMileage = (value: string) => `${Number(value).toLocaleString()}+`
     const formatEngineCapacity = (value: string) => `${value}L`
@@ -110,9 +137,12 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
 
     // Helper function to determine if the form can be submitted
+    // Make sure make and model are not empty
     const canSubmit = useMemo(() => make.trim() && model.trim(), [make, model])
     const fieldsDisabled = !canSubmit
 
+    const [showPopup, setShowPopup] = useState(false)
+    // const componentRef = useRef<HTMLDivElement>(null)
     // Function to fetch both Mudah and Carlist make and models
     // Instead of fetching one by one, we can fetch both at the same time
     // Uses Promise.allSettled to handle errors
@@ -275,7 +305,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         Object.keys(availableMakes).forEach(m => makes.add(m))
         // For each make in carlistMakes (carlist), add it to the set
         Object.keys(carlistMakes).forEach(m => makes.add(m))
-
         // Basically merge all available makes and models
         return Array.from(makes).sort()
         // Any make that is in both sources will only appear once
@@ -319,27 +348,17 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     // All fetch functions
     // Function to retrieve Carlist listings
     const getCarlistData = async () => {
-        if (!canSubmit) return
+        // if (!canSubmit) return
 
-        // Validate if make exists in Carlist
-        if (!makeExistsInCarlist) {
-            console.log("Make does not exist in Carlist")
-            return {
-                // Returns empty listings to match the expected return type of getCarlistData
-                listings: [],
-                listingsAscending: [],
-                listingsDescending: [],
-                make: make,
-                model: model,
-                vehicleType: 'car',
-                source: 'Carlist',
-                unavailable: true  // Optional flag to indicate platform doesn't support this make
-            }
-        }
+        // Validate make and models in Carlist by pushing Make and Model to missingFields array if they do not exist
+        let missingFields = []
 
-        // Validate if model exists in Carlist
-        if (!modelExistsInCarlist) {
-            console.log("Model does not exist in Carlist")
+        if (!makeExistsInCarlist) missingFields.push("Make")
+        if (!modelExistsInCarlist) missingFields.push("Model")
+
+        // If make or model does not exist, return empty arrays and log missing fields
+        if (missingFields.length > 0) {
+            console.log(`Missing fields for Carlist: ${missingFields.join(", ")}`)
             return {
                 listings: [],
                 listingsAscending: [],
@@ -348,7 +367,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 model: model,
                 vehicleType: 'car',
                 source: 'Carlist',
-                unavailable: true  // Optional flag to indicate platform doesn't support this model
+                unavailable: true
             }
         }
 
@@ -540,11 +559,17 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
     // Function to retrieve Mudah listings
     const getMudahData = async () => {
-        if (!canSubmit) return
+        // if (!canSubmit) return
 
-        // Validate if make exists in Mudah
-        if (!makeExistsInMudah) {
-            console.log("Make does not exist in Mudah")
+        // Validate if make and model exists in Mudah by pushing Make and Model to missingFields array if they do not exist
+        let missingFields = []
+
+        if (!makeExistsInMudah) missingFields.push("Make")
+        if (!modelExistsInMudah) missingFields.push("Model")
+
+        if (missingFields.length > 0) {
+            // If make or model does not exist, return empty arrays and log missing fields
+            console.log(`Missing fields for Mudah: ${missingFields.join(", ")}`)
             return {
                 listings: [],
                 listingsAscending: [],
@@ -554,21 +579,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 vehicleType: 'car',
                 source: 'Mudah',
                 unavailable: true
-            }
-        }
-
-        // Validate if model exists in Mudah
-        if (!modelExistsInMudah) {
-            console.log("Model does not exist in Mudah")
-            return {
-                listings: [],
-                listingsAscending: [],
-                listingsDescending: [],
-                make: make,
-                model: model,
-                vehicleType: 'car',
-                source: 'Mudah',
-                unavailable: true  // Optional flag to indicate platform doesn't support this model
             }
         }
 
@@ -713,8 +723,13 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         }
     }
 
+    // Function to handle the form submission
     const handleSubmit = async () => {
-        if (!canSubmit) return
+        // If make or model is empty, show make model popup
+        if (!canSubmit) {
+            setShowPopup(true)
+            return
+        }
 
         setIsLoading(true)
         if (onSearchStart) {
@@ -823,7 +838,13 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
-            <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+            <form id="car-form" className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+                <label htmlFor="car-form" className="sr-only">Car Valuation Form</label>
+                {/* Option to change between East, West Malaysia and Langkawi */}
+                <RegionSelection
+                    value={region}
+                    onChange={setRegion}
+                />
                 <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
                     <h3 className="text-lg font-bold text-brand">Car Make/Model</h3>
                     <p className="text-xs text-foreground">Select the make and model of the vehicle and also the region</p>
@@ -866,41 +887,8 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             placeholder="Select a model..."
                             disabled={!make || (unifiedModels.length === 0)}
                             emptyMessage={make ? "No models found for this make" : "Select a make first"}
+                        // Extra handling for when the model is not found
                         />
-                    </div>
-                </div>
-                {/* Option to change between East and West Malaysia */}
-                <div className="flex flex-col gap-2 border-b-2 border-brand/20 pb-4">
-                    <p className="text-brand font-medium">*Region</p>
-                    <div className="flex gap-4">
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="west"
-                                name="region"
-                                value="west"
-                                checked={region === 'west'}
-                                onChange={(e) => setRegion(e.target.value)}
-                                className="w-4 h-4 accent-brand"
-                                disabled={fieldsDisabled}
-                            />
-                            <label htmlFor="west">West Malaysia</label>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="east"
-                                name="region"
-                                value="east"
-                                checked={region === 'east'}
-                                onChange={(e) => setRegion(e.target.value)}
-                                className="w-4 h-4 accent-brand"
-                                disabled={fieldsDisabled}
-                            />
-                            <label htmlFor="east">East Malaysia</label>
-                        </div>
-
                     </div>
                 </div>
 
@@ -948,13 +936,12 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">*Variant</label>
                             </div>
-                            <input
-                                type="text"
+                            <FormTextInput
                                 placeholder="e.g., 1.5G"
                                 disabled={fieldsDisabled}
+                                type="text"
                                 value={carlistVariant}
                                 onChange={(e) => setCarlistVariant(e.target.value)}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             />
                         </div>
 
@@ -1066,14 +1053,13 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">Previous Insured Sum (MYR)</label>
                             </div>
-                            <input
+                            <FormTextInput
                                 type="number"
                                 max={9999999}
                                 placeholder="E.g. 123456"
                                 disabled={fieldsDisabled}
                                 value={insuredPrice}
                                 onChange={(e) => setInsuredPrice(e.target.value)}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             />
                         </div>
 
@@ -1089,9 +1075,11 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             onClick={() => {
                                 handleSubmit()
                                 // Small delay to allow react to render the results wrapper or start loading
-                                setTimeout(() => scrollToElement("valuation"), 100)
+                                if (canSubmit) {
+                                    setTimeout(() => scrollToElement("valuation"), 100)
+                                }
                             }}
-                            disabled={!canSubmit || loading || isLoading}
+                            disabled={loading || isLoading}
                             variant="secondary"
                             size="sm"
                             className="w-full text-lg md:text-xl flex justify-center gap-2"
@@ -1117,6 +1105,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                     </div>
                 </div>
             </form>
+            <MakeModelPopup isOpen={showPopup} onClose={() => setShowPopup(false)} />
         </div>
     )
 }

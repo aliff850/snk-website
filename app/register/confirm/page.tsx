@@ -1,7 +1,7 @@
 "use client";
 
 import AnimateOnLoad from "@/app/components/ui/AnimateOnLoad";
-import { Button } from "@/app/components/ui/button";
+import { Button } from "@/app/components/ui/ButtonComponent";
 import Link from "next/link";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";

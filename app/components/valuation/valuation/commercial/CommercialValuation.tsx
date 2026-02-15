@@ -1,10 +1,14 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { ArrowDown, RotateCcw } from 'lucide-react'
+import { ArrowDown, RotateCcw, Truck } from 'lucide-react'
 import SearchableSelect from '@/app/components/ui/SearchableSelect'
-import { Button } from "../../../ui/button"
-import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters, getEngineCcRangeFromLiterOption } from "../../ranges"
+import { Button } from "../../../ui/ButtonComponent"
+import { SelectionButtonGroup } from "../../shared/SelectionButtonGroup"
+import { RegionSelection } from "../../shared/RegionSelection"
+import { yearOptions, mileageOptions, engineCapacityOptionsLiters } from "../../ranges"
+import { FormSelect, FormTextInput } from "../cars/CarValuationNew"
+import { MakeModelPopup } from "../../shared/MakeModelPopup"
 
 interface CommercialValuationProps {
     onSearch: (searchData: any) => void
@@ -62,6 +66,8 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
     const canSubmit = useMemo(() => make.trim() && model.trim() && weightClass, [make, model, weightClass])
     const fieldsDisabled = !canSubmit
+
+    const [showPopup, setShowPopup] = useState(false)
 
     // Fetch Mudah makes
     const fetchMakes = async () => {
@@ -185,8 +191,6 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
         setBtm("")
         setSeatCapacity("")
         setSeatCapacity("")
-        setDrivenWheel("")
-        setWeightClass("")
 
         // Reset Carlist specific
         setCarlistVariant("")
@@ -199,45 +203,32 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
         }
     }
 
+    const handleSubmit = () => {
+        setShowPopup(true)
+        return
+    }
+
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
-            <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+            <form id="commercial-form" className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+                <label htmlFor="commercial-form" className="sr-only">Commercial Valuation Form</label>
+                {/* Option to change between East and West Malaysia */}
+                <RegionSelection
+                    value={region}
+                    onChange={setRegion}
+                />
 
-                {/* Commercial vehicle weight class selection */}
-                {/* Radio buttons to select between below 10 ton and above 10 ton commercial vehicles */}
-                {/* Placeholders for now */}
-                <div className="flex flex-col gap-2 pb-3 border-b-2 border-brand/20">
-                    <div className="flex flex-col">
-                        <h3 className="text-lg font-bold text-brand">Vehicle Weight Class</h3>
-                        <p className="text-xs">Select the weight class of the vehicle</p>
-                    </div>
-
-                    <div className="flex gap-4">
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="below10ton"
-                                name="weightClass"
-                                value="below10ton"
-                                checked={weightClass === 'below10ton'}
-                                onChange={(e) => setWeightClass(e.target.value)}
-                                className="w-4 h-4 accent-brand"
-                            />
-                            <label htmlFor="below10ton" className="">Below 10 Ton</label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="above10ton"
-                                name="weightClass"
-                                value="above10ton"
-                                checked={weightClass === 'above10ton'}
-                                onChange={(e) => setWeightClass(e.target.value)}
-                                className="w-4 h-4 accent-brand"
-                            />
-                            <label htmlFor="above10ton" className="">Above 10 Ton</label>
-                        </div>
-                    </div>
+                <div className="flex flex-col gap-4 pb-4 border-b-2 border-brand/20">
+                    {/* Weight class selection */}
+                    <SelectionButtonGroup
+                        items={[
+                            { id: 'below10ton', label: 'Below 10 Ton', icon: Truck },
+                            { id: 'above10ton', label: 'Above 10 Ton', icon: Truck }
+                        ]}
+                        value={weightClass}
+                        onChange={setWeightClass}
+                        disabled={!region}
+                    />
                 </div>
 
                 <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
@@ -284,40 +275,6 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
                     </div>
                 </div>
 
-                {/* Option to change between East and West Malaysia */}
-                <div className="flex flex-col gap-2 border-b-2 border-brand/20 pb-4">
-                    <label className="text-brand font-medium">*Region</label>
-                    <div className="flex gap-4">
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="west"
-                                name="region"
-                                value="west"
-                                checked={region === 'west'}
-                                onChange={(e) => setRegion(e.target.value)}
-                                disabled={!weightClass}
-                                className="w-4 h-4 accent-brand"
-                            />
-                            <label htmlFor="west">West Malaysia</label>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="east"
-                                name="region"
-                                value="east"
-                                checked={region === 'east'}
-                                onChange={(e) => setRegion(e.target.value)}
-                                disabled={!weightClass}
-                                className="w-4 h-4 accent-brand"
-                            />
-                            <label htmlFor="east">East Malaysia</label>
-                        </div>
-                    </div>
-                </div>
-
                 {/* Commercial Vehicle Query */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     {/* Vehicle identity */}
@@ -329,43 +286,38 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Year</label>
-                            <select
+                            <FormSelect
                                 value={yearFrom}
                                 onChange={(e) => setYearFrom(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {yearOptions.filter(v => v !== 'Any').map(y => (
-                                    <option key={y} value={y}>{y}</option>
-                                ))}
-                            </select>
+                                options={yearOptions}
+                            />
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Body Type</label>
-                            <select
+                            <FormSelect
                                 value={bodyType}
                                 onChange={(e) => setBodyType(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="wooden_cargo">Wooden Cargo</option>
-                                <option value="metal_cargo">Metal Cargo</option>
-                                <option value="box_van">Box Van</option>
-                                <option value="curtain_sider">Curtain Sider</option>
-                                <option value="refrigerated">Refrigerated</option>
-                                <option value="tipper">Tipper</option>
-                                <option value="flatbed">Flatbed</option>
-                                <option value="crane_cargo">Crane Cargo</option>
-                                <option value="tanker">Tanker</option>
-                                <option value="car_carrier">Car Carrier</option>
-                                <option value="tow_truck">Tow Truck</option>
-                                <option value="mixer">Mixer</option>
-                                <option value="trailer">Trailer</option>
-                                <option value="other">Other</option>
-                            </select>
+                                options={[
+                                    { value: "", label: "--" },
+                                    { value: "wooden_cargo", label: "Wooden Cargo" },
+                                    { value: "metal_cargo", label: "Metal Cargo" },
+                                    { value: "box_van", label: "Box Van" },
+                                    { value: "curtain_sider", label: "Curtain Sider" },
+                                    { value: "refrigerated", label: "Refrigerated" },
+                                    { value: "tipper", label: "Tipper" },
+                                    { value: "flatbed", label: "Flatbed" },
+                                    { value: "crane_cargo", label: "Crane Cargo" },
+                                    { value: "tanker", label: "Tanker" },
+                                    { value: "car_carrier", label: "Car Carrier" },
+                                    { value: "tow_truck", label: "Tow Truck" },
+                                    { value: "mixer", label: "Mixer" },
+                                    { value: "trailer", label: "Trailer" },
+                                    { value: "other", label: "Other" },
+                                ]}
+                            />
                         </div>
 
                         {/* Variant */}
@@ -373,13 +325,12 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">*Variant</label>
                             </div>
-                            <input
-                                type="text"
+                            <FormTextInput
                                 placeholder="e.g., 1.5G"
                                 disabled={fieldsDisabled}
+                                type="text"
                                 value={carlistVariant}
                                 onChange={(e) => setCarlistVariant(e.target.value)}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             />
                         </div>
 
@@ -388,19 +339,19 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">*Origin</label>
                             </div>
-                            <select
+                            <FormSelect
                                 value={origin}
                                 onChange={(e) => setOrigin(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="New Local">New Local</option>
-                                <option value="New Import">New Import</option>
-                                <option value="Recon">Reconditioned</option>
-                                <option value="CBU">CBU</option>
-                                <option value="CKD">CKD</option>
-                            </select>
+                                options={[
+                                    { value: "", label: "--" },
+                                    { value: "New Local", label: "New Local" },
+                                    { value: "New Import", label: "New Import" },
+                                    { value: "Recon", label: "Reconditioned" },
+                                    { value: "CBU", label: "CBU" },
+                                    { value: "CKD", label: "CKD" },
+                                ]}
+                            />
                         </div>
                     </div>
 
@@ -413,33 +364,33 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Transmission</label>
-                            <select
+                            <FormSelect
                                 value={transmission}
                                 onChange={(e) => setTransmission(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="auto">Auto</option>
-                                <option value="manual">Manual</option>
-                            </select>
+                                options={[
+                                    { value: "", label: "--" },
+                                    { value: "Automatic", label: "Automatic" },
+                                    { value: "Manual", label: "Manual" },
+                                ]}
+                            />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium mb-1">*Fuel Type</label>
-                                <select
+                                <FormSelect
                                     value={fuelType}
                                     onChange={(e) => setFuelType(e.target.value)}
                                     disabled={fieldsDisabled}
-                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                                >
-                                    <option value="">--</option>
-                                    <option value="petrol">Petrol</option>
-                                    <option value="hybrid">Hybrid</option>
-                                    <option value="diesel">Diesel</option>
-                                    <option value="electric">Electric</option>
-                                </select>
+                                    options={[
+                                        { value: "", label: "--" },
+                                        { value: "petrol", label: "Petrol" },
+                                        { value: "hybrid", label: "Hybrid" },
+                                        { value: "diesel", label: "Diesel" },
+                                        { value: "electric", label: "Electric" },
+                                    ]}
+                                />
                             </div>
 
                             {/* Engine Capacity */}
@@ -447,17 +398,12 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
                                 <div className="flex justify-between items-center mb-1">
                                     <label className="block text-sm font-medium">*Engine Capacity (L)</label>
                                 </div>
-                                <select
+                                <FormSelect
                                     value={engineCapacityLiter}
                                     onChange={(e) => setEngineCapacityLiter(e.target.value)}
                                     disabled={fieldsDisabled}
-                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                                >
-                                    <option value="">--</option>
-                                    {engineCapacityOptionsLiters.filter(v => v !== 'Any').map(l => (
-                                        <option key={l} value={l}>{l}</option>
-                                    ))}
-                                </select>
+                                    options={engineCapacityOptionsLiters.map(l => ({ value: l, label: l }))}
+                                />
                             </div>
                         </div>
 
@@ -465,57 +411,25 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium mb-1">*BDM (KG)</label>
-                                <input
+                                <FormTextInput
                                     type="number"
                                     placeholder="e.g. 7500"
                                     value={bdm}
                                     onChange={(e) => setBdm(e.target.value)}
                                     disabled={fieldsDisabled}
-                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                 />
                                 {/* <p className="text-[10px] text-foreground/60 mt-0.5">Weight with load</p> */}
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">*BTM (KG)</label>
-                                <input
+                                <FormTextInput
                                     type="number"
                                     placeholder="e.g. 3500"
                                     value={btm}
                                     onChange={(e) => setBtm(e.target.value)}
                                     disabled={fieldsDisabled}
-                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                                 />
                                 {/* <p className="text-[10px] text-foreground/60 mt-0.5">Weight without load</p> */}
-                            </div>
-                        </div>
-
-                        {/* Driven Wheel & Seat Capacity */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">*Driven Wheel</label>
-                                <select
-                                    value={drivenWheel}
-                                    onChange={(e) => setDrivenWheel(e.target.value)}
-                                    disabled={fieldsDisabled}
-                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                                >
-                                    <option value="">--</option>
-                                    <option value="2wd">2WD</option>
-                                    <option value="4wd">4WD</option>
-                                    <option value="6wd">6WD</option>
-                                    <option value="awd">AWD</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">*Seat Capacity</label>
-                                <input
-                                    type="number"
-                                    placeholder="e.g. 2"
-                                    value={seatCapacity}
-                                    onChange={(e) => setSeatCapacity(e.target.value)}
-                                    disabled={fieldsDisabled}
-                                    className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                                />
                             </div>
                         </div>
                     </div>
@@ -529,34 +443,29 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Condition</label>
-                            <select
+                            <FormSelect
                                 value={condition}
                                 onChange={(e) => setCondition(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                <option value="Very Poor">Very Poor</option>
-                                <option value="Poor">Poor</option>
-                                <option value="Fair">Fair</option>
-                                <option value="Good">Good</option>
-                                <option value="Very Good">Very Good</option>
-                            </select>
+                                options={[
+                                    { value: "", label: "--" },
+                                    { value: "Very Poor", label: "Very Poor" },
+                                    { value: "Poor", label: "Poor" },
+                                    { value: "Fair", label: "Fair" },
+                                    { value: "Good", label: "Good" },
+                                    { value: "Very Good", label: "Very Good" },
+                                ]}
+                            />
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
-                            <select
+                            <FormSelect
                                 value={mileageFrom}
                                 onChange={(e) => setMileageFrom(e.target.value)}
                                 disabled={fieldsDisabled}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
-                            >
-                                <option value="">--</option>
-                                {mileageOptions.filter(v => v !== 'Any').map(m => (
-                                    <option key={m} value={m}>{Number(m).toLocaleString()}+</option>
-                                ))}
-                            </select>
+                                options={mileageOptions.filter(v => v !== 'Any').map(m => ({ value: m, label: m }))}
+                            />
                         </div>
 
                         {/* Insured Price - Available for both */}
@@ -564,14 +473,13 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">Previous Insured Sum (MYR)</label>
                             </div>
-                            <input
+                            <FormTextInput
                                 type="number"
                                 max={9999999}
                                 placeholder="E.g. 123456"
                                 disabled={fieldsDisabled}
                                 value={insuredPrice}
                                 onChange={(e) => setInsuredPrice(e.target.value)}
-                                className="w-full rounded-lg border border-foreground/40 px-3 py-2 outline-none focus:border-brand transition-colors duration-150 disabled:border-foreground/20 disabled:text-foreground/20"
                             />
                         </div>
 
@@ -583,9 +491,8 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
                     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
                         <Button
                             type="button"
-                            href="#valuation"
-                            // onClick={handleSubmit}
-                            disabled={!canSubmit || loading || isLoading}
+                            onClick={handleSubmit}
+                            disabled={loading || isLoading}
                             variant="secondary"
                             size="sm"
                             className="w-full text-lg md:text-xl flex justify-center gap-2"
@@ -607,9 +514,8 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
                         </Button>
                     </div>
                 </div>
-
-
             </form>
+            <MakeModelPopup isOpen={showPopup} onClose={() => setShowPopup(false)} />
         </div>
     )
 }

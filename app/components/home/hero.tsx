@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/app/components/ui/ButtonComponent"
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 import { ChevronRight } from "lucide-react";
 import dynamic from 'next/dynamic';

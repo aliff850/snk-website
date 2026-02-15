@@ -42,7 +42,7 @@ const formatMileage = (mileage: string | { gte: string; lte: string } | undefine
     return `${gte} - ${lte} km`
 }
 
-// Helper to format condition (from schema.org URL to simple text)
+// Helper to format condition (from Carlist's schema.org URL to simple text)
 const formatCondition = (condition?: string) => {
     if (!condition) return undefined
 
@@ -66,7 +66,7 @@ export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car
                 return (
                     <div
                         key={`${listing.url}-${index}`}
-                        className="rounded-xl border border-foreground/20 bg-brand-white hover:shadow-md transition-shadow duration-200"
+                        className="rounded-xl md:rounded-2xl border border-brand-light-grey bg-brand-white hover:shadow-md transition-shadow duration-200"
                     >
                         <div className="p-4 md:p-5">
                             {/* Header */}
@@ -79,7 +79,7 @@ export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car
                                         {/* Source badge */}
                                         {/* Only show source badge for admin */}
                                         {user?.role === 'admin' ? (
-                                            <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-bold ${listing.source === 'Mudah'
+                                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${listing.source === 'Mudah'
                                                 ? 'bg-blue-100 text-blue-800 border border-blue-200'
                                                 : 'bg-purple-100 text-purple-800 border border-purple-200'
                                                 }`}>
@@ -108,7 +108,7 @@ export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car
                                             </span>
                                         )}
                                         {vehicleType === 'car' && listing.bodyType && (
-                                            <span className="text-xs md:text-sm text-gray-500 capitalize">{listing.bodyType}</span>
+                                            <span className="text-xs md:text-sm text-brand-grey capitalize">{listing.bodyType}</span>
                                         )}
                                     </div>
                                 </div>
@@ -145,44 +145,46 @@ export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car
                                 </div>
                             )}
 
+                            <hr className="my-4 border-brand-light-grey" />
+
                             {/* Specs Grid */}
-                            <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
+                            <div className="grid grid-cols-2 gap-3 mt-4">
                                 <div className="flex items-center gap-2">
-                                    <Calendar className="w-4 h-4 text-gray-400" />
+                                    <Calendar className="w-4 h-4 text-brand-grey" />
                                     <div>
-                                        <p className="text-xs text-gray-500">Year</p>
-                                        <p className="text-sm font-medium text-gray-900">{listing.year}</p>
+                                        <p className="text-xs text-brand-grey">Year</p>
+                                        <p className="text-sm font-medium text-brand-black">{listing.year}</p>
                                     </div>
                                 </div>
 
                                 {listing.mileage && (
                                     <div className="flex items-center gap-2">
-                                        <Gauge className="w-4 h-4 text-gray-400" />
+                                        <Gauge className="w-4 h-4 text-brand-grey" />
                                         <div>
-                                            <p className="text-xs text-gray-500">Mileage</p>
-                                            <p className="text-sm font-medium text-gray-900">{formatMileage(listing.mileage)}</p>
+                                            <p className="text-xs text-brand-grey">Mileage</p>
+                                            <p className="text-sm font-medium text-brand-black">{formatMileage(listing.mileage)}</p>
                                         </div>
                                     </div>
                                 )}
 
                                 {vehicleType === 'car' && listing.transmission && (
                                     <div className="flex items-center gap-2">
-                                        <Settings className="w-4 h-4 text-gray-400" />
+                                        <Settings className="w-4 h-4 text-brand-grey" />
                                         <div>
-                                            <p className="text-xs text-gray-500">Transmission</p>
-                                            <p className="text-sm font-medium text-gray-900">{listing.transmission}</p>
+                                            <p className="text-xs text-brand-grey">Transmission</p>
+                                            <p className="text-sm font-medium text-brand-black">{listing.transmission}</p>
                                         </div>
                                     </div>
                                 )}
 
                                 {(listing.fuelType || listing.engineCapacity) && (
                                     <div className="flex items-center gap-2">
-                                        <Fuel className="w-4 h-4 text-gray-400" />
+                                        <Fuel className="w-4 h-4 text-brand-grey" />
                                         <div>
-                                            <p className="text-xs text-gray-500">
+                                            <p className="text-xs text-brand-grey">
                                                 {vehicleType === 'motorcycle' ? 'Engine' : 'Fuel / Engine'}
                                             </p>
-                                            <p className="text-sm font-medium text-gray-900 capitalize">
+                                            <p className="text-sm font-medium text-brand-black capitalize">
                                                 {vehicleType === 'motorcycle'
                                                     ? listing.engineCapacity ? `${listing.engineCapacity}cc` : 'N/A'
                                                     : listing.fuelType && listing.engineCapacity
@@ -202,7 +204,7 @@ export default function UnifiedGridView({ listings, onRemove, vehicleType = 'car
                                     href={listing.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-brand/90 hover:bg-brand text-white font-medium rounded-xl transition-colors duration-200"
+                                    className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-brand/90 hover:bg-brand text-white font-medium rounded-full transition-colors duration-200"
                                 >
                                     View Listing
                                     <ExternalLink className="w-4 h-4" />

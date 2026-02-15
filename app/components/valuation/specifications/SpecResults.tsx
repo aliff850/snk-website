@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Button } from "../../ui/button"
+import { Button } from "../../ui/ButtonComponent"
 import ZigWheelsDisplay from "./ZigAbout"
 import { Ban } from "lucide-react"
 
@@ -18,8 +18,8 @@ export function SpecResults({ results, error, loading, onClearResults }: SpecRes
             <div className="p-4 md:p-6 border-b border-foreground/20 flex flex-col md:flex-row gap-2 items-center justify-between">
                 <h4 className="text-2xl md:text-3xl text-brand font-bold">Vehicle Specifications</h4>
                 <div>
-                    <Button 
-                        onClick={onClearResults} 
+                    <Button
+                        onClick={onClearResults}
                         variant="secondary"
                         size="sm2"
                         className="text-xl flex gap-2"

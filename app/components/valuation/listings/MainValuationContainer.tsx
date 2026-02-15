@@ -6,6 +6,53 @@ import UnifiedGridView from './ValuationListings'
 import UserInputsDisplay from '../shared/UserInputsDisplay'
 import { useAuth } from '@/context/AuthContext'
 
+export function SortButton({
+    mode,
+    viewMode,
+    setViewMode,
+    icon,
+    text
+}: {
+    mode: 'ascending' | 'descending',
+    viewMode: 'ascending' | 'descending',
+    setViewMode: (viewMode: 'ascending' | 'descending') => void,
+    icon: React.ReactNode,
+    text: string
+}) {
+    const isActive = viewMode === mode;
+    return (
+        <button
+            onClick={() => setViewMode(mode)}
+            className={`flex items-center gap-2 p-2 text-sm md:px-4 md:py-2 md:text-base rounded-full font-medium transition-ring-color duration-200 ease-in-out ${isActive
+                ? 'bg-brand text-brand-white'
+                : 'ring-1 ring-brand-light-grey/50 hover:ring-brand-light-grey bg-gray-100 text-brand-grey hover:bg-gray-200'
+                }`}
+        >
+            {icon}
+            {text}
+        </button>
+    )
+}
+
+export function PriceContainer({
+    title,
+    price,
+    color,
+    //formatPrice
+}: {
+    title: string,
+    price: string,
+    color: 'lowest' | 'highest' | 'average',
+    //formatPrice: (price: number) => string
+}) {
+    return (
+        <div className={`rounded-xl md:rounded-2xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br ${color === 'lowest' ? 'from-green-50 to-green-100 border border-green-200' : color === 'highest' ? 'from-purple-50 to-purple-100 border border-purple-200' : 'from-blue-50 to-blue-100 border border-blue-200'} p-2 md:p-4`}>
+            <p className={`text-sm font-medium ${color === 'lowest' ? 'text-green-700' : color === 'highest' ? 'text-purple-700' : 'text-blue-700'}`}>{title}</p>
+            <p className={`print:text-3xl md:text-4xl font-bold ${color === 'lowest' ? 'text-green-900' : color === 'highest' ? 'text-purple-900' : 'text-blue-900'}`}>{price}</p>
+        </div>
+    )
+}
+
 // Works for both Mudah and Carlist
 interface UnifiedListing {
     // Common fields
@@ -60,7 +107,6 @@ interface UnifiedListingsDisplayProps {
 
 // Normalize listing from either source
 const normalizeListing = (listing: any): UnifiedListing | null => {
-    // Might rewrite this later to handle both Mudah and Carlist
 
     // Safety check to see if listing is valid
     // If listing is not an object, return null
@@ -68,7 +114,6 @@ const normalizeListing = (listing: any): UnifiedListing | null => {
         console.warn("Invalid listing object:", listing)
         return null
     }
-
     // Check if it's a Mudah listing (has adview_url)
     if (listing.adview_url || listing.make_name) {
         return {
@@ -89,7 +134,6 @@ const normalizeListing = (listing: any): UnifiedListing | null => {
             originalData: listing
         }
     }
-
     // Otherwise it's a Carlist listing
     return {
         source: 'Carlist',
@@ -223,9 +267,14 @@ export default function UnifiedListingsDisplay({
 
     // Adjust average price based on region
     // If East Malaysia, add 5% to the average price
+    // If Langkawi, add 10% to the average price
     // If West Malaysia price is same
     if (userInputs?.region === "east") {
         averagePrice = Math.round(baseAveragePrice * 1.05)
+    } else if (userInputs?.region === "langkawi") {
+        // averagePrice = Math.round(baseAveragePrice * 1.1)
+        // Comment this out for now since we do not yet have actual percentage for Langkawi
+        averagePrice = baseAveragePrice
     }
 
     // Adjust average price based on condition
@@ -247,49 +296,48 @@ export default function UnifiedListingsDisplay({
 
     // Price summary component
     const PriceSummary = ({ className = "" }: { className?: string }) => (
-        <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 print:gap-2 gap-4 ${className}`}>
-            <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
-                <p className="text-sm font-medium text-green-700">Lowest Price</p>
-                <p className="print:text-3xl md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
-            </div>
-
-            <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-2 md:p-4">
-                <p className="text-sm font-medium text-purple-700">Average Price</p>
-                <p className="print:text-3xl md:text-4xl font-bold text-purple-900">{formatPrice(averagePrice)}</p>
-            </div>
-
-            <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-2 md:p-4">
-                <p className="text-sm font-medium text-blue-700">Highest Price</p>
-                <p className="print:text-3xl md:text-4xl font-bold text-blue-900">{formatPrice(highestPrice)}</p>
-            </div>
+        <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 print:gap-2 gap-2 md:gap-4 ${className}`}>
+            <PriceContainer
+                title="Lowest Price"
+                price={formatPrice(lowestPrice)}
+                color="lowest"
+            />
+            <PriceContainer
+                title="Average Price"
+                price={formatPrice(averagePrice)}
+                color="average"
+            />
+            <PriceContainer
+                title="Highest Price"
+                price={formatPrice(highestPrice)}
+                color="highest"
+            />
         </div>
     )
 
     // Insurable values component (right now the values are placeholders)
     const InsurableValue = ({ className = "" }: { className?: string }) => {
         return (
-            <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 print:gap-2 gap-4 ${className}`}>
-                <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-2 md:p-4">
-                    <p className="text-sm font-medium text-green-900">Lowest Insurable Value</p>
-                    <p className="print:text-3xl md:text-4xl font-bold text-green-900">{formatPrice(lowestPrice)}</p>
-                </div>
-
-                <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-2 md:p-4">
-                    <p className="text-sm font-medium text-purple-700">Average Insurable Value</p>
-                    <p className="print:text-3xl md:text-4xl font-bold text-purple-900">{formatPrice(averagePrice)}</p>
-                </div>
-
-                <div className="rounded-xl flex justify-between sm:items-center md:flex-col print:flex-col bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-2 md:p-4">
-                    <p className="text-sm font-medium text-blue-700">Highest Insurable Value</p>
-                    <p className="print:text-3xl md:text-4xl font-bold text-blue-900">{formatPrice(highestPrice)}</p>
-                </div>
+            <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 print:gap-2 gap-2 md:gap-4 ${className}`}>
+                <PriceContainer
+                    title="Lowest Insurable Value"
+                    price="RM 0"
+                    color="lowest"
+                />
+                <PriceContainer
+                    title="Average Insurable Value"
+                    price="RM 0"
+                    color="average"
+                />
+                <PriceContainer
+                    title="Highest Insurable Value"
+                    price="RM 0"
+                    color="highest"
+                />
             </div>
         )
     }
-
-
     const { user } = useAuth();
-
     return (
         <div className="flex flex-col print:gap-2 gap-4">
             {/* User vehicle details */}
@@ -318,14 +366,14 @@ export default function UnifiedListingsDisplay({
                     ? 'animate-in slide-in-from-top-4 fade-in'
                     : 'animate-out slide-out-to-top-4 fade-out'
                     }`}>
-                    <div className="bg-brand-white rounded-3xl p-4 shadow-2xl border border-foreground/40 backdrop-blur-sm">
+                    <div className="bg-brand-white rounded-3xl p-4 shadow-2xl border border-brand-light-grey backdrop-blur-sm">
                         <PriceSummary className="mb-0" />
                     </div>
                 </div>
             )}
 
             {/* Insurable values container */}
-            <div className="rounded-xl border border-foreground/20 flex flex-col gap-4 print:gap-2 p-2 print:p-2 md:p-4">
+            <div className="rounded-xl border border-brand-light-grey flex flex-col gap-4 print:gap-2 p-2 print:p-2 md:p-4">
                 <div className="flex items-center gap-2">
                     <div className="p-2 rounded-lg bg-purple-100">
                         <HandCoins className="w-5 h-5 text-purple-900" />
@@ -337,7 +385,7 @@ export default function UnifiedListingsDisplay({
             </div>
 
             {/* Market value container */}
-            <div ref={priceContainerRef} className="rounded-xl border border-foreground/20 flex flex-col gap-4 print:gap-2 p-2 print:p-2 md:p-4">
+            <div ref={priceContainerRef} className="rounded-xl border border-brand-light-grey flex flex-col gap-4 print:gap-2 p-2 print:p-2 md:p-4">
                 <div className="flex items-center gap-2">
                     <div className="p-2 rounded-lg bg-purple-100">
                         <CircleDollarSign className="w-5 h-5 text-purple-900" />
@@ -348,36 +396,29 @@ export default function UnifiedListingsDisplay({
             </div>
 
             {/* Controls Section */}
-            <div className="rounded-xl border border-foreground/20 p-2 md:p-4 flex flex-col gap-4 print:hidden">
+            <div className="rounded-xl border border-brand-light-grey p-2 md:p-4 flex flex-col gap-4 print:hidden">
                 <div className="flex flex-col gap-4">
                     {/* Price Sorting */}
                     {normalizedAscending.length > 0 && normalizedDescending.length > 0 && (
                         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
                             <div className="flex items-center gap-2">
-                                {/* <ArrowUpDown className="w-4 h-4 text-gray-500" /> */}
                                 <span className="font-medium text-gray-700">View:</span>
                             </div>
                             <div className="flex flex-col md:flex-row gap-2">
-                                <button
-                                    onClick={() => setViewMode('ascending')}
-                                    className={`flex items-center gap-2 p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${viewMode === 'ascending'
-                                        ? 'bg-brand text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                        }`}
-                                >
-                                    <ArrowUp className="sm:hidden md:block w-4 h-4" />
-                                    Price: Low to High
-                                </button>
-                                <button
-                                    onClick={() => setViewMode('descending')}
-                                    className={`flex items-center gap-2 p-2 text-sm md:px-4 md:py-2 md:text-base rounded-lg font-medium transition-colors ${viewMode === 'descending'
-                                        ? 'bg-brand text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                        }`}
-                                >
-                                    <ArrowDown className="sm:hidden md:block w-4 h-4" />
-                                    Price: High to Low
-                                </button>
+                                <SortButton
+                                    mode="ascending"
+                                    viewMode={viewMode}
+                                    setViewMode={setViewMode}
+                                    icon={<ArrowUp className="sm:hidden md:block w-4 h-4" />}
+                                    text="Price: Low to High"
+                                />
+                                <SortButton
+                                    mode="descending"
+                                    viewMode={viewMode}
+                                    setViewMode={setViewMode}
+                                    icon={<ArrowDown className="sm:hidden md:block w-4 h-4" />}
+                                    text="Price: High to Low"
+                                />
                             </div>
                         </div>
                     )}
@@ -391,27 +432,27 @@ export default function UnifiedListingsDisplay({
                             <div className="flex flex-col md:flex-row gap-2">
                                 <button
                                     onClick={() => setSourceFilter('all')}
-                                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${sourceFilter === 'all'
+                                    className={`px-4 py-2 rounded-full font-medium transition-ring-color duration-200 ease-in-out ${sourceFilter === 'all'
                                         ? 'bg-brand text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        : 'ring-1 ring-brand-light-grey/50 hover:ring-brand-light-grey bg-gray-100 text-brand-grey hover:bg-gray-200'
                                         }`}
                                 >
                                     All ({sourceCounts.total})
                                 </button>
                                 <button
                                     onClick={() => setSourceFilter('mudah')}
-                                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${sourceFilter === 'mudah'
+                                    className={`px-4 py-2 rounded-full font-medium transition-ring-color duration-200 ease-in-out ${sourceFilter === 'mudah'
                                         ? 'bg-blue-600 text-white'
-                                        : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
+                                        : 'ring-1 ring-blue-300 hover:ring-blue-700 bg-blue-50 text-blue-700 hover:bg-blue-100'
                                         }`}
                                 >
                                     Mudah ({sourceCounts.mudah})
                                 </button>
                                 <button
                                     onClick={() => setSourceFilter('carlist')}
-                                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${sourceFilter === 'carlist'
+                                    className={`px-4 py-2 rounded-full font-medium transition-ring-color duration-200 ease-in-out ${sourceFilter === 'carlist'
                                         ? 'bg-purple-600 text-white'
-                                        : 'bg-purple-50 text-purple-700 hover:bg-purple-100'
+                                        : 'ring-1 ring-purple-300 hover:ring-purple-700 bg-purple-50 text-purple-700 hover:bg-purple-100'
                                         }`}
                                 >
                                     Carlist ({sourceCounts.carlist})
@@ -429,30 +470,6 @@ export default function UnifiedListingsDisplay({
                             </h6>
                             <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
                         </div>
-
-                        {/* Display mode toggle. hidden for now */}
-                        {/* <div className="hidden md:flex gap-2 items-center">
-                            <button
-                                onClick={() => setDisplayMode('grid')}
-                                className={`p-2 rounded-lg transition-colors ${displayMode === 'grid'
-                                        ? 'bg-brand text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                                aria-label="Grid view"
-                            >
-                                <Grid3x3 className="w-5 h-5" />
-                            </button>
-                            <button
-                                onClick={() => setDisplayMode('list')}
-                                className={`p-2 rounded-lg transition-colors ${displayMode === 'list'
-                                        ? 'bg-brand text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                                aria-label="List view"
-                            >
-                                <List className="w-5 h-5" />
-                            </button>
-                        </div> */}
                     </div>
                 </div>
 

@@ -3,7 +3,7 @@
 import { ArrowRight, CircleCheck } from "lucide-react"
 import AnimateOnLoad from "@/components/ui/AnimateOnLoad"
 import LoginContainer from "@/components/ui/LoginContainer"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/app/components/ui/ButtonComponent"
 
 export default function ResetSuccessPage() {
     return (

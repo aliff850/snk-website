@@ -1,6 +1,6 @@
 import Image from "next/image"
 import AnimateOnLoad from "../ui/AnimateOnLoad"
-import { Button } from "../ui/button"
+import { Button } from "../ui/ButtonComponent"
 import SectionContainer from "../ui/SectionContainer"
 
 export function Background() {

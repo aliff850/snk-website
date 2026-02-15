@@ -1,6 +1,6 @@
 import AnimateOnLoad from '@/components/ui/AnimateOnLoad';
 import { ArrowRight } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button } from '../ui/ButtonComponent';
 
 interface FormField {
     name: string;
@@ -64,10 +64,10 @@ const formFields: FormField[] = [
 ];
 
 export function ContactForm() {
-    return(
+    return (
         <section className="w-full bg-brand py-4 md:py-16 px-2 md:px-12 lg:px-24 font-onest">
             <div className="w-full max-w-7xl mx-auto flex flex-col gap-4 md:gap-8">
-                
+
                 <AnimateOnLoad animation="fade-in-up">
                     <div className="text-center flex flex-col gap-2 md:gap-4">
                         <h2 className="text-white text-4xl md:text-5xl font-bold">Send Us a Message</h2>
@@ -83,9 +83,9 @@ export function ContactForm() {
                             <form className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {formFields.slice(0, 4).map((field, index) => (
-                                        <AnimateOnLoad 
+                                        <AnimateOnLoad
                                             key={field.name}
-                                            animation="fade-in-up" 
+                                            animation="fade-in-up"
                                             delay={(index * 100 + 300) as 0 | 100 | 200 | 300 | 400}
                                         >
                                             <div className="space-y-2">
@@ -160,16 +160,16 @@ export function ContactForm() {
 
                                 <AnimateOnLoad animation="fade-in-up" delay={400}>
                                     <div className="flex justify-center">
-                                        <Button 
+                                        <Button
                                             type="submit"
                                             variant="secondary"
                                             size="lg"
                                             className="grow flex gap-2 text-xl"
                                         >
                                             Send Message
-                                            <ArrowRight/>
+                                            <ArrowRight />
                                         </Button>
-                                        
+
                                     </div>
                                 </AnimateOnLoad>
                             </form>

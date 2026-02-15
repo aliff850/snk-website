@@ -1,4 +1,4 @@
-import { Button } from "../ui/button"
+import { Button } from "../ui/ButtonComponent"
 import { ArrowUpRight } from "lucide-react"
 import AnimateOnLoad from "../ui/AnimateOnLoad"
 

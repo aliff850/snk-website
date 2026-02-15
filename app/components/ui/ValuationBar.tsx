@@ -16,8 +16,8 @@ interface ValuationBarProps {
 
 export function ValuationBar({ activeTab, onTabChange }: ValuationBarProps) {
     return (
-        <div className="w-full bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-2 md:p-4 font-onest">
-            <nav className="grid grid-cols-1 md:grid-cols-3 items-center justify-center gap-2">
+        <div className="w-full bg-brand-white rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 font-onest">
+            <nav className="grid grid-cols-1 md:grid-cols-3 items-center justify-center gap-2 md:gap-4">
                 {navItems.map((item) => {
                     const Icon = item.icon
                     const isActive = activeTab === item.value
@@ -29,12 +29,11 @@ export function ValuationBar({ activeTab, onTabChange }: ValuationBarProps) {
                             onClick={() => onTabChange(item.value)}
                             //disabled={isDisabled}
                             className={`
-                                flex items-center justify-center gap-2 flex-1 p-2 md:px-4 md:py-2 
-                                rounded-xl md:rounded-2xl font-semibold text-sm md:text-base lg:text-lg 
-                                transition-all duration-300 ease-in-out
+                                flex items-center justify-center gap-2 p-2 md:py-2 md:px-4 
+                                rounded-full ring transition-all duration-300 font-bold
                                 ${isActive
-                                    ? "text-brand-white bg-brand"
-                                    : "hover:text-brand-white hover:bg-brand"
+                                    ? "bg-brand text-brand-white ring-brand shadow-md scale-[1.02]"
+                                    : "bg-white text-brand ring-foreground/10 hover:ring-brand/50 hover:bg-brand/5"
                                 }
                             `}
                         >

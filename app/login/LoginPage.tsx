@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "../components/ui/button"
+import { Button } from "../components/ui/ButtonComponent"
 import AnimateOnLoad from "../components/ui/AnimateOnLoad"
 import LoginContainer from "../components/ui/LoginContainer"
 import Link from "next/link"
