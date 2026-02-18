@@ -5,6 +5,7 @@ from api.utils.mudah.router import mudahRouter
 from api.utils.zigwheels.router import informationRouter
 from api.utils.carlist.router import carlistRouter
 from api.utils.vehicleRouter import valuationRouter  # I added this new thing but it can easily be commented out
+from api.utils.insurable.router import insurableRouter
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -37,5 +38,6 @@ app.include_router(mudahRouter)
 app.include_router(informationRouter)
 app.include_router(carlistRouter)
 app.include_router(valuationRouter) # Same here
+app.include_router(insurableRouter)
 
 print("Started API")
