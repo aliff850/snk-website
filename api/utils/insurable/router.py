@@ -28,9 +28,24 @@ class vehicle_identification(BaseModel):
 
 @insurableRouter.post("/search")
 def get_insurable(vehicle_detail: vehicle_identification):
-    vehicle_string = ','.join([str(x) for x in list(vehicle_detail.model_dump().values()) if x and str(x).strip()])
+    vehicle_string = ','.join([str(x).upper() for x in list(vehicle_detail.model_dump().values()) if x and str(x).strip()])
     vehicle_id = uuid5(NAMESPACE_OID, vehicle_string)
 
     res = supabase.table('vehicle_values').select('*').eq('vehicle_id', vehicle_id).execute()
+    if not res.data:
+        return {"meta": "No vehicle found"}
     return res.data
 
+
+@insurableRouter.get('/details')
+def get_details(make: str, model: str):
+    res = supabase.table('vehicles').select('variant,series,style,cc').match({'make': make.upper(), 'model': model.upper()}).execute()
+    
+    if not res.data:
+        return {"meta": "No vehicle found"}
+
+    columns = ['variant', 'series', 'style', 'cc']
+    return {
+        col: sorted(list(set(d[col] for d in res.data if d.get(col))))
+        for col in columns
+    }
