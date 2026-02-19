@@ -33,15 +33,17 @@ interface UserInputsDisplayProps {
     vehicleType?: 'car' | 'motorcycle'
     year?: string
     region?: string
-    bodyType?: string
-    engineCapacity?: string
+    // bodyType?: string
+    // engineCapacity?: string
     fuelType?: string
     transmission?: string
     condition?: string
     origin?: string
     mileage?: string
     insuredPrice?: string
-    variant?: string // Carlist specific
+    variant?: string
+    style?: string
+    cc?: string
 }
 
 export default function UserInputsDisplay({
@@ -50,15 +52,17 @@ export default function UserInputsDisplay({
     vehicleType = 'car',
     year,
     region,
-    bodyType,
-    engineCapacity,
+    // bodyType,
+    // engineCapacity,
     fuelType,
     transmission,
     origin,
     condition,
     mileage,
     insuredPrice,
-    variant
+    variant,
+    style,
+    cc
 }: UserInputsDisplayProps) {
 
     // Format the display values
@@ -153,14 +157,14 @@ export default function UserInputsDisplay({
                         <UserInputsBox
                             icon={<Car className="w-4 h-4 text-gray-500" />}
                             title="Body Type"
-                            value={bodyType ? formatValue(bodyType) : "--"}
+                            value={style ? formatValue(style) : "--"}
                         />
 
                         {/* Engine Capacity */}
                         <UserInputsBox
                             icon={<Cog className="w-4 h-4 text-gray-500" />}
                             title="Engine Capacity"
-                            value={engineCapacity ? `${engineCapacity}L` : "--"}
+                            value={cc ? `${cc}cc` : "--"}
                         />
 
                         {/* Fuel Type */}
