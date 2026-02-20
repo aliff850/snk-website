@@ -13,7 +13,7 @@ export function RegionSelection({ value, onChange, disabled }: RegionSelectionPr
     const regionItems = [
         { id: 'west', label: 'West Malaysia', icon: MapPin },
         { id: 'east', label: 'East Malaysia', icon: MapPin },
-        { id: 'langkawi', label: 'Langkawi', icon: MapPin }
+        // { id: 'langkawi', label: 'Langkawi', icon: MapPin }
     ]
 
     return (

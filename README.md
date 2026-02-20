@@ -25,20 +25,13 @@ This is a [Next.js](https://nextjs.org) and [FastAPI](https://fastapi.tiangolo.c
    pnpm install
    ```
 
-2. **Set up Python virtual environment:**
-   It is recommended to use a virtual environment named `.venv` for Python dependencies:
-   ```bash
-   python -m venv .venv
-   # Activate the virtual environment:
-   # On Windows:
-   .venv\Scripts\activate
-   # On macOS/Linux:
-   source .venv/bin/activate
-   ```
+2. **Install Python dependencies with uv:**
 
-3. **Install Python dependencies:**
+   This project uses `uv` for fast Python package management. install it first if you haven't: [https://docs.astral.sh/uv/](https://docs.astral.sh/uv/)
+
    ```bash
-   pip install -r requirements.txt
+   # Install dependencies and create virtual environment
+   uv sync
    ```
 
 ### Running the App
@@ -57,7 +50,8 @@ npm run dev
 - `app/` - Next.js app directory (pages, components, styles)
 - `api/` - FastAPI backend (vehicle valuation, information APIs)
 - `public/` - Static assets (images, SVGs, client logos)
-- `requirements.txt` - Python dependencies
+- `pyproject.toml` - Python project configuration
+- `uv.lock` - Python dependency lock file
 - `package.json` - Node.js dependencies and scripts
 
 ## Scripts
