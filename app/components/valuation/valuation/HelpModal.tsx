@@ -61,7 +61,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                                     <div className="bg-gray-50 rounded-xl p-2 md:p-4 border border-foreground/40 flex gap-2 items-center">
                                         <Info className="w-4 h-4" />
                                         <p className="text-foreground/70">
-                                            <strong>Tokens:</strong> Please ensure you have tokens before generating valuation (Coming Soon)
+                                            <strong>Tokens:</strong> Each valuation search costs 1 token. You receive 3 tokens per week.
                                         </p>
                                     </div>
                                 </div>

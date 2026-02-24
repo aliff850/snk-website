@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
+import { useAuth } from "@/context/AuthContext"
 import { ArrowDown, RotateCcw } from 'lucide-react'
 import SearchableSelect from '@/app/components/ui/SearchableSelect'
 import { Button } from "../../../ui/ButtonComponent"
@@ -92,6 +93,9 @@ export function FormTextInput({
 }
 
 export function CarValuationNew({ onSearch, onReset, loading = false, onSearchStart }: CarValuationNewProps) {
+    // Auth context for token checking
+    const { user, refreshTokens, getAccessToken } = useAuth()
+
     // Label formatters for FormSelect components
     const formatMileage = (value: string) => `${Number(value).toLocaleString()}+`
     const formatEngineCapacity = (value: string) => `${value}L`
@@ -731,88 +735,272 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             return
         }
 
+        // Check if user has tokens
+        if (!user?.tokens_remaining || user.tokens_remaining <= 0) {
+            onSearch({ error: "No valuation tokens remaining. Tokens refresh weekly." })
+            return
+        }
+
         setIsLoading(true)
         if (onSearchStart) {
             onSearchStart()
         }
 
         try {
-            // Initialize results and errors arrays
-            const results: any[] = []
-            const errors: string[] = []
-
-            // Fetch from all sources
-            // Try to fetch from Mudah
-            try {
-                const mudahResult = await getMudahData()
-                // Validate if listings is not undefined
-                if (mudahResult && mudahResult.listings !== undefined) {
-                    results.push(mudahResult)
-                }
-            } catch (e: any) {
-                // errors.push(`Mudah: ${e?.message || "Unknown error"}`)
-                console.log('Error fetching Mudah data:', e)
-            }
-
-            // Try to fetch from Carlist
-            try {
-                const carlistResult = await getCarlistData()
-                if (carlistResult && carlistResult.listings !== undefined) {
-                    results.push(carlistResult)
-                }
-            } catch (e: any) {
-                // errors.push(`Carlist: ${e?.message || "Unknown error"}`)
-                console.log('Error fetching Carlist data:', e)
-            }
-
-            // Construct all of the user inputs object from state
-            const currentUserInputs = {
-                make,
-                model,
-                region,
-                year: yearFrom,
-                bodyType,
-                engineCapacity: engineCapacityLiter,
-                fuelType,
-                transmission,
-                origin,
-                condition,
-                mileage: mileageFrom,
-                insuredPrice,
-                variant: carlistVariant,
-
-            }
-
-            // If no results from any source, return error
-            if (results.length === 0) {
-                onSearch({ error: errors.join('; ') || "No results from source" })
+            // Get access token for API auth
+            const accessToken = await getAccessToken()
+            if (!accessToken) {
+                onSearch({ error: "Authentication error. Please log in again." })
                 return
             }
 
-            // Combine and return results
+            const makeSlug = slug(make)
+            const modelSlug = slug(model)
+
+            // Build Mudah search params (ascending + descending)
+            const mudahSearchQuery: Record<string, any> = {
+                make_id: makeSlug,
+                model_id: modelSlug,
+                From: fromOffset,
+                limit,
+                sortby: 'price_asc',
+                type
+            }
+            const yearQuery = yearFrom ? `${yearFrom}-${yearFrom}` : ""
+            if (yearQuery) mudahSearchQuery.mfg_year = yearQuery
+            if (fuelType) mudahSearchQuery.fueltype = fuelType
+            if (bodyType) {
+                const mudahBodyMap: Record<string, string> = {
+                    'sedan': 'sedan', 'hatchback': 'hatchback', 'suv': 'suvs',
+                    'mpv': 'mpvs', 'coupe': 'coupe', 'pickup': 'pick_up',
+                    'convertible': 'sports', 'wagon': 'other', 'van': 'other'
+                }
+                if (mudahBodyMap[bodyType]) mudahSearchQuery.car_type_id = mudahBodyMap[bodyType]
+            }
+            if (mileageFrom) {
+                const m = parseInt(mileageFrom, 10)
+                if (!Number.isNaN(m)) mudahSearchQuery.mileage = `${mileageFrom}-${m + 5000}`
+            }
+            if (transmission) mudahSearchQuery.transmission_id = transmission
+
+            // Build Carlist search params
+            const carlistQuery: Record<string, any> = {
+                make: makeSlug,
+                model: modelSlug,
+                condition: 'used'
+            }
+            if (carlistVariant) carlistQuery.variant = carlistVariant
+            if (bodyType) {
+                const bodyTypeMap: Record<string, string> = {
+                    'sedan': 'sedan', 'hatchback': 'Hatchback', 'suv': 'suv',
+                    'mpv': 'MPV', 'coupe': 'Coupe', 'pickup': 'pickup',
+                    'convertible': 'Convertible', 'wagon': 'wagon', 'van': 'van'
+                }
+                carlistQuery.body_type = bodyTypeMap[bodyType] || bodyType
+            }
+            const carlistFilters: Record<string, any> = { page_size: 50, sort: 'asc' }
+            if (yearFrom) {
+                const y = parseInt(yearFrom, 10)
+                carlistFilters.min_year = y
+                carlistFilters.max_year = y
+            }
+            if (transmission) {
+                const transMap: Record<string, string> = { 'auto': 'Automatic', 'manual': 'Manual' }
+                carlistFilters.transmission = transMap[transmission] || transmission
+            }
+            if (fuelType) {
+                const fuelMap: Record<string, string> = {
+                    'petrol': 'Petrol', 'diesel': 'Diesel', 'hybrid': 'Hybrid', 'electric': 'Electric'
+                }
+                carlistFilters.fuel_type = fuelMap[fuelType] || fuelType
+            }
+            if (mileageFrom) {
+                const m = parseInt(mileageFrom, 10)
+                carlistFilters.min_mileage = m
+                carlistFilters.max_mileage = m + 5000
+            }
+
+            // Build the unified request
+            const requestBody: Record<string, any> = {
+                vehicle_type: 'car',
+            }
+
+            // Only include sources that have the make/model
+            if (makeExistsInMudah && modelExistsInMudah) {
+                requestBody.mudah = {
+                    searchQuery: mudahSearchQuery,
+                    whitelist_attributes: [
+                        'model_name', 'make_name', 'condition_name', 'manufactured_year',
+                        'fueltype', 'price', 'mileage', 'transmission_name',
+                        'engine_capacity', 'car_type_name', 'adview_url', 'image', 'variant'
+                    ]
+                }
+            }
+            if (makeExistsInCarlist && modelExistsInCarlist) {
+                requestBody.carlist = {
+                    query: carlistQuery,
+                    filters: carlistFilters,
+                    whitelist_attributes: [
+                        "brand.name", "model", "itemCondition", "vehicleModelDate",
+                        "fuelType", "offers.price", "mileageFromOdometer.value",
+                        "vehicleTransmission", "image[0].url", "mainEntityOfPage"
+                    ]
+                }
+            }
+
+            // If neither source has make/model, return error
+            if (!requestBody.mudah && !requestBody.carlist) {
+                onSearch({ error: "Vehicle make/model not found in any data source." })
+                return
+            }
+
+            // Always include insurable search if we have make, model and year
+            if (make && model && yearFrom) {
+                const insurableDetail: Record<string, any> = {
+                    make: make.toUpperCase(),
+                    model: model.toUpperCase(),
+                    year: yearFrom,
+                }
+                if (carlistVariant) insurableDetail.variant = carlistVariant.toUpperCase()
+                if (engineCapacityLiter) insurableDetail.cc = engineCapacityLiter
+                if (transmission) insurableDetail.transmission = transmission.toUpperCase()
+                if (bodyType) insurableDetail.style = bodyType.toUpperCase()
+
+                requestBody.insurable = {
+                    vehicle_detail: insurableDetail
+                }
+            }
+
+            // Call unified endpoint
+            const response = await fetch('/api/valuation/get_marketdata', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: JSON.stringify(requestBody)
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null)
+                const errorMsg = errorData?.detail || `Request failed (${response.status})`
+                onSearch({ error: errorMsg })
+                return
+            }
+
+            const data = await response.json()
+
+            // Refresh token count in AuthContext
+            await refreshTokens()
+
+            // Process results from unified response
+            const results: any[] = []
+
+            // Process Mudah results
+            if (data.results?.mudah) {
+                const mudahListings = Array.isArray(data.results.mudah) ? data.results.mudah : []
+
+                // Deduplicate using adview_url
+                const listingsMap: Record<string, any> = {}
+                mudahListings.forEach((listing: any) => {
+                    if (listing.adview_url) listingsMap[listing.adview_url] = listing
+                })
+                const allListings = Object.values(listingsMap)
+                const ascending = [...allListings].sort((a: any, b: any) => a.price - b.price)
+                const descending = [...allListings].sort((a: any, b: any) => b.price - a.price)
+
+                results.push({
+                    listings: ascending,
+                    listingsAscending: ascending,
+                    listingsDescending: descending,
+                    make: makeSlug,
+                    model: modelSlug,
+                    vehicleType: 'car',
+                    source: 'Mudah'
+                })
+            }
+
+            // Process Carlist results
+            if (data.results?.carlist) {
+                const carlistListings = Array.isArray(data.results.carlist) ? data.results.carlist : []
+
+                // Deduplicate + normalize
+                const listingsMap: Record<string, any> = {}
+                carlistListings.forEach((listing: any) => {
+                    const normalized = {
+                        ...listing,
+                        price: listing['offers.price'] || listing.price,
+                        image: listing['image[0].url'] || listing.image,
+                        url: listing['mainEntityOfPage'] || listing.url
+                    }
+                    const key = `${normalized['brand.name']}-${normalized['model']}-${normalized.price}-${normalized['vehicleModelDate']}`
+                    listingsMap[key] = normalized
+                })
+                const allListings = Object.values(listingsMap)
+                const ascending = [...allListings].sort((a: any, b: any) => {
+                    return (a['offers.price'] || 0) - (b['offers.price'] || 0)
+                })
+                const descending = [...allListings].sort((a: any, b: any) => {
+                    return (b['offers.price'] || 0) - (a['offers.price'] || 0)
+                })
+
+                results.push({
+                    listings: ascending,
+                    listingsAscending: ascending,
+                    listingsDescending: descending,
+                    make: make,
+                    model: model,
+                    vehicleType: 'car',
+                    source: 'Carlist'
+                })
+            }
+
+            // Construct user inputs
+            const currentUserInputs = {
+                make, model, region, year: yearFrom, bodyType,
+                engineCapacity: engineCapacityLiter, fuelType, transmission,
+                origin, condition, mileage: mileageFrom, insuredPrice,
+                variant: carlistVariant,
+            }
+
+            // Include insurable data if available
+            const insurableData = data.results?.insurable || null
+
+            if (results.length === 0) {
+                // Even if no market listings, we may have insurable data
+                if (insurableData && !insurableData.meta) {
+                    onSearch({
+                        listings: [],
+                        listingsAscending: [],
+                        listingsDescending: [],
+                        source: 'None',
+                        vehicleType: 'car',
+                        userInputs: currentUserInputs,
+                        insurable: insurableData,
+                        counts: { total: 0 }
+                    })
+                    return
+                }
+                onSearch({ error: data.errors ? JSON.stringify(data.errors) : "No results from source" })
+                return
+            }
+
             if (results.length === 1) {
-                // if only one source is available, return the result from that source
                 const result = results[0]
                 onSearch({
                     ...result,
                     userInputs: currentUserInputs,
+                    insurable: insurableData,
                     counts: {
                         [result.source.toLowerCase()]: result.listings.length,
                         total: result.listings.length
                     }
                 })
             } else {
-                // Else, combine results from both sources
                 const combinedListings = results.flatMap(r => r.listings)
-
-                // Helper to get price for sorting
-                const getPrice = (listing: any) => {
-                    // Mudah has 'price', Carlist has 'offers.price' return raw numeric
-                    return listing.price || listing['offers.price'] || listing.normalizedPrice || 0
-                }
-
-                const combinedAscending = [...combinedListings].sort((a: any, b: any) => getPrice(a) - getPrice(b))
-                const combinedDescending = [...combinedListings].sort((a: any, b: any) => getPrice(b) - getPrice(a))
+                const getPrice = (listing: any) => listing.price || listing['offers.price'] || 0
+                const combinedAscending = [...combinedListings].sort((a, b) => getPrice(a) - getPrice(b))
+                const combinedDescending = [...combinedListings].sort((a, b) => getPrice(b) - getPrice(a))
 
                 onSearch({
                     listings: combinedListings,
@@ -821,6 +1009,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                     source: 'Combined',
                     vehicleType: 'car',
                     userInputs: currentUserInputs,
+                    insurable: insurableData,
                     counts: {
                         mudah: results.find(r => r.source === 'Mudah')?.listings.length || 0,
                         carlist: results.find(r => r.source === 'Carlist')?.listings.length || 0,
@@ -829,8 +1018,8 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 })
             }
         } catch (e: any) {
-            // onSearch({ error: e?.message || "Something went wrong" })
             console.log(e)
+            onSearch({ error: e?.message || "Something went wrong" })
         } finally {
             setIsLoading(false)
         }

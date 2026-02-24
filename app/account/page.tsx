@@ -59,7 +59,7 @@ export default function AccountPage() {
                             </div>
 
                             <div className="flex flex-col items-start">
-                                <p className="font-bold text-4xl">0</p>
+                                <p className="font-bold text-4xl">{user?.tokens_remaining ?? 0}</p>
                                 <p>remaining Valuation Tokens.</p>
                             </div>
                         </DetailContainer>

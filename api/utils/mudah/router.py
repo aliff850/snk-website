@@ -102,7 +102,6 @@ def build_url(query_model: dict, type: int) -> str:
 def search(searchQuery: CarSearchQuery | MotorSearchQuery,
            whitelist_attributes: list[str | None] | None = ['model_name', 'make_name', 'condition_name', 'manufactured_year', 'fueltype', 'price', 'mileage', 'transmission_name', 'engine_capacity', 'car_type_name', 'adview_url','image', 'variant']):
     URL = build_url(searchQuery.model_dump().items(), type=1020 if isinstance(searchQuery, CarSearchQuery) else 1040)
-    print(URL)
     html = get(URL)
     if not html.ok and html.status_code != 200:
         return Response(status_code=400, content={
@@ -111,8 +110,8 @@ def search(searchQuery: CarSearchQuery | MotorSearchQuery,
     listings = html.json()['data']
     
     # DEBUG logs
-    if listings:
-        print ("First listing variant field:" , listings[0].get('attributes', {}).get('listing_id'))
+    # if listings:
+    #     print ("First listing variant field:" , listings[0].get('attributes', {}).get('listing_id'))
 
     response = []
     if whitelist_attributes:
