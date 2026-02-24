@@ -14,7 +14,7 @@ export function HeroSection() {
             {/* Just comment this out if the effect is too overbearing */}
             {/* <LiquidBackground /> */}
 
-            <div className="relative h-svh w-full bg-gradient-to-b from-black/50 via-black/50 to-brand/50 flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 py-8">
+            <div className="relative h-svh w-full bg-linear-to-b from-black/50 via-black/50 to-brand/50 flex flex-col justify-center items-center px-4 md:px-12 lg:px-24 py-8">
 
                 <div className="mx-auto max-w-7xl">
                     <AnimateOnLoad animation="fade-in-up">
