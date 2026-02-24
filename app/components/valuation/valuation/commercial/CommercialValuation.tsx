@@ -1,14 +1,16 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { ArrowDown, RotateCcw, Truck } from 'lucide-react'
+import { ArrowDown, ArrowLeft, RotateCcw } from 'lucide-react'
 import SearchableSelect from '@/app/components/ui/SearchableSelect'
 import { Button } from "../../../ui/ButtonComponent"
-import { SelectionButtonGroup } from "../../shared/SelectionButtonGroup"
+import { WeightClassSelector } from "../../shared/WeightClassSelector"
 import { RegionSelection } from "../../shared/RegionSelection"
 import { yearOptions, mileageOptions, engineCapacityOptionsLiters } from "../../ranges"
 import { FormSelect, FormTextInput } from "../cars/CarValuationNew"
 import { MakeModelPopup } from "../../shared/MakeModelPopup"
+import { FaTruckMoving } from "react-icons/fa6"
+import { BiSolidTruck } from "react-icons/bi"
 
 interface CommercialValuationProps {
     onSearch: (searchData: any) => void
@@ -210,311 +212,323 @@ export function CommercialValuation({ onSearch, onReset, loading, onSearchStart 
 
     return (
         <div className="rounded-2xl md:rounded-3xl border border-foreground/40 shadow-sm p-4 md:p-6 bg-brand-white">
-            <form id="commercial-form" className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-                <label htmlFor="commercial-form" className="sr-only">Commercial Valuation Form</label>
-                {/* Option to change between East and West Malaysia */}
-                <RegionSelection
-                    value={region}
-                    onChange={setRegion}
-                />
 
-                <div className="flex flex-col gap-4 pb-4 border-b-2 border-brand/20">
-                    {/* Weight class selection */}
-                    <SelectionButtonGroup
-                        items={[
-                            { id: 'below10ton', label: 'Below 10 Ton', icon: Truck },
-                            { id: 'above10ton', label: 'Above 10 Ton', icon: Truck }
-                        ]}
-                        value={weightClass}
-                        onChange={setWeightClass}
-                        disabled={!region}
+            {/* Weight class selection */}
+            {!weightClass ? (
+                <WeightClassSelector value={weightClass} onChange={setWeightClass} />
+            ) : (
+
+                <form id="commercial-form" className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+                    <label htmlFor="commercial-form" className="sr-only">Commercial Valuation Form</label>
+
+                    <div className="flex flex-col justify-center items-center gap-4 text-brand">
+                        <Button
+                            variant="secondary"
+                            size="sm2"
+                            type="button"
+                            onClick={() => setWeightClass("")}
+                            className="flex items-center gap-2 self-start"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            Reselect Weight Class
+                        </Button>
+                        <div className="flex flex-col md:flex-row gap-2 items-center">
+                            {weightClass === 'below10ton' ? <BiSolidTruck className="w-8 h-8" /> : <FaTruckMoving className="w-8 h-8" />}
+                            <h1 className="text-lg md:text-xl text-center font-bold">{weightClass === 'below10ton' ? 'Commercial Vehicles Below 10 Tons' : 'Commercial Vehicles Above 10 Tons'}</h1>
+                        </div>
+                    </div>
+
+                    {/* Option to change between East and West Malaysia */}
+                    <RegionSelection
+                        value={region}
+                        onChange={setRegion}
                     />
-                </div>
 
-                <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
-                    <h3 className="text-lg font-bold text-brand">Vehicle Make/Model</h3>
-                    <p className="text-xs text-foreground">Select the make and model of the vehicle and also the region</p>
-                </div>
-
-                {/* Make/Model Selection */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                        <label className="font-medium text-brand">*Make</label>
-                        <SearchableSelect
-                            options={Object.keys(availableMakes).map((make) => ({
-                                value: make,
-                                label: make,
-                            }))}
-                            value={make}
-                            onChange={(value) => {
-                                setMake(value)
-                                setModel("") // Reset model when make changes
-                                setAvailableModels({})
-                                fetchModels(value)
-                            }}
-                            placeholder="Select Make"
-                            isLoading={loadingMakes}
-                            disabled={!weightClass}
-                            className="w-full"
-                        />
+                    <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
+                        <h3 className="text-lg font-bold text-brand">Vehicle Make/Model</h3>
+                        <p className="text-xs text-foreground">Select the make and model of the vehicle</p>
                     </div>
 
-                    <div className="flex flex-col gap-2">
-                        <label className="font-medium text-brand">*Model</label>
-                        <SearchableSelect
-                            options={Object.keys(availableModels).map((model) => ({
-                                value: model,
-                                label: model,
-                            }))}
-                            value={model}
-                            onChange={setModel}
-                            placeholder="Select Model"
-                            disabled={!make}
-                            className="w-full"
-                        />
-                    </div>
-                </div>
-
-                {/* Commercial Vehicle Query */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    {/* Vehicle identity */}
-                    <div className="space-y-4">
-                        <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
-                            <p className="text-xs">Basic vehicle information</p>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Year</label>
-                            <FormSelect
-                                value={yearFrom}
-                                onChange={(e) => setYearFrom(e.target.value)}
-                                disabled={fieldsDisabled}
-                                options={yearOptions}
+                    {/* Make/Model Selection */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-2">
+                            <label className="font-medium text-brand">*Make</label>
+                            <SearchableSelect
+                                options={Object.keys(availableMakes).map((make) => ({
+                                    value: make,
+                                    label: make,
+                                }))}
+                                value={make}
+                                onChange={(value) => {
+                                    setMake(value)
+                                    setModel("") // Reset model when make changes
+                                    setAvailableModels({})
+                                    fetchModels(value)
+                                }}
+                                placeholder="Select Make"
+                                isLoading={loadingMakes}
+                                disabled
+                                className="w-full"
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Body Type</label>
-                            <FormSelect
-                                value={bodyType}
-                                onChange={(e) => setBodyType(e.target.value)}
-                                disabled={fieldsDisabled}
-                                options={[
-                                    { value: "", label: "--" },
-                                    { value: "wooden_cargo", label: "Wooden Cargo" },
-                                    { value: "metal_cargo", label: "Metal Cargo" },
-                                    { value: "box_van", label: "Box Van" },
-                                    { value: "curtain_sider", label: "Curtain Sider" },
-                                    { value: "refrigerated", label: "Refrigerated" },
-                                    { value: "tipper", label: "Tipper" },
-                                    { value: "flatbed", label: "Flatbed" },
-                                    { value: "crane_cargo", label: "Crane Cargo" },
-                                    { value: "tanker", label: "Tanker" },
-                                    { value: "car_carrier", label: "Car Carrier" },
-                                    { value: "tow_truck", label: "Tow Truck" },
-                                    { value: "mixer", label: "Mixer" },
-                                    { value: "trailer", label: "Trailer" },
-                                    { value: "other", label: "Other" },
-                                ]}
+                        <div className="flex flex-col gap-2">
+                            <label className="font-medium text-brand">*Model</label>
+                            <SearchableSelect
+                                options={Object.keys(availableModels).map((model) => ({
+                                    value: model,
+                                    label: model,
+                                }))}
+                                value={model}
+                                onChange={setModel}
+                                placeholder="Select Model"
+                                disabled={!make}
+                                className="w-full"
                             />
                         </div>
+                    </div>
 
-                        {/* Variant */}
-                        <div>
-                            <div className="flex justify-between items-center mb-1">
-                                <label className="block text-sm font-medium">*Variant</label>
+                    {/* Commercial Vehicle Query */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        {/* Vehicle identity */}
+                        <div className="space-y-4">
+                            <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
+                                <h3 className="text-lg font-bold text-brand">Vehicle Identity</h3>
+                                <p className="text-xs">Basic vehicle information</p>
                             </div>
-                            <FormTextInput
-                                placeholder="e.g., 1.5G"
-                                disabled={fieldsDisabled}
-                                type="text"
-                                value={carlistVariant}
-                                onChange={(e) => setCarlistVariant(e.target.value)}
-                            />
-                        </div>
 
-                        {/* Origin */}
-                        <div>
-                            <div className="flex justify-between items-center mb-1">
-                                <label className="block text-sm font-medium">*Origin</label>
-                            </div>
-                            <FormSelect
-                                value={origin}
-                                onChange={(e) => setOrigin(e.target.value)}
-                                disabled={fieldsDisabled}
-                                options={[
-                                    { value: "", label: "--" },
-                                    { value: "New Local", label: "New Local" },
-                                    { value: "New Import", label: "New Import" },
-                                    { value: "Recon", label: "Reconditioned" },
-                                    { value: "CBU", label: "CBU" },
-                                    { value: "CKD", label: "CKD" },
-                                ]}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Technical specifications */}
-                    <div className="space-y-4">
-                        <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Technical Specifications</h3>
-                            <p className="text-xs">Engine and performance details</p>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Transmission</label>
-                            <FormSelect
-                                value={transmission}
-                                onChange={(e) => setTransmission(e.target.value)}
-                                disabled={fieldsDisabled}
-                                options={[
-                                    { value: "", label: "--" },
-                                    { value: "Automatic", label: "Automatic" },
-                                    { value: "Manual", label: "Manual" },
-                                ]}
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium mb-1">*Fuel Type</label>
+                                <label className="block text-sm font-medium mb-1">*Year</label>
                                 <FormSelect
-                                    value={fuelType}
-                                    onChange={(e) => setFuelType(e.target.value)}
+                                    value={yearFrom}
+                                    onChange={(e) => setYearFrom(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    options={yearOptions}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Body Type</label>
+                                <FormSelect
+                                    value={bodyType}
+                                    onChange={(e) => setBodyType(e.target.value)}
                                     disabled={fieldsDisabled}
                                     options={[
                                         { value: "", label: "--" },
-                                        { value: "petrol", label: "Petrol" },
-                                        { value: "hybrid", label: "Hybrid" },
-                                        { value: "diesel", label: "Diesel" },
-                                        { value: "electric", label: "Electric" },
+                                        { value: "wooden_cargo", label: "Wooden Cargo" },
+                                        { value: "metal_cargo", label: "Metal Cargo" },
+                                        { value: "box_van", label: "Box Van" },
+                                        { value: "curtain_sider", label: "Curtain Sider" },
+                                        { value: "refrigerated", label: "Refrigerated" },
+                                        { value: "tipper", label: "Tipper" },
+                                        { value: "flatbed", label: "Flatbed" },
+                                        { value: "crane_cargo", label: "Crane Cargo" },
+                                        { value: "tanker", label: "Tanker" },
+                                        { value: "car_carrier", label: "Car Carrier" },
+                                        { value: "tow_truck", label: "Tow Truck" },
+                                        { value: "mixer", label: "Mixer" },
+                                        { value: "trailer", label: "Trailer" },
+                                        { value: "other", label: "Other" },
                                     ]}
                                 />
                             </div>
 
-                            {/* Engine Capacity */}
+                            {/* Variant */}
                             <div>
                                 <div className="flex justify-between items-center mb-1">
-                                    <label className="block text-sm font-medium">*Engine Capacity (L)</label>
+                                    <label className="block text-sm font-medium">*Variant</label>
+                                </div>
+                                <FormTextInput
+                                    placeholder="e.g., 1.5G"
+                                    disabled={fieldsDisabled}
+                                    type="text"
+                                    value={carlistVariant}
+                                    onChange={(e) => setCarlistVariant(e.target.value)}
+                                />
+                            </div>
+
+                            {/* Origin */}
+                            <div>
+                                <div className="flex justify-between items-center mb-1">
+                                    <label className="block text-sm font-medium">*Origin</label>
                                 </div>
                                 <FormSelect
-                                    value={engineCapacityLiter}
-                                    onChange={(e) => setEngineCapacityLiter(e.target.value)}
+                                    value={origin}
+                                    onChange={(e) => setOrigin(e.target.value)}
                                     disabled={fieldsDisabled}
-                                    options={engineCapacityOptionsLiters.map(l => ({ value: l, label: l }))}
+                                    options={[
+                                        { value: "", label: "--" },
+                                        { value: "New Local", label: "New Local" },
+                                        { value: "New Import", label: "New Import" },
+                                        { value: "Recon", label: "Reconditioned" },
+                                        { value: "CBU", label: "CBU" },
+                                        { value: "CKD", label: "CKD" },
+                                    ]}
                                 />
                             </div>
                         </div>
 
-                        {/* BDM & BTM */}
-                        <div className="grid grid-cols-2 gap-4">
+                        {/* Technical specifications */}
+                        <div className="space-y-4">
+                            <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
+                                <h3 className="text-lg font-bold text-brand">Technical Specifications</h3>
+                                <p className="text-xs">Engine and performance details</p>
+                            </div>
+
                             <div>
-                                <label className="block text-sm font-medium mb-1">*BDM (KG)</label>
+                                <label className="block text-sm font-medium mb-1">*Transmission</label>
+                                <FormSelect
+                                    value={transmission}
+                                    onChange={(e) => setTransmission(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    options={[
+                                        { value: "", label: "--" },
+                                        { value: "Automatic", label: "Automatic" },
+                                        { value: "Manual", label: "Manual" },
+                                    ]}
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">*Fuel Type</label>
+                                    <FormSelect
+                                        value={fuelType}
+                                        onChange={(e) => setFuelType(e.target.value)}
+                                        disabled={fieldsDisabled}
+                                        options={[
+                                            { value: "", label: "--" },
+                                            { value: "petrol", label: "Petrol" },
+                                            { value: "hybrid", label: "Hybrid" },
+                                            { value: "diesel", label: "Diesel" },
+                                            { value: "electric", label: "Electric" },
+                                        ]}
+                                    />
+                                </div>
+
+                                {/* Engine Capacity */}
+                                <div>
+                                    <div className="flex justify-between items-center mb-1">
+                                        <label className="block text-sm font-medium">*Engine Capacity (cc)</label>
+                                    </div>
+                                    <FormSelect
+                                        value={engineCapacityLiter}
+                                        onChange={(e) => setEngineCapacityLiter(e.target.value)}
+                                        disabled={fieldsDisabled}
+                                        options={engineCapacityOptionsLiters.map(l => ({ value: l, label: l }))}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* BDM & BTM */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">*BDM (KG)</label>
+                                    <FormTextInput
+                                        type="number"
+                                        placeholder="e.g. 7500"
+                                        value={bdm}
+                                        onChange={(e) => setBdm(e.target.value)}
+                                        disabled={fieldsDisabled}
+                                    />
+                                    {/* <p className="text-[10px] text-foreground/60 mt-0.5">Weight with load</p> */}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">*BTM (KG)</label>
+                                    <FormTextInput
+                                        type="number"
+                                        placeholder="e.g. 3500"
+                                        value={btm}
+                                        onChange={(e) => setBtm(e.target.value)}
+                                        disabled={fieldsDisabled}
+                                    />
+                                    {/* <p className="text-[10px] text-foreground/60 mt-0.5">Weight without load</p> */}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Condition & Value */}
+                        <div className="space-y-4">
+                            <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
+                                <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
+                                <p className="text-xs">Usage and valuation data</p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">*Condition</label>
+                                <FormSelect
+                                    value={condition}
+                                    onChange={(e) => setCondition(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    options={[
+                                        { value: "", label: "--" },
+                                        { value: "Very Poor", label: "Very Poor" },
+                                        { value: "Poor", label: "Poor" },
+                                        { value: "Fair", label: "Fair" },
+                                        { value: "Good", label: "Good" },
+                                        { value: "Very Good", label: "Very Good" },
+                                    ]}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
+                                <FormSelect
+                                    value={mileageFrom}
+                                    onChange={(e) => setMileageFrom(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    options={mileageOptions.filter(v => v !== 'Any').map(m => ({ value: m, label: m }))}
+                                />
+                            </div>
+
+                            {/* Insured Price - Available for both */}
+                            <div>
+                                <div className="flex justify-between items-center mb-1">
+                                    <label className="block text-sm font-medium">Previous Insured Sum (MYR)</label>
+                                </div>
                                 <FormTextInput
                                     type="number"
-                                    placeholder="e.g. 7500"
-                                    value={bdm}
-                                    onChange={(e) => setBdm(e.target.value)}
+                                    max={9999999}
+                                    placeholder="E.g. 123456"
                                     disabled={fieldsDisabled}
+                                    value={insuredPrice}
+                                    onChange={(e) => setInsuredPrice(e.target.value)}
                                 />
-                                {/* <p className="text-[10px] text-foreground/60 mt-0.5">Weight with load</p> */}
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">*BTM (KG)</label>
-                                <FormTextInput
-                                    type="number"
-                                    placeholder="e.g. 3500"
-                                    value={btm}
-                                    onChange={(e) => setBtm(e.target.value)}
-                                    disabled={fieldsDisabled}
-                                />
-                                {/* <p className="text-[10px] text-foreground/60 mt-0.5">Weight without load</p> */}
-                            </div>
+
                         </div>
                     </div>
 
-                    {/* Condition & Value */}
-                    <div className="space-y-4">
-                        <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
-                            <h3 className="text-lg font-bold text-brand">Condition & Value</h3>
-                            <p className="text-xs">Usage and valuation data</p>
+                    {/* Action Buttons */}
+                    <div className="flex pt-4 w-full">
+                        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
+                            <Button
+                                type="button"
+                                onClick={handleSubmit}
+                                disabled={loading || isLoading}
+                                variant="secondary"
+                                size="sm"
+                                className="w-full text-lg md:text-xl flex justify-center gap-2"
+                            >
+                                Get Market Value
+                                <ArrowDown className="h-5 w-5" />
+                            </Button>
+                            <Button
+                                type="button"
+                                href="#main"
+                                onClick={resetAll}
+                                variant="secondary"
+                                size="sm"
+                                className="w-full text-lg md:text-xl flex justify-center items-center gap-2"
+                                title="Clears all fields and valuation results"
+                            >
+                                Reset
+                                <RotateCcw className="h-5 w-5" />
+                            </Button>
                         </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">*Condition</label>
-                            <FormSelect
-                                value={condition}
-                                onChange={(e) => setCondition(e.target.value)}
-                                disabled={fieldsDisabled}
-                                options={[
-                                    { value: "", label: "--" },
-                                    { value: "Very Poor", label: "Very Poor" },
-                                    { value: "Poor", label: "Poor" },
-                                    { value: "Fair", label: "Fair" },
-                                    { value: "Good", label: "Good" },
-                                    { value: "Very Good", label: "Very Good" },
-                                ]}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Mileage (KM)</label>
-                            <FormSelect
-                                value={mileageFrom}
-                                onChange={(e) => setMileageFrom(e.target.value)}
-                                disabled={fieldsDisabled}
-                                options={mileageOptions.filter(v => v !== 'Any').map(m => ({ value: m, label: m }))}
-                            />
-                        </div>
-
-                        {/* Insured Price - Available for both */}
-                        <div>
-                            <div className="flex justify-between items-center mb-1">
-                                <label className="block text-sm font-medium">Previous Insured Sum (MYR)</label>
-                            </div>
-                            <FormTextInput
-                                type="number"
-                                max={9999999}
-                                placeholder="E.g. 123456"
-                                disabled={fieldsDisabled}
-                                value={insuredPrice}
-                                onChange={(e) => setInsuredPrice(e.target.value)}
-                            />
-                        </div>
-
                     </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex pt-4 w-full">
-                    <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
-                        <Button
-                            type="button"
-                            onClick={handleSubmit}
-                            disabled={loading || isLoading}
-                            variant="secondary"
-                            size="sm"
-                            className="w-full text-lg md:text-xl flex justify-center gap-2"
-                        >
-                            Get Market Value
-                            <ArrowDown className="h-5 w-5" />
-                        </Button>
-                        <Button
-                            type="button"
-                            href="#main"
-                            onClick={resetAll}
-                            variant="secondary"
-                            size="sm"
-                            className="w-full text-lg md:text-xl flex justify-center items-center gap-2"
-                            title="Clears all fields and valuation results"
-                        >
-                            Reset
-                            <RotateCcw className="h-5 w-5" />
-                        </Button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            )}
             <MakeModelPopup isOpen={showPopup} onClose={() => setShowPopup(false)} />
         </div>
     )

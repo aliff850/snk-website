@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext"
 import { ArrowDown, RotateCcw } from 'lucide-react'
 import SearchableSelect from '@/app/components/ui/SearchableSelect'
 import { Button } from "../../../ui/ButtonComponent"
-import { yearOptions, mileageOptions, MIN_VALUES, engineCapacityOptionsLiters } from "../../ranges"
+import { yearOptions, mileageOptions, MIN_VALUES } from "../../ranges"
 import { RegionSelection } from "../../shared/RegionSelection"
 import { MakeModelPopup } from "../../shared/MakeModelPopup"
 import { scrollToElement } from "@/app/components/ui/SmoothScroll"
@@ -120,13 +120,24 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     const [condition, setCondition] = useState("")
     const [transmission, setTransmission] = useState("")
     const [bodyType, setBodyType] = useState("")
+    const [electricMotorWatts, setElectricMotorWatts] = useState<string>("")
+
+    // Insurable values options lists (populated from API based on make+model)
+    const [variantOptions, setVariantOptions] = useState<string[]>([])
+    const [ccOptions, setCcOptions] = useState<string[]>([])
+    const [styleOptions, setStyleOptions] = useState<string[]>([])
+
+    // Insurable values selected values (what the user has chosen)
+    const [selectedVariant, setSelectedVariant] = useState<string>("")
+    const [selectedCC, setSelectedCC] = useState<string>("")
+    const [selectedStyle, setSelectedStyle] = useState<string>("")
+    const [loadingFormOptions, setLoadingFormOptions] = useState<boolean>(false)
 
     // Mudah specific states
     const [origin, setOrigin] = useState("")
     const [engineCapacityLiter, setEngineCapacityLiter] = useState<string>("")
     const [yearFrom, setYearFrom] = useState<string>("")
     const [mileageFrom, setMileageFrom] = useState<string>("")
-    // const [priceFrom, setPriceFrom] = useState<string>("")
     const [insuredPrice, setInsuredPrice] = useState<string>("")
 
     // Carlist states
@@ -134,8 +145,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     const [carlistModels, setCarlistModels] = useState<Record<string, string | null>>({})
     const [loadingCarlistMakes, setLoadingCarlistMakes] = useState(false)
 
-    // Carlist specific field for vehicle variants
-    const [carlistVariant, setCarlistVariant] = useState("")
+    // Carlist specific field for vehicle variants (replaced by selectedVariant above)
 
     // Helper function to slugify strings
     const slug = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-")
@@ -302,6 +312,22 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         }
     }, [make]) // Changed dependency to make - we want to fetch once when make is selected
 
+    // Fetch form options (variant, cc) whenever both make AND model are set
+    // This populates the variant and cc dropdowns from the vehicle database
+    useEffect(() => {
+        if (make && model) {
+            getFormOptions()
+        } else {
+            // Clear options and selections when make or model is cleared
+            setVariantOptions([])
+            setCcOptions([])
+            setStyleOptions([])
+            setSelectedVariant("")
+            setSelectedCC("")
+            setSelectedStyle("")
+        }
+    }, [make, model])
+
     // Function which merges all makes from both sources so that we can display them in the dropdown
     const unifiedMakes = useMemo(() => {
         const makes = new Set<string>()
@@ -341,7 +367,11 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         setMileageFrom("")
         setInsuredPrice("")
         setEngineCapacityLiter("")
-        setCarlistVariant("")
+        // Reset insurable value selections and options
+        setSelectedVariant("")
+        setSelectedCC("")
+        setVariantOptions([])
+        setCcOptions([])
         setCarlistModels({})
         setAvailableModels({})
         if (onReset) {
@@ -350,7 +380,51 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
     }
 
     // All fetch functions
-    // Function to retrieve Carlist listings
+
+    // Function to fetch form select options from master database based on make and model
+    const getFormOptions = async () => {
+        setLoadingFormOptions(true)
+        try {
+            console.log("Fetching details for ", make, model)
+            // Send make and model as query params
+            const params = new URLSearchParams({ make, model })
+            // We use API endpoint where after we send the make and model, it will query the vehicle database and it returns lists containing variant, series, year, cc based on the make and model
+            // Then we will dynamically populate the valuation form select inputs with these lists
+            // Year, import status, transmission and body style are just uniform and can
+            const response = await fetch(`/api/insurable/details?${params}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            })
+
+            // Data is returned as { variant: string[], series: string[], style: string[], cc: number[] }
+            const data = await response.json()
+            console.log("Form options fetched:", data)
+
+            // Populate the options lists and convert cc numbers to strings for FormSelect
+            setVariantOptions(data.variant ?? [])
+            setCcOptions((data.cc ?? []).map(String))
+            setStyleOptions(data.style ?? [])
+
+            // Reset the user's current selections since make/model has changed
+            setSelectedVariant("")
+            setSelectedCC("")
+            setSelectedStyle("")
+
+        } catch (e: any) {
+            console.log("Error fetching form options:", e)
+        } finally {
+            setLoadingFormOptions(false)
+        }
+    }
+
+    // Function to get the insurable values
+    // After the filters have been fetched
+    const getInsurableValues = async () => {
+        // Logic to be added
+    }
+
+    // For both Carlist and Mudah, most important filters are Year and Mileage
+    // Function to retrieve Carlist listings from the Carlist API endpoint
     const getCarlistData = async () => {
         // if (!canSubmit) return
 
@@ -392,38 +466,45 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                     condition: 'used'
                 }
 
-                // Variant (if specified)
-                if (carlistVariant) query.variant = carlistVariant
-
-                // Map body type
-                if (bodyType) {
-                    // Setting the body type to fit Carlist's API requirements
-                    const bodyTypeMap: Record<string, string> = {
-                        'sedan': 'sedan',
-                        'hatchback': 'Hatchback',
-                        'suv': 'suv',
-                        'mpv': 'MPV',
-                        'coupe': 'Coupe',
-                        'pickup': 'pickup',
-                        'convertible': 'Convertible',
-                        'wagon': 'wagon',
-                        'van': 'van'
-                    }
-                    const mappedBodyType = bodyTypeMap[bodyType] || bodyType
-                    query.body_type = mappedBodyType
-                }
-
                 // Set page size and sort order
                 const baseFilters: Record<string, any> = {
                     page_size: 50,
                     sort: sortOrder
                 }
 
+                // Variant (if specified)
+                // if (carlistVariant) query.variant = carlistVariant
+
+                // Map body type
+                // if (bodyType) {
+                //     // Setting the body type to fit Carlist's API requirements
+                //     const bodyTypeMap: Record<string, string> = {
+                //         'sedan': 'sedan',
+                //         'hatchback': 'Hatchback',
+                //         'suv': 'suv',
+                //         'mpv': 'MPV',
+                //         'coupe': 'Coupe',
+                //         'pickup': 'pickup',
+                //         'convertible': 'Convertible',
+                //         'wagon': 'wagon',
+                //         'van': 'van'
+                //     }
+                //     const mappedBodyType = bodyTypeMap[bodyType] || bodyType
+                //     query.body_type = mappedBodyType
+                // }
+
                 // Map manufactured year range
                 if (yearFrom) {
                     const y = parseInt(yearFrom, 10)
                     baseFilters.min_year = y
                     baseFilters.max_year = y
+                }
+
+                // Use mileage with 5000 KM window
+                if (mileageFrom) {
+                    const m = parseInt(mileageFrom, 10)
+                    baseFilters.min_mileage = m
+                    baseFilters.max_mileage = m + 5000
                 }
 
                 // Map transmission
@@ -446,13 +527,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                         'electric': 'Electric'
                     }
                     baseFilters.fuel_type = fuelMap[fuelType] || fuelType
-                }
-
-                // Use mileage with 5000 KM window
-                if (mileageFrom) {
-                    const m = parseInt(mileageFrom, 10)
-                    baseFilters.min_mileage = m
-                    baseFilters.max_mileage = m + 5000
                 }
 
                 // After all filters are set, fetch the data
@@ -480,7 +554,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 // If response is not ok, throw error
                 if (!res.ok) {
                     console.log('Failed to fetch Carlist Listings:', res.status)
-                    // console.error('Failed to fetch Carlist Listings:', res.status)
                     return []
                 }
                 return res.json()
@@ -561,7 +634,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         }
     }
 
-    // Function to retrieve Mudah listings
+    // Function to retrieve Mudah listings from the Mudah API endpoint
     const getMudahData = async () => {
         // if (!canSubmit) return
 
@@ -619,21 +692,21 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 if (fuelType) searchQuery.fueltype = fuelType
 
                 // Body type
-                if (bodyType) {
-                    const mudahBodyMap: Record<string, string> = {
-                        'sedan': 'sedan',
-                        'hatchback': 'hatchback',
-                        'suv': 'suvs',
-                        'mpv': 'mpvs',
-                        'coupe': 'coupe',
-                        'pickup': 'pick_up',
-                        'convertible': 'sports',
-                        'wagon': 'other',
-                        'van': 'other'
-                    }
-                    const mapped = mudahBodyMap[bodyType]
-                    if (mapped) searchQuery.car_type_id = mapped
-                }
+                // if (bodyType) {
+                //     const mudahBodyMap: Record<string, string> = {
+                //         'sedan': 'sedan',
+                //         'hatchback': 'hatchback',
+                //         'suv': 'suvs',
+                //         'mpv': 'mpvs',
+                //         'coupe': 'coupe',
+                //         'pickup': 'pick_up',
+                //         'convertible': 'sports',
+                //         'wagon': 'other',
+                //         'van': 'other'
+                //     }
+                //     const mapped = mudahBodyMap[bodyType]
+                //     if (mapped) searchQuery.car_type_id = mapped
+                // }
 
                 // Mileage query with 5000 KM window
                 const mileageQuery = (() => {
@@ -663,7 +736,6 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                     const errorText = await response.text()
                     console.log('Failed to fetch Mudah Listings:', response.status, errorText)
                     return []
-                    // throw new Error(`Failed to fetch Mudah Listings: ${response.status} - ${errorText}`)
                 }
                 return await response.json()
             }
@@ -1036,7 +1108,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 />
                 <div className="flex flex-col gap-1 pb-3 border-b-2 border-brand/20">
                     <h3 className="text-lg font-bold text-brand">Car Make/Model</h3>
-                    <p className="text-xs text-foreground">Select the make and model of the vehicle and also the region</p>
+                    <p className="text-xs text-foreground">Select the make and model of the vehicle</p>
                 </div>
                 {/* Make/Model Selection */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1102,22 +1174,36 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
                         <div>
                             <label className="block text-sm font-medium mb-1">*Body Type</label>
-                            <FormSelect
-                                value={bodyType}
-                                onChange={(e) => setBodyType(e.target.value)}
-                                disabled={fieldsDisabled}
-                                options={[
-                                    { value: "sedan", label: "Sedan" },
-                                    { value: "hatchback", label: "Hatchback" },
-                                    { value: "suv", label: "SUV" },
-                                    { value: "mpv", label: "MPV" },
-                                    { value: "coupe", label: "Coupe" },
-                                    { value: "pickup", label: "Pick-up" },
-                                    { value: "convertible", label: "Convertible" },
-                                    { value: "wagon", label: "Wagon" },
-                                    { value: "van", label: "Van" },
-                                ]}
-                            />
+                            {/* Default to predefined body types if there are no style options for selected vehicle make and model */}
+                            {styleOptions.length == 0 ? (
+                                <FormSelect
+                                    value={selectedStyle}
+                                    onChange={(e) => setSelectedStyle(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    options={[
+                                        { value: "sedan", label: "4D Sedan" },
+                                        { value: "hatchback", label: "4D Hatchback" },
+                                        { value: "2dhatchback", label: "2D Hatchback" },
+                                        { value: "wagon", label: "4D Wagon" },
+                                        { value: "4dcoupe", label: "4D Coupe" },
+                                        { value: "coupe", label: "2D Coupe" },
+                                        { value: "suv", label: "4D SUV" },
+                                        { value: "2dsuv", label: "2D SUV" },
+                                        { value: "pickup", label: "4D Pick-up" },
+                                        { value: "2dpickup", label: "2D Pick-up" },
+                                        { value: "mpv", label: "MPV" },
+                                        { value: "convertible", label: "Convertible" },
+                                        { value: "van", label: "Van" },
+                                    ]}
+                                />
+                            ) : (
+                                <FormSelect
+                                    value={selectedStyle}
+                                    onChange={(e) => setSelectedStyle(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    options={styleOptions.map((style) => ({ value: style, label: style }))}
+                                />
+                            )}
                         </div>
 
                         {/* Variant */}
@@ -1125,19 +1211,26 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                             <div className="flex justify-between items-center mb-1">
                                 <label className="block text-sm font-medium">*Variant</label>
                             </div>
-                            <FormTextInput
+                            {/* <FormTextInput
                                 placeholder="e.g., 1.5G"
                                 disabled={fieldsDisabled}
                                 type="text"
-                                value={carlistVariant}
-                                onChange={(e) => setCarlistVariant(e.target.value)}
+                                value={variantOptions} // Just set this to insurable values' variant options
+                                onChange={(e) => setVariantOptions(e.target.value)}
+                            /> */}
+                            <FormSelect
+                                value={selectedVariant}
+                                onChange={(e) => setSelectedVariant(e.target.value)}
+                                disabled={variantOptions.length == 0 || fieldsDisabled || loadingFormOptions}
+                                options={variantOptions}
+
                             />
                         </div>
 
                         {/* Origin */}
                         <div>
                             <div className="flex justify-between items-center mb-1">
-                                <label className="block text-sm font-medium">*Origin</label>
+                                <label className="block text-sm font-medium">*Import Status</label>
                             </div>
                             <FormSelect
                                 value={origin}
@@ -1148,6 +1241,8 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                                     { value: "New Import", label: "New Import" },
                                     { value: "Used Local", label: "Used Local" },
                                     { value: "Used Import", label: "Used Import" },
+                                    { value: "Rebuilt", label: "Rebuilt" },
+                                    { value: "Recon", label: "Recon" }
                                 ]}
                             />
                         </div>
@@ -1189,18 +1284,51 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                         </div>
 
                         {/* Engine Capacity */}
-                        <div>
-                            <div className="flex justify-between items-center mb-1">
-                                <label className="block text-sm font-medium">*Engine Capacity (L)</label>
+                        {/* If fuel type is other than electric, display engine capacity */}
+                        {fuelType !== "electric" && (
+                            <div>
+                                <div className="flex justify-between items-center mb-1">
+                                    <label className="block text-sm font-medium">*Engine Capacity (cc)</label>
+                                </div>
+                                {ccOptions.length == 0 ? (
+                                    <FormTextInput
+                                        value={selectedCC}
+                                        onChange={(e) => setSelectedCC(e.target.value)}
+                                        disabled={fieldsDisabled}
+                                        type="number"
+                                        min={0}
+                                        max={10000}
+                                        step={1000}
+                                        placeholder="e.g., 1600"
+                                    />
+                                ) : (
+                                    <FormSelect
+                                        value={selectedCC}
+                                        onChange={(e) => setSelectedCC(e.target.value)}
+                                        disabled={fieldsDisabled || loadingFormOptions}
+                                        options={ccOptions}
+                                    // labelFormatter={formatEngineCapacity}
+                                    />
+                                )}
                             </div>
-                            <FormSelect
-                                value={engineCapacityLiter}
-                                onChange={(e) => setEngineCapacityLiter(e.target.value)}
-                                disabled={fieldsDisabled}
-                                options={engineCapacityOptionsLiters}
-                                labelFormatter={formatEngineCapacity}
-                            />
-                        </div>
+                        )
+                        }
+                        {fuelType === "electric" && (
+                            <div>
+                                <div className="flex justify-between items-center mb-1">
+                                    <label className="block text-sm font-medium">*Electric Motor Watts</label>
+                                </div>
+                                <FormTextInput
+                                    value={electricMotorWatts}
+                                    onChange={(e) => setElectricMotorWatts(e.target.value)}
+                                    disabled={fieldsDisabled}
+                                    type="number"
+                                    min={0}
+                                    step={1000}
+                                    placeholder="e.g., 100000"
+                                />
+                            </div>
+                        )}
                     </div>
 
                     {/* Condition & Value */}

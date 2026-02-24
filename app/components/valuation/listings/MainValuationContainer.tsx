@@ -93,8 +93,8 @@ interface UnifiedListingsDisplayProps {
         model: string
         region?: string
         year?: string
-        bodyType?: string
-        engineCapacity?: string
+        // bodyType?: string
+        // engineCapacity?: string
         fuelType?: string
         transmission?: string
         origin?: string
@@ -102,6 +102,8 @@ interface UnifiedListingsDisplayProps {
         mileage?: string
         insuredPrice?: string
         variant?: string
+        style?: string
+        cc?: string
     }
 }
 
@@ -211,6 +213,7 @@ export default function UnifiedListingsDisplay({
 
     // Count listings by source
     const sourceCounts = useMemo(() => {
+
         const allListings = viewMode === 'ascending' ? normalizedAscending :
             normalizedDescending.length > 0 ? normalizedDescending :
                 normalizedListings
@@ -348,8 +351,8 @@ export default function UnifiedListingsDisplay({
                     year={userInputs.year}
                     region={userInputs.region}
                     vehicleType={vehicleType}
-                    bodyType={userInputs.bodyType}
-                    engineCapacity={userInputs.engineCapacity}
+                    //bodyType={userInputs.bodyType}
+                    // engineCapacity={userInputs.engineCapacity}
                     fuelType={userInputs.fuelType}
                     transmission={userInputs.transmission}
                     origin={userInputs.origin}
@@ -357,6 +360,8 @@ export default function UnifiedListingsDisplay({
                     mileage={userInputs.mileage}
                     insuredPrice={userInputs.insuredPrice}
                     variant={userInputs.variant}
+                    style={userInputs.style}
+                    cc={userInputs.cc}
                 />
             )}
 
@@ -399,7 +404,7 @@ export default function UnifiedListingsDisplay({
             <div className="rounded-xl border border-brand-light-grey p-2 md:p-4 flex flex-col gap-4 print:hidden">
                 <div className="flex flex-col gap-4">
                     {/* Price Sorting */}
-                    {normalizedAscending.length > 0 && normalizedDescending.length > 0 && (
+                    {normalizedAscending.length > 1 && normalizedDescending.length > 1 && (
                         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
                             <div className="flex items-center gap-2">
                                 <span className="font-medium text-gray-700">View:</span>
