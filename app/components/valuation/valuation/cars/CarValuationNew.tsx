@@ -861,7 +861,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 model: modelSlug,
                 condition: 'used'
             }
-            if (carlistVariant) carlistQuery.variant = carlistVariant
+            if (selectedVariant) carlistQuery.variant = selectedVariant
             if (bodyType) {
                 const bodyTypeMap: Record<string, string> = {
                     'sedan': 'sedan', 'hatchback': 'Hatchback', 'suv': 'suv',
@@ -933,10 +933,10 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                     model: model.toUpperCase(),
                     year: yearFrom,
                 }
-                if (carlistVariant) insurableDetail.variant = carlistVariant.toUpperCase()
-                if (engineCapacityLiter) insurableDetail.cc = engineCapacityLiter
+                if (selectedVariant) insurableDetail.variant = selectedVariant.toUpperCase()
+                if (selectedCC) insurableDetail.cc = selectedCC
                 if (transmission) insurableDetail.transmission = transmission.toUpperCase()
-                if (bodyType) insurableDetail.style = bodyType.toUpperCase()
+                if (selectedStyle) insurableDetail.style = selectedStyle.toUpperCase()
 
                 requestBody.insurable = {
                     vehicle_detail: insurableDetail
@@ -1029,10 +1029,10 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
             // Construct user inputs
             const currentUserInputs = {
-                make, model, region, year: yearFrom, bodyType,
-                engineCapacity: engineCapacityLiter, fuelType, transmission,
+                make, model, region, year: yearFrom, bodyType: selectedStyle,
+                engineCapacity: selectedCC, fuelType, transmission,
                 origin, condition, mileage: mileageFrom, insuredPrice,
-                variant: carlistVariant,
+                variant: selectedVariant,
             }
 
             // Include insurable data if available
