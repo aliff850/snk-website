@@ -1,7 +1,7 @@
 // UserInputsDisplay
 // Displays all the user inputs for the valuation
 
-import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign, MapPin, Info, Bolt } from 'lucide-react'
+import { Car, Calendar, Gauge, Fuel, Settings, Cog, DollarSign, MapPin, Info, Bolt, Zap } from 'lucide-react'
 import { FaMotorcycle } from 'react-icons/fa6'
 
 // Reusable user inputs box component
@@ -33,8 +33,6 @@ interface UserInputsDisplayProps {
     vehicleType?: 'car' | 'motorcycle'
     year?: string
     region?: string
-    // bodyType?: string
-    // engineCapacity?: string
     fuelType?: string
     transmission?: string
     condition?: string
@@ -44,6 +42,7 @@ interface UserInputsDisplayProps {
     variant?: string
     style?: string
     cc?: string
+    electricMotorWatts?: string
 }
 
 export default function UserInputsDisplay({
@@ -52,8 +51,6 @@ export default function UserInputsDisplay({
     vehicleType = 'car',
     year,
     region,
-    // bodyType,
-    // engineCapacity,
     fuelType,
     transmission,
     origin,
@@ -62,7 +59,8 @@ export default function UserInputsDisplay({
     insuredPrice,
     variant,
     style,
-    cc
+    cc,
+    electricMotorWatts
 }: UserInputsDisplayProps) {
 
     // Format the display values
@@ -146,7 +144,7 @@ export default function UserInputsDisplay({
                 {/* Car-specific fields */}
                 {vehicleType === 'car' && (
                     <>
-                        {/* Variant (Carlist only) */}
+                        {/* Variant */}
                         <UserInputsBox
                             icon={<Info className="w-4 h-4 text-gray-500" />}
                             title="Variant"
@@ -158,13 +156,6 @@ export default function UserInputsDisplay({
                             icon={<Car className="w-4 h-4 text-gray-500" />}
                             title="Body Type"
                             value={style ? formatValue(style) : "--"}
-                        />
-
-                        {/* Engine Capacity */}
-                        <UserInputsBox
-                            icon={<Cog className="w-4 h-4 text-gray-500" />}
-                            title="Engine Capacity"
-                            value={cc ? `${cc}cc` : "--"}
                         />
 
                         {/* Fuel Type */}
@@ -180,6 +171,21 @@ export default function UserInputsDisplay({
                             title="Transmission"
                             value={transmission ? formatValue(transmission) : "--"}
                         />
+
+                        {/* Engine Capacity or Motor Power */}
+                        {fuelType === 'electric' ? (
+                            <UserInputsBox
+                                icon={<Zap className="w-4 h-4 text-gray-500" />}
+                                title="Motor Power"
+                                value={electricMotorWatts ? `${electricMotorWatts} kW` : "--"}
+                            />
+                        ) : (
+                            <UserInputsBox
+                                icon={<Cog className="w-4 h-4 text-gray-500" />}
+                                title="Engine Capacity"
+                                value={cc ? `${cc}cc` : "--"}
+                            />
+                        )}
 
                         {/* Vehicle origin */}
                         <UserInputsBox
