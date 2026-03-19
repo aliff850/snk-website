@@ -33,6 +33,9 @@ export async function signup(formData: FormData) {
       data: {
         full_name: formData.get("fullname") as string,
         role: "user",
+        tokens_remaining: 3,
+        tokens_per_week: 3,
+        last_refill_at: new Date().toISOString(),
       },
       redirectTo: `${process.env.NODE_ENV === "development" ? "http://127.0.0.1:3000" : process.env.NEXT_PUBLIC_APP_URL}`,
     },

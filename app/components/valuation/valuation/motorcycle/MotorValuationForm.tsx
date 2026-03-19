@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
+import { useAuth } from "@/context/AuthContext"
 import { ArrowDown, RotateCcw } from 'lucide-react'
 import { Button } from "../../../ui/ButtonComponent"
 import { yearOptions, MIN_VALUES } from "../../ranges"
@@ -18,6 +19,7 @@ interface MotorValuationFormProps {
 }
 
 export function MotorValuationForm({ onSearch, onReset, loading = false, onSearchStart }: MotorValuationFormProps) {
+    const { user, refreshTokens, getAccessToken } = useAuth()
     const [isLoading, setIsLoading] = useState(false)
     // Existing states
     const [make, setMake] = useState("")
@@ -97,102 +99,97 @@ export function MotorValuationForm({ onSearch, onReset, loading = false, onSearc
             return
         }
 
+        // Check if user has tokens
+        if (!user?.tokens_remaining || user.tokens_remaining <= 0) {
+            onSearch({ error: "No valuation tokens remaining. Tokens refresh weekly." })
+            return
+        }
+
         setIsLoading(true)
         if (onSearchStart) {
             onSearchStart()
         }
 
         try {
+            const accessToken = await getAccessToken()
+            if (!accessToken) {
+                onSearch({ error: "Authentication error. Please log in again." })
+                return
+            }
+
             const makeSlug = slug(make)
             const modelSlug = slug(model)
-            const headers = { "Content-Type": "application/json" }
 
-            // Helper function to fetch listings
-            const fetchListings = async (sortOrder: 'price_asc' | 'price_desc') => {
-                const searchQuery: Record<string, any> = {
-                    motorcycle_make_id: makeSlug,
-                    motorcycle_model_id: modelSlug,
-                    From: fromOffset,
-                    limit,
-                    sortby: sortOrder
-                }
-
-                // Model year
-                const yearQuery = (() => {
-                    const from = yearFrom || ""
-                    if (!from) return ""
-                    if (from) return `${from}-${from}`
-                    return `${MIN_VALUES.year}-`
-                })()
-
-                if (yearQuery) searchQuery.mfg_year = yearQuery
-
-                const response = await fetch(`/api/mudah/search`, {
-                    method: "POST",
-                    headers,
-                    body: JSON.stringify({ searchQuery })
-                })
-
-                if (!response.ok) {
-                    const errorText = await response.text()
-                    throw new Error(`Failed to fetch Mudah Listings: ${response.status} - ${errorText}`)
-                }
-
-                return await response.json()
+            // Build Mudah motorcycle search params
+            const mudahSearchQuery: Record<string, any> = {
+                motorcycle_make_id: makeSlug,
+                motorcycle_model_id: modelSlug,
+                From: fromOffset,
+                limit,
+                sortby: 'price_asc'
             }
 
-            // Fetch all listings
-            const ascendingListings = await fetchListings('price_asc')
+            const yearQuery = yearFrom ? `${yearFrom}-${yearFrom}` : ""
+            if (yearQuery) mudahSearchQuery.mfg_year = yearQuery
 
-            let descendingListings: any[] = []
-            let uniqueAscending: any[] = []
-            let uniqueDescending: any[] = []
-
-            // If less than 50 listings, use only ascending
-            if (ascendingListings.length < 50) {
-                uniqueAscending = ascendingListings
-                uniqueDescending = []
-            } else {
-                // If we got 50 or more, also fetch descending
-                descendingListings = await fetchListings('price_desc')
-
-                // create a map using adview_url as the key to deduplicate
-                const listingsMap: Record<string, any> = {}
-
-                // Add ascending listings
-                ascendingListings.forEach((listing: any) => {
-                    if (listing.adview_url) {
-                        listingsMap[listing.adview_url] = listing
-                    }
-                })
-
-                // Add descending listings
-                descendingListings.forEach((listing: any) => {
-                    if (listing.adview_url) {
-                        listingsMap[listing.adview_url] = listing
-                    }
-                })
-                // convert map values to arrays and sort
-                const allListings = Object.values(listingsMap)
-                uniqueAscending = [...allListings].sort((a: any, b: any) => a.price - b.price)
-                uniqueDescending = [...allListings].sort((a: any, b: any) => b.price - a.price)
+            // Build unified request (motorcycle only uses Mudah)
+            const requestBody = {
+                vehicle_type: 'motorcycle',
+                mudah: {
+                    searchQuery: mudahSearchQuery,
+                    whitelist_attributes: [
+                        'model_name', 'make_name', 'condition_name', 'manufactured_year',
+                        'fueltype', 'price', 'mileage', 'transmission_name',
+                        'engine_capacity', 'car_type_name', 'adview_url', 'image', 'variant'
+                    ]
+                }
             }
+
+            // Call unified endpoint
+            const response = await fetch('/api/valuation/get_marketdata', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                body: JSON.stringify(requestBody)
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null)
+                const errorMsg = errorData?.detail || `Request failed (${response.status})`
+                onSearch({ error: errorMsg })
+                return
+            }
+
+            const data = await response.json()
+
+            // Refresh token count
+            await refreshTokens()
+
+            // Process Mudah results
+            const mudahListings = Array.isArray(data.results?.mudah) ? data.results.mudah : []
+
+            // Deduplicate using adview_url
+            const listingsMap: Record<string, any> = {}
+            mudahListings.forEach((listing: any) => {
+                if (listing.adview_url) listingsMap[listing.adview_url] = listing
+            })
+            const allListings = Object.values(listingsMap)
+            const ascending = [...allListings].sort((a: any, b: any) => a.price - b.price)
+            const descending = [...allListings].sort((a: any, b: any) => b.price - a.price)
 
             const results = {
-                listings: uniqueAscending,
-                listingsAscending: uniqueAscending,
-                listingsDescending: uniqueDescending,
+                listings: ascending,
+                listingsAscending: ascending,
+                listingsDescending: descending,
                 make: makeSlug,
                 model: modelSlug,
                 vehicleType: 'motorcycle',
                 source: 'Mudah',
                 userInputs: {
-                    make: make,
-                    model: model,
-                    region: region,
-                    year: yearFrom,
-                    condition: condition,
-                    insuredPrice: insuredPrice
+                    make, model, region,
+                    year: yearFrom, condition, insuredPrice
                 }
             }
 

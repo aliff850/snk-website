@@ -79,7 +79,7 @@ export function ValuationResults({ link, results, error, loading, onClearResults
 
             <div ref={componentRef} className="rounded-2xl md:rounded-3xl border print:border-0 print:shadow-none print:p-4 border-foreground/20 shadow-sm bg-brand-white print:page-break-inside-avoid">
 
-                <div id="valuation-results-header" className="print:px-0 print:py-2 p-4 md:p-6 flex items-center justify-between">
+                <div id="valuation-results-header" className="print:px-0 print:py-2 pt-4 px-4 md:pt-6 md:px-6 flex items-center justify-between">
                     <h4 className="text-2xl md:text-3xl text-brand font-bold">Valuation Result</h4>
                     {/* Buttons for clearing results and downloading */}
                     <div className="flex gap-4 print:hidden">
@@ -190,13 +190,13 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                 </div>
 
                 {/* Document Footer */}
-                <div className="hidden print:block border border-brand/20 p-2 rounded-xl mt-2 text-brand flex flex-col gap-1 items-center print:page-break-inside-avoid">
+                <div className="hidden print:block border border-brand-light-grey p-2 rounded-xl mt-2 text-brand flex flex-col gap-1 items-center print:page-break-inside-avoid">
                     <p className="font-bold text-lg">Market value is based on</p>
                     <p className="text-2xl font-bold">{results?.listings?.length} {results?.listings?.length === 1 ? 'listing' : 'listings'}</p>
                     <p className="font-bold text-lg">from online sources.</p>
                 </div>
 
-                <div className="hidden print:block mt-2 pt-4 border-t border-gray-200 print:page-break-inside-avoid">
+                <div className="hidden print:block mt-2 pt-4 print:page-break-inside-avoid">
                     <div className="flex flex-col items-center">
                         <p className="text-center text-sm text-brand font-bold">Valuation produced by SNK Real Time Online Inquiry Platform</p>
                         <p className="text-center text-sm text-brand">© 2026 SNK Market Data. All rights reserved.</p>

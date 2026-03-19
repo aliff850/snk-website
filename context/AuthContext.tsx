@@ -10,12 +10,16 @@ interface User {
     email?: string;
     full_name?: string;
     role?: string;
+    tokens_remaining?: number;
+    tokens_per_week?: number;
 }
 
 interface AuthContextType {
     user: User | null;
     login: (formData: FormData) => Promise<{ ok: boolean; message?: string; user?: User }>;
     logout: () => Promise<void>;
+    refreshTokens: () => Promise<void>;
+    getAccessToken: () => Promise<string | null>;
     isLoading: boolean;
 }
 
@@ -32,6 +36,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             email: sbUser.email,
             full_name: sbUser.user_metadata?.full_name,
             role: sbUser.user_metadata?.role,
+            tokens_remaining: sbUser.user_metadata?.tokens_remaining,
+            tokens_per_week: sbUser.user_metadata?.tokens_per_week,
         };
     }
 
@@ -83,8 +89,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         router.refresh();
     };
 
+    const refreshTokens = async () => {
+        try {
+            // refreshSession() forces a new JWT from Supabase with the latest user_metadata.
+            // This is necessary because the backend updates metadata via admin API,
+            // which doesn't invalidate the client's cached session.
+            const { data: { session }, error } = await supabase.auth.refreshSession();
+            if (error) {
+                console.error("Error refreshing session:", error);
+                return;
+            }
+            if (session?.user) {
+                setUser(mapUser(session.user));
+            }
+        } catch (error) {
+            console.error("Error refreshing tokens:", error);
+        }
+    };
+
+    const getAccessToken = async (): Promise<string | null> => {
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            return session?.access_token ?? null;
+        } catch (error) {
+            console.error("Error getting access token:", error);
+            return null;
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+        <AuthContext.Provider value={{ user, login, logout, refreshTokens, getAccessToken, isLoading }}>
             {children}
         </AuthContext.Provider>
     );

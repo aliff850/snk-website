@@ -93,8 +93,6 @@ interface UnifiedListingsDisplayProps {
         model: string
         region?: string
         year?: string
-        // bodyType?: string
-        // engineCapacity?: string
         fuelType?: string
         transmission?: string
         origin?: string
@@ -104,6 +102,7 @@ interface UnifiedListingsDisplayProps {
         variant?: string
         style?: string
         cc?: string
+        electricMotorWatts?: string
     }
 }
 
@@ -351,8 +350,6 @@ export default function UnifiedListingsDisplay({
                     year={userInputs.year}
                     region={userInputs.region}
                     vehicleType={vehicleType}
-                    //bodyType={userInputs.bodyType}
-                    // engineCapacity={userInputs.engineCapacity}
                     fuelType={userInputs.fuelType}
                     transmission={userInputs.transmission}
                     origin={userInputs.origin}
@@ -362,6 +359,7 @@ export default function UnifiedListingsDisplay({
                     variant={userInputs.variant}
                     style={userInputs.style}
                     cc={userInputs.cc}
+                    electricMotorWatts={userInputs.electricMotorWatts}
                 />
             )}
 

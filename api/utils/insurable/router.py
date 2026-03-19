@@ -37,9 +37,20 @@ def get_insurable(vehicle_detail: vehicle_identification):
     return res.data
 
 
+@insurableRouter.get('/years')
+def get_years(make: str, model: str):
+    res = supabase.table('vehicles').select('year').match({'make': make.upper(), 'model': model.upper()}).execute()
+
+    if not res.data:
+        return {"years": []}
+
+    years = sorted(list(set(d['year'] for d in res.data if d.get('year'))), reverse=True)
+    return {"years": years}
+
+
 @insurableRouter.get('/details')
-def get_details(make: str, model: str):
-    res = supabase.table('vehicles').select('variant,series,style,cc').match({'make': make.upper(), 'model': model.upper()}).execute()
+def get_details(make: str, model: str, year: str):
+    res = supabase.table('vehicles').select('variant,series,style,cc').match({'make': make.upper(), 'model': model.upper(), 'year': year}).execute()
     
     if not res.data:
         return {"meta": "No vehicle found"}

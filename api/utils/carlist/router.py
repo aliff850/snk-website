@@ -178,7 +178,7 @@ def Search(query: SearchQuery, filters: SearchFilters,
             whitelist_attributes: Optional[list[str]] = ["brand.name", "model", "itemCondition", "vehicleModelDate", "fuelType", "offers.price", "mileageFromOdometer.value", "vehicleTransmission", "image[0].url", "mainEntityOfPage"]):
     # print(query.model_dump())
     URL = build_url(query, filters)
-    print(f"Generated URL: {URL}")
+    # print(f"Generated URL: {URL}")
 
     html = get(URL)
     if not html.ok and html.status_code != 200:
