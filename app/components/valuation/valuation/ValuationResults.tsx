@@ -183,6 +183,7 @@ export function ValuationResults({ link, results, error, loading, onClearResults
                                 source={results?.source || 'Unknown'}
                                 counts={results?.counts}
                                 userInputs={results?.userInputs}
+                                insurableData={results?.insurable}
                             />
 
                         </div>

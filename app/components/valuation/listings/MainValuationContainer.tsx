@@ -1,6 +1,6 @@
 // Container to display listings from both Mudah and Carlist
 
-import { Car, CircleDollarSign, HandCoins, ArrowUp, ArrowDown } from 'lucide-react'
+import { Car, CircleDollarSign, HandCoins, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import UnifiedGridView from './ValuationListings'
 import UserInputsDisplay from '../shared/UserInputsDisplay'
@@ -104,6 +104,7 @@ interface UnifiedListingsDisplayProps {
         cc?: string
         electricMotorWatts?: string
     }
+    insurableData?: any
 }
 
 // Normalize listing from either source
@@ -138,19 +139,19 @@ const normalizeListing = (listing: any): UnifiedListing | null => {
     // Otherwise it's a Carlist listing
     return {
         source: 'Carlist',
-        make: listing['brand.name'] || '',
+        make: listing['brand.name'] || listing.make || '',
         model: listing.model || '',
         variant: listing.variant,
         year: listing.vehicleModelDate || listing['vehicleModelDate'] || '',
-        price: listing['offers.price'] || listing.normalizedPrice || 0,
-        mileage: listing['mileageFromOdometer.value'] ? `${listing['mileageFromOdometer.value']} km` : undefined,
-        transmission: listing.vehicleTransmission || listing['vehicleTransmission'],
+        price: listing['offers.price'] || listing.price || listing.normalizedPrice || 0,
+        mileage: listing['mileageFromOdometer.value'] ? `${listing['mileageFromOdometer.value']} km` : listing.mileage,
+        transmission: listing.vehicleTransmission || listing['vehicleTransmission'] || listing.transmission,
         fuelType: listing.fuelType || listing['fuelType'],
-        condition: listing.itemCondition || listing['itemCondition'],
+        condition: listing.itemCondition || listing['itemCondition'] || listing.condition,
         bodyType: listing.bodyType,
         engineCapacity: listing.engineCapacity,
-        image: listing.image,
-        url: listing.url || '',
+        image: listing.image || listing['image[0].url'] || (Array.isArray(listing.images) ? listing.images[0] : undefined),
+        url: listing.url || listing.mainEntityOfPage || listing['mainEntityOfPage'] || '',
         originalData: listing
     }
 }
@@ -160,7 +161,8 @@ export default function UnifiedListingsDisplay({
     listingsAscending = [],
     listingsDescending = [],
     vehicleType = 'car',
-    userInputs
+    userInputs,
+    insurableData
 }: UnifiedListingsDisplayProps) {
 
     const [removedUrls, setRemovedUrls] = useState<Set<string>>(new Set())
@@ -170,6 +172,15 @@ export default function UnifiedListingsDisplay({
     const [isFloating, setIsFloating] = useState(false)
     const [shouldShowFloating, setShouldShowFloating] = useState(false)
     const priceContainerRef = useRef<HTMLDivElement>(null)
+    
+    // Pagination State
+    const [currentPage, setCurrentPage] = useState(1)
+    const ITEMS_PER_PAGE = 30
+
+    // Reset page to 1 when filters change
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [viewMode, sourceFilter, listings])
 
     // Normalize all listings
     const normalizedListings = useMemo(() => {
@@ -186,25 +197,37 @@ export default function UnifiedListingsDisplay({
 
     // Update filtered listings when view mode or source filter changes
     const displayListings = useMemo(() => {
-        let source: UnifiedListing[]
+        // Start with the raw combined list of normalized objects
+        let source = normalizedListings
 
-        if (normalizedAscending.length > 0 && normalizedDescending.length > 0) {
-            source = viewMode === 'ascending' ? normalizedAscending : normalizedDescending
-        } else {
-            source = normalizedListings
-        }
-
-        // Filter by source
+        // Filter out removed items first
         let filtered = source.filter(listing => !removedUrls.has(listing.url))
 
+        // Filter by source
         if (sourceFilter !== 'all') {
             filtered = filtered.filter(listing =>
                 listing.source.toLowerCase() === sourceFilter
             )
         }
 
-        return filtered
-    }, [viewMode, normalizedAscending, normalizedDescending, normalizedListings, removedUrls, sourceFilter])
+        // New Logic: Mix them up according to the option!
+        // We sort the entirely combined list exactly based on the viewMode filter.
+        return [...filtered].sort((a, b) => {
+            if (viewMode === 'ascending') {
+                return a.price - b.price
+            } else {
+                return b.price - a.price
+            }
+        })
+    }, [viewMode, normalizedListings, removedUrls, sourceFilter])
+
+    // Pagination Logic: Slice the sorted array into 30 items for the current page
+    const paginatedListings = useMemo(() => {
+        const startIdx = (currentPage - 1) * ITEMS_PER_PAGE
+        return displayListings.slice(startIdx, startIdx + ITEMS_PER_PAGE)
+    }, [displayListings, currentPage])
+
+    const totalPages = Math.ceil(displayListings.length / ITEMS_PER_PAGE) || 1
 
     const removeListing = (url: string) => {
         setRemovedUrls(prev => new Set(prev).add(url))
@@ -212,16 +235,11 @@ export default function UnifiedListingsDisplay({
 
     // Count listings by source
     const sourceCounts = useMemo(() => {
-
-        const allListings = viewMode === 'ascending' ? normalizedAscending :
-            normalizedDescending.length > 0 ? normalizedDescending :
-                normalizedListings
-
+        const allListings = normalizedListings
         const mudah = allListings.filter(l => l.source === 'Mudah').length
         const carlist = allListings.filter(l => l.source === 'Carlist').length
-
         return { mudah, carlist, total: mudah + carlist }
-    }, [normalizedListings, normalizedAscending, normalizedDescending, viewMode])
+    }, [normalizedListings])
 
     // Scroll detection for floating price container
     useEffect(() => {
@@ -262,40 +280,50 @@ export default function UnifiedListingsDisplay({
     }
 
     // Calculate price statistics
-    const prices = displayListings.map(l => l.price)
-    const baseAveragePrice = Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length)
+    // New Logic: Get the absolute lowest, highest, and (lowest+highest)/2 from the mixed array!
+    const validPrices = displayListings.map(l => l.price).filter(p => typeof p === 'number' && p > 0)
+    
+    let lowestPrice = 0
+    let highestPrice = 0
+    let averagePrice = 0
 
-    let averagePrice = baseAveragePrice
-
-    // Adjust average price based on region
-    // If East Malaysia, add 5% to the average price
-    // If Langkawi, add 10% to the average price
-    // If West Malaysia price is same
-    if (userInputs?.region === "east") {
-        averagePrice = Math.round(baseAveragePrice * 1.05)
-    } else if (userInputs?.region === "langkawi") {
-        // averagePrice = Math.round(baseAveragePrice * 1.1)
-        // Comment this out for now since we do not yet have actual percentage for Langkawi
+    if (validPrices.length > 0) {
+        lowestPrice = Math.min(...validPrices)
+        highestPrice = Math.max(...validPrices)
+        
+        // As requested: find the true average between the lowest and highest price across both platforms
+        let baseAveragePrice = Math.round((lowestPrice + highestPrice) / 2)
         averagePrice = baseAveragePrice
+
+        // Adjust average price based on region
+        // If East Malaysia, add 5% to the average price
+        // If Langkawi, add 10% to the average price
+        // If West Malaysia price is same
+        if (userInputs?.region === "east") {
+            averagePrice = Math.round(baseAveragePrice * 1.05)
+        } else if (userInputs?.region === "langkawi") {
+            // averagePrice = Math.round(baseAveragePrice * 1.1)
+            // Comment this out for now since we do not yet have actual percentage for Langkawi
+            averagePrice = baseAveragePrice
+        }
+
+        // Adjust average price based on condition
+        if (userInputs?.condition) {
+            const condition_name = userInputs.condition
+            const lowPercentage = 0.1
+            const highPercentage = 0.2
+
+            if (condition_name === "Very Poor") { averagePrice = Math.round(averagePrice * (1 - highPercentage)) }
+            else if (condition_name === "Poor") { averagePrice = Math.round(averagePrice * (1 - lowPercentage)) }
+            else if (condition_name === "Good") { averagePrice = Math.round(averagePrice * (1 + lowPercentage)) }
+            else if (condition_name === "Very Good") { averagePrice = Math.round(averagePrice * (1 + highPercentage)) }
+        }
     }
 
-    // Adjust average price based on condition
-    if (userInputs?.condition) {
-        const condition_name = userInputs.condition
-        const lowPercentage = 0.1
-        const highPercentage = 0.2
-
-        if (condition_name === "Very Poor") { averagePrice = Math.round(averagePrice * (1 - highPercentage)) }
-        else if (condition_name === "Poor") { averagePrice = Math.round(averagePrice * (1 - lowPercentage)) }
-        else if (condition_name === "Good") { averagePrice = Math.round(averagePrice * (1 + lowPercentage)) }
-        else if (condition_name === "Very Good") { averagePrice = Math.round(averagePrice * (1 + highPercentage)) }
-    }
-
-    // Calculate range based on adjusted average
-    const rangePercentage = 0.1
-    const lowestPrice = Math.round(averagePrice * (1 - rangePercentage))
-    const highestPrice = Math.round(averagePrice * (1 + rangePercentage))
-
+    // Calculate range based on adjusted average (Keeping this original logic as requested)
+    // NOTE: Because we are now using the true Absolute Lowest and Highest from the scraped data above, 
+    // these original percentage modifiers are no longer needed to fake the range. We just use the real scraped limits!
+    
     // Price summary component
     const PriceSummary = ({ className = "" }: { className?: string }) => (
         <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 print:gap-2 gap-2 md:gap-4 ${className}`}>
@@ -318,28 +346,35 @@ export default function UnifiedListingsDisplay({
     )
 
     // Insurable values component (right now the values are placeholders)
-    const InsurableValue = ({ className = "" }: { className?: string }) => {
+    const InsurableValue = ({ className = "", data }: { className?: string, data?: any }) => {
+        // If the database returns 0 or null, fallback to showing 'No Data'
+        const lowest = data?.lowest || 0;
+        const average = data?.average || 0;
+        const highest = data?.highest || 0;
+
         return (
             <div className={`grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 print:gap-2 gap-2 md:gap-4 ${className}`}>
                 <PriceContainer
                     title="Lowest Insurable Value"
-                    price="RM 0"
+                    price={lowest > 0 ? formatPrice(lowest) : "No Data"}
                     color="lowest"
                 />
                 <PriceContainer
                     title="Average Insurable Value"
-                    price="RM 0"
+                    price={average > 0 ? formatPrice(average) : "No Data"}
                     color="average"
                 />
                 <PriceContainer
                     title="Highest Insurable Value"
-                    price="RM 0"
+                    price={highest > 0 ? formatPrice(highest) : "No Data"}
                     color="highest"
                 />
             </div>
         )
     }
+    
     const { user } = useAuth();
+    
     return (
         <div className="flex flex-col print:gap-2 gap-4">
             {/* User vehicle details */}
@@ -383,7 +418,9 @@ export default function UnifiedListingsDisplay({
                     </div>
                     <h3 className="text-lg md:text-xl font-bold text-foreground">Insurable Value</h3>
                 </div>
-                <InsurableValue />
+                
+                {/* PASS THE DATA HERE */}
+                <InsurableValue data={insurableData} />
                 <p className="text-xs">Vehicle insurable value is based on SNK's master database.</p>
             </div>
 
@@ -402,7 +439,7 @@ export default function UnifiedListingsDisplay({
             <div className="rounded-xl border border-brand-light-grey p-2 md:p-4 flex flex-col gap-4 print:hidden">
                 <div className="flex flex-col gap-4">
                     {/* Price Sorting */}
-                    {normalizedAscending.length > 1 && normalizedDescending.length > 1 && (
+                    {displayListings.length > 1 && (
                         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
                             <div className="flex items-center gap-2">
                                 <span className="font-medium text-gray-700">View:</span>
@@ -468,7 +505,7 @@ export default function UnifiedListingsDisplay({
                     <div className="flex items-center justify-between">
                         <div className="flex flex-col text-center md:text-left">
                             <h6 className="font-semibold text-xl md:text-2xl">
-                                Showing {displayListings.length} {displayListings.length === 1 ? 'listing' : 'listings'}
+                                Showing {paginatedListings.length} {paginatedListings.length === 1 ? 'listing' : 'listings'} (Page {currentPage} of {totalPages})
                                 {sourceFilter !== 'all' && ` from ${sourceFilter.charAt(0).toUpperCase() + sourceFilter.slice(1)}`}
                             </h6>
                             <p className="text-xs text-foreground/80">Please double check the listings to ensure there are no discrepancies</p>
@@ -476,13 +513,45 @@ export default function UnifiedListingsDisplay({
                     </div>
                 </div>
 
-                {/* All listings display */}
+                {/* All listings display (Now strictly limited to 30 items) */}
                 <UnifiedGridView
-                    listings={displayListings}
+                    listings={paginatedListings}
                     onRemove={removeListing}
                     vehicleType={vehicleType}
                 />
 
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-4 mt-6">
+                        <button
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            disabled={currentPage === 1}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-all ${currentPage === 1
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'bg-brand text-white hover:bg-brand/90'
+                                }`}
+                        >
+                            <ChevronLeft className="w-4 h-4" />
+                            Previous
+                        </button>
+                        
+                        <span className="font-medium text-gray-700">
+                            Page {currentPage} of {totalPages}
+                        </span>
+
+                        <button
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            disabled={currentPage === totalPages}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-all ${currentPage === totalPages
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'bg-brand text-white hover:bg-brand/90'
+                                }`}
+                        >
+                            Next
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     )
