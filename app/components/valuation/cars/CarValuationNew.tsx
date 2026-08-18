@@ -544,13 +544,15 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             }
             if (transmission) mudahSearchQuery.transmission_id = transmission
 
-            // Build Carlist search params
+            // Build Carlist search params (Variant Filter Removed)
             const carlistQuery: Record<string, any> = {
                 make: makeSlug,
                 model: modelSlug,
                 condition: 'used'
             }
-            if (selectedVariant) carlistQuery.variant = selectedVariant
+            
+            // Note: Strict variant filter is intentionally omitted to avoid over-filtering
+            
             if (bodyType) {
                 const bodyTypeMap: Record<string, string> = {
                     'sedan': 'sedan', 'hatchback': 'Hatchback', 'suv': 'suv',
@@ -696,7 +698,8 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                         image: listing['image[0].url'] || listing.image,
                         url: listing['mainEntityOfPage'] || listing.url
                     }
-                    const key = `${normalized['brand.name']}-${normalized['model']}-${normalized.price}-${normalized['vehicleModelDate']}`
+                    // THE FIX: Use the unique URL as the key to prevent price collisions!
+                    const key = normalized.url
                     listingsMap[key] = normalized
                 })
                 const allListings = Object.values(listingsMap)

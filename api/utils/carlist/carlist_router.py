@@ -5,6 +5,7 @@ from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel, Field, field_validator, model_validator
 import re
 import traceback
+from urllib.parse import unquote
 
 from typing import Literal, Optional, Annotated
 from json import load, loads
@@ -48,7 +49,6 @@ def extract_all_item_lists(data, path="root"):
         for idx, entry in enumerate(data):
             items.extend(extract_all_item_lists(entry, f"{path}[{idx}]"))
     return items
-
 
 class SearchQuery(BaseModel):
     make: str
@@ -103,7 +103,8 @@ class SearchFilters(BaseModel):
         return "price." + value
 
 
-def build_url(query: SearchQuery, filters: SearchFilters, strict=True) -> str:
+# UPGRADE: Added dynamic page_number parameter to support the pagination loop
+def build_url(query: SearchQuery, filters: SearchFilters, strict=True, page_number=1) -> str:
     path_parts = ["https://www.carlist.my/"]
     
     if query.condition:
@@ -144,11 +145,14 @@ def build_url(query: SearchQuery, filters: SearchFilters, strict=True) -> str:
     path_parts.append("malaysia")
     url = "".join(path_parts)
     
-    query_params = ["page_number=1"]
+    # Inject the dynamic page number here
+    query_params = [f"page_number={page_number}", "page_size=50"]
     filter_items = filters.model_dump(exclude_none=True).items()
 
     for parameter, value in filter_items:
         if not value: continue
+        # Don't add page_size again if it's already hardcoded above
+        if parameter == 'page_size': continue
         query_params.append(f'{parameter}={str(value).split(",")[0]}')
 
     if query_params:
@@ -161,140 +165,137 @@ def build_url(query: SearchQuery, filters: SearchFilters, strict=True) -> str:
 def Search(query: SearchQuery, filters: SearchFilters,
             whitelist_attributes: Optional[list[str]] = None):
     
-    print(f"\n{'='*60}\n[CARLIST DIAGNOSTIC SEARCH START]")
-    print(f"[CARLIST INCOMING WHITELIST]: {whitelist_attributes}")
-
-    target_url = build_url(query, filters, strict=True)
-    print(f"[CARLIST FETCH URL]: {target_url}")
+    seen_identifiers = set()
+    result_list = []
     
-    try:
-        response = requests.get(target_url, headers=HEADERS, impersonate="chrome", timeout=15)
-        print(f"[CARLIST HTTP STATUS]: {response.status_code}")
-    except Exception as e:
-        print(f"[CARLIST HTTP ERROR]: {str(e)}")
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"meta": f"Network error: {str(e)}"})
-
-    if response.status_code == 404 and (query.variant or query.body_type):
-        print("[CARLIST STRICT 404]: Retrying without variant/body_type slug...")
-        target_url = build_url(query, filters, strict=False)
-        print(f"[CARLIST FALLBACK URL]: {target_url}")
+    # UPGRADE: Pagination Loop. Scrape up to 4 pages (roughly 200 raw cars) to bypass Carlist's limit
+    max_pages_to_scrape = 4
+    
+    print(f"\n{'='*50}\n[CARLIST MASTER DIAGNOSTIC START]")
+    
+    for current_page in range(1, max_pages_to_scrape + 1):
+        target_url = build_url(query, filters, strict=True, page_number=current_page)
+        print(f"\n[PAGE {current_page}] Fetching: {target_url}")
+        
         try:
             response = requests.get(target_url, headers=HEADERS, impersonate="chrome", timeout=15)
-            print(f"[CARLIST FALLBACK HTTP STATUS]: {response.status_code}")
         except Exception as e:
-            print(f"[CARLIST FALLBACK HTTP ERROR]: {str(e)}")
-            pass
+            print(f"[FATAL NETWORK ERROR ON PAGE {current_page}]: {e}")
+            if current_page == 1:
+                return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"meta": f"Network error: {str(e)}"})
+            break
 
-    if not response.ok:
-        print(f"[CARLIST FINAL HTTP FAIL]: Status {response.status_code}")
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"meta": f"Carlist returned status: {response.status_code}"})
-
-    tree = etree.fromstring(response.text, htmlParser)
-    
-    # Check total HTML listing cards on the actual page
-    article_nodes = tree.xpath('//article | //div[contains(@class, "listing")] | //div[contains(@class, "card")]')
-    print(f"[CARLIST HTML NODES]: Found {len(article_nodes)} potential card/article elements in HTML.")
-
-    script_tags = tree.xpath('//script[@type="application/ld+json"]')
-    print(f"[CARLIST JSON-LD TAGS]: Found {len(script_tags)} ld+json script tags.")
-
-    raw_items = []
-    for idx, tag in enumerate(script_tags):
-        if tag.text:
+        if response.status_code == 404 and (query.variant or query.body_type):
+            print(f"[PAGE {current_page}] STRICT 404: Retrying without variant/body_type slug...")
+            target_url = build_url(query, filters, strict=False, page_number=current_page)
             try:
-                parsed_json = loads(tag.text)
-                found = extract_all_item_lists(parsed_json, path=f"tag[{idx}]")
-                if found:
-                    print(f"[CARLIST SCRIPT #{idx+1}]: Extracted {len(found)} itemListElement entries.")
-                    raw_items.extend(found)
-                else:
-                    tag_type = parsed_json.get('@type') if isinstance(parsed_json, dict) else type(parsed_json)
-                    print(f"[CARLIST SCRIPT #{idx+1}]: @type='{tag_type}', no 'itemListElement'.")
+                response = requests.get(target_url, headers=HEADERS, impersonate="chrome", timeout=15)
             except Exception as e:
-                print(f"[CARLIST SCRIPT #{idx+1} JSON ERROR]: {str(e)}")
-                continue
+                print(f"[FALLBACK NETWORK ERROR]: {e}")
+                pass
 
-    print(f"[CARLIST TOTAL RAW ITEMS BEFORE DEDUP]: {len(raw_items)}")
+        if not response.ok:
+            print(f"[HTTP FAIL] Status {response.status_code}")
+            if current_page == 1:
+                return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"meta": f"Carlist returned status: {response.status_code}"})
+            break
 
-    seen_identifiers = set()
-    unique_listings = []
-    for entry in raw_items:
-        item = entry.get('item', {}) if isinstance(entry, dict) else {}
-        if not item:
-            continue
-        
-        identifier = item.get('mainEntityOfPage') or item.get('url') or item.get('offers', {}).get('url') or str(item.get('name'))
-        if identifier and identifier in seen_identifiers:
-            continue
-        if identifier:
-            seen_identifiers.add(identifier)
+        try:
+            tree = etree.fromstring(response.text, htmlParser)
+            article_nodes = tree.xpath('//article[contains(@class, "listing")]')
+            print(f"[PAGE {current_page}] Found {len(article_nodes)} raw HTML cards.")
             
-        unique_listings.append(item)
+            if not article_nodes:
+                break
 
-    print(f"[CARLIST UNIQUE LISTINGS EXTRACTED]: {len(unique_listings)}")
-
-    if unique_listings:
-        sample = unique_listings[0]
-        print(f"[CARLIST SAMPLE RAW LISTING KEYS]: {list(sample.keys())}")
-        print(f"[CARLIST SAMPLE RAW IMAGE FIELD]: {sample.get('image')}")
-
-    result_list = []
-    for idx, item in enumerate(unique_listings):
-        # Extract Image URL
-        image_url = None
-        raw_img = item.get('image') or item.get('photos') or item.get('thumbnailUrl')
-        
-        if isinstance(raw_img, str):
-            image_url = raw_img
-        elif isinstance(raw_img, list) and len(raw_img) > 0:
-            first_elem = raw_img[0]
-            if isinstance(first_elem, str):
-                image_url = first_elem
-            elif isinstance(first_elem, dict):
-                image_url = first_elem.get('url') or first_elem.get('contentUrl')
-        elif isinstance(raw_img, dict):
-            image_url = raw_img.get('url') or raw_img.get('contentUrl')
-
-        if idx < 3:
-            print(f"[CARLIST LISTING #{idx+1} RESOLVED IMAGE]: {image_url}")
-
-        # Extract attributes
-        filtered_item = {
-            "image": image_url,
-            "image[0].url": image_url,
-            "brand.name": (item.get('brand', {}).get('name') if isinstance(item.get('brand'), dict) else item.get('brand')),
-            "model": item.get('model'),
-            "itemCondition": item.get('itemCondition'),
-            "vehicleModelDate": item.get('vehicleModelDate'),
-            "fuelType": item.get('fuelType'),
-            "offers.price": (item.get('offers', {}).get('price') if isinstance(item.get('offers'), dict) else item.get('offers.price')),
-            "mileageFromOdometer.value": (item.get('mileageFromOdometer', {}).get('value') if isinstance(item.get('mileageFromOdometer'), dict) else item.get('mileageFromOdometer.value')),
-            "vehicleTransmission": item.get('vehicleTransmission'),
-            "mainEntityOfPage": item.get('mainEntityOfPage') or item.get('url'),
-            "url": item.get('mainEntityOfPage') or item.get('url')
-        }
-
-        # Keep extra attributes if custom whitelist provided
-        if whitelist_attributes:
-            for attribute in whitelist_attributes:
-                if attribute in filtered_item:
+            stats = {"added": 0, "duplicates": 0, "missing_price": 0}
+            
+            for node in article_nodes:
+                identifier = node.get('data-listing-id') or node.get('data-url')
+                if identifier in seen_identifiers:
+                    stats["duplicates"] += 1
                     continue
-                keys = [m for part in attribute.split('.') for m in re.findall(r'([^\[\]]+)', part)]
-                value = item
-                try:
-                    for key in keys:
-                        if isinstance(value, list) and key.isdigit():
-                            value = value[int(key)]
-                        else:
-                            value = value[key]
-                    filtered_item[attribute] = value
-                except (KeyError, IndexError, TypeError):
-                    filtered_item[attribute] = None
+                if identifier:
+                    seen_identifiers.add(identifier)
+                
+                make = node.get('data-make')
+                model = node.get('data-model')
+                variant = node.get('data-variant')
+                year = node.get('data-year')
+                mileage = node.get('data-mileage')
+                transmission = node.get('data-transmission')
+                condition = node.get('data-ad-type')
+                url = node.get('data-url')
+                
+                image_src = node.get('data-image-src')
+                if not image_src:
+                    img_nodes = node.xpath('.//img[contains(@class, "listing__img")]/@data-src')
+                    if img_nodes: image_src = img_nodes[0]
+                    
+                price = None
+                
+                share_text = node.get('data-default-line-text') or node.get('data-default-whatsapp-text')
+                if share_text:
+                    decoded_text = unquote(share_text)
+                    price_match = re.search(r'RM\s*([\d,]+)', decoded_text)
+                    if price_match:
+                        clean_price_str = price_match.group(1).replace(',', '')
+                        if clean_price_str.isdigit():
+                            price = int(clean_price_str)
+                
+                if not price:
+                    price_nodes = node.xpath('.//span[contains(@class, "listing__price")]/text()')
+                    for p_text in price_nodes:
+                        clean_p = re.sub(r'[^\d]', '', p_text)
+                        if clean_p.isdigit() and int(clean_p) > 5000:
+                            price = int(clean_p)
+                            break
+                
+                filtered_item = {
+                    "image": image_src,
+                    "image[0].url": image_src,
+                    "brand.name": make,
+                    "model": model,
+                    "variant": variant,
+                    "itemCondition": condition,
+                    "vehicleModelDate": year,
+                    "fuelType": None,
+                    "offers.price": price,
+                    "mileageFromOdometer.value": int(mileage) if mileage and mileage.isdigit() else None,
+                    "vehicleTransmission": transmission,
+                    "mainEntityOfPage": url,
+                    "url": url
+                }
+                
+                if not filtered_item["offers.price"]:
+                    stats["missing_price"] += 1
+                    continue
 
-        result_list.append(filtered_item)
-    
-    print(f"[CARLIST RETURNING {len(result_list)} ITEMS TO BACKEND/FRONTEND]")
-    print(f"{'='*60}\n")
+                if whitelist_attributes:
+                    for attribute in whitelist_attributes:
+                        if attribute not in filtered_item:
+                            filtered_item[attribute] = None
+
+                result_list.append(filtered_item)
+                stats["added"] += 1
+                
+            print(f"[PAGE {current_page} STATS] Passed: {stats['added']} | Dropped as Duplicates: {stats['duplicates']} | Dropped (No Price Found): {stats['missing_price']}")
+            
+            if stats["added"] == 0 and stats["missing_price"] == 0:
+                break
+                
+        except Exception as e:
+            # THIS IS THE MAGIC LINE: It will print the exact line of code that caused the crash
+            print(f"[FATAL PARSING ERROR ON PAGE {current_page}]:")
+            traceback.print_exc()
+            break
+
+    print(f"\n[FINAL CARLIST COUNT]: {len(result_list)} unique cars sent to frontend.")
+    print(f"{'='*50}\n")
+
+    if not result_list:
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"meta": f"No listings for '{query.condition or ''} {query.make} {query.model}' found."})
+
     return result_list
 
 
