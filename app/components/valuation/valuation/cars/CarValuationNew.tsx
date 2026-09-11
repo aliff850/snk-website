@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 import { ArrowDown, RotateCcw } from 'lucide-react'
 import SearchableSelect from '@/app/components/ui/SearchableSelect'
-import { Button } from "../../../ui/ButtonComponent"
+import { Button } from "@/app/components/ui/ButtonComponent"
 import { mileageOptions, yearOptions } from "../../ranges"
 import { RegionSelection } from "../../shared/RegionSelection"
 import { MakeModelPopup } from "../../shared/MakeModelPopup"
@@ -550,9 +550,9 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
                 model: modelSlug,
                 condition: 'used'
             }
-            
+
             // Note: Strict variant filter is intentionally omitted to avoid over-filtering
-            
+
             if (bodyType) {
                 const bodyTypeMap: Record<string, string> = {
                     'sedan': 'sedan', 'hatchback': 'Hatchback', 'suv': 'suv',
