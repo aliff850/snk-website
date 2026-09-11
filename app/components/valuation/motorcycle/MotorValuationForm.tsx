@@ -4,11 +4,11 @@ import { useState, useMemo, useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 import { ArrowDown, RotateCcw } from 'lucide-react'
 import { Button } from "@/app/components/ui/ButtonComponent"
-import { yearOptions, MIN_VALUES } from "../../ranges"
-import { RegionSelection } from "../../shared/RegionSelection"
+import { yearOptions, MIN_VALUES } from "@/app/components/valuation/ranges"
+import { RegionSelection } from "@/app/components/valuation/shared/RegionSelection"
 import SearchableSelect from '@/app/components/ui/SearchableSelect'
-import { FormTextInput, FormSelect } from "../cars/CarValuationNew"
-import { MakeModelPopup } from "../../shared/MakeModelPopup"
+import { FormTextInput, FormSelect } from "@/app/components/valuation/cars/CarValuationNew"
+import { MakeModelPopup } from "@/app/components/valuation/shared/MakeModelPopup"
 import { scrollToElement } from "@/app/components/ui/SmoothScroll"
 
 interface MotorValuationFormProps {
