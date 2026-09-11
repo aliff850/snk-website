@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Button } from "../../ui/ButtonComponent"
+import { Button } from "@/app/components/ui/ButtonComponent"
 import ZigWheelsDisplay from "./ZigAbout"
 import { Ban } from "lucide-react"
 

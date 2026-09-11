@@ -1,7 +1,7 @@
 "use client"
 
 import { HelpModal } from "./HelpModal"
-import { ValuationBar } from "../ui/ValuationBar"
+import { ValuationBar } from "@/app/components/ui/ValuationBar"
 import { CarValuationNew } from "./cars/CarValuationNew" // Car valuation form component
 import { MotorValuationForm } from "./motorcycle/MotorValuationForm" // Motorcycle valuation form component
 import { CommercialValuation } from "./commercial/CommercialValuation" // Commercial valuation form component

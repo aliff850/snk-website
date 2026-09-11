@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "../../ui/ButtonComponent"
+import { Button } from "@/app/components/ui/ButtonComponent"
 import { Ban, Download, X, CarFront } from "lucide-react"
 import UnifiedListingsDisplay from "../listings/MainValuationContainer"
 import { useState, useRef } from "react"
