@@ -14,8 +14,8 @@ from os import getenv
 from dotenv import load_dotenv
 
 # Import existing search functions and models
-from api.utils.mudah.router import search as mudah_search, CarSearchQuery, MotorSearchQuery
-from api.utils.carlist.router import Search as carlist_search, SearchQuery as CarlistSearchQuery, SearchFilters as CarlistSearchFilters
+from api.utils.mudah.mudah_router import search as mudah_search, CarSearchQuery, MotorSearchQuery
+from api.utils.carlist.carlist_router import Search as carlist_search, SearchQuery as CarlistSearchQuery, SearchFilters as CarlistSearchFilters
 from api.utils.insurable.router import get_insurable as insurable_search, vehicle_identification
 
 load_dotenv('.env.local')
@@ -156,7 +156,7 @@ def get_marketdata(
             whitelist = params.whitelist_attributes or [
                 "brand.name", "model", "itemCondition", "vehicleModelDate",
                 "fuelType", "offers.price", "mileageFromOdometer.value",
-                "vehicleTransmission", "image[0].url", "mainEntityOfPage"
+                "vehicleTransmission", "image", "image[0].url", "mainEntityOfPage",
             ]
 
             result = carlist_search(query_model, filters_model, whitelist)

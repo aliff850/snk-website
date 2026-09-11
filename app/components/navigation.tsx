@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { User, LayoutDashboard, LogOut } from "lucide-react";
+import { User, LayoutDashboard, LogOut, Database } from "lucide-react"; // Added Database icon here
 // import AnimateOnLoad from "./ui/AnimateOnLoad"
 // import { Button } from "@/components/ui/button"
 // import { Car } from "lucide-react"
@@ -196,6 +196,17 @@ export function Navigation() {
                           <LayoutDashboard size={16} />
                           Manage Account
                         </Link>
+                        
+                        {/* New Desktop Admin Button */}
+                        {user?.role === 'admin' && (
+                          <Link
+                            href="/admin/upload_page"
+                            className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                          >
+                            <Database size={16} />
+                            Upload Latest Insured Data
+                          </Link>
+                        )}
 
                         <button
                           onClick={() => logout()}
@@ -293,6 +304,18 @@ export function Navigation() {
                   <LayoutDashboard size={18} />
                   Manage Account
                 </Link>
+
+                {/* New Mobile Admin Button */}
+                {user?.role === 'admin' && (
+                  <Link
+                    href="/admin/upload_page"
+                    className="flex items-center gap-2 text-foreground hover:bg-brand-white/60 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Database size={18} />
+                    Upload Latest Insured Data
+                  </Link>
+                )}
 
                 <button
                   className="flex items-center gap-2 text-red-600 hover:bg-red-50 transition-colors w-full text-left"
