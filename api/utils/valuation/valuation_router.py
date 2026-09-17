@@ -164,6 +164,9 @@ def get_marketdata(
         except HTTPException:
             raise
         except Exception as e:
+            print(f"CARLIST CRASHED: {str(e)}")
+            import traceback
+            traceback.print_exc()
             errors['carlist'] = str(e)
 
     # Insurable value search
