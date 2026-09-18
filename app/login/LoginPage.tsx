@@ -19,7 +19,7 @@ export default function LoginPage() {
   const redirectTo = searchParams.get('redirectTo')
   const { login: loginCtx } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
@@ -56,8 +56,16 @@ export default function LoginPage() {
         },
       });
 
-      await loginPromise;
-      router.push(redirectTo || '/');
+      // 🟢 Capture the resolved data which contains the user object
+      const result = await loginPromise as { ok: boolean; user?: { role?: string } };
+      
+      // 🟢 Implement the Master Admin routing logic here
+      if (result?.user?.role === 'master_admin' || result?.user?.role === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push(redirectTo || '/');
+      }
+
     } catch (err: any) {
       const errorMessage = err?.message || err || "An unexpected error occurred";
       setError(errorMessage);
