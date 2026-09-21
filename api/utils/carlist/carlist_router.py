@@ -17,7 +17,6 @@ from supabase import create_client, Client
 from zenrows import ZenRowsClient
 
 # --- SETUP CREDENTIALS ---
-# Load your .env.local file to grab the keys
 load_dotenv(".env.local")
 
 # Initialize the Supabase client
@@ -35,7 +34,7 @@ with open(vehicle_map_path, "r") as f:
 class SearchQuery(BaseModel):
     make: str
     model: str
-    condition: str = "used"  # Defaulting to "used" to prevent broken URLs
+    condition: str = "used"
     variant: Optional[str] = None
     body_type: Optional[str] = None
 
@@ -113,7 +112,6 @@ def zenrows_scrape(url: str):
         
     client = ZenRowsClient(api_key)
     
-    # We added 'block_resources' to massively speed up the headless browser
     params = {
         "js_render": "true", 
         "antibot": "true",
@@ -149,10 +147,26 @@ def zenrows_scrape(url: str):
         print(f"ZenRows error: {e}")
         return None
 
+def generate_filter_signature(query: SearchQuery, filters: SearchFilters) -> str:
+    """Combines all search filters into a single unique string for the cache."""
+    parts = [
+        query.condition,
+        str(query.variant),
+        str(query.body_type),
+        str(filters.min_year),
+        str(filters.transmission),
+        str(filters.fuel_type),
+        str(filters.min_mileage)
+    ]
+    signature = "_".join([p for p in parts if p and p != "None"])
+    return signature.replace(" ", "_").lower()
 
 @carlistRouter.post('/search')
 def Search(query: SearchQuery, filters: SearchFilters,
             whitelist_attributes: Optional[list[str]] = ["brand.name", "model", "itemCondition", "vehicleModelDate", "fuelType", "offers.price", "mileageFromOdometer.value", "vehicleTransmission", "image[0].url", "mainEntityOfPage"]):
+    
+    # THE MISSING LINE: Generate the unique signature for this exact search
+    cache_signature = generate_filter_signature(query, filters)
     
     # --- 1. THE CACHE CHECK ---
     try:
@@ -160,11 +174,11 @@ def Search(query: SearchQuery, filters: SearchFilters,
             .select("data") \
             .eq("make", query.make.lower()) \
             .eq("model", query.model.lower()) \
-            .eq("condition", query.condition) \
+            .eq("condition", cache_signature) \
             .execute()
             
         if cache_response.data and len(cache_response.data) > 0:
-            print("Found in Supabase Cache! Skipping ZenRows scrape.")
+            print(f"Found [{cache_signature}] in Supabase Cache! Skipping ZenRows.")
             return cache_response.data[0]["data"]
     except Exception as e:
         print(f"Cache read error: {e}")
@@ -178,7 +192,6 @@ def Search(query: SearchQuery, filters: SearchFilters,
     filters.sort = "desc"
     url_high = build_url(query, filters)
     
-    # Run both scrapes at the exact same time
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
         future_low = executor.submit(zenrows_scrape, url_low)
         future_high = executor.submit(zenrows_scrape, url_high)
@@ -188,7 +201,6 @@ def Search(query: SearchQuery, filters: SearchFilters,
     
     all_listings = cheapest_listings + priciest_listings
     
-    # Deduplicate listings by URL
     unique_listings = {item.get('url'): item for item in all_listings if item.get('url')}.values()
     
     response_data = []
@@ -221,17 +233,14 @@ def Search(query: SearchQuery, filters: SearchFilters,
             supabase.table("carlist_cache").upsert({
                 "make": query.make.lower(),
                 "model": query.model.lower(),
-                "condition": query.condition,
+                "condition": cache_signature,
                 "data": response_data
             }).execute()
-            print("Saved new ZenRows scrape to Supabase cache.")
+            print(f"Saved [{cache_signature}] to Supabase cache.")
         except Exception as e:
             print(f"Cache write error: {e}")
             
     return response_data
-
-
-
 
 @carlistRouter.get('/all_vehicles')
 def vehicle_map(make: str = None):
