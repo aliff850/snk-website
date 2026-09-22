@@ -1,10 +1,11 @@
 [project]
 name = "snk-website"
 version = "0.1.0"
-description = "Add your description here"
+description = "Vehicle Valuation API & Web Application"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+<<<<<<< HEAD
     "annotated-types==0.7.0",
     "anyio==4.11.0",
     "browserforge>=1.2.4",
@@ -45,4 +46,18 @@ dependencies = [
     "urllib3==2.5.0",
     "uvicorn==0.37.0",
     "zenrows>=1.4.1",
+=======
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.0",
+    "pydantic>=2.10.0",
+    "python-multipart>=0.0.9",
+    "python-dotenv>=1.0.0",
+    "requests>=2.32.0",
+    "lxml>=5.0.0",
+    "supabase>=2.10.0",
+    "zenrows>=1.4.0",
+    "pandas>=2.2.0",
+    "openpyxl>=3.1.0",
+    "numpy>=1.26.0",
+>>>>>>> 6d0510b (perf(python): remove unused heavy dependencies to reduce Vercel bundle size below 500MB)
 ]
