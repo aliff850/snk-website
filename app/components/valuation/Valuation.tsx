@@ -1,7 +1,11 @@
 "use client"
 
 import { HelpModal } from "./HelpModal"
+<<<<<<< HEAD
 import { ValuationBar } from "@/app/components/ui/ValuationBar"
+=======
+import { ValuationBar } from "@/components/ui/ValuationBar"
+>>>>>>> 9bef3d4 (fix(build): resolve broken import paths and remove duplicate valuation subfolder)
 import { CarValuationNew } from "./cars/CarValuationNew" // Car valuation form component
 import { MotorValuationForm } from "./motorcycle/MotorValuationForm" // Motorcycle valuation form component
 import { CommercialValuation } from "./commercial/CommercialValuation" // Commercial valuation form component
