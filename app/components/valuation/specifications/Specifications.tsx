@@ -107,9 +107,10 @@ export function CarSpecifications() {
             const modelSlug = slug(model)
             const headers = { "Content-Type": "application/json" }
 
-            let response
+            let response: Response
             if (endpoint === 'about') {
                 response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/information/about?make=${encodeURIComponent(makeSlug)}&model=${encodeURIComponent(modelSlug)}`)
+            } else {
                 response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/information/${endpoint}?make=${encodeURIComponent(makeSlug)}&model=${encodeURIComponent(modelSlug)}`, {
                     method: "POST",
                     headers,
