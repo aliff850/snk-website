@@ -3,19 +3,11 @@
 import { useState, useMemo, useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 import { ArrowDown, RotateCcw } from 'lucide-react'
-<<<<<<< HEAD
-import SearchableSelect from '@/app/components/ui/SearchableSelect'
-import { Button } from "@/app/components/ui/ButtonComponent"
-import { mileageOptions, yearOptions } from "@/app/components/valuation/ranges"
-import { RegionSelection } from "@/app/components/valuation/shared/RegionSelection"
-import { MakeModelPopup } from "@/app/components/valuation/shared/MakeModelPopup"
-=======
 import SearchableSelect from '@/components/ui/SearchableSelect'
 import { Button } from "@/components/ui/ButtonComponent"
 import { mileageOptions, yearOptions } from "../ranges"
 import { RegionSelection } from "../shared/RegionSelection"
 import { MakeModelPopup } from "../shared/MakeModelPopup"
->>>>>>> 9bef3d4 (fix(build): resolve broken import paths and remove duplicate valuation subfolder)
 import { scrollToElement } from "@/app/components/ui/SmoothScroll"
 
 interface CarValuationNewProps {

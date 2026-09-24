@@ -2,15 +2,6 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { ArrowDown, ArrowLeft, RotateCcw } from 'lucide-react'
-<<<<<<< HEAD
-import SearchableSelect from '@/app/components/ui/SearchableSelect'
-import { Button } from "@/app/components/ui/ButtonComponent"
-import { WeightClassSelector } from "@/app/components/valuation/shared/WeightClassSelector"
-import { RegionSelection } from "@/app/components/valuation/shared/RegionSelection"
-import { yearOptions, mileageOptions, engineCapacityOptionsLiters } from "@/app/components/valuation/ranges"
-import { FormSelect, FormTextInput } from "@/app/components/valuation/cars/CarValuationNew"
-import { MakeModelPopup } from "@/app/components/valuation/shared/MakeModelPopup"
-=======
 import SearchableSelect from '@/components/ui/SearchableSelect'
 import { Button } from "@/components/ui/ButtonComponent"
 import { WeightClassSelector } from "../shared/WeightClassSelector"
@@ -18,7 +9,6 @@ import { RegionSelection } from "../shared/RegionSelection"
 import { yearOptions, mileageOptions, engineCapacityOptionsLiters } from "../ranges"
 import { FormSelect, FormTextInput } from "../cars/CarValuationNew"
 import { MakeModelPopup } from "../shared/MakeModelPopup"
->>>>>>> 9bef3d4 (fix(build): resolve broken import paths and remove duplicate valuation subfolder)
 import { FaTruckMoving } from "react-icons/fa6"
 import { BiSolidTruck } from "react-icons/bi"
 
