@@ -177,8 +177,8 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         try {
             // Fetch both Mudah and Carlist at the same time
             const [mudahResult, carlistResult] = await Promise.allSettled([
-                fetch('/api/mudah/all_vehicles'),
-                fetch('/api/carlist/all_vehicles')
+                fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/mudah/all_vehicles`),
+                fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carlist/all_vehicles`)
             ])
 
             // Process Mudah
@@ -236,12 +236,12 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
 
             // If make exists in Mudah, add the fetch promise for Mudah
             if (makeExistsInMudah) {
-                fetchPromises.push(fetch(`/api/mudah/all_vehicles?make=${encodeURIComponent(makeSlug)}`))
+                fetchPromises.push(fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/mudah/all_vehicles?make=${encodeURIComponent(makeSlug)}`))
                 platformFlags.mudah = true
             }
             // If make exists in Carlist, add the fetch promise for Carlist
             if (makeExistsInCarlist) {
-                fetchPromises.push(fetch(`/api/carlist/all_vehicles?make=${encodeURIComponent(makeSlug)}`))
+                fetchPromises.push(fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/carlist/all_vehicles?make=${encodeURIComponent(makeSlug)}`))
                 platformFlags.carlist = true
             }
 
@@ -437,7 +437,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
         setSelectedStyle("")
         try {
             const params = new URLSearchParams({ make, model })
-            const response = await fetch(`/api/insurable/years?${params}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/insurable/years?${params}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             })
@@ -460,7 +460,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             const params = new URLSearchParams({ make, model, year: yearFrom })
             // We use API endpoint where after we send the make and model, it will query the vehicle database and it returns lists containing variant, series, year, cc based on the make and model
             // Then we will dynamically populate the valuation form select inputs with these lists
-            const response = await fetch(`/api/insurable/details?${params}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/insurable/details?${params}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             })
@@ -645,7 +645,7 @@ export function CarValuationNew({ onSearch, onReset, loading = false, onSearchSt
             }
 
             // Call unified endpoint
-            const response = await fetch('/api/valuation/get_marketdata', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/valuation/get_marketdata`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

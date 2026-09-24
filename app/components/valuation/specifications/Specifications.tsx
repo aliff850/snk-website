@@ -29,7 +29,7 @@ export function CarSpecifications() {
         const fetchZigwheelsMap = async () => {
             setLoadingZigwheels(true)
             try {
-                const response = await fetch('/api/information/all_vehicles')
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/information/all_vehicles`)
                 if (response.ok) {
                     const data = await response.json()
                     // Transform the map data
@@ -109,9 +109,8 @@ export function CarSpecifications() {
 
             let response
             if (endpoint === 'about') {
-                response = await fetch(`/api/information/about?make=${encodeURIComponent(makeSlug)}&model=${encodeURIComponent(modelSlug)}`)
-            } else {
-                response = await fetch(`/api/information/${endpoint}?make=${encodeURIComponent(makeSlug)}&model=${encodeURIComponent(modelSlug)}`, {
+                response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/information/about?make=${encodeURIComponent(makeSlug)}&model=${encodeURIComponent(modelSlug)}`)
+                response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/information/${endpoint}?make=${encodeURIComponent(makeSlug)}&model=${encodeURIComponent(modelSlug)}`, {
                     method: "POST",
                     headers,
                     body: JSON.stringify(variants)
