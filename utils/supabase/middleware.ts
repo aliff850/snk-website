@@ -1,7 +1,18 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': 'https://api.snkmarketdata.com',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+  'Access-Control-Allow-Credentials': 'true',
+}
+
 export async function updateSession(request: NextRequest) {
+  if (request.method === 'OPTIONS') {
+    return new NextResponse(null, { status: 200, headers: corsHeaders })
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -47,7 +58,11 @@ export async function updateSession(request: NextRequest) {
     const attemptedPath = url.pathname
     url.pathname = '/login'
     url.searchParams.append('redirectTo', attemptedPath)
-    return NextResponse.redirect(url)
+    const redirectResponse = NextResponse.redirect(url)
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      redirectResponse.headers.set(key, value)
+    })
+    return redirectResponse
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
@@ -62,6 +77,10 @@ export async function updateSession(request: NextRequest) {
   //    return myNewResponse
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
+
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    supabaseResponse.headers.set(key, value)
+  })
 
   return supabaseResponse
 }
