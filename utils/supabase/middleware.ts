@@ -1,14 +1,33 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': 'https://api.snkmarketdata.com',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
-  'Access-Control-Allow-Credentials': 'true',
+const allowedOrigins = [
+  'https://www.snkmarketdata.com',
+  'https://snkmarketdata.com',
+  'https://api.snkmarketdata.com',
+  'https://snkmdr-dev.vercel.app',
+]
+
+function getCorsHeaders(origin: string | null) {
+  const isAllowed =
+    origin &&
+    (allowedOrigins.includes(origin) ||
+      origin.endsWith('.snkmarketdata.com') ||
+      origin.endsWith('.vercel.app') ||
+      origin.includes('localhost') ||
+      origin.includes('127.0.0.1'))
+
+  return {
+    'Access-Control-Allow-Origin': isAllowed ? origin : 'https://www.snkmarketdata.com',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+    'Access-Control-Allow-Credentials': 'true',
+  }
 }
 
 export async function updateSession(request: NextRequest) {
+  const corsHeaders = getCorsHeaders(request.headers.get('origin'))
+
   if (request.method === 'OPTIONS') {
     return new NextResponse(null, { status: 200, headers: corsHeaders })
   }

@@ -20,10 +20,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://snkmarketdata.com", 
+        "https://www.snkmarketdata.com",
+        "https://api.snkmarketdata.com",
         "https://snkmdr-dev.vercel.app", 
         "http://localhost:3000",   # 🔴 Removed trailing slash
         "http://127.0.0.1:3000"    # 🔴 Added secondary local IP
     ],  
+    allow_origin_regex=r"https://.*\.snkmarketdata\.com|https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
