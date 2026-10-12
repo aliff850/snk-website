@@ -270,7 +270,8 @@ class MarketSearch(BaseModel):
     import_status: Literal["imported_new", "local_assembled", "imported_recon"] = "local_assembled"
     variant_slug: Optional[str] = None
     body_slug: Optional[str] = None
-    year: Optional[int] = None
+    # Required: chosen last, from the years that have listings for the other choices
+    year: int
     transmission: Optional[Literal["automatic", "manual"]] = None
     fuel_type: Optional[str] = None
 

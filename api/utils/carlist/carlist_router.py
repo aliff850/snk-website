@@ -298,6 +298,11 @@ def strict_match(item: dict, query: SearchQuery, filters: SearchFilters) -> bool
             return False
     return True
 
+def listing_id(item: dict) -> str:
+    """'https://www.carlist.my/used-cars-for-sale/...?sort=price.asc#listing_18907179' -> 'listing_18907179'"""
+    url = item.get("url") or ""
+    return url.rsplit("#", 1)[-1] if "#" in url else url
+
 def find_listings(query: SearchQuery, filters: SearchFilters):
     """Returns (matching raw listings, when they were scraped as an ISO date string).
     Uses a saved result from the last 7 days when there is one, otherwise scrapes."""
@@ -318,14 +323,18 @@ def find_listings(query: SearchQuery, filters: SearchFilters):
             broad_query = query.model_copy(update={"variant": None})
             cheapest_listings, priciest_listings = scrape_low_and_high(broad_query, filters)
 
-        all_listings = (cheapest_listings or []) + (priciest_listings or [])
-        unique_listings = list({item.get('url'): item for item in all_listings if item.get('url')}.values())
+        unique_listings = [item for item in (cheapest_listings or []) + (priciest_listings or []) if item.get('url')]
 
         # Only save real results: a failed or empty scrape should be retried by the next search.
         if unique_listings:
             market_cache.save(CACHE_TABLE, search_key, vehicle_key(inputs), SCRAPER_VERSION, inputs, unique_listings)
         elif cheapest_listings is None and priciest_listings is None:
             log_error("carlist", "scrape_failed", "Both price pages failed", inputs)
+
+    # A listing on both the cheapest and priciest page must count once. Its url is the page address plus
+    # "#listing_<id>", and the page address differs by sort order, so compare the listing id.
+    # Done after loading too, because results saved before this fix contain such pairs.
+    unique_listings = list({listing_id(item): item for item in unique_listings}.values())
 
     filtered_listings = []
     for item in unique_listings:
@@ -484,6 +493,78 @@ def get_menu(path: str = "") -> Optional[dict]:
     except Exception as e:
         log_error("cache", "db_error", f"Saving {OPTIONS_TABLE}: {e}", {"path": path})
     return menus
+
+# Choices change which cars are listed, so the narrowed menus for a set of choices are kept for less time
+FILTERED_FRESH_DAYS = 7
+FILTER_SLUG = re.compile(r"^[A-Za-z0-9\-]+$")
+FILTERED_KEYS = ("years", "body_types", "transmissions", "fuel_types")
+
+def _filtered_page(path: str, condition: str, variant_slug, body_slug, transmission, fuel_type) -> Optional[dict]:
+    """Carlist's menus on one condition's listing page with these choices applied. Saved for FILTERED_FRESH_DAYS."""
+    make, _, rest = path.partition("/")
+    # Saved in the same table as the model menus, under a key that includes every choice
+    key = f"{rest}|filtered|{condition}|{variant_slug or ''}|{body_slug or ''}|{transmission or ''}|{fuel_type or ''}"
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=FILTERED_FRESH_DAYS)).isoformat()
+    try:
+        res = execute(lambda: supabase.table(OPTIONS_TABLE).select("options").eq("make", make).eq("model", key).gte("fetched_at", cutoff).limit(1))
+        if res.data and res.data[0]["options"].get("version") == OPTIONS_VERSION:
+            return res.data[0]["options"]
+    except Exception as e:
+        log_error("cache", "db_error", f"Reading {OPTIONS_TABLE}: {e}", {"path": path, "key": key})
+
+    segments = "".join(f"{s}/" for s in (variant_slug, body_slug) if s)
+    params = "&".join(f"{k}={v}" for k, v in (("transmission", transmission), ("fuel_type", fuel_type)) if v)
+    url = f"https://www.carlist.my/{condition}-cars-for-sale/{path}/{segments}malaysia" + (f"?{params}" if params else "")
+    print(f"Fetching Carlist filtered menus: {url}")
+    tree = fetch_page(url, timeout=90)
+    if tree is None:
+        return None
+    menus = parse_menus(tree)
+    # No years means no listings for these choices, so the other menus on that page don't apply
+    page = {"version": OPTIONS_VERSION, **({k: menus[k] for k in FILTERED_KEYS} if menus["years"] else {k: [] for k in FILTERED_KEYS})}
+    try:
+        execute(lambda: supabase.table(OPTIONS_TABLE).upsert(
+            {"make": make, "model": key, "options": page, "fetched_at": datetime.now(timezone.utc).isoformat()},
+            on_conflict="make,model",
+        ))
+    except Exception as e:
+        log_error("cache", "db_error", f"Saving {OPTIONS_TABLE}: {e}", {"path": path, "key": key})
+    return page
+
+def get_filtered(path: str, conditions: list[str], variant_slug: Optional[str] = None, body_slug: Optional[str] = None,
+                 transmission: Optional[str] = None, fuel_type: Optional[str] = None) -> Optional[dict]:
+    """Years, body types, transmissions and fuel types that have listings for exactly these choices, read from
+    Carlist's own menus on the pages the search will use (one page per condition, e.g. new + used)."""
+    path = path.strip("/").lower()
+    if not CARLIST_PATH.match(path) or "/" not in path:
+        return None
+    if any(s and not FILTER_SLUG.match(s) for s in (variant_slug, body_slug, fuel_type)):
+        return None
+    if transmission not in (None, "automatic", "manual"):
+        return None
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(conditions)) as executor:
+        pages = list(executor.map(lambda c: _filtered_page(path, c, variant_slug, body_slug, transmission, fuel_type), conditions))
+    found = [p for p in pages if p is not None]
+    if not found:
+        return None
+
+    def merge(key, id_field=None):
+        out, seen = [], set()
+        for p in found:
+            for item in p[key]:
+                ident = item[id_field] if id_field else item
+                if ident not in seen:
+                    seen.add(ident)
+                    out.append(item)
+        return out
+
+    return {
+        "years": sorted(merge("years"), reverse=True),
+        "body_types": merge("body_types", "slug"),
+        "transmissions": merge("transmissions"),
+        "fuel_types": merge("fuel_types"),
+    }
 
 @carlistRouter.get('/all_vehicles', dependencies=[Depends(require_admin)])
 def vehicle_map(make: str = None):

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ArrowDown, RotateCcw } from "lucide-react"
 import { useAuth } from "@/context/AuthContext"
 import SearchableSelect from "@/components/ui/SearchableSelect"
@@ -24,6 +24,17 @@ interface Menu {
     years: string[]
     transmissions: string[]
     fuel_types: string[]
+}
+// Options that have listings for the choices made so far (from the market source's own narrowed menus)
+interface Filtered {
+    years: string[]
+    body_types: SlugOption[]
+    transmissions: string[]
+    fuel_types: string[]
+}
+// What each dropdown after the variant offers
+interface Narrowed extends Filtered {
+    statuses: Record<string, boolean>
 }
 const EMPTY_MENU: Menu = { makes: [], model_groups: [], models: [], variants: [], body_types: [], years: [], transmissions: [], fuel_types: [] }
 
@@ -54,6 +65,10 @@ export function CarMarket() {
     const [transmission, setTransmission] = useState("")
     const [fuelType, setFuelType] = useState("")
     const [importStatus, setImportStatus] = useState("local_assembled")
+    // null until the variant is chosen and the narrowed options have loaded
+    const [narrowed, setNarrowed] = useState<Narrowed | null>(null)
+    // Same choices -> same answer, so each set of choices is only asked for once per visit
+    const filteredCache = useRef(new Map<string, Promise<Filtered | null>>())
 
     const [loadingStep, setLoadingStep] = useState<string | null>(null)
     const [searching, setSearching] = useState(false)
@@ -105,7 +120,7 @@ export function CarMarket() {
         return () => { current = false }
     }, [group])
 
-    // Model -> variants, body types, years, transmissions, fuel types
+    // Model -> its variants (the other options are narrowed once the variant is chosen)
     useEffect(() => {
         setMenu(EMPTY_MENU); setVariantSlug(""); setBodySlug(""); setYear(""); setTransmission(""); setFuelType("")
         if (!model) return
@@ -114,22 +129,85 @@ export function CarMarket() {
             if (!current || !m) return
             setMenu(m)
             if (m.variants.length === 1) setVariantSlug(m.variants[0].slug)
-            if (m.body_types.length === 1) setBodySlug(m.body_types[0].slug)
         })
         return () => { current = false }
     }, [model])
+
+    const fetchFiltered = (choices: Record<string, string>): Promise<Filtered | null> => {
+        // Imported New and Local Assembled read the same listings, so they share one request
+        const params = new URLSearchParams(Object.entries(choices).filter(([, v]) => v)
+            .map(([k, v]) => [k, k === "import_status" && v === "imported_new" ? "local_assembled" : v]))
+        const key = params.toString()
+        const cached = filteredCache.current.get(key)
+        if (cached) return cached
+        const request = (async () => {
+            const accessToken = await getAccessToken()
+            const res = await fetch(`${API_BASE}/api/market/options/filtered?${key}`, { headers: { 'Authorization': `Bearer ${accessToken}` } })
+            if (!res.ok) return null
+            return await res.json() as Filtered
+        })().catch(() => null)
+        request.then(r => { if (!r) filteredCache.current.delete(key) })  // let a failed request be tried again
+        filteredCache.current.set(key, request)
+        return request
+    }
+
+    // Make, model and variant must be chosen first. After that every dropdown only offers options that have
+    // listings for the choices before it: Import Status -> Body Type -> Transmission -> Fuel Type -> Year
+    const variantReady = !!model && loadingStep !== "details" && (menu.variants.length === 0 || !!variantSlug)
+
+    useEffect(() => {
+        setYear(""); setNarrowed(null)
+        if (!variantReady) return
+        let current = true
+        ;(async () => {
+            setLoadingStep("filtered")
+            const base = { path: model, variant: variantSlug }
+            const withStatus = { ...base, import_status: importStatus }
+            const [local, recon, level0, level1, level2, level3] = await Promise.all([
+                fetchFiltered({ ...base, import_status: "local_assembled" }),
+                fetchFiltered({ ...base, import_status: "imported_recon" }),
+                fetchFiltered(withStatus),
+                fetchFiltered({ ...withStatus, body: bodySlug }),
+                fetchFiltered({ ...withStatus, body: bodySlug, transmission }),
+                fetchFiltered({ ...withStatus, body: bodySlug, transmission, fuel_type: fuelType }),
+            ])
+            if (!current) return
+            setLoadingStep(null)
+            if (!local || !recon || !level0 || !level1 || !level2 || !level3) { setError("Could not load the options. Please try again."); return }
+            setError(null)
+
+            // Imported New and Local Assembled search the same listings, so they are available together
+            const statuses: Record<string, boolean> = { imported_new: local.years.length > 0, local_assembled: local.years.length > 0, imported_recon: recon.years.length > 0 }
+            // A choice that no longer has listings is cleared (or switched), and this runs again with the new choices
+            if (!statuses[importStatus]) {
+                const available = IMPORT_STATUSES.find(st => statuses[st.value])
+                if (available) { setImportStatus(available.value); return }
+            }
+            if (bodySlug && !level0.body_types.some(b => b.slug === bodySlug)) { setBodySlug(""); return }
+            if (transmission && !level1.transmissions.includes(transmission)) { setTransmission(""); return }
+            if (fuelType && !level2.fuel_types.includes(fuelType)) { setFuelType(""); return }
+            // Only one option: choose it for them
+            if (!bodySlug && level0.body_types.length === 1) { setBodySlug(level0.body_types[0].slug); return }
+            if (!transmission && level1.transmissions.length === 1) { setTransmission(level1.transmissions[0]); return }
+
+            setNarrowed({ statuses, body_types: level0.body_types, transmissions: level1.transmissions, fuel_types: level2.fuel_types, years: level3.years })
+        })()
+        return () => { current = false; setLoadingStep(prev => prev === "filtered" ? null : prev) }
+    }, [variantReady, model, variantSlug, importStatus, bodySlug, transmission, fuelType])
 
     const makeLabel = labelOf(makes, make).toUpperCase()
     const groupLabel = labelOf(groups, group).toUpperCase()
     const modelLabel = [groupLabel, labelOf(models, model).toUpperCase()].filter(Boolean).join(" ")
     const variantLabel = labelOf(menu.variants, variantSlug)
-    const bodyLabel = labelOf(menu.body_types, bodySlug)
+    const bodyLabel = labelOf(narrowed?.body_types || [], bodySlug)
     const importStatusLabel = IMPORT_STATUSES.find(s => s.value === importStatus)?.label || ""
 
     const resetAll = () => { setMake(""); setImportStatus("local_assembled"); setResults(null); setError(null) }
 
     const handleSubmit = async () => {
         if (!model) { setError("Please select the make and model."); return }
+        if (!variantReady) { setError("Please select the variant."); return }
+        if (!year) { setError("Please select the year."); return }
         setSearching(true); setError(null); setResults(null)
         try {
             const accessToken = await getAccessToken()
@@ -142,7 +220,7 @@ export function CarMarket() {
                     import_status: importStatus,
                     variant_slug: variantSlug || null,
                     body_slug: bodySlug || null,
-                    year: year ? parseInt(year) : null,
+                    year: parseInt(year),
                     transmission: transmission || null,
                     fuel_type: fuelType || null,
                 }),
@@ -186,6 +264,9 @@ export function CarMarket() {
         <label className="block text-sm font-medium mb-1">{text} {loading && <span className="text-xs text-foreground/50">Loading...</span>}</label>
     )
     const detailsDisabled = !model || loadingStep === "details"
+    // Options after the variant stay locked until their narrowed lists have loaded
+    const filteredLoading = loadingStep === "filtered"
+    const after = narrowed && !filteredLoading ? narrowed : null
 
     return (
         <>
@@ -216,33 +297,39 @@ export function CarMarket() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            {field("Variant", loadingStep === "details")}
+                            {field(menu.variants.length > 0 ? "*Variant" : "Variant", loadingStep === "details")}
                             <FormSelect value={variantSlug} onChange={(e) => setVariantSlug(e.target.value)} disabled={detailsDisabled || menu.variants.length === 0} options={byLabel(menu.variants).map(v => ({ value: v.slug, label: v.label }))} />
                         </div>
                         <div>
-                            {field("Body Type", loadingStep === "details")}
-                            <FormSelect value={bodySlug} onChange={(e) => setBodySlug(e.target.value)} disabled={detailsDisabled || menu.body_types.length === 0} options={byLabel(menu.body_types).map(b => ({ value: b.slug, label: b.label }))} />
+                            {field("*Import Status", filteredLoading)}
+                            <FormSelect value={importStatus} onChange={(e) => setImportStatus(e.target.value || "local_assembled")} disabled={!after}
+                                options={IMPORT_STATUSES.filter(st => !narrowed || narrowed.statuses[st.value])} />
                         </div>
                         <div>
-                            {field("Year", loadingStep === "details")}
-                            <FormSelect value={year} onChange={(e) => setYear(e.target.value)} disabled={detailsDisabled || menu.years.length === 0} options={menu.years} />
+                            {field("Body Type", filteredLoading)}
+                            <FormSelect value={bodySlug} onChange={(e) => setBodySlug(e.target.value)} disabled={!after || after.body_types.length === 0} options={byLabel(narrowed?.body_types || []).map(b => ({ value: b.slug, label: b.label }))} />
                         </div>
                         <div>
-                            {field("*Import Status")}
-                            <FormSelect value={importStatus} onChange={(e) => setImportStatus(e.target.value || "local_assembled")} disabled={!model} options={IMPORT_STATUSES} />
+                            {field("Transmission", filteredLoading)}
+                            <FormSelect value={transmission} onChange={(e) => setTransmission(e.target.value)} disabled={!after || after.transmissions.length === 0} options={(narrowed?.transmissions || []).map(t => ({ value: t, label: capitalize(t) }))} />
                         </div>
-                        <div>
-                            {field("Transmission", loadingStep === "details")}
-                            <FormSelect value={transmission} onChange={(e) => setTransmission(e.target.value)} disabled={detailsDisabled || menu.transmissions.length === 0} options={menu.transmissions.map(t => ({ value: t, label: capitalize(t) }))} />
-                        </div>
-                        {/* Only shown when the market source has more than one fuel type for this model */}
-                        {menu.fuel_types.length > 1 && (
+                        {/* Only shown when more than one fuel type has listings for these choices */}
+                        {narrowed && narrowed.fuel_types.length > 1 && (
                             <div>
-                                {field("Fuel Type")}
-                                <FormSelect value={fuelType} onChange={(e) => setFuelType(e.target.value)} disabled={detailsDisabled} options={menu.fuel_types} />
+                                {field("Fuel Type", filteredLoading)}
+                                <FormSelect value={fuelType} onChange={(e) => setFuelType(e.target.value)} disabled={!after} options={narrowed.fuel_types} />
                             </div>
                         )}
+                        {/* Only years that have listings for everything chosen above; any change above clears it */}
+                        <div>
+                            {field("*Year", filteredLoading)}
+                            <FormSelect value={year} onChange={(e) => setYear(e.target.value)} disabled={!after || after.years.length === 0} options={narrowed?.years || []} />
+                            {model && !variantReady && loadingStep !== "details" && <p className="text-xs text-foreground/60 mt-1 ml-1">Select the variant first.</p>}
+                        </div>
                     </div>
+                    {narrowed && narrowed.years.length === 0 && (
+                        <p className="text-sm text-red-600 text-center">No listings for these choices right now. Try changing one of them.</p>
+                    )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                         <Button type="button" onClick={handleSubmit} disabled={searching || loadingStep !== null} variant="secondary" size="sm" className="w-full text-lg md:text-xl flex justify-center gap-2">
