@@ -30,7 +30,9 @@ const EMPTY_MENU: Menu = { makes: [], model_groups: [], models: [], variants: []
 // Shown as import status; the server maps each to the market source's listing conditions
 const IMPORT_STATUSES = [{ value: "imported_new", label: "Imported New" }, { value: "local_assembled", label: "Local Assembled" }, { value: "imported_recon", label: "Imported Recon" }]
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
-const toOptions = (list: PathOption[]) => list.map(o => ({ value: o.path, label: o.label.toUpperCase() }))
+// Always A-Z (numbers in natural order: 1 SERIES, 2 SERIES... 10), never the source's own popularity order
+const byLabel = <T extends { label: string }>(list: T[]) => [...list].sort((a, b) => a.label.localeCompare(b.label, undefined, { numeric: true, sensitivity: 'base' }))
+const toOptions = (list: PathOption[]) => byLabel(list).map(o => ({ value: o.path, label: o.label.toUpperCase() }))
 const labelOf = (list: { label: string; path?: string; slug?: string }[], key: string) => list.find(o => (o.path ?? o.slug) === key)?.label || ""
 
 // Car tab of the Current Market Valuation page. Each dropdown is the market source's own filter menu for the
@@ -215,11 +217,11 @@ export function CarMarket() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             {field("Variant", loadingStep === "details")}
-                            <FormSelect value={variantSlug} onChange={(e) => setVariantSlug(e.target.value)} disabled={detailsDisabled || menu.variants.length === 0} options={menu.variants.map(v => ({ value: v.slug, label: v.label }))} />
+                            <FormSelect value={variantSlug} onChange={(e) => setVariantSlug(e.target.value)} disabled={detailsDisabled || menu.variants.length === 0} options={byLabel(menu.variants).map(v => ({ value: v.slug, label: v.label }))} />
                         </div>
                         <div>
                             {field("Body Type", loadingStep === "details")}
-                            <FormSelect value={bodySlug} onChange={(e) => setBodySlug(e.target.value)} disabled={detailsDisabled || menu.body_types.length === 0} options={menu.body_types.map(b => ({ value: b.slug, label: b.label }))} />
+                            <FormSelect value={bodySlug} onChange={(e) => setBodySlug(e.target.value)} disabled={detailsDisabled || menu.body_types.length === 0} options={byLabel(menu.body_types).map(b => ({ value: b.slug, label: b.label }))} />
                         </div>
                         <div>
                             {field("Year", loadingStep === "details")}

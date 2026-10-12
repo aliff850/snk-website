@@ -102,10 +102,10 @@ export default function AdminUploadPage() {
                             >
                                 <option value="" disabled>Select a category...</option>
                                 <option value="PRIVATE">PRIVATE</option>
-                                <option value="COMMERCIAL">COMMERCIAL</option>
                                 <option value="MOTORCYCLE">MOTORCYCLE</option>
-                                <option value="LIGHT">LIGHT</option>
-                                <option value="HEAVY">HEAVY</option>
+                                {/* Commercial vehicles are uploaded as LIGHT or HEAVY, matching the Insurable Value page */}
+                                <option value="LIGHT">LIGHT COMMERCIAL</option>
+                                <option value="HEAVY">HEAVY COMMERCIAL</option>
                             </select>
                         </div>
                     </div>
