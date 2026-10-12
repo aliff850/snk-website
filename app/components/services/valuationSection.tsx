@@ -28,7 +28,6 @@ export function ValuationBanner() {
                                 variant="primary"
                                 size="md"
                                 href="/valuation"
-                                target="_blank"
                                 className="w-full md:w-auto text-base md:text-xl flex gap-2 whitespace-nowrap"
                             >
                                 Get Value <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6" />

@@ -190,7 +190,7 @@ export default function UserInputsDisplay({
                         {/* Vehicle origin */}
                         <UserInputsBox
                             icon={<Bolt className="w-4 h-4 text-gray-500" />}
-                            title="Vehicle Origin"
+                            title="Import Status"
                             value={origin ? formatValue(origin) : "--"}
                         />
 

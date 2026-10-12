@@ -96,20 +96,6 @@ export function Navigation() {
               Our Services
               <hr className="hidden md:block absolute w-full rounded-full border border-brand/80 right-24 top-5 group-hover:right-0 transition-all duration-150 ease-in-out" />
             </Link>
-            <Link
-              href="/valuation/insurable"
-              className="hover:text-brand transition-colors overflow-hidden group relative whitespace-nowrap"
-            >
-              Insurable Value
-              <hr className="hidden md:block absolute w-full rounded-full border border-brand/80 right-28 top-5 group-hover:right-0 transition-all duration-150 ease-in-out" />
-            </Link>
-            <Link
-              href="/valuation/market"
-              className="hover:text-brand transition-colors overflow-hidden group relative whitespace-nowrap"
-            >
-              Current Market Valuation
-              <hr className="hidden md:block absolute w-full rounded-full border border-brand/80 right-44 top-5 group-hover:right-0 transition-all duration-150 ease-in-out" />
-            </Link>
             {/* <Link
               href="/news"
               className="hover:text-brand transition-colors overflow-hidden group relative whitespace-nowrap"
@@ -290,20 +276,6 @@ export function Navigation() {
               onClick={() => setIsMenuOpen(false)}
             >
               Our Services
-            </Link>
-            <Link
-              href="/valuation/insurable"
-              className="text-foreground hover:bg-brand-white/60 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Insurable Value
-            </Link>
-            <Link
-              href="/valuation/market"
-              className="text-foreground hover:bg-brand-white/60 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Current Market Valuation
             </Link>
             {/* <Link
               href="/news"

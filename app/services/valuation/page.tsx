@@ -79,7 +79,7 @@ export default function ValuationPage() {
         title="Transform your valuation process today"
         caption="Get instant real-time vehicle valuation through inquiries today"
         button="Get Valuation"
-        target="_blank"
+        target="_self"
         link="/valuation"
       />
     </div>

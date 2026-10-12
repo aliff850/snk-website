@@ -21,7 +21,6 @@ export function ValuationCTA() {
                             variant="primary"
                             size="md"
                             href="/valuation"
-                            target="_blank"
                             className="text-lg md:text-xl flex gap-2"
                         >
                             Get Value <ArrowUpRight />

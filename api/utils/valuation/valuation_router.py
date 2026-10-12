@@ -1,5 +1,6 @@
 import os
 import re
+import concurrent.futures
 from typing import Optional, Any, Dict, List, Literal
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
@@ -48,11 +49,18 @@ def normalize_db_model(make: str, model: str) -> List[str]:
     if no_spaces not in candidates: candidates.append(no_spaces)
     return candidates
 
+# Vehicle category values in our database for each tab on the Insurable Value page
+CATEGORIES = {"car": ["PRIVATE", "private"], "motorcycle": ["motorcycle"], "light": ["light"], "heavy": ["heavy"], "commercial": ["light", "heavy"]}
+
+def vehicles_query(columns: str, make: str, model: str, category: Optional[str] = None):
+    """vehicles rows for a make/model, limited to one tab's categories when given."""
+    query = supabase.table("vehicles").select(columns).ilike("make", make.replace("-", " ").strip()).in_("model", normalize_db_model(make, model))
+    return query.in_("category", CATEGORIES[category]) if category in CATEGORIES else query
+
 @valuationRouter.get('/options/variants')
-def get_variants(make: str, model: str):
+def get_variants(make: str, model: str, category: Optional[str] = None):
     try:
-        candidates = normalize_db_model(make, model)
-        res = supabase.table("vehicles").select("variant").ilike("make", make.replace("-", " ").strip()).in_("model", candidates).execute()
+        res = vehicles_query("variant", make, model, category).execute()
         variant_map = {}
         for row in res.data:
             v = row.get("variant")
@@ -64,30 +72,27 @@ def get_variants(make: str, model: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @valuationRouter.get('/options/body-types')
-def get_body_types(make: str, model: str, variant: str):
+def get_body_types(make: str, model: str, variant: str, category: Optional[str] = None):
     try:
-        candidates = normalize_db_model(make, model)
-        res = supabase.table("vehicles").select("style").ilike("make", make.replace("-", " ").strip()).in_("model", candidates).ilike("variant", f"%{variant.strip()}%").execute()
+        res = vehicles_query("style", make, model, category).ilike("variant", f"%{variant.strip()}%").execute()
         body_types = sorted(list({str(row["style"]).strip().upper() for row in res.data if row.get("style")}))
         return {"body_types": body_types}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @valuationRouter.get('/options/years')
-def get_years(make: str, model: str, variant: str, style: str):
+def get_years(make: str, model: str, variant: str, style: str, category: Optional[str] = None):
     try:
-        candidates = normalize_db_model(make, model)
-        res = supabase.table("vehicles").select("year").ilike("make", make.replace("-", " ").strip()).in_("model", candidates).ilike("variant", f"%{variant.strip()}%").ilike("style", style.strip()).execute()
+        res = vehicles_query("year", make, model, category).ilike("variant", f"%{variant.strip()}%").ilike("style", style.strip()).execute()
         years = sorted(list({int(row["year"]) for row in res.data if row.get("year")}), reverse=True)
         return {"years": years}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @valuationRouter.get('/options/variant-specs')
-def get_variant_specs(make: str, model: str, variant: str, style: str, year: int):
+def get_variant_specs(make: str, model: str, variant: str, style: str, year: int, category: Optional[str] = None):
     try:
-        candidates = normalize_db_model(make, model)
-        res = supabase.table("vehicles").select("cc, transmission, specs, import_status").ilike("make", make.replace("-", " ").strip()).in_("model", candidates).ilike("variant", f"%{variant.strip()}%").ilike("style", style.strip()).eq("year", str(year)).execute()
+        res = vehicles_query("cc, transmission, specs, import_status", make, model, category).ilike("variant", f"%{variant.strip()}%").ilike("style", style.strip()).eq("year", str(year)).execute()
 
         engine_ccs, engine_watts, transmissions, fuel_types = set(), set(), set(), set()
         translated_statuses = set()
@@ -107,7 +112,7 @@ def get_variant_specs(make: str, model: str, variant: str, style: str, year: int
                 clean_st = str(st).strip().upper()
                 if clean_st == "CBU": translated_statuses.add("Imported New")
                 elif clean_st == "CKD": translated_statuses.add("Local Assembled")
-                elif clean_st in ("RECOND", "RCN"): translated_statuses.add("Imported Recond")
+                elif clean_st in ("RECOND", "RCN"): translated_statuses.add("Imported Recon")
 
         return {
             "engine_ccs": sorted(list(engine_ccs)), 
@@ -180,6 +185,7 @@ def lookup_insurable(v: VehicleDetails) -> dict:
 
     query = query.eq('year', str(v.year))
     if v.variant: query = query.ilike('variant', v.variant.strip())
+    if v.category in CATEGORIES: query = query.in_('category', CATEGORIES[v.category])
 
     res = query.execute()
     if not res.data:
@@ -199,18 +205,20 @@ def lookup_insurable(v: VehicleDetails) -> dict:
 # --- Insurable Value page (our database only) ---
 
 @valuationRouter.get('/options/makes')
-def get_makes():
+def get_makes(category: str = "car"):
     try:
-        return {"makes": [row["make"] for row in supabase.rpc("vehicle_makes").execute().data]}
+        cats = CATEGORIES.get(category, CATEGORIES["car"])
+        return {"makes": [row["make"] for row in supabase.rpc("vehicle_makes", {"p_categories": cats}).execute().data]}
     except Exception as e:
         log_error("insurable", "db_error", f"vehicle_makes: {e}")
         raise HTTPException(status_code=500, detail="Could not load makes.")
 
 
 @valuationRouter.get('/options/models')
-def get_models(make: str):
+def get_models(make: str, category: str = "car"):
     try:
-        return {"models": [row["model"] for row in supabase.rpc("vehicle_models", {"p_make": make.strip()}).execute().data]}
+        cats = CATEGORIES.get(category, CATEGORIES["car"])
+        return {"models": [row["model"] for row in supabase.rpc("vehicle_models", {"p_make": make.strip(), "p_categories": cats}).execute().data]}
     except Exception as e:
         log_error("insurable", "db_error", f"vehicle_models: {e}", {"make": make})
         raise HTTPException(status_code=500, detail="Could not load models.")
@@ -231,29 +239,56 @@ def insurable(vehicle: VehicleDetails, user=Depends(get_current_user)):
 
 # --- Current Market Valuation page (market source only, using its own filter values) ---
 
+# Import status shown to users -> the market source's listing conditions to search.
+# The source's "new" and "used" listings both cover Imported New and Local Assembled cars.
+IMPORT_STATUS_CONDITIONS = {
+    "imported_new": ["new", "used"],
+    "local_assembled": ["new", "used"],
+    "imported_recon": ["recon"],
+}
+
+
 class MarketSearch(BaseModel):
-    make: str
-    model: str
-    condition: Literal["used", "new", "recon"] = "used"
+    # Carlist's own path for the chosen model, e.g. "honda/civic" or "bmw/1-series/118i"
+    path: str
+    import_status: Literal["imported_new", "local_assembled", "imported_recon"] = "local_assembled"
     variant_slug: Optional[str] = None
     body_slug: Optional[str] = None
     year: Optional[int] = None
     transmission: Optional[Literal["automatic", "manual"]] = None
+    fuel_type: Optional[str] = None
 
 
 @valuationRouter.post("/market", summary="Current market listings. Costs 1 token per call.")
 def market(search: MarketSearch, user=Depends(get_current_user)):
-    query = CarlistSearchQuery(make=search.make, model=search.model, condition=search.condition,
-                               variant_slug=search.variant_slug, body_slug=search.body_slug)
-    filters = CarlistSearchFilters(min_year=search.year, max_year=search.year, transmission=search.transmission)
+    segments = search.path.strip("/").lower().split("/")
+    if len(segments) < 2:
+        raise HTTPException(status_code=400, detail="Please select a model.")
+    for slug_value in (search.variant_slug, search.body_slug):
+        if slug_value and not re.fullmatch(r"[A-Za-z0-9\-]+", slug_value):
+            raise HTTPException(status_code=400, detail="Invalid option.")
+    queries = [
+        CarlistSearchQuery(make=segments[0], model=segments[-1], path="/".join(segments), condition=condition,
+                           variant_slug=search.variant_slug, body_slug=search.body_slug)
+        for condition in IMPORT_STATUS_CONDITIONS[search.import_status]
+    ]
+    filters = CarlistSearchFilters(min_year=search.year, max_year=search.year, transmission=search.transmission, fuel_type=search.fuel_type)
     tokens_after = use_token(user)
-    try:
-        items, scraped_at = find_carlist_listings(query, filters)
-    except Exception as e:
-        log_error("carlist", "search_error", str(e), search.model_dump())
-        items, scraped_at = [], None
+
+    items, dates = [], []
+    # Each condition is a separate search (and saved result); run them at the same time
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(queries)) as executor:
+        futures = [executor.submit(find_carlist_listings, q, filters) for q in queries]
+        for future in futures:
+            try:
+                found, scraped_at = future.result()
+                items += found
+                if scraped_at: dates.append(scraped_at)
+            except Exception as e:
+                log_error("carlist", "search_error", str(e), search.model_dump())
     listings = for_viewer([from_carlist(item) for item in items], is_admin(user))
-    return {"listings": listings, "as_of": scraped_at, "tokens_remaining": tokens_after}
+    # Show the oldest date when the results were combined from more than one search
+    return {"listings": listings, "as_of": min(dates) if dates else None, "tokens_remaining": tokens_after}
 
 
 @valuationRouter.get('/tokens', summary="Get the current user's token count (applies the weekly refill if due).")

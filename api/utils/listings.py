@@ -19,7 +19,8 @@ class VehicleDetails(BaseModel):
     cc: Optional[str] = None
     transmission: Optional[str] = None   # as written in our database, e.g. "7 SP AUTOMATIC CVT"
     fuel_type: Optional[str] = None      # petrol / diesel / hybrid / electric
-    import_status: Optional[str] = None  # Imported New / Local Assembled / Imported Recond
+    import_status: Optional[str] = None  # Imported New / Local Assembled / Imported Recon
+    category: Optional[str] = None       # Insurable Value tab: car / motorcycle / commercial
 
 
 def slug(s: str) -> str:
@@ -60,7 +61,7 @@ def mudah_motorcycle_query(v: VehicleDetails) -> dict:
 
 def carlist_query(v: VehicleDetails):
     """Returns (query, filters) for the Carlist search."""
-    query = {"make": slug(v.make), "model": slug(v.model), "condition": "recon" if v.import_status == "Imported Recond" else "used"}
+    query = {"make": slug(v.make), "model": slug(v.model), "condition": "recon" if v.import_status in ("Imported Recon", "Imported Recond") else "used"}
     if v.style: query["body_type"] = _body_types(v.style)[1]
     if v.variant: query["variant"] = v.variant
     # cc lets the URL builder construct slugs like '1-5-e' for short trims
