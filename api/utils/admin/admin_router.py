@@ -113,7 +113,7 @@ async def upload_prices(file: UploadFile = File(...), category: str = Form(...))
             
             vehicles_df = df_clean[['vehicle_id', 'category', 'make', 'model', 'variant', 'series', 'year', 'cc', 'import_status', 'transmission', 'style']].copy().rename(columns={'vehicle_id': 'id'})
             text_cols = ['category', 'make', 'model', 'variant', 'series', 'import_status', 'transmission', 'style']
-            for c in text_cols: vehicles_df[c] = vehicles_df[c].apply(lambda x: str(x).upper() if pd.notna(x) else None)
+            for c in text_cols: vehicles_df[c] = vehicles_df[c].apply(lambda x: str(x).strip().upper() if pd.notna(x) else None)
             vehicles_df = vehicles_df.replace({nan: None})
 
             for i in range(0, len(vehicles_df), batch_size):

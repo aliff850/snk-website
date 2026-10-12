@@ -59,10 +59,15 @@ CATEGORIES = {
     "commercial": ["LIGHT", "light", "HEAVY", "heavy"],
 }
 
+def make_pattern(make: str) -> str:
+    """Case-insensitive match where a dash and a space count as the same, so 'MERCEDES-BENZ',
+    'Mercedes Benz' and 'HARLEY-DAVIDSON' all find the rows saved in the database."""
+    return re.sub(r"[-\s]+", "_", make.strip())
+
 def vehicles_query(columns: str, make: str, model: str, category: Optional[str] = None):
     """vehicles rows for a make/model, limited to one tab's categories when given."""
     # Only vehicles in the current list (older rows replaced by a newer upload are marked inactive)
-    query = supabase.table("vehicles").select(columns).eq("active", True).ilike("make", make.replace("-", " ").strip()).in_("model", normalize_db_model(make, model))
+    query = supabase.table("vehicles").select(columns).eq("active", True).ilike("make", make_pattern(make)).in_("model", normalize_db_model(make, model))
     return query.in_("category", CATEGORIES[category]) if category in CATEGORIES else query
 
 @valuationRouter.get('/options/variants')
@@ -118,9 +123,7 @@ def get_variant_specs(make: str, model: str, variant: str, style: str, year: int
             st = row.get("import_status")
             if st:
                 clean_st = str(st).strip().upper()
-                if clean_st == "CBU": translated_statuses.add("Imported New")
-                elif clean_st == "CKD": translated_statuses.add("Local Assembled")
-                elif clean_st in ("RECOND", "RCN"): translated_statuses.add("Imported Recon")
+                if clean_st in IMPORT_STATUS_LABELS: translated_statuses.add(IMPORT_STATUS_LABELS[clean_st])
 
         return {
             "engine_ccs": sorted(list(engine_ccs)), 
@@ -180,27 +183,38 @@ def get_marketdata(request: MarketDataRequest, user=Depends(get_current_user)):
     return {"results": results, "errors": (errors or None) if is_admin(user) else None, "tokens_remaining": tokens_after}
 
 
+# Import status as saved in the database (the uploaded list's short code) -> what the form shows
+IMPORT_STATUS_LABELS = {"CBU": "Imported New", "CKD": "Local Assembled", "RECON": "Imported Recon", "RECOND": "Imported Recon", "RCN": "Imported Recon"}
+
+def _same(a, b) -> bool:
+    """Compares a database value with a form choice, ignoring case, extra spaces and '1998' vs '1998.0'."""
+    norm = lambda x: re.sub(r"\.0+$", "", re.sub(r"\s+", " ", str(x)).strip().upper())
+    return norm(a) == norm(b)
+
 def lookup_insurable(v: VehicleDetails) -> dict:
-    """Lowest / average / highest insurable value across all matching rows in our database."""
-    query = supabase.table('vehicles').select('id').eq('active', True)
+    """Insurable value for the vehicle chosen on the form. Each vehicle's latest quarter gives its value (average)
+    and its lowest / highest range; when the choices still match several vehicles, the widest range is shown."""
+    query = supabase.table('vehicles').select('id, style, transmission, cc, import_status').eq('active', True)
 
-    # Use ilike for case-insensitive robust matching against the DB strings
-    db_make = v.make.replace('-', ' ').strip()
-    query = query.ilike('make', db_make)
-
-    candidates = normalize_db_model(db_make, v.model.replace('-', ' '))
-    query = query.in_('model', candidates)
+    # Same make and model matching as the dropdowns (vehicles_query), so every option offered can be found
+    query = query.ilike('make', make_pattern(v.make)).in_('model', normalize_db_model(v.make, v.model))
 
     query = query.eq('year', str(v.year))
     if v.variant: query = query.ilike('variant', v.variant.strip())
     if v.category in CATEGORIES: query = query.in_('category', CATEGORIES[v.category])
 
-    res = query.execute()
-    if not res.data:
+    rows = query.execute().data
+    # The other choices on the form, compared in Python so differences in spacing or number format don't matter
+    if v.style: rows = [r for r in rows if _same(r.get('style'), v.style)]
+    if v.transmission: rows = [r for r in rows if _same(r.get('transmission'), v.transmission)]
+    if v.cc: rows = [r for r in rows if _same(r.get('cc'), v.cc)]
+    if v.import_status:
+        rows = [r for r in rows if IMPORT_STATUS_LABELS.get(str(r.get('import_status') or '').strip().upper()) == v.import_status]
+    if not rows:
         return {"meta": "No vehicle found"}
 
-    vehicle_ids = [row['id'] for row in res.data]
-    val_res = supabase.table('vehicle_values').select('vehicle_id, value, valuation_period').in_('vehicle_id', vehicle_ids).execute()
+    vehicle_ids = [row['id'] for row in rows]
+    val_res = supabase.table('vehicle_values').select('vehicle_id, value, lowest_value, highest_value, valuation_period').in_('vehicle_id', vehicle_ids).execute()
     if not val_res.data:
         return {"meta": "No vehicle values found"}
 
@@ -212,10 +226,14 @@ def lookup_insurable(v: VehicleDetails) -> dict:
         current = latest.get(row['vehicle_id'])
         if current is None or str(row['valuation_period']) > str(current['valuation_period']):
             latest[row['vehicle_id']] = row
-    values = [float(row['value']) for row in latest.values()]
-    if not values:
+    if not latest:
         return {"meta": "No valid values found"}
-    return {"lowest": int(min(values)), "average": int(sum(values) / len(values)), "highest": int(max(values))}
+
+    values = [float(r['value']) for r in latest.values()]
+    # A vehicle without a saved range falls back to its value
+    lows = [float(r['lowest_value'] if r.get('lowest_value') is not None else r['value']) for r in latest.values()]
+    highs = [float(r['highest_value'] if r.get('highest_value') is not None else r['value']) for r in latest.values()]
+    return {"lowest": int(min(lows)), "average": int(sum(values) / len(values)), "highest": int(max(highs))}
 
 
 # --- Insurable Value page (our database only) ---
